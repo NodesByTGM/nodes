@@ -74,8 +74,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     navigateTo(
                       context,
                       // GeneralSignupScreen.routeName,
-                      // TalentAuthScreen.routeName,
-                      BusinessAuthScreen.routeName,
+                      TalentAuthScreen.routeName,
+                      // BusinessAuthScreen.routeName,
                     );
                   },
                   title: btnTxt("Continue with email", WHITE),

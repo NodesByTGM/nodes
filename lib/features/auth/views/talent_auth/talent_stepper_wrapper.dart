@@ -44,7 +44,7 @@ class _TalentStepperWrapperScreen extends State<TalentStepperWrapperScreen> {
         children: [
           ySpace(),
           labelText(
-            "TStep 1/4",
+            "Step 1/4",
             fontSize: 18,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w400,
