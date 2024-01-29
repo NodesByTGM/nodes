@@ -1,5 +1,6 @@
-import 'dart:io';
 
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -18,8 +19,17 @@ class _TStepFourOfFourState extends State<TStepFourOfFour> {
   final TextEditingController xCtrl = TextEditingController();
 
   final formValues = {};
+  late AuthController _authCtrl;
+
+  @override
+  void initState() {
+    _authCtrl = locator.get<AuthController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _authCtrl = context.watch<AuthController>();
     return FormBuilder(
       key: formKey,
       child: Column(
@@ -88,23 +98,10 @@ class _TStepFourOfFourState extends State<TStepFourOfFour> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: 50,
-                width: 56,
-                margin: const EdgeInsets.only(right: 24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  border: Border.all(
-                    width: 1,
-                    color: BORDER,
-                  ),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.keyboard_arrow_left,
-                    size: 24,
-                  ),
-                ),
+              backBoxFn(
+                onTap: () {
+                  _authCtrl.setTStepper(3);
+                },
               ),
               Expanded(
                 child: SubmitBtn(
@@ -122,6 +119,7 @@ class _TStepFourOfFourState extends State<TStepFourOfFour> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {}
+    _authCtrl.setTStepper(1); // Resets once data is submitted
   }
 
   @override

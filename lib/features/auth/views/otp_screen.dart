@@ -1,16 +1,11 @@
-import 'package:datepicker_dropdown/datepicker_dropdown.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/auth/views/business_auth/business_stepper_wrapper.dart';
-import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
-import 'package:nodes/features/home/views/navbar_view.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/utilities/widgets/pin_code.dart';
-import 'package:password_strength_indicator/password_strength_indicator.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({Key? key}) : super(key: key);
+  const OtpScreen({Key? key, required this.otpData}) : super(key: key);
+
+  final OtpScreenData otpData;
 
   static const String routeName = "/otpScreen";
 
@@ -62,7 +57,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           ySpace(height: 8),
           subtext(
-            "janedoe@gmail.com",
+            "${widget.otpData.email}",
             fontSize: 14,
             color: PRIMARY,
             textAlign: TextAlign.center,
@@ -70,6 +65,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           ySpace(height: 40),
           PinCodeView(
+            length: 6,
             onChanged: (val) {
               otpCode = val;
               setState(() {});
@@ -135,7 +131,19 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _submit() async {
     closeKeyPad(context);
-    // navigateTo(context, TalentStepperWrapperScreen.routeName);
-    navigateTo(context, BusinessStepperWrapperScreen.routeName);
+    navigateTo(context, "${widget.otpData.to}");
   }
+}
+
+class OtpScreenData<T> {
+  final String? from;
+  final String? to;
+  final String? email;
+  final T? data;
+  OtpScreenData({
+    this.from,
+    this.to,
+    this.email,
+    this.data,
+  });
 }

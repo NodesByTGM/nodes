@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:expandable_section/expandable_section.dart';
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -19,8 +21,17 @@ class _BStepOneOfFourState extends State<BStepOneOfFour> {
   final formValues = {};
   File? companyPicture;
 
+  late AuthController _authCtrl;
+
+  @override
+  void initState() {
+    _authCtrl = locator.get<AuthController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _authCtrl = context.watch<AuthController>();
     return FormBuilder(
       key: formKey,
       child: Column(
@@ -115,24 +126,11 @@ class _BStepOneOfFourState extends State<BStepOneOfFour> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: 50,
-                width: 56,
-                margin: const EdgeInsets.only(right: 24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  border: Border.all(
-                    width: 1,
-                    color: BORDER,
-                  ),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.keyboard_arrow_left,
-                    size: 24,
-                  ),
-                ),
-              ),
+             backBoxFn(
+              onTap: () {
+                navigateBack(context);
+              },
+            ),
               Expanded(
                 child: SubmitBtn(
                   onPressed: _submit,
@@ -156,5 +154,6 @@ class _BStepOneOfFourState extends State<BStepOneOfFour> {
   void _submit() async {
     closeKeyPad(context);
     // remember to check with url with regex
+    _authCtrl.setBStepper(2);
   }
 }

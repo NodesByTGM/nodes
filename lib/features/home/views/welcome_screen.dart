@@ -73,8 +73,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   onPressed: () {
                     navigateTo(
                       context,
-                      // GeneralSignupScreen.routeName,
-                      TalentAuthScreen.routeName,
+                      GeneralSignupScreen.routeName,
+                      // TalentAuthScreen.routeName,
                       // BusinessAuthScreen.routeName,
                     );
                   },

@@ -22,6 +22,8 @@ class AuthController extends BaseController {
 
   // Variables
   // UserModel _currentUser = const UserModel();
+  int _tStepperVal = 1;
+  int _bStepperVal = 1;
 
   // Getters
 
@@ -35,8 +37,20 @@ class AuthController extends BaseController {
   String get currentScreen =>
       _storageService.getData(KeyString.currentScreen) ?? "/";
 
+  int get tStepperVal => _tStepperVal;
+  int get bStepperVal => _bStepperVal;
 
   // Setters
+
+  setTStepper(int val) {
+    _tStepperVal = val;
+    notifyListeners();
+  }
+
+  setBStepper(int val) {
+    _bStepperVal = val;
+    notifyListeners();
+  }
 
   set currentUserVal(CurrentSession session) {
     // _currentUser = session.user as UserModel;
@@ -79,7 +93,6 @@ class AuthController extends BaseController {
         .toJson());
   }
 
-
   // Functions
   // Future<bool> login(LoginDetails _details) async {
   //   setBusy(true);
@@ -105,8 +118,6 @@ class AuthController extends BaseController {
     return "";
   }
 
-  
-
   // Future<bool> verifyOtp(String otp) async {
   //   setBusy(true);
   //   try {
@@ -125,8 +136,6 @@ class AuthController extends BaseController {
   //     setBusy(false);
   //   }
   // }
-
-  
 
   // Future<List<GuestModel>> searchGuest({required String query}) async {
   //   setBusy(true);

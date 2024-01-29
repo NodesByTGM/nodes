@@ -1,5 +1,3 @@
-import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 

@@ -489,9 +489,33 @@ Text tosText(
   return subtext(
     text,
     fontSize: 12,
-    textAlign: textAlign?? TextAlign.center,
+    textAlign: textAlign ?? TextAlign.center,
     fontWeight: FontWeight.w400,
     textDecoration: isUnderlined ? TextDecoration.underline : null,
     height: height,
+  );
+}
+
+backBoxFn({required GestureCancelCallback onTap}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      height: 50,
+      width: 56,
+      margin: const EdgeInsets.only(right: 24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(
+          width: 1,
+          color: BORDER,
+        ),
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.keyboard_arrow_left,
+          size: 24,
+        ),
+      ),
+    ),
   );
 }

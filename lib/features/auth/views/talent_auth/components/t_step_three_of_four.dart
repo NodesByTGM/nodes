@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:expandable_section/expandable_section.dart';
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class TStepThreeOfFour extends StatefulWidget {
@@ -13,9 +15,17 @@ class TStepThreeOfFour extends StatefulWidget {
 // Pass data, email etc...
 class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
   File? profilePicture;
-  
+  late AuthController _authCtrl;
+
+  @override
+  void initState() {
+    _authCtrl = locator.get<AuthController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _authCtrl = context.watch<AuthController>();
     return Column(
       children: [
         labelText(
@@ -70,23 +80,10 @@ class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 50,
-              width: 56,
-              margin: const EdgeInsets.only(right: 24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                border: Border.all(
-                  width: 1,
-                  color: BORDER,
-                ),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.keyboard_arrow_left,
-                  size: 24,
-                ),
-              ),
+            backBoxFn(
+              onTap: () {
+                _authCtrl.setTStepper(2);
+              },
             ),
             Expanded(
               child: SubmitBtn(
@@ -102,5 +99,6 @@ class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
 
   void _submit() async {
     closeKeyPad(context);
+     _authCtrl.setTStepper(4);
   }
 }

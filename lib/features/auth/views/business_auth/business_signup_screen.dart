@@ -1,3 +1,4 @@
+import 'package:nodes/features/auth/views/business_auth/business_stepper_wrapper.dart';
 import 'package:nodes/features/auth/views/otp_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -281,7 +282,15 @@ class _BusinessSignupScreenState extends State<BusinessSignupScreen> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {
-      navigateTo(context, OtpScreen.routeName);
+      navigateTo(
+        context,
+        OtpScreen.routeName,
+        arguments: OtpScreenData(
+          email: emailCtrl.text,
+          from: KeyString.businessSignupScreen,
+          to: BusinessStepperWrapperScreen.routeName,
+        ),
+      );
     }
   }
 

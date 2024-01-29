@@ -39,7 +39,9 @@ class Routes {
         );
       case OtpScreen.routeName:
         // pass data: From route, to route and generic data <T>
-        const page = OtpScreen();
+        final page = OtpScreen(
+          otpData: args as OtpScreenData,
+        );
         return MaterialPageRoute(
           builder: (_) => page,
         );

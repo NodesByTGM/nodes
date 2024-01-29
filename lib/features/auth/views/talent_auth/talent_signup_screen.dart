@@ -1,5 +1,6 @@
 import 'package:nodes/features/auth/views/business_auth/business_auth_screen.dart';
 import 'package:nodes/features/auth/views/otp_screen.dart';
+import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -209,7 +210,15 @@ class _TalentSignupScreenState extends State<TalentSignupScreen> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {
-      navigateTo(context, OtpScreen.routeName);
+      navigateTo(
+        context,
+        OtpScreen.routeName,
+        arguments: OtpScreenData(
+          email: emailCtrl.text,
+          from: KeyString.talentSignupScreen,
+          to: TalentStepperWrapperScreen.routeName,
+        ),
+      );
     }
   }
 

@@ -1,7 +1,6 @@
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
+import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:password_strength_indicator/password_strength_indicator.dart';
@@ -208,6 +207,9 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                                 ),
                               ),
                             ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                            ],
                             keyboardType: TextInputType.text,
                             style: FORM_STYLE,
                             controller: pwdCtrl,
@@ -223,7 +225,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                               ],
                             ),
                             onChanged: (val) {
-                              passwordValue = val;
+                              passwordValue = trimValue(val);
                               setState(() {});
                             },
                           ),
@@ -254,25 +256,55 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                             if (password.isEmpty) return 0.0;
 
                             // Check which types of characters are used and create an opinionated bonus.
-                            double charsetBonus;
+                            // double charsetBonus;
+                            // if (RegExp(r'^[a-z]*$').hasMatch(password)) {
+                            //   charsetBonus = 0.1;
+                            // } else if (RegExp(r'^[a-z0-9]*$')
+                            //     .hasMatch(password)) {
+                            //   charsetBonus = 0.2;
+                            // } else if (RegExp(r'^[a-zA-Z]*$')
+                            //     .hasMatch(password)) {
+                            //   charsetBonus = 0.3;
+                            // } else if (RegExp(r'^[a-z\-_!?]*$')
+                            //     .hasMatch(password)) {
+                            //   charsetBonus = 0.4;
+                            // } else if (RegExp(r'^[a-zA-Z0-9]*$')
+                            //     .hasMatch(password)) {
+                            //   charsetBonus = 0.5;
+                            // } else if (password.length > 8) {
+                            //   charsetBonus = 0.8;
+                            // } else {
+                            //   charsetBonus = 1.0; // bug
+                            // }
+                            // return charsetBonus;
+
+                            double charsetBonus = 0.0;
                             if (RegExp(r'^[a-z]*$').hasMatch(password)) {
+                              // Small letter
                               charsetBonus = 0.1;
                             } else if (RegExp(r'^[a-z0-9]*$')
                                 .hasMatch(password)) {
+                              // small letters and numbers
                               charsetBonus = 0.2;
                             } else if (RegExp(r'^[a-zA-Z]*$')
                                 .hasMatch(password)) {
+                              // small letters and capslock
                               charsetBonus = 0.3;
                             } else if (RegExp(r'^[a-z\-_!?]*$')
                                 .hasMatch(password)) {
+                              // small letters and special characters
                               charsetBonus = 0.4;
                             } else if (RegExp(r'^[a-zA-Z0-9]*$')
                                 .hasMatch(password)) {
+                              // Caps Letter and Number
+                              print(password.length);
                               charsetBonus = 0.5;
-                            } else if (password.length > 8) {
+                              // } else if (password.length > 8) {
+                            } else if (!RegExp(r'.{8,30}').hasMatch(password)) {
                               charsetBonus = 0.8;
                             } else {
-                              charsetBonus = 1.0; // bug
+                              // charsetBonus = 1.0; // bug
+                              charsetBonus = charsetBonus;
                             }
                             return charsetBonus;
 
