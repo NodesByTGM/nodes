@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nodes/utilities/utils/utils.dart';
 
 Text labelText(
   String label, {
@@ -11,6 +12,7 @@ Text labelText(
   TextDecoration textDecoration = TextDecoration.none,
   double height = 1.2,
   int? maxLine,
+  String? fontFamily = FontFamily,
 }) {
   return Text(
     label,
@@ -26,7 +28,7 @@ Text labelText(
       letterSpacing: letterSpacing,
       decoration: textDecoration,
       height: height,
-    
+      fontFamily: fontFamily,
     ),
   );
 }
@@ -51,6 +53,7 @@ Text subtext(
   int? maxLines,
   TextOverflow? overflow,
   double height = 1.2,
+  String? fontFamily = FontFamily,
 }) {
   return Text(
     label,
@@ -60,11 +63,12 @@ Text subtext(
     overflow: overflow,
     maxLines: maxLines,
     style: TextStyle(
-      color: color ?? Colors.black,
+      color: color ?? const Color(0xff212121),
       fontSize: fontSize ?? 15,
       fontWeight: fontWeight ?? FontWeight.w400,
       decoration: textDecoration,
       height: height,
+      fontFamily: fontFamily,
     ),
   );
 }

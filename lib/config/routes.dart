@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:nodes/features/auth/views/business_auth/business_auth_screen.dart';
 import 'package:nodes/features/auth/views/business_auth/business_signup_screen.dart';
 import 'package:nodes/features/auth/views/business_auth/business_stepper_wrapper.dart';
+import 'package:nodes/features/auth/views/forgot_password_screen.dart';
 import 'package:nodes/features/auth/views/general_signup_screen.dart';
 import 'package:nodes/features/auth/views/otp_screen.dart';
+import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_auth_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_signup_screen.dart';
 import 'package:nodes/features/home/views/home_screen.dart';
+import 'package:nodes/features/home/views/navbar_view.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -22,8 +25,18 @@ class Routes {
         return MaterialPageRoute(
           builder: (_) => page,
         );
+      case ForgotPasswordScreen.routeName:
+        const page = ForgotPasswordScreen();
+        return MaterialPageRoute(
+          builder: (_) => page,
+        );
       case GeneralSignupScreen.routeName:
         const page = GeneralSignupScreen();
+        return MaterialPageRoute(
+          builder: (_) => page,
+        );
+      case PricePlanScreen.routeName:
+        const page = PricePlanScreen();
         return MaterialPageRoute(
           builder: (_) => page,
         );
@@ -60,8 +73,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (_) => page,
         );
+        
       case BusinessStepperWrapperScreen.routeName:
         const page = BusinessStepperWrapperScreen();
+        return MaterialPageRoute(
+          builder: (_) => page,
+        );
+
+      case NavbarView.routeName:
+        const page = NavbarView();
         return MaterialPageRoute(
           builder: (_) => page,
         );

@@ -14,7 +14,7 @@ import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-const FontFamily = "Raleway";
+const FontFamily = 'br-firma';
 
 // Default Delay
 Duration get screenDuration => const Duration(milliseconds: 200);
@@ -28,7 +28,7 @@ double screenHeight(context) => MediaQuery.of(context).size.height;
 // Used to get a consistent Screen Padding
 EdgeInsetsGeometry get screenPadding =>
     // const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0);
-    const EdgeInsets.symmetric(horizontal: 20, vertical: 0);
+    const EdgeInsets.symmetric(horizontal: 16, vertical: 0);
 
 // Used to give vertical Spaces
 SizedBox ySpace({double? height}) {
@@ -60,6 +60,7 @@ String shortDate(DateTime now) => DateFormat('dd MMMM, yyyy').format(now);
 navigateTo(BuildContext context, String route, {dynamic arguments}) {
   Navigator.pushNamed(context, route, arguments: arguments);
 }
+
 
 navigateAndClearAll(BuildContext context, String route,
     {String? secondRoute, dynamic arguments}) {
@@ -125,6 +126,24 @@ String capitalize(String s) {
   }
   return s;
 }
+
+String formatCurrencyAmount(String ccy, double amount) {
+  return '$ccy${formatAmount(amount)}';
+}
+
+String formatAmount(double? amount) {
+  if (amount == null) {
+    return '';
+  }
+  return NumberFormat.currency(
+          name: '', decimalDigits: (isInteger(amount)) ? 0 : 2)
+      .format(amount);
+}
+
+String formatAmountFromInput(String val) =>
+    val.split(",").join("").split(".").first;
+
+bool isInteger(num value) => value is int || value == value.roundToDouble();
 
 String enumToString<T>(T value, {camelCase = false}) =>
     EnumToString.convertToString(value, camelCase: camelCase);
@@ -303,16 +322,21 @@ cachedNetworkImage({
   required String imgUrl,
   EdgeInsets? margin,
   double size = 50,
+  BoxShape shape = BoxShape.rectangle,
 }) {
   final empty = Container(
-    color: Colors.grey,
+    decoration: BoxDecoration(
+      color: Colors.grey,
+      shape: shape,
+      border: Border.all(width: 1, color: Colors.white),
+    ),
   );
   return CachedNetworkImage(
     imageUrl: imgUrl,
     imageBuilder: (context, imageProvider) => Container(
       margin: const EdgeInsets.only(left: 0, top: 0),
       decoration: BoxDecoration(
-        // shape: BoxShape.circle,
+        shape: shape,
         border: Border.all(width: 1, color: Colors.white),
         image: DecorationImage(
           image: imageProvider,
@@ -518,4 +542,67 @@ backBoxFn({required GestureCancelCallback onTap}) {
       ),
     ),
   );
+}
+
+customDivider({
+  EdgeInsetsGeometry padding = const EdgeInsets.all(0),
+  double? height = 30,
+  Color? color = BORDER,
+  double? thickness = 1,
+}) {
+  return Padding(
+    padding: padding,
+    child: Divider(
+      height: height,
+      thickness: thickness,
+      color: color,
+    ),
+  );
+}
+
+class Subsection extends StatelessWidget {
+  const Subsection({
+    super.key,
+    required this.leftSection,
+    this.rightSection,
+    this.withDivider = true,
+    this.onTap,
+  });
+
+  final String leftSection;
+  final String? rightSection;
+  final bool withDivider;
+  final GestureCancelCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            labelText(
+              leftSection,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+            if (!isObjectEmpty(rightSection)) ...[
+              GestureDetector(
+                onTap: onTap,
+                child: subtext(
+                  "$rightSection",
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ],
+        ),
+        if (withDivider) ...[
+          customDivider(),
+          ySpace(height: 24),
+        ],
+      ],
+    );
+  }
 }

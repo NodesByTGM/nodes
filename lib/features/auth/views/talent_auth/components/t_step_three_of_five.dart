@@ -4,15 +4,15 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
-class TStepTwoOfFour extends StatefulWidget {
-  const TStepTwoOfFour({Key? key}) : super(key: key);
+class TStepThreeOfFive extends StatefulWidget {
+  const TStepThreeOfFive({Key? key}) : super(key: key);
 
   @override
-  State<TStepTwoOfFour> createState() => _TStepTwoOfFourState();
+  State<TStepThreeOfFive> createState() => _TStepThreeOfFiveState();
 }
 
 // Pass data, email etc...
-class _TStepTwoOfFourState extends State<TStepTwoOfFour> {
+class _TStepThreeOfFiveState extends State<TStepThreeOfFive> {
   TextEditingController locationCtrl = TextEditingController();
   List<String> locationList = const [
     'USA',
@@ -40,7 +40,7 @@ class _TStepTwoOfFourState extends State<TStepTwoOfFour> {
       children: [
         labelText(
           "Where are you located?",
-          fontSize: 24,
+          fontSize: 20,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.w600,
         ),
@@ -98,7 +98,7 @@ class _TStepTwoOfFourState extends State<TStepTwoOfFour> {
           children: [
             backBoxFn(
               onTap: () {
-                _authCtrl.setTStepper(1);
+                _authCtrl.setTStepper(2);
               },
             ),
             Expanded(
@@ -115,7 +115,7 @@ class _TStepTwoOfFourState extends State<TStepTwoOfFour> {
 
   void _submit() async {
     closeKeyPad(context);
-    _authCtrl.setTStepper(3);
+    _authCtrl.setTStepper(4);
   }
 
   @override

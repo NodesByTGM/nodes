@@ -52,6 +52,16 @@ class AuthController extends BaseController {
     notifyListeners();
   }
 
+  resetBTStepper() {
+    _tStepperVal = 1;
+    _bStepperVal = 1;
+    notifyListeners();
+  }
+
+  dummySession(Map<String, dynamic> json) {
+     _saveSession(json);
+  }
+
   set currentUserVal(CurrentSession session) {
     // _currentUser = session.user as UserModel;
     notifyListeners();

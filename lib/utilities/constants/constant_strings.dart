@@ -13,4 +13,8 @@ class Constants {
   static const passwordLenError = "Password length must be 6 or more";
   static const confirmPassword = "Confirm Password";
   static const passwordMatchError = "Password does not match!";
+  static const naira = "₦";
+
+  
+
 }

@@ -206,6 +206,7 @@ class _BusinessSignupScreenState extends State<BusinessSignupScreen> {
                           ),
                         ),
                         ySpace(height: 24),
+                        //  You caan use wrap...
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -11,6 +11,7 @@ class CurrentSession extends Equatable {
   final String? access;
   final String? user_type;
   final String? uid;
+  final bool loggedIn;
   // final UserModel? user;
 
   const CurrentSession({
@@ -18,6 +19,7 @@ class CurrentSession extends Equatable {
     this.access,
     this.user_type,
     this.uid,
+    this.loggedIn = false,
     // this.user,
   });
 
@@ -26,6 +28,7 @@ class CurrentSession extends Equatable {
     String? access,
     String? user_type,
     String? uid,
+    bool? loggedIn,
     // UserModel? user,
   }) =>
       CurrentSession(
@@ -33,6 +36,7 @@ class CurrentSession extends Equatable {
         access: access ?? this.access,
         user_type: user_type ?? this.user_type,
         uid: uid ?? this.uid,
+        loggedIn: loggedIn ?? this.loggedIn,
         // user: user ?? this.user,
       );
 
@@ -47,6 +51,7 @@ class CurrentSession extends Equatable {
         access,
         user_type,
         uid,
+        loggedIn,
         // user,
       ];
 }

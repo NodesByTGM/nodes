@@ -1,24 +1,58 @@
+// ignore_for_file: prefer_final_fields
 
-
-
+import 'package:nodes/config/dynamic_page_routes.dart';
 import 'package:nodes/core/controller/base_controller.dart';
+import 'package:nodes/features/dashboard/screen/dashboard_screen.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 
 class NavController extends BaseController {
+  // ##################### VARIABLES #####################
   int _currentIndex = 0;
-  int _createFacilityCurrentIndex = 0;
   bool _isFullyExpanded = false;
+  List<String> _pageListStack = [
+    DashboardScreen.routeName,
+  ];
+  HorizontalSlidingCardDataSource _dashboardDynamicItem =
+      HorizontalSlidingCardDataSource.Empty;
+
+  // ##################### GETTERS #####################
+  Map<String, dynamic> get persistentRoutes => persistentRoutesSettings;
+  
 
   int get currentIndex => _currentIndex;
-  int get createFacilityCurrentIndex => _createFacilityCurrentIndex;
   bool get isFullyExpanded => _isFullyExpanded;
+  List<String> get pageListStack => _pageListStack;
+  // This gets the last FILO first in, Last out
+  String get currentPageListStackItem => _pageListStack.last;
+  HorizontalSlidingCardDataSource get currentDashboardDynamicItem =>
+      _dashboardDynamicItem;
 
-
+  // ##################### SETTERS #####################
   set currentIndexVal(int val) {
     _currentIndex = val;
     notifyListeners();
   }
-  set currentFacilityIndexVal(int val) {
-    _createFacilityCurrentIndex = val;
+
+  // Used to add screens to the stack
+  updatePageListStack(String val) {
+    _pageListStack.add(val);
+    notifyListeners();
+  }
+
+  popPageListStack() {
+    // This is used to remove all, except the first (index 0) item
+    // Being the DashboardScreen
+    if (_pageListStack.length > 1) {
+      _pageListStack.removeLast();
+      notifyListeners();
+    }
+  }
+
+  // To be called when the home button is pressed...
+  resetPageListStack() {
+    _pageListStack = [
+      DashboardScreen.routeName,
+    ];
     notifyListeners();
   }
 
@@ -28,7 +62,12 @@ class NavController extends BaseController {
   }
 
   resetValues() {
-    currentIndexVal  = 0;
-    fullyExpandedVal  = false;
+    currentIndexVal = 0;
+    fullyExpandedVal = false;
+  }
+
+  updateDashboardDynamicItem(HorizontalSlidingCardDataSource val) {
+    _dashboardDynamicItem = val;
+    notifyListeners();
   }
 }

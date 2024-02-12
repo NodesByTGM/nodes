@@ -1,9 +1,10 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/auth/views/talent_auth/components/t_step_four_of_four.dart';
-import 'package:nodes/features/auth/views/talent_auth/components/t_step_one_of_four.dart';
-import 'package:nodes/features/auth/views/talent_auth/components/t_step_three_of_four.dart';
-import 'package:nodes/features/auth/views/talent_auth/components/t_step_two_of_four.dart';
+import 'package:nodes/features/auth/views/talent_auth/components/t_step_five_of_five.dart';
+import 'package:nodes/features/auth/views/talent_auth/components/t_step_one_of_five.dart';
+import 'package:nodes/features/auth/views/talent_auth/components/t_step_two_of_five.dart';
+import 'package:nodes/features/auth/views/talent_auth/components/t_step_four_of_five.dart';
+import 'package:nodes/features/auth/views/talent_auth/components/t_step_three_of_five.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class TalentStepperWrapperScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _TalentStepperWrapperScreen extends State<TalentStepperWrapperScreen> {
         children: [
           ySpace(),
           labelText(
-            "Step ${_authCtrl.tStepperVal}/4",
+            "Step ${_authCtrl.tStepperVal}/5",
             fontSize: 18,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w400,
@@ -61,15 +62,17 @@ class _TalentStepperWrapperScreen extends State<TalentStepperWrapperScreen> {
   Widget getStep() {
     switch (_authCtrl.tStepperVal) {
       case 1:
-        return const TStepOneOfFour();
+        return const TStepOneOfFive();
       case 2:
-        return const TStepTwoOfFour();
+        return const TStepTwoOfFive();
       case 3:
-        return const TStepThreeOfFour();
+        return const TStepThreeOfFive();
       case 4:
-        return const TStepFourOfFour();
+        return const TStepFourOfFive();
+      case 5:
+        return const TStepFiveOfFive();
       default:
-        return const TStepOneOfFour();
+        return const TStepOneOfFive();
     }
   }
 }

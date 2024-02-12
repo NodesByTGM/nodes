@@ -27,18 +27,6 @@ class _OtpScreenState extends State<OtpScreen> {
         height: 32,
         width: 36,
       ),
-      actions: [
-        GestureDetector(
-          onTap: () {},
-          child: subtext(
-            'Log In',
-            fontSize: 14,
-            color: PRIMARY,
-            textDecoration: TextDecoration.underline,
-          ),
-        ),
-        xSpace(width: 10)
-      ],
       body: Column(
         children: [
           ySpace(),

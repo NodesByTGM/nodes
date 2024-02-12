@@ -1,3 +1,4 @@
+import 'package:nodes/features/auth/views/forgot_password_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -103,11 +104,16 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                       FormUtils.formSpacer(),
                       FormWithLabel(
                         label: "Password",
-                        secondaryLabel: subtext(
-                          "Forgot?",
-                          fontSize: 14,
-                          color: PRIMARY,
-                          fontWeight: FontWeight.w400,
+                        secondaryLabel: GestureDetector(
+                          onTap: () {
+                            navigateTo(context, ForgotPasswordScreen.routeName);
+                          },
+                          child: subtext(
+                            "Forgot?",
+                            fontSize: 14,
+                            color: PRIMARY,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                         form: FormBuilderTextField(
                           name: "password",
@@ -213,6 +219,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   @override
   void dispose() {
     pwdCtrl.dispose();
+    emailCtrl.dispose();
     super.dispose();
   }
 }

@@ -10,4 +10,10 @@ class KeyString {
   static const talentSignupScreen = "talentSignupScreen";
   static const businessSignupScreen = "talentSignupScreen";
   static const tStepOneOfFour = "tStepOneOfFour";
+  static const homeScreen = "Home";
+  static const profileScreen = "Profile";
+  static const communityScreen = "Community";
+  static const forBusinessScreen = "For Business";
+  static const subscriptionScreen = "Subscription";
+  static const upgradeToProScreen = "Upgrade To Pro";
 }

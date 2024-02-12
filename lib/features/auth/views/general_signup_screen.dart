@@ -1,6 +1,8 @@
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nodes/features/auth/views/otp_screen.dart';
+import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:password_strength_indicator/password_strength_indicator.dart';
@@ -465,30 +467,39 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
 
   void _submit() async {
     closeKeyPad(context);
-    if (formKey.currentState!.saveAndValidate()) {
-      // LoginResponse? response =
-      //     await context.read<AuthController>().signIn(_request);
-      var response = "";
+    navigateTo(
+      context,
+      OtpScreen.routeName,
+      arguments: OtpScreenData(
+        email: emailCtrl.text,
+        from: KeyString.talentSignupScreen,
+        to: TalentStepperWrapperScreen.routeName,
+      ),
+    );
+    // if (formKey.currentState!.saveAndValidate()) {
+    //   // LoginResponse? response =
+    //   //     await context.read<AuthController>().signIn(_request);
+    //   var response = "";
 
-      if (!isObjectEmpty(response) && mounted) {
-        safeNavigate(() {
-          formKey.currentState!.reset();
-          // if (response!.route == VerifyAccount.route) {
-          //   navigateAndClearPrev(
-          //     context,
-          //     VerifyAccount.route,
-          //     arguments: VerifyData(
-          //       email: _request.email,
-          //       nextRoute: NavbarView.routeName,
-          //     ),
-          //   );
-          //   return;
-          // }
-          // navigateAndClearPrev(context, response.route);
-          // context.read<AuthController>().resetVisibility();
-        });
-      }
-    }
+    //   if (!isObjectEmpty(response) && mounted) {
+    //     safeNavigate(() {
+    //       formKey.currentState!.reset();
+    //       // if (response!.route == VerifyAccount.route) {
+    //       //   navigateAndClearPrev(
+    //       //     context,
+    //       //     VerifyAccount.route,
+    //       //     arguments: VerifyData(
+    //       //       email: _request.email,
+    //       //       nextRoute: NavbarView.routeName,
+    //       //     ),
+    //       //   );
+    //       //   return;
+    //       // }
+    //       // navigateAndClearPrev(context, response.route);
+    //       // context.read<AuthController>().resetVisibility();
+    //     });
+    //   }
+    // }
   }
 
   @override

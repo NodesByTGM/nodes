@@ -5,15 +5,15 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
-class TStepThreeOfFour extends StatefulWidget {
-  const TStepThreeOfFour({Key? key}) : super(key: key);
+class TStepFourOfFive extends StatefulWidget {
+  const TStepFourOfFive({Key? key}) : super(key: key);
 
   @override
-  State<TStepThreeOfFour> createState() => _TStepThreeOfFourState();
+  State<TStepFourOfFive> createState() => _TStepFourOfFiveState();
 }
 
 // Pass data, email etc...
-class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
+class _TStepFourOfFiveState extends State<TStepFourOfFive> {
   File? profilePicture;
   late AuthController _authCtrl;
 
@@ -30,7 +30,7 @@ class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
       children: [
         labelText(
           "Let’s see what you look like",
-          fontSize: 24,
+          fontSize: 20,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.w600,
         ),
@@ -82,7 +82,7 @@ class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
           children: [
             backBoxFn(
               onTap: () {
-                _authCtrl.setTStepper(2);
+                _authCtrl.setTStepper(3);
               },
             ),
             Expanded(
@@ -99,6 +99,6 @@ class _TStepThreeOfFourState extends State<TStepThreeOfFour> {
 
   void _submit() async {
     closeKeyPad(context);
-     _authCtrl.setTStepper(4);
+     _authCtrl.setTStepper(5);
   }
 }

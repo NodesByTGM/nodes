@@ -88,9 +88,13 @@ class _HomeViewState extends State<HomeView> {
                 body: Loader(),
               );
             }
+            // is currently null, but once user logs in, the current session will be updated,
             if (snapshot.data == null) {
-              // check if you're has ever created account before, then show the welcomebackscreen
               return const WelcomeScreen();
+            }
+            // check if you're has ever created account before, then show the welcomebackscreen
+            if (snapshot.data!.loggedIn) {
+              return const WelcomeBackScreen();
             }
             return const NavbarView();
           },

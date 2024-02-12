@@ -1,18 +1,18 @@
-
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
-class TStepFourOfFour extends StatefulWidget {
-  const TStepFourOfFour({Key? key}) : super(key: key);
+class TStepFiveOfFive extends StatefulWidget {
+  const TStepFiveOfFive({Key? key}) : super(key: key);
 
   @override
-  State<TStepFourOfFour> createState() => _TStepFourOfFourState();
+  State<TStepFiveOfFive> createState() => _TStepFiveOfFiveState();
 }
 
 // Pass data, email etc...
-class _TStepFourOfFourState extends State<TStepFourOfFour> {
+class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController linkedinCtrl = TextEditingController();
   final TextEditingController instagramCtrl = TextEditingController();
@@ -36,7 +36,7 @@ class _TStepFourOfFourState extends State<TStepFourOfFour> {
         children: [
           labelText(
             "Social media",
-            fontSize: 24,
+            fontSize: 20,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w600,
           ),
@@ -100,7 +100,7 @@ class _TStepFourOfFourState extends State<TStepFourOfFour> {
             children: [
               backBoxFn(
                 onTap: () {
-                  _authCtrl.setTStepper(3);
+                  _authCtrl.setTStepper(4);
                 },
               ),
               Expanded(
@@ -119,7 +119,7 @@ class _TStepFourOfFourState extends State<TStepFourOfFour> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {}
-    _authCtrl.setTStepper(1); // Resets once data is submitted
+    navigateTo(context, PricePlanScreen.routeName);
   }
 
   @override

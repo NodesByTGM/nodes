@@ -4,15 +4,15 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
-class TStepOneOfFour extends StatefulWidget {
-  const TStepOneOfFour({Key? key}) : super(key: key);
+class TStepTwoOfFive extends StatefulWidget {
+  const TStepTwoOfFive({Key? key}) : super(key: key);
 
   @override
-  State<TStepOneOfFour> createState() => _TStepOneOfFourState();
+  State<TStepTwoOfFive> createState() => _TStepTwoOfFiveState();
 }
 
 // Pass data, email etc...
-class _TStepOneOfFourState extends State<TStepOneOfFour> {
+class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
   MultipleSearchController controller = MultipleSearchController();
   late AuthController _authCtrl;
 
@@ -29,7 +29,7 @@ class _TStepOneOfFourState extends State<TStepOneOfFour> {
       children: [
         labelText(
           "What do you do?",
-          fontSize: 24,
+          fontSize: 20,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.w600,
         ),
@@ -130,7 +130,7 @@ class _TStepOneOfFourState extends State<TStepOneOfFour> {
           children: [
              backBoxFn(
               onTap: () {
-                navigateBack(context);
+                 _authCtrl.setTStepper(1);
               },
             ),
             Expanded(
@@ -147,6 +147,6 @@ class _TStepOneOfFourState extends State<TStepOneOfFour> {
 
   void _submit() async {
     closeKeyPad(context);
-    _authCtrl.setTStepper(2);
+    _authCtrl.setTStepper(3);
   }
 }

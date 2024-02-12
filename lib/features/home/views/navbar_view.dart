@@ -1,21 +1,22 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nodes/config/dynamic_page_routes.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/core/models/current_session.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/home/views/welcome_screen.dart';
+import 'package:nodes/features/auth/views/welcome_back_screen.dart';
+import 'package:nodes/features/home/components/drawer.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class NavbarView extends StatefulWidget {
   static const String routeName = '/navbar_view';
 
-  // const NavbarView({Key? key}) : super(key: key);
   const NavbarView({Key? key}) : super(key: key);
 
   @override
-  _NavbarViewState createState() => _NavbarViewState();
+  State<NavbarView> createState() => _NavbarViewState();
 }
 
 class _NavbarViewState extends State<NavbarView> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthController _authCtrl;
   late CurrentSession? session;
 
@@ -38,12 +39,14 @@ class _NavbarViewState extends State<NavbarView> {
 
   @override
   Widget build(BuildContext context) {
-    final _navCtrl = context.watch<NavController>();
+    final navCtrl = context.watch<NavController>();
     _authCtrl = context.watch<AuthController>();
     // String _userType = _authCtrl.currentUser.user_type ?? "";
     return WillPopScope(
       onWillPop: () async {
-        if (_navCtrl.currentIndex == 0) {
+        // navCtrl.popPageListStack();
+        // if (navCtrl.pageListStack.length == 1) {
+        if (navCtrl.currentIndex == 0) {
           final result = await showAlertDialog(
             context,
             body: subtext("Are you sure you want to logout?", fontSize: 13),
@@ -55,75 +58,65 @@ class _NavbarViewState extends State<NavbarView> {
           }
           return false;
         }
-        _navCtrl.currentIndexVal = 0;
+        navCtrl.currentIndexVal = 0;
         return false;
       },
-      child: Scaffold(
+      child: AppWrapper(
+        scafoldKey: _scaffoldKey,
+        isCancel: false,
         backgroundColor: Colors.white,
-        body: Consumer<AuthController>(
+        leading: GestureDetector(
+          onTap: () => _openDrawer(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: SvgPicture.asset(
+              ImageUtils.menuIcon,
+            ),
+          ),
+        ),
+        title: Image.asset(
+          ImageUtils.appIcon,
+          height: 32,
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {},
+            child: SvgPicture.asset(
+              ImageUtils.bellIcon,
+              height: 32,
+            ),
+          ),
+          xSpace(width: 24),
+          GestureDetector(
+            onTap: () {},
+            child: SvgPicture.asset(
+              ImageUtils.envelopeIcon,
+              height: 32,
+            ),
+          ),
+          xSpace(width: 20),
+        ],
+        body: Consumer<NavController>(
           builder: (context, model, _) {
-            return labelText("label");
+            // Get screen from stack
+            return getDynamicScreen(model);
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 3,
-          selectedItemColor: PRIMARY,
-          unselectedItemColor: Colors.blueGrey.shade200,
-          showUnselectedLabels: true,
-          currentIndex: _navCtrl.currentIndex,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          showSelectedLabels: true,
-          unselectedLabelStyle: const TextStyle(
-            height: 1.4,
-          ),
-          selectedLabelStyle: const TextStyle(
-            height: 1.4,
-          ),
-          iconSize: 22,
-          selectedFontSize: 12,
-          unselectedFontSize: 11,
-          onTap: (index) {
-          
-          },
-          items: _items(),
-        ),
+        drawer: const DrawerWidget(),
       ),
     );
   }
 
-  List<BottomNavigationBarItem> _items() {
-    
-    return [
-      const BottomNavigationBarItem(
-        label: "",
-        icon: Icon(
-          Icons.home_outlined,
-          size: 30,
-        ),
-      ),
-      BottomNavigationBarItem(
-        label: "",
-        icon: Icon(
-          MdiIcons.lineScan,
-          size: 30,
-        ),
-      ),
-      BottomNavigationBarItem(
-        label: "",
-        icon: Icon(
-          MdiIcons.homeCityOutline,
-          size: 30,
-        ),
-      ),
-    ];
+  _openDrawer() {
+    _scaffoldKey.currentState!.openDrawer();
   }
+
 }
 
 void logout(BuildContext context) {
   context.read<AuthController>().logout();
   // context.read<NavController>().resetValues();
   // context.read<ProfileController>().resetController();
-  // context.read<RequestController>().resetController();
-  navigateAndClearAll(context, WelcomeScreen.routeName);
+  context.read<AuthController>().setCurrentScreen(WelcomeBackScreen.routeName);
+  navigateAndClearAll(context, WelcomeBackScreen.routeName);
 }
