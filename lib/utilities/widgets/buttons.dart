@@ -154,22 +154,24 @@ class OutlineBtn extends StatelessWidget {
   final double? width;
   final double borderRadius;
   final Color? borderColor;
+  final Color? foregroundColor;
   final Color? color;
   final double height;
 
-  const OutlineBtn(
-      {Key? key,
-      @required this.onPressed,
-      required this.child,
-      this.loading = false,
-      this.width,
-      this.leftIcon,
-      this.rightIcon,
-      this.color,
-      this.borderRadius = 8,
-      this.height = 54,
-      this.borderColor})
-      : super(key: key);
+  const OutlineBtn({
+    Key? key,
+    @required this.onPressed,
+    required this.child,
+    this.loading = false,
+    this.width,
+    this.leftIcon,
+    this.rightIcon,
+    this.color,
+    this.borderRadius = 8,
+    this.height = 54,
+    this.borderColor,
+    this.foregroundColor = PRIMARY,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +182,7 @@ class OutlineBtn extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: color,
+          foregroundColor: foregroundColor,
           side: BorderSide(
             color: borderColor ?? Colors.white,
             width: 1,

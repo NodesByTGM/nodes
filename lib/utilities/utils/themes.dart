@@ -6,9 +6,9 @@ ThemeData themeData() {
   return ThemeData(
     // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.transparent,
-      background: RED,
-      onBackground: TEAL,
+      seedColor: PRIMARY,
+      // background: RED,
+      // onBackground: TEAL, // Color of this on background
     ),
     useMaterial3: true,
     visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -18,6 +18,6 @@ ThemeData themeData() {
     fontFamily: FontFamily,
 
     //
-    // splashColor: Colors.transparent,
+    // splashColor: PRIMARY,
   );
 }

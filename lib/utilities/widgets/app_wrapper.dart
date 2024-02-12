@@ -150,8 +150,10 @@ class BottomSheetWrapper extends StatelessWidget {
           Positioned(
             left: 0,
             top: 16,
-            child: MaterialButton(
-              onPressed: () => navigateBack(context),
+            child: Container(
+              padding: const EdgeInsets.only(top: 16, right: 30),
+              margin: const EdgeInsets.only(left: 20),
+              color: WHITE,
               child: title,
             ),
           ),

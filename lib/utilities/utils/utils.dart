@@ -61,7 +61,6 @@ navigateTo(BuildContext context, String route, {dynamic arguments}) {
   Navigator.pushNamed(context, route, arguments: arguments);
 }
 
-
 navigateAndClearAll(BuildContext context, String route,
     {String? secondRoute, dynamic arguments}) {
   Navigator.of(context).pushNamedAndRemoveUntil(
@@ -605,4 +604,32 @@ class Subsection extends StatelessWidget {
       ],
     );
   }
+}
+
+socialInteractionIconWithVal({
+  required String content,
+  required GestureCancelCallback onTap,
+  required IconData icon,
+  double? iconSize = 13,
+  double? textSize = 13,
+  Color? color,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Wrap(
+      spacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: iconSize,
+          color: color,
+        ),
+        subtext(
+          content,
+          fontSize: textSize,
+        ),
+      ],
+    ),
+  );
 }
