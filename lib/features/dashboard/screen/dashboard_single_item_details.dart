@@ -104,10 +104,6 @@ class _DashboardSingleItemDetailsScreenState
               bottom: 0,
               child: Container(
                 color: WHITE,
-                // padding: const EdgeInsets.symmetric(
-                //   horizontal: 24,
-                //   vertical: 28,
-                // ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

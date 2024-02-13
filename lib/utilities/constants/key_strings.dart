@@ -16,4 +16,5 @@ class KeyString {
   static const forBusinessScreen = "For Business";
   static const subscriptionScreen = "Subscription";
   static const upgradeToProScreen = "Upgrade To Pro";
+  static const gridToolScreen = "Grid Tools";
 }

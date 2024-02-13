@@ -27,6 +27,7 @@ class ImageUtils {
   static const globeIcon = "assets/images/svg/globe_icon.svg";
   static const briefcaseIcon = "assets/images/svg/briefcase_icon.svg";
   static const cubeIcon = "assets/images/svg/cube_icon.svg";
+  static const gridToolIcon = "assets/images/svg/grid_tool_icon.svg";
   static const menuIcon = "assets/images/svg/menu_icon.svg";
   static const bellIcon = "assets/images/svg/bell_icon.svg";
   static const envelopeIcon = "assets/images/svg/envelope_icon.svg";

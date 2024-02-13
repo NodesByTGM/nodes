@@ -154,6 +154,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           //
                         },
                       ),
+                      _menuItem(
+                        icon: ImageUtils.gridToolIcon,
+                        title: KeyString.gridToolScreen,
+                        route: DrawerRouteTitle.Subscription,
+                        isActive: false,
+                        onTap: () {
+                          closeDrawer();
+                          //
+                        },
+                      ),
                       ySpace(height: 32),
                       GestureDetector(
                         onTap: () {
