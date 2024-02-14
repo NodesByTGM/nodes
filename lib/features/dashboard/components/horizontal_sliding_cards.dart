@@ -1,4 +1,7 @@
 import 'package:nodes/features/dashboard/components/card_template.dart';
+import 'package:nodes/features/dashboard/components/community_card_template.dart';
+import 'package:nodes/features/dashboard/components/leave_a_rating.dart';
+import 'package:nodes/features/dashboard/components/top_movies_card_template.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
@@ -68,12 +71,8 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
                 children: List.generate(
                   snapshot.data!.length,
                   (index) {
-                    return CustomCardTemplate(
-                      imgUrl:
-                          "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-                      title: "Lorem ipsum dolor sit amet, con...",
-                      onTap: () {},
-                    );
+                    // Depending on the datasource, the corresponding cards will be used...
+                    return designatedCardDisplay();
                   },
                 ),
               ),
@@ -81,6 +80,63 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
           );
         }
         return const CircularProgressIndicator.adaptive();
+      },
+    );
+  }
+
+  designatedCardDisplay() {
+    switch (widget.dataSource) {
+      case HorizontalSlidingCardDataSource.TopMovies:
+        return TopMovieCardTemplate(
+          imgUrl:
+              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          title: "Lorem ipsum dolor sit amet, con...",
+          onTap: () {},
+          ratingTap: () {
+            showRatingBottomSheet(
+                // passin the item details, likes of IDs, etc...
+                );
+          },
+        );
+      case HorizontalSlidingCardDataSource.Community:
+        return CommunityCardTemplate(
+          imgUrl:
+              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          title: "Lorem ipsum dolor sit amet, con...",
+          onTap: () {},
+        );
+      default:
+        return CustomCardTemplate(
+          imgUrl:
+              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          title: "Lorem ipsum dolor sit amet, con...",
+          onTap: () {},
+        );
+    }
+  }
+
+  showRatingBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return BottomSheetWrapper(
+          closeOnTap: true,
+          title: labelText(
+            "Leave a rating",
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          child: const LeaveARating(),
+        );
       },
     );
   }

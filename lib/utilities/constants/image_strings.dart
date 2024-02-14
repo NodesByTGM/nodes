@@ -30,6 +30,8 @@ class ImageUtils {
   static const gridToolIcon = "assets/images/svg/grid_tool_icon.svg";
   static const menuIcon = "assets/images/svg/menu_icon.svg";
   static const bellIcon = "assets/images/svg/bell_icon.svg";
+  static const starIcon = "assets/images/svg/star_icon.svg";
+  static const starOutlineIcon = "assets/images/svg/star_outline_icon.svg";
   static const envelopeIcon = "assets/images/svg/envelope_icon.svg";
   static const leftCircleDirectionIcon =
       "assets/images/svg/left_circle_direction_icon.svg";

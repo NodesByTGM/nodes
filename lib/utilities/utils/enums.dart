@@ -16,6 +16,7 @@ enum HorizontalSlidingCardDataSource {
   TopMovies,
   HiddenGems,
   Flashbacks,
+  Community,
   CollaborationSpotlights,
   Birthdays,
   MoreLikeThis,

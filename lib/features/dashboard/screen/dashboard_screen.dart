@@ -216,7 +216,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             rightSection: "Open Community",
             onTap: () {},
           ),
-          //
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Community,
+          ),
           ySpace(height: 40),
           Subsection(
             leftSection: "Collaboration Spotlights",
