@@ -1,5 +1,6 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_view_all_dynamic_screen.dart';
@@ -214,7 +215,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Subsection(
             leftSection: "Community",
             rightSection: "Open Community",
-            onTap: () {},
+            onTap: () {
+              navCtrl.updatePageListStack(
+                NodeSpacesScreen.routeName,
+              );
+            },
           ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.Community,

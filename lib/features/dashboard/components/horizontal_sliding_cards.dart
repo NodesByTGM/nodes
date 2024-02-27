@@ -1,3 +1,6 @@
+import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/community/components/community_space_card_template.dart';
+import 'package:nodes/features/community/screens/space_details_screen.dart';
 import 'package:nodes/features/dashboard/components/card_template.dart';
 import 'package:nodes/features/dashboard/components/community_card_template.dart';
 import 'package:nodes/features/dashboard/components/leave_a_rating.dart';
@@ -10,8 +13,10 @@ class HorizontalSlidingCards extends StatefulWidget {
   const HorizontalSlidingCards({
     super.key,
     required this.dataSource,
+    this.height,
   });
   final HorizontalSlidingCardDataSource dataSource;
+  final double? height;
 
   @override
   State<HorizontalSlidingCards> createState() => _HorizontalSlidingCardsState();
@@ -64,7 +69,8 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
         } else if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
           return SizedBox(
-            height: 240,
+            // height: 240,
+            height: widget.height ?? 240,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -104,6 +110,18 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
               "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
           title: "Lorem ipsum dolor sit amet, con...",
           onTap: () {},
+        );
+      case HorizontalSlidingCardDataSource.Recommended:
+        return CommunitySpaceCardTemplate(
+          imgUrl:
+              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          title: "Lorem ipsum dolor sit amet, con...",
+          height: 300,
+          onTap: () {
+            context
+                .read<NavController>()
+                .updatePageListStack(SpaceDetailsScreen.routeName);
+          },
         );
       default:
         return CustomCardTemplate(

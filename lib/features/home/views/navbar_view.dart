@@ -3,6 +3,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/core/models/current_session.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
+import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/home/components/drawer.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -42,6 +43,7 @@ class _NavbarViewState extends State<NavbarView> {
     final navCtrl = context.watch<NavController>();
     _authCtrl = context.watch<AuthController>();
     // String _userType = _authCtrl.currentUser.user_type ?? "";
+    EdgeInsets? genScreenpadding = shouldHavePadding(navCtrl);
     return WillPopScope(
       onWillPop: () async {
         // navCtrl.popPageListStack();
@@ -65,6 +67,9 @@ class _NavbarViewState extends State<NavbarView> {
         scafoldKey: _scaffoldKey,
         isCancel: false,
         backgroundColor: Colors.white,
+        // padding: const EdgeInsets.all(0),
+        // There might be some screens where I won't want the padding to reflect, so I add them in an array...
+        padding: genScreenpadding,
         leading: GestureDetector(
           onTap: () => _openDrawer(),
           child: Padding(
@@ -111,6 +116,13 @@ class _NavbarViewState extends State<NavbarView> {
     _scaffoldKey.currentState!.openDrawer();
   }
 
+  EdgeInsets? shouldHavePadding(NavController ctrl) {
+    return [
+      NodeSpacesScreen.routeName,
+    ].contains(ctrl.currentPageListStackItem)
+        ? const EdgeInsets.all(0)
+        : null;
+  }
 }
 
 void logout(BuildContext context) {

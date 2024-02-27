@@ -1,6 +1,7 @@
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
@@ -102,9 +103,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.homeIcon,
                         title: KeyString.homeScreen,
                         route: DrawerRouteTitle.Home,
-                        // isActive: navCtrl.pageListStack.length == 1, // or any of the Home children screen is the currentPageListStackItem
-                        isActive: navCtrl.persistentRoutes[KeyString.homeScreen]
-                            .contains(navCtrl.currentPageListStackItem),
+                        // or any of the Home children screen is the currentPageListStackItem
+                        isActive:
+                            getActiveDrawer(navCtrl, KeyString.homeScreen),
                         onTap: () {
                           // Check if the currentPageListStackItem, is amongst the children of HOMe,
                           // Asin, did we get to the screen via the home tab, if yes, then yeah... it'll make
@@ -128,10 +129,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.globeIcon,
                         title: KeyString.communityScreen,
                         route: DrawerRouteTitle.Community,
-                        isActive: false,
+                        isActive:
+                            getActiveDrawer(navCtrl, KeyString.communityScreen),
                         onTap: () {
                           closeDrawer();
-                          //
+                          navCtrl.updatePageListStack(
+                            NodeSpacesScreen.routeName,
+                          );
                         },
                       ),
                       _menuItem(
@@ -260,11 +264,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      // onTap: () {
-      //   // Uncomment if you wish to remove the drawer menu from being drawn unto the screen before navigating to the next screen
-      //   // navigateBack(context);
-      //   // navigateTo(context, ExploreDrawerScreen.routeName, arguments: route);
-      // },
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 10,
@@ -297,5 +296,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         ),
       ),
     );
+  }
+
+  getActiveDrawer(NavController nCtrl, String route) {
+    return nCtrl.persistentRoutes[route]
+        .contains(nCtrl.currentPageListStackItem);
   }
 }

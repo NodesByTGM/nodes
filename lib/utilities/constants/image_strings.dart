@@ -37,4 +37,6 @@ class ImageUtils {
       "assets/images/svg/left_circle_direction_icon.svg";
   static const rightCircleDirectionIcon =
       "assets/images/svg/right_circle_direction_icon.svg";
+  static const multipleUserIcon = "assets/images/svg/multiple_users_icon.svg";
+  static const commentOutlineIcon = "assets/images/svg/comment_outline_icon.svg";
 }

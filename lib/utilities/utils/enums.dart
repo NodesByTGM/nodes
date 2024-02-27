@@ -20,6 +20,7 @@ enum HorizontalSlidingCardDataSource {
   CollaborationSpotlights,
   Birthdays,
   MoreLikeThis,
+  Recommended,
 }
 
 enum FilterSort {

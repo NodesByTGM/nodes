@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/community/screens/space_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_single_item_details.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_view_all_dynamic_screen.dart';
@@ -12,7 +14,10 @@ const Map<String, dynamic> persistentRoutesSettings = {
     DashboardSingleItemDetailsScreen.routeName,
   ],
   KeyString.profileScreen: [],
-  KeyString.communityScreen: [],
+  KeyString.communityScreen: [
+    NodeSpacesScreen.routeName,
+    SpaceDetailsScreen.routeName,
+  ],
   KeyString.forBusinessScreen: [],
   KeyString.subscriptionScreen: [],
 };
@@ -28,6 +33,8 @@ Widget getDynamicScreen(NavController m) {
     DashboardSingleItemDetailsScreen.routeName =>
       //  DashboardSingleItemDetailsScreen(s: args as String,),
       const DashboardSingleItemDetailsScreen(),
+    NodeSpacesScreen.routeName => const NodeSpacesScreen(),
+    SpaceDetailsScreen.routeName => const SpaceDetailsScreen(),
 
     // Serves as default value
     _ => const DashboardScreen()
