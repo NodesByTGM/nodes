@@ -34,3 +34,15 @@ const primarySwatches = <int, Color>{
   800: PRIMARY,
   900: PRIMARY,
 };
+
+const linearGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color.fromARGB(20, 213, 222, 33),
+      Color.fromARGB(20, 213, 222, 33),
+      Color.fromARGB(20, 213, 222, 33),
+      Color.fromARGB(20, 213, 222, 33),
+      Color.fromARGB(1, 255, 255, 255),
+      Color.fromARGB(1, 255, 255, 255),
+    ]);

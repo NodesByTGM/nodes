@@ -12,6 +12,7 @@ CurrentSession _$CurrentSessionFromJson(Map<String, dynamic> json) =>
       access: json['access'] as String?,
       user_type: json['user_type'] as String?,
       uid: json['uid'] as String?,
+      loggedIn: json['loggedIn'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$CurrentSessionToJson(CurrentSession instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$CurrentSessionToJson(CurrentSession instance) =>
       'access': instance.access,
       'user_type': instance.user_type,
       'uid': instance.uid,
+      'loggedIn': instance.loggedIn,
     };

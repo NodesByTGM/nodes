@@ -12,6 +12,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/services/push_notifications.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/view_model/com_controller.dart';
 import 'package:nodes/utilities/constants/constant_strings.dart';
 import 'package:nodes/utilities/utils/themes.dart';
 import 'package:nodes/config/routes.dart';
@@ -65,6 +66,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
          ChangeNotifierProvider<NavController>(
           create: (_) => locator.get<NavController>(),
+        ),
+         ChangeNotifierProvider<ComController>(
+          create: (_) => locator.get<ComController>(),
         ),
       ],
       child: MaterialApp(

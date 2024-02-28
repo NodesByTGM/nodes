@@ -1,6 +1,8 @@
+import 'package:nodes/features/community/components/create_new_space.dart';
 import 'package:nodes/features/community/components/create_space_tab.dart';
 import 'package:nodes/features/community/components/discover_tab.dart';
 import 'package:nodes/features/community/components/space_following_tab.dart';
+import 'package:nodes/features/community/components/topic_interests_modal.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -14,13 +16,15 @@ class NodeSpacesScreen extends StatefulWidget {
 
 class _NodeSpacesScreenState extends State<NodeSpacesScreen>
     with SingleTickerProviderStateMixin {
-  var top = 0.0;
+  var top = 91.0;
   int currentTabIndex = 0;
 
   late TabController tabController;
 
   @override
   void initState() {
+    // Launch the into modal on init...
+    // But first check if user has selected any topics, if yes, then don't launch, else.. launch
     tabController = TabController(vsync: this, length: 3);
     super.initState();
     tabController.addListener(() {
@@ -28,25 +32,14 @@ class _NodeSpacesScreenState extends State<NodeSpacesScreen>
         currentTabIndex = tabController.index;
       });
     });
+    showWelcomeModal();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: top < 90
-            ? null
-            : const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0x26D5DE21),
-                  Color(0x26D5DE21),
-                  Color(0x26D5DE21),
-                  Color(0xFFFFFFFF),
-                  Color(0xFFFFFFFF),
-                ],
-              ),
+        gradient: top < 90 ? null : linearGradient,
       ),
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -92,7 +85,8 @@ class _NodeSpacesScreenState extends State<NodeSpacesScreen>
                                 xSpace(width: 16),
                                 Expanded(
                                   child: OutlineBtn(
-                                    onPressed: () {},
+                                    onPressed: () =>
+                                        showCreateSpaceBottomSheet(),
                                     borderColor: PRIMARY,
                                     color: WHITE,
                                     height: 48,
@@ -204,5 +198,177 @@ class _NodeSpacesScreenState extends State<NodeSpacesScreen>
   void dispose() {
     tabController.dispose();
     super.dispose();
+  }
+
+  showWelcomeModal() async {
+    await Future.delayed(
+      const Duration(microseconds: 500),
+      () {
+        showSimpleDialog(
+          context: context,
+          backgroundColor: WHITE,
+          dismissable: false,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.only(bottom: 0),
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 10, top: 20),
+            decoration: BoxDecoration(
+              color: WHITE,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Wrap(
+                  spacing: 5,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    labelText(
+                      "Introducing",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                    ),
+                    labelText(
+                      "Discover",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                      color: PRIMARY,
+                    ),
+                    labelText(
+                      "on Nodes",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                ySpace(height: 40),
+                SvgPicture.asset(ImageUtils.multiSpaceEmptyIcon),
+                ySpace(height: 40),
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: linearGradient,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              labelText(
+                                "Join amazing spaces",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                textAlign: TextAlign.center,
+                              ),
+                              ySpace(height: 10),
+                              subtext(
+                                "Lorem ipsum dolor sit amet consectetur. Consequat nunc euismod id molestie ",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                textAlign: TextAlign.center,
+                                height: 1.7,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              labelText(
+                                "Learn something community",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                textAlign: TextAlign.center,
+                              ),
+                              ySpace(height: 10),
+                              subtext(
+                                "Lorem ipsum dolor sit amet consectetur. Consequat nunc euismod id molestie ",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                textAlign: TextAlign.center,
+                                height: 1.7,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 100,
+                    vertical: 10,
+                  ),
+                  child: SubmitBtn(
+                    onPressed: () {
+                      showOptionModal();
+                    },
+                    title: btnTxt(
+                      "Next",
+                      WHITE,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  showOptionModal() async {
+    navigateBack(context);
+    await Future.delayed(
+      const Duration(microseconds: 500),
+      () {
+        showSimpleDialog(
+          context: context,
+          backgroundColor: WHITE,
+          dismissable: false,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.only(bottom: 0),
+          child: const TopicInterest(),
+        );
+      },
+    );
+  }
+
+  showCreateSpaceBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return BottomSheetWrapper(
+              closeOnTap: true,
+              title: labelText(
+                "Create a new space",
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+              child: const CreateNewSpace(),
+            );
+          },
+        );
+      },
+    );
   }
 }

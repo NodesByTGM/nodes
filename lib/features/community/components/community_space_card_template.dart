@@ -10,6 +10,7 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
     this.width,
     this.marginRight,
     required this.onTap,
+    this.popupMenu,
   });
 
   final String imgUrl;
@@ -19,6 +20,7 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
   final double? width;
   final double? marginRight;
   final GestureTapCallback onTap;
+  final Widget? popupMenu;
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +48,23 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
                   imgUrl: "",
                   size: 80,
                 ),
-                GestureDetector(
-                  onTap: onTap ,
-                  child: labelText(
-                    onTapTitle ?? "Join space",
-                    color: PRIMARY,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                )
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: onTap,
+                      child: labelText(
+                        onTapTitle ?? "Join space",
+                        color: PRIMARY,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    if (!isObjectEmpty(popupMenu)) ...[
+                      xSpace(width: 10),
+                      popupMenu!
+                    ],
+                  ],
+                ),
               ],
             ),
             ySpace(height: 24),

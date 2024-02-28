@@ -9,6 +9,9 @@ import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/features/auth/repo/auth_repository.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/repo/com_repository.dart';
+import 'package:nodes/features/community/service/com_service.dart';
+import 'package:nodes/features/community/view_model/com_controller.dart';
 import 'package:nodes/interceptor/http_dio_interceptor.dart';
 
 import 'env.config.dart' as envConfig;
@@ -33,11 +36,21 @@ void setUpLocator() {
       dioConfig(),
     ),
   );
+  locator.registerSingleton<ComRepository>(
+    ComRepository(
+      dioConfig(),
+    ),
+  );
 
   // services
   locator.registerSingleton<AuthService>(
     AuthService(
       locator.get<AuthRepository>(),
+    ),
+  );
+  locator.registerSingleton<ComService>(
+    ComService(
+      locator.get<ComRepository>(),
     ),
   );
 
@@ -46,6 +59,11 @@ void setUpLocator() {
     AuthController(
       locator.get<AuthService>(),
       locator.get<LocalStorageService>(),
+    ),
+  );
+  locator.registerSingleton<ComController>(
+    ComController(
+      locator.get<ComService>(),
     ),
   );
   locator.registerSingleton<NavController>(

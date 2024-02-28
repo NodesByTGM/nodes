@@ -1,13 +1,20 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/components/space_about_tab.dart';
 import 'package:nodes/features/community/components/space_discussion_tab.dart';
 import 'package:nodes/features/community/components/space_members_tab.dart';
+import 'package:nodes/features/community/view_model/com_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class SpaceDetailsScreen extends StatefulWidget {
-  const SpaceDetailsScreen({super.key});
+  const SpaceDetailsScreen({
+    super.key,
+    this.isCreateSpace = false,
+  });
   static const String routeName = "/space_details_screen";
+
+  final bool isCreateSpace;
 
   @override
   State<SpaceDetailsScreen> createState() => _SpaceDetailsScreenState();
@@ -16,11 +23,13 @@ class SpaceDetailsScreen extends StatefulWidget {
 class _SpaceDetailsScreenState extends State<SpaceDetailsScreen>
     with SingleTickerProviderStateMixin {
   int currentTabIndex = 0;
+  late ComController comCtrl;
 
   late TabController tabController;
 
   @override
   void initState() {
+    comCtrl = locator.get<ComController>();
     tabController = TabController(vsync: this, length: 3);
     super.initState();
     tabController.addListener(() {
@@ -32,6 +41,7 @@ class _SpaceDetailsScreenState extends State<SpaceDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
+    comCtrl = context.watch<ComController>();
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
@@ -73,8 +83,48 @@ class _SpaceDetailsScreenState extends State<SpaceDetailsScreen>
                         height: 300,
                         width: screenWidth(context),
                         marginRight: 0,
-                        onTapTitle: "Invite a friend",
+                        onTapTitle: widget.isCreateSpace
+                            ? "Share space"
+                            : "Invite a friend",
                         onTap: () {},
+                        popupMenu: !comCtrl.dummyIsCreatedSpace
+                            ? null
+                            : PopupMenuButton<String>(
+                                onSelected: (value) {},
+                                itemBuilder: (context) {
+                                  return [
+                                    PopupMenuItem(
+                                      value: 'private',
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          subtext("Make private"),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          subtext(
+                                            "Delete space",
+                                            color: RED,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ];
+                                },
+                                // offset: const Offset(0, 40),
+                                color: WHITE,
+                                elevation: 2,
+                                child: const Icon(
+                                  Icons.more_vert,
+                                ),
+                              ),
                       ),
                     ],
                   ),

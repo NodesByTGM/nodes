@@ -364,6 +364,8 @@ showSimpleDialog({
   bool isCancel = true,
   Color backgroundColor = Colors.white,
   VoidCallback? cancelFn,
+  EdgeInsetsGeometry? padding,
+  EdgeInsets? insetPadding,
 }) {
   return showDialog(
     context: context,
@@ -371,9 +373,10 @@ showSimpleDialog({
     builder: (BuildContext context) {
       return Dialog(
         backgroundColor: backgroundColor,
+        insetPadding: insetPadding,
         child: Container(
           width: screenWidth(context),
-          padding: const EdgeInsets.all(20),
+          padding: padding ?? const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

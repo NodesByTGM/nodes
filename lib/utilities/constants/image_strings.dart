@@ -39,4 +39,8 @@ class ImageUtils {
       "assets/images/svg/right_circle_direction_icon.svg";
   static const multipleUserIcon = "assets/images/svg/multiple_users_icon.svg";
   static const commentOutlineIcon = "assets/images/svg/comment_outline_icon.svg";
+  static const attachmentIcon = "assets/images/svg/attachment_icon.svg";
+  static const galleryIcon = "assets/images/svg/gallery_icon.svg";
+  static const spaceEmptyIcon = "assets/images/svg/space_empty_icon.svg";
+  static const multiSpaceEmptyIcon = "assets/images/svg/multi_space_people.svg";
 }

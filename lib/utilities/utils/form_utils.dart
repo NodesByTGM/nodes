@@ -159,3 +159,36 @@ class SocialsFormWithLabel extends StatelessWidget {
     );
   }
 }
+
+class DoubleFormWithLabel extends StatelessWidget {
+  const DoubleFormWithLabel({
+    Key? key,
+    required this.firstForm,
+    required this.lastForm,
+  }) : super(key: key);
+
+  final Widget firstForm;
+  final Widget lastForm;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          width: 1,
+          color: BORDER,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          
+          firstForm,
+          lastForm,
+        ],
+      ),
+    );
+  }
+}
