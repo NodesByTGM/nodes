@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class TopicInterest extends StatefulWidget {
@@ -12,6 +11,7 @@ class _TopicInterestState extends State<TopicInterest> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.all(20),

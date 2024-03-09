@@ -64,10 +64,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<AuthController>(
           create: (_) => locator.get<AuthController>(),
         ),
-         ChangeNotifierProvider<NavController>(
+        ChangeNotifierProvider<NavController>(
           create: (_) => locator.get<NavController>(),
         ),
-         ChangeNotifierProvider<ComController>(
+        ChangeNotifierProvider<ComController>(
           create: (_) => locator.get<ComController>(),
         ),
       ],

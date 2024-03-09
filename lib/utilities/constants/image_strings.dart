@@ -43,4 +43,6 @@ class ImageUtils {
   static const galleryIcon = "assets/images/svg/gallery_icon.svg";
   static const spaceEmptyIcon = "assets/images/svg/space_empty_icon.svg";
   static const multiSpaceEmptyIcon = "assets/images/svg/multi_space_people.svg";
+  static const mapLocationIcon = "assets/images/svg/map_location.svg";
+  static const chainLinkIcon = "assets/images/svg/chain_link.svg";
 }

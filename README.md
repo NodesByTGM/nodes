@@ -4,13 +4,14 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a starting point for Nodes application, which is a product of `The Grid Management Company`
 
-A few resources to get you started if this is your first Flutter project:
+## Table of Content
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Software Development Kit versions for both Flutter and Dart
+2. App architectural design.
+3. App user story.
+4. Folder structure and core functionalities.
+5. Routing and Dynamic routing system used.
+6. Essential packages used, likes of Firebase, Shorebird, build runner etc...
+7. The screens that are exempted from the default screen padding found in the NavBar file

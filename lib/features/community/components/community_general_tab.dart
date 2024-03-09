@@ -1,15 +1,14 @@
-import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
-class SpaceDiscussionTab extends StatefulWidget {
-  const SpaceDiscussionTab({super.key});
+class CommunityGeneralTab extends StatefulWidget {
+  const CommunityGeneralTab({super.key});
 
   @override
-  State<SpaceDiscussionTab> createState() => _SpaceDiscussionTabState();
+  State<CommunityGeneralTab> createState() => _CommunityGeneralTabState();
 }
 
-class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
+class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
   TextEditingController msgCtrl = TextEditingController();
   bool commentIsExpanded = false;
   var _ = 158.0;
@@ -32,6 +31,7 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
+                    margin: const EdgeInsets.only(right: 16),
                     padding: const EdgeInsets.only(
                       top: 4,
                       bottom: 4,
@@ -96,6 +96,7 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 5,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemBuilder: (c, i) {
                   return commentCard();
                 },
@@ -108,6 +109,7 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 100),
+              // height: 128,
               height: 128,
               padding: const EdgeInsets.only(
                 top: 6,
@@ -145,7 +147,7 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
                         child: FormBuilderTextField(
                           name: "comment",
                           decoration: FormUtils.formDecoration(
-                            hintText: "Ask the members a question...",
+                            hintText: "Ask for help from the community...",
                             isTransparentBorder: true,
                             verticalPadding: 10,
                           ),
@@ -237,45 +239,91 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
                 ),
               ),
               xSpace(width: 10),
-              const Icon(Icons.more_horiz),
+              PopupMenuButton<String>(
+                onSelected: (value) {},
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      value: 'follow',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          subtext("Follow this conversation"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'report',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          subtext(
+                            "Report",
+                            color: RED,
+                          ),
+                        ],
+                      ),
+                    )
+                  ];
+                },
+                // offset: const Offset(0, 40),
+                color: WHITE,
+                elevation: 2,
+                child: const Icon(
+                  Icons.more_horiz,
+                ),
+              ),
             ],
           ),
           ySpace(height: 20),
-          labelText(
-            "Lorem ipsum dolor sit amet consectetur. Feugiat senectus ut aenean commodo dictum malesuada. Imperdiet orci magnis donec malesuada mi massa magna lectus viverra. Nunc quam congue vulputate etiam dapibus vel suscipit cras pretium. Ut donec vulputate etiam consectetur vel.",
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            height: 1.5,
-          ),
-          ySpace(height: 20),
-          Container(
-            width: screenWidth(context),
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: cachedNetworkImage(
-                imgUrl:
-                    "https://images.pexels.com/photos/13734188/pexels-photo-13734188.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-              ),
+          GestureDetector(
+            onTap: () {},
+            child: Column(
+              children: [
+                labelText(
+                  "Lorem ipsum dolor sit amet consectetur. Feugiat senectus ut aenean commodo dictum malesuada. Imperdiet orci magnis donec malesuada mi massa magna lectus viverra. Nunc quam congue vulputate etiam dapibus vel suscipit cras pretium. Ut donec vulputate etiam consectetur vel.",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5,
+                ),
+                ySpace(height: 20),
+                Container(
+                  width: screenWidth(context),
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: cachedNetworkImage(
+                      imgUrl:
+                          "https://images.pexels.com/photos/13734188/pexels-photo-13734188.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           ySpace(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              socialBtn(
+                title: '24',
+                icon: Icons.chat_bubble_outline_outlined,
+                onTap: () {},
+              ),
               socialBtn(
                 title: '24',
                 icon: Icons.thumb_up_alt_outlined,
                 onTap: () {},
               ),
-              xSpace(width: 24),
               socialBtn(
                 title: 'Share',
                 icon: Icons.ios_share_rounded,
-                onTap: () {},
+                onTap: () async {
+                  final res = await shareDoc(context);
+                },
               ),
             ],
           ),

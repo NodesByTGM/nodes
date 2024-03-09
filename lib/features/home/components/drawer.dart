@@ -2,6 +2,7 @@ import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
@@ -119,10 +120,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.profileIcon,
                         title: KeyString.profileScreen,
                         route: DrawerRouteTitle.Profile,
-                        isActive: false,
+                        isActive:
+                            getActiveDrawer(navCtrl, KeyString.profileScreen),
                         onTap: () {
                           closeDrawer();
-                          //
+                          // Get to know who's logged in, i.e individual, Talent or Business, and direct them properly...
+                          navCtrl.updatePageListStack(
+                            ProfileWrapper.routeName,
+                          );
                         },
                       ),
                       _menuItem(

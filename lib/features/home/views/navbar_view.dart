@@ -3,8 +3,16 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/core/models/current_session.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
+import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/home/components/drawer.dart';
+import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
+import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
+import 'package:nodes/features/profile/screens/individual/edit_individual_profile_screen.dart';
+import 'package:nodes/features/profile/screens/individual/individual_profile_screen.dart';
+import 'package:nodes/features/profile/screens/profile_wrapper.dart';
+import 'package:nodes/features/profile/screens/talent/edit_talent_profile_screen.dart';
+import 'package:nodes/features/profile/screens/talent/talent_profile_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class NavbarView extends StatefulWidget {
@@ -20,6 +28,7 @@ class _NavbarViewState extends State<NavbarView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthController _authCtrl;
   late CurrentSession? session;
+  bool isRegistered = true;
 
   initSession() async {
     _authCtrl = context.read<AuthController>();
@@ -66,48 +75,83 @@ class _NavbarViewState extends State<NavbarView> {
       child: AppWrapper(
         scafoldKey: _scaffoldKey,
         isCancel: false,
+        safeBottom: false, // used to remove the safeArea bottom
         backgroundColor: Colors.white,
         // padding: const EdgeInsets.all(0),
         // There might be some screens where I won't want the padding to reflect, so I add them in an array...
         padding: genScreenpadding,
-        leading: GestureDetector(
-          onTap: () => _openDrawer(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: SvgPicture.asset(
-              ImageUtils.menuIcon,
-            ),
-          ),
-        ),
-        title: Image.asset(
-          ImageUtils.appIcon,
-          height: 32,
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: SvgPicture.asset(
-              ImageUtils.bellIcon,
-              height: 32,
-            ),
-          ),
-          xSpace(width: 24),
-          GestureDetector(
-            onTap: () {},
-            child: SvgPicture.asset(
-              ImageUtils.envelopeIcon,
-              height: 32,
-            ),
-          ),
-          xSpace(width: 20),
-        ],
+        leading: isRegistered
+            ? GestureDetector(
+                onTap: () => _openDrawer(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: SvgPicture.asset(
+                    ImageUtils.menuIcon,
+                  ),
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(left: 18.0),
+                child: Image.asset(
+                  ImageUtils.appIcon,
+                  height: 25,
+                ),
+              ),
+        title: isRegistered
+            ? Image.asset(
+                ImageUtils.appIcon,
+                height: 32,
+              )
+            : null,
+        centerTitle: isRegistered,
+        actions: isRegistered
+            ? [
+                GestureDetector(
+                  onTap: () {},
+                  child: SvgPicture.asset(
+                    ImageUtils.bellIcon,
+                    height: 32,
+                  ),
+                ),
+                xSpace(width: 24),
+                GestureDetector(
+                  onTap: () {},
+                  child: SvgPicture.asset(
+                    ImageUtils.envelopeIcon,
+                    height: 32,
+                  ),
+                ),
+                xSpace(width: 20),
+              ]
+            : [
+                SizedBox(
+                  width: 100,
+                  height: 47,
+                  child: OutlineBtn(
+                    onPressed: () {},
+                    borderColor: WHITE,
+                    color: WHITE,
+                    child: btnTxt("Login", BLACK),
+                  ),
+                ),
+                xSpace(width: 10),
+                SizedBox(
+                  width: 100,
+                  height: 47,
+                  child: SubmitBtn(
+                    onPressed: () {},
+                    title: btnTxt("Sign Up", WHITE),
+                  ),
+                ),
+                xSpace(width: 16),
+              ],
         body: Consumer<NavController>(
           builder: (context, model, _) {
             // Get screen from stack
             return getDynamicScreen(model);
           },
         ),
-        drawer: const DrawerWidget(),
+        drawer: isRegistered ? const DrawerWidget() : null,
       ),
     );
   }
@@ -116,9 +160,18 @@ class _NavbarViewState extends State<NavbarView> {
     _scaffoldKey.currentState!.openDrawer();
   }
 
+// This is used to denote which screens should have the default padding an all...
   EdgeInsets? shouldHavePadding(NavController ctrl) {
     return [
       NodeSpacesScreen.routeName,
+      NodeCommunityScreen.routeName,
+      ProfileWrapper.routeName,
+      IndividualProfileScreen.routeName,
+      EditIndividualProfileScreen.routeName,
+      TalentProfileScreen.routeName,
+      EditTalentProfileScreen.routeName,
+      BusinessProfileScreen.routeName,
+      EditBusinessProfileScreen.routeName,
     ].contains(ctrl.currentPageListStackItem)
         ? const EdgeInsets.all(0)
         : null;

@@ -52,6 +52,10 @@ dependencies:
   flutter_textfield_autocomplete: ^1.0.2
   shimmer: ^3.0.0
   flutter_rating_bar: ^4.0.1
+  share_plus: ^7.2.2
+  dotted_border: ^2.1.0
+  device_preview: ^1.1.0
+  sticky_headers: "^0.3.0"
 
 dev_dependencies:
   flutter_test:

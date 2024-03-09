@@ -26,7 +26,7 @@ class CreateSpaceTab extends StatelessWidget {
                       ),
                       ySpace(height: 20),
                       subtext(
-                        "You haven’t created a space yet\nGet started now and create one",
+                        "You haven't created a space yet\nGet started now and create one",
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         textAlign: TextAlign.center,

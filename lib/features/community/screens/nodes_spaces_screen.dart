@@ -1,8 +1,10 @@
+import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/create_new_space.dart';
 import 'package:nodes/features/community/components/create_space_tab.dart';
 import 'package:nodes/features/community/components/discover_tab.dart';
 import 'package:nodes/features/community/components/space_following_tab.dart';
 import 'package:nodes/features/community/components/topic_interests_modal.dart';
+import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -74,7 +76,12 @@ class _NodeSpacesScreenState extends State<NodeSpacesScreen>
                             children: [
                               Expanded(
                                 child: SubmitBtn(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context
+                                        .read<NavController>()
+                                        .updatePageListStack(
+                                            NodeCommunityScreen.routeName);
+                                  },
                                   title: btnTxt(
                                     "See Community",
                                     WHITE,
@@ -217,6 +224,7 @@ class _NodeSpacesScreenState extends State<NodeSpacesScreen>
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Wrap(
                   spacing: 5,

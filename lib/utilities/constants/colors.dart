@@ -15,6 +15,7 @@ const Color TITLE_COLOR = Color(0xFF1D1A42);
 const Color FORM_TEXT = Color(0xFF76768D);
 const Color GREEN = Color(0xFF378E5A);
 const Color BORDER = Color(0xFFD6D6D6);
+const Color DOTTED_BORDER = Color(0xFF212121);
 const Color GRAY = Color(0xFF757575);
 // const Color GRAY = Color(0xFF979797);
 const Color ACTIVE_LABEL = Color(0xFF76768D);
@@ -45,4 +46,13 @@ const linearGradient = LinearGradient(
       Color.fromARGB(20, 213, 222, 33),
       Color.fromARGB(1, 255, 255, 255),
       Color.fromARGB(1, 255, 255, 255),
+    ]);
+const profileLinearGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color.fromARGB(10, 214, 222, 33),
+      Color.fromARGB(10, 214, 222, 33),
+      Color.fromARGB(10, 214, 222, 33),
+      Color.fromARGB(10, 214, 222, 33),
     ]);

@@ -13,6 +13,7 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 const FontFamily = 'br-firma';
 
@@ -376,13 +377,42 @@ showSimpleDialog({
         insetPadding: insetPadding,
         child: Container(
           width: screenWidth(context),
-          padding: padding ?? const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              child,
-            ],
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(8),
           ),
+          padding: padding ?? const EdgeInsets.all(20),
+          child: child,
+          // child: SingleChildScrollView(
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       // if (isCancel)
+          //       //   Row(
+          //       //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       //     children: [
+          //       //       title ?? Container(),
+          //       //       GestureDetector(
+          //       //         onTap: () => navigateBack(context),
+          //       //         child: SvgPicture.asset(
+          //       //           ImageUtils.cancel,
+          //       //           height: 32,
+          //       //           width: 32,
+          //       //         ),
+          //       //       ),
+          //       //     ],
+          //       //   ),
+          //       child,
+          //     ],
+          //   ),
+          // ),
+          // child: SingleChildScrollView(
+          //   padding: const EdgeInsets.symmetric(
+          //     horizontal: 20.0,
+          //     vertical: 36.0,
+          //   ),
+          //   child: child,
+          // ),
         ),
       );
     },
@@ -635,4 +665,17 @@ socialInteractionIconWithVal({
       ],
     ),
   );
+}
+
+Future<ShareResultStatus> shareDoc(BuildContext context) async {
+  final box = context.findRenderObject() as RenderBox?;
+
+  final result = await Share.shareWithResult(
+    'check out this post https://example.com',
+    sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+  );
+  if (result.status == ShareResultStatus.success) {
+    print('Thank you for sharing my website!');
+  }
+  return ShareResultStatus.success;
 }

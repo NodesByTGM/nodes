@@ -210,7 +210,7 @@ class _CreateNewSpaceState extends State<CreateNewSpace> {
         showText(message: "Oops!!! Please fill the empty title.");
         return;
       }
-      ;
+      
     }
     for (var element in dynamicDescRulesCtrl) {
       if (isObjectEmpty(element.text)) {
