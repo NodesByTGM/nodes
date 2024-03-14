@@ -38,7 +38,7 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
             "Social media",
             fontSize: 20,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 40),
           SocialsFormWithLabel(

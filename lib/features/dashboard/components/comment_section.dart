@@ -45,7 +45,7 @@ class _CommentSectionState extends State<CommentSection> {
                     child: labelText(
                       "Jane Doe",
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

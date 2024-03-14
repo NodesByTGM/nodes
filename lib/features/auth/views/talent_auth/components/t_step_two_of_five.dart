@@ -31,7 +31,7 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
           "What do you do?",
           fontSize: 20,
           textAlign: TextAlign.center,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
         ySpace(height: 40),
         MultipleSearchSelection<String>(
@@ -128,9 +128,9 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-             backBoxFn(
+            backBoxFn(
               onTap: () {
-                 _authCtrl.setTStepper(1);
+                _authCtrl.setTStepper(1);
               },
             ),
             Expanded(

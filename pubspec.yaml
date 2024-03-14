@@ -38,9 +38,9 @@ dependencies:
   regexed_validator: ^2.0.0+1
   camera: ^0.10.5+5
   flutter_multi_formatter: ^2.11.16
-  firebase_core: ^2.20.0
-  firebase_messaging: ^14.7.2
-  firebase_crashlytics: ^3.4.6
+  # firebase_core: ^2.20.0
+  # firebase_messaging: ^14.7.2
+  # firebase_crashlytics: ^3.4.6
   flutter_local_notifications: ^9.9.1
   upgrader: ^8.2.0
   material_design_icons_flutter: ^7.0.7296
@@ -94,28 +94,24 @@ flutter:
     - assets/images/
     - assets/images/png/
     - assets/images/svg/
-    - assets/fonts/br-firma-cufonfonts/
+    - assets/fonts/generalSans/
     - assets/fonts/
 
   fonts:
-    - family: br-firma
+
+    - family: generalSans
       fonts:
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Black.otf
-          weight: 900
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Bold.otf
+        - asset: assets/fonts/generalSans/GeneralSans_Bold.otf
           weight: 800
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_SemiBold.otf
+        - asset: assets/fonts/generalSans/GeneralSans_SemiBold.otf
           weight: 700
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Medium.otf
+        - asset: assets/fonts/generalSans/GeneralSans_Medium.otf
           weight: 600
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Regular.otf
+        - asset: assets/fonts/generalSans/GeneralSans_Regular.otf
           weight: 500
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Light.otf
+        - asset: assets/fonts/generalSans/GeneralSans_Light.otf
           weight: 400
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Extra_Light.otf
-          weight: 300
-        - asset: assets/fonts/br-firma-cufonfonts/br_firma_Thin.otf
-          weight: 200
+          
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -34,7 +34,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               "Reset password",
               fontSize: 24,
               textAlign: TextAlign.center,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
             ySpace(height: 8),
             subtext(

@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
@@ -59,7 +59,7 @@ class AuthController extends BaseController {
   }
 
   dummySession(Map<String, dynamic> json) {
-     _saveSession(json);
+    _saveSession(json);
   }
 
   set currentUserVal(CurrentSession session) {

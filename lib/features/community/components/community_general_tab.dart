@@ -314,7 +314,7 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
                 onTap: () {},
               ),
               socialBtn(
-                title: '24',
+                title: '29',
                 icon: Icons.thumb_up_alt_outlined,
                 onTap: () {},
               ),

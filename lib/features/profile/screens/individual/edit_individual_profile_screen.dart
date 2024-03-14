@@ -79,7 +79,8 @@ class _EditIndividualProfileScreenState
                           Row(
                             children: [
                               cachedNetworkImage(
-                               imgUrl: "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                                imgUrl:
+                                    "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
                                 size: 100,
                               ),
                               xSpace(width: 16),
@@ -154,7 +155,12 @@ class _EditIndividualProfileScreenState
                               onChanged: (val) {},
                             ),
                           ),
-                          ySpace(height: 16),
+                          ySpace(height: 40),
+                          SubmitBtn(
+                            onPressed: _submit,
+                            title: btnTxt("Save and Continue", WHITE),
+                          ),
+                          ySpace(height: 20),
                         ],
                       ),
                     ),
@@ -211,7 +217,12 @@ class _EditIndividualProfileScreenState
                               onChanged: (val) {},
                             ),
                           ),
-                          ySpace(height: 16),
+                          ySpace(height: 40),
+                          SubmitBtn(
+                            onPressed: _submit,
+                            title: btnTxt("Save and Continue", WHITE),
+                          ),
+                          ySpace(height: 20),
                         ],
                       ),
                     ),
@@ -305,7 +316,12 @@ class _EditIndividualProfileScreenState
                               onChanged: (val) {},
                             ),
                           ),
-                          ySpace(height: 16),
+                          ySpace(height: 40),
+                          SubmitBtn(
+                            onPressed: _submit,
+                            title: btnTxt("Save and Continue", WHITE),
+                          ),
+                          ySpace(height: 20),
                         ],
                       ),
                     ),
@@ -396,6 +412,12 @@ class _EditIndividualProfileScreenState
         ],
       ),
     );
+  }
+
+  void _submit() async {
+    closeKeyPad(context);
+    if (formKey.currentState!.saveAndValidate()) {}
+    formKey.currentState!.reset();
   }
 
   @override

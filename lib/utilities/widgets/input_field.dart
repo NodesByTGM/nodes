@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 const FORM_STYLE = TextStyle(color: PRIMARY, fontSize: 15);
@@ -114,7 +113,6 @@ class FormUtils {
       height: 28.0,
     );
   }
-
 }
 
 class FormLabel extends StatefulWidget {
@@ -142,7 +140,7 @@ class _FormLabelState extends State<FormLabel> {
               widget.label,
               fontSize: 13,
               color: widget.color ?? FORM_TEXT,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
             xSpace(width: 8),
           ],

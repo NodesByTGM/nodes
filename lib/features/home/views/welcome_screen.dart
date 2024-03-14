@@ -40,7 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   "Your creative evolution starts here!",
                   fontSize: 24,
                   textAlign: TextAlign.center,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                 ),
                 ySpace(height: 8),
                 subtext(

@@ -41,7 +41,7 @@ class _BStepOneOfFourState extends State<BStepOneOfFour> {
             "Company details",
             fontSize: 24,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 40),
           OutlineBtn(
@@ -126,11 +126,11 @@ class _BStepOneOfFourState extends State<BStepOneOfFour> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-             backBoxFn(
-              onTap: () {
-                navigateBack(context);
-              },
-            ),
+              backBoxFn(
+                onTap: () {
+                  navigateBack(context);
+                },
+              ),
               Expanded(
                 child: SubmitBtn(
                   onPressed: _submit,

@@ -23,7 +23,7 @@ Text labelText(
     maxLines: maxLine,
     style: TextStyle(
       color: color ?? Colors.black,
-      fontWeight: fontWeight ?? FontWeight.w600,
+      fontWeight: fontWeight ?? FontWeight.w500,
       fontSize: fontSize ?? 16,
       letterSpacing: letterSpacing,
       decoration: textDecoration,
@@ -52,7 +52,7 @@ Text subtext(
   double? fontSize,
   int? maxLines,
   TextOverflow? overflow,
-  double height = 1.2,
+  double height = 1.5,
   String? fontFamily = FontFamily,
 }) {
   return Text(

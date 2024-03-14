@@ -26,7 +26,7 @@ class ProfileWrapper extends StatelessWidget {
   // }
 
   Widget getUserProfile() {
-    switch (2) {
+    switch (1) {
       case 1:
         return const IndividualProfileScreen();
       case 2:

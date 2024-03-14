@@ -43,7 +43,7 @@ class CommunityCardTemplate extends StatelessWidget {
                   child: labelText(
                     "Directors room ",
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],

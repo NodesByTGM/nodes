@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/models/current_session.dart';

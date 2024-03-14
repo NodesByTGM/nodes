@@ -32,7 +32,7 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
           "Let’s see what you look like",
           fontSize: 20,
           textAlign: TextAlign.center,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
         ySpace(height: 40),
         OutlineBtn(
@@ -40,7 +40,7 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
             File? _ = await selectImageFromGallery();
             if (_ != null) {
               profilePicture = _;
-              setState(() {});        
+              setState(() {});
             }
           },
           borderColor: BORDER,
@@ -99,6 +99,6 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
 
   void _submit() async {
     closeKeyPad(context);
-     _authCtrl.setTStepper(5);
+    _authCtrl.setTStepper(5);
   }
 }

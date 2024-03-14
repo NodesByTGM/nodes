@@ -40,7 +40,7 @@ class _BusinessSignupScreenState extends State<BusinessSignupScreen> {
             "Want to register your\ncompany",
             fontSize: 24,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 8),
           subtext(

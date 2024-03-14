@@ -1,4 +1,5 @@
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
+import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -45,7 +46,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   "Welcome Back!",
                   fontSize: 24,
                   textAlign: TextAlign.center,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                 ),
                 ySpace(height: 8),
                 subtext(
@@ -190,6 +191,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
 
   void _submit() async {
     closeKeyPad(context);
+    navigateTo(context, NavbarView.routeName);
     if (formKey.currentState!.saveAndValidate()) {
       // LoginResponse? response =
       //     await context.read<AuthController>().signIn(_request);

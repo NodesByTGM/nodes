@@ -18,7 +18,7 @@ class _BStepTwoOfFourState extends State<BStepTwoOfFour> {
   final TextEditingController typeCtrl = TextEditingController();
   final formValues = {};
 
- late AuthController _authCtrl;
+  late AuthController _authCtrl;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _BStepTwoOfFourState extends State<BStepTwoOfFour> {
             "Company details",
             fontSize: 24,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 40),
           SocialsFormWithLabel(
@@ -99,10 +99,10 @@ class _BStepTwoOfFourState extends State<BStepTwoOfFour> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               backBoxFn(
-              onTap: () {
-                _authCtrl.setBStepper(1);
-              },
-            ),
+                onTap: () {
+                  _authCtrl.setBStepper(1);
+                },
+              ),
               Expanded(
                 child: SubmitBtn(
                   onPressed: _submit,

@@ -46,7 +46,9 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
 
   List<XFile> projectImageFileList = [];
   XFile? thumbnailImageFile;
+  XFile? logoImage;
   bool isLoadingThumbnail = false;
+  bool isLoadingLogo = false;
   bool isLoadingImage = false;
 
   @override
@@ -93,25 +95,70 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              cachedNetworkImage(
-                                imgUrl:
-                                    "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-                                size: 100,
-                              ),
-                              xSpace(width: 16),
-                              GestureDetector(
-                                onTap: () {},
-                                child: labelText(
-                                  "Replace",
-                                  color: PRIMARY,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                          if (1 < 2) ...[
+                            FormWithLabel(
+                              label: "Logo",
+                              form: GestureDetector(
+                                onTap: () {
+                                  multipleImagePicker(
+                                    isLogo: true,
+                                  );
+                                },
+                                child: Stack(
+                                  children: [
+                                    if (isObjectEmpty(logoImage)) ...[
+                                      CustomDottedBorder(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(28.0),
+                                          child: Center(
+                                            child: subtext(
+                                              "Click to browse your files\nRecommended image size: 280 x 160px",
+                                              fontSize: 14,
+                                              color: GRAY,
+                                              fontWeight: FontWeight.w400,
+                                              textAlign: TextAlign.center,
+                                              height: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    if (!isObjectEmpty(logoImage)) ...[
+                                      Row(
+                                        children: [
+                                          cachedNetworkImage(
+                                            imgUrl:
+                                                "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                                            size: 100,
+                                          ),
+                                          xSpace(width: 16),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: labelText(
+                                              "Replace",
+                                              color: PRIMARY,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+
+                                    /// Loading Dialog on Empty Box
+                                    if (isLoadingLogo) ...[
+                                      Positioned(
+                                        top: 90,
+                                        left: screenWidth(context) * .42,
+                                        child: const CircularProgressIndicator
+                                            .adaptive(),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                           ySpace(height: 32),
                           FormWithLabel(
                             label: "Name of Business",
@@ -159,7 +206,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                             form: FormBuilderTextField(
                               name: "location",
                               decoration: FormUtils.formDecoration(
-                                hintText: "Enter you city",
+                                hintText: "Enter your city",
                               ),
                               keyboardType: TextInputType.text,
                               style: FORM_STYLE,
@@ -173,7 +220,12 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                               onChanged: (val) {},
                             ),
                           ),
-                          ySpace(height: 16),
+                          ySpace(height: 40),
+                          SubmitBtn(
+                            onPressed: _submit,
+                            title: btnTxt("Save and Continue", WHITE),
+                          ),
+                          ySpace(height: 20),
                         ],
                       ),
                     ),
@@ -230,7 +282,12 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                               onChanged: (val) {},
                             ),
                           ),
-                          ySpace(height: 16),
+                          ySpace(height: 40),
+                          SubmitBtn(
+                            onPressed: _submit,
+                            title: btnTxt("Save and Continue", WHITE),
+                          ),
+                          ySpace(height: 20),
                         ],
                       ),
                     ),
@@ -702,7 +759,12 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                               onChanged: (val) {},
                             ),
                           ),
-                          ySpace(height: 16),
+                          ySpace(height: 40),
+                          SubmitBtn(
+                            onPressed: _submit,
+                            title: btnTxt("Save and Continue", WHITE),
+                          ),
+                          ySpace(height: 20),
                         ],
                       ),
                     ),
@@ -821,6 +883,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
 
   multipleImagePicker({
     bool isThumbnail = false,
+    bool isLogo = false,
   }) async {
     final ImagePicker imagePicker = locator.get<ImagePicker>();
     if (isThumbnail) {
@@ -830,6 +893,14 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
       awaitingImageLoad(true);
       if (!isObjectEmpty(selectedImage)) {
         thumbnailImageFile = selectedImage;
+      }
+    } else if (isLogo) {
+      awaitingImageLoad(true);
+      final XFile? selectedImage =
+          await imagePicker.pickImage(source: ImageSource.gallery);
+      awaitingImageLoad(true);
+      if (!isObjectEmpty(selectedImage)) {
+        logoImage = selectedImage;
       }
     } else {
       awaitingImageLoad(false);

@@ -15,7 +15,8 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
-const FontFamily = 'br-firma';
+// const FontFamily = 'br-firma';
+const FontFamily = 'generalSans';
 
 // Default Delay
 Duration get screenDuration => const Duration(milliseconds: 200);

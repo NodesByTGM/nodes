@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:camera/camera.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/config/dependencies.dart';

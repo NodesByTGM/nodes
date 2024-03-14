@@ -49,7 +49,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
             "Welcome to Nodes!",
             fontSize: 24,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 8),
           subtext(

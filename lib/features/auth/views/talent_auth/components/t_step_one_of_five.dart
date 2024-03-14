@@ -37,7 +37,7 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
           "What do you want to do on Nodes?",
           fontSize: 20,
           textAlign: TextAlign.center,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
         ySpace(height: 40),
         todoCheckbox(

@@ -39,7 +39,7 @@ class _TalentSignupScreenState extends State<TalentSignupScreen> {
             "Are you a Talent?",
             fontSize: 24,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 8),
           subtext(

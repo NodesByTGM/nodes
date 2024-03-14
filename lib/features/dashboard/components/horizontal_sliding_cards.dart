@@ -117,6 +117,7 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
               "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
           title: "Lorem ipsum dolor sit amet, con...",
           height: 300,
+          width: screenWidth(context) * 0.75,
           onTap: () {
             context
                 .read<NavController>()

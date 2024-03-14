@@ -1,6 +1,7 @@
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -83,7 +84,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           child: labelText(
                             "Jane Doe",
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Icon(
@@ -231,7 +232,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         labelText(
                           "Settings and support",
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                         xSpace(width: 10),
                         Icon(
@@ -246,7 +247,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
                 ExpandableSection(
                   expand: settingsStatus,
-                  child: Container(),
+                  child: Column(
+                    children: [
+                      _menuItem(
+                        icon: ImageUtils.gridToolIcon,
+                        title: "Logout",
+                        route: DrawerRouteTitle.Profile,
+                        isActive: false,
+                        onTap: () {
+                          closeDrawer();
+                          // Get to know who's logged in, i.e individual, Talent or Business, and direct them properly...
+                          navCtrl.resetPageListStack();
+                          context.read<AuthController>().logout();
+                          navigateAndClearAll(
+                              context, WelcomeBackScreen.routeName);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

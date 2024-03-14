@@ -77,7 +77,7 @@ class _BusinessAuthScreenState extends State<BusinessAuthScreen> {
           labelText(
             "Medium length hero headline goes here",
             fontSize: 32,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 24),
           subtext(

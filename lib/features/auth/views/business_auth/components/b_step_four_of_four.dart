@@ -51,7 +51,7 @@ class _BStepFourOfFourState extends State<BStepFourOfFour> {
           labelText(
             "What do you do at The Grid Management",
             fontSize: 24,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 40),
           FormBuilderTextField(

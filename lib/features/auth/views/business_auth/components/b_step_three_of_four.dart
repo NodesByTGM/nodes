@@ -38,7 +38,7 @@ class _BStepThreeOfFourState extends State<BStepThreeOfFour> {
             "Social media",
             fontSize: 24,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
           ySpace(height: 40),
           SocialsFormWithLabel(

@@ -26,7 +26,7 @@ class FormUtils {
       helperText: helperText,
       helperStyle: const TextStyle(fontSize: 15.0),
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 12.0),
+      hintStyle: const TextStyle(fontSize: 14.0),
       suffix: suffix,
       prefixIcon: prefixIcon,
       prefixIconConstraints: const BoxConstraints(maxWidth: 30),
@@ -184,7 +184,6 @@ class DoubleFormWithLabel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           firstForm,
           lastForm,
         ],
