@@ -15,13 +15,15 @@ const Color TITLE_COLOR = Color(0xFF1D1A42);
 const Color FORM_TEXT = Color(0xFF76768D);
 const Color GREEN = Color(0xFF378E5A);
 const Color BORDER = Color(0xFFD6D6D6);
-const Color DOTTED_BORDER = Color(0xFF212121);
+// const Color DOTTED_BORDER = Color(0xFF212121);
+const Color DOTTED_BORDER = Color(0xFFD6D6D6);
 const Color GRAY = Color(0xFF757575);
 // const Color GRAY = Color(0xFF979797);
 const Color ACTIVE_LABEL = Color(0xFF76768D);
 const Color LIGHT_BLUE = Color(0xFF4285F4);
 const Color PURPLE = Color(0xFF562694);
 const Color TRANSPARENT = Colors.transparent;
+const Color PROFILEBG = Color(0xffFBFBFB);
 
 const primarySwatches = <int, Color>{
   50: PRIMARY,

@@ -36,7 +36,7 @@ class CommunityCardTemplate extends StatelessWidget {
                 cachedNetworkImage(
                   imgUrl: "",
                   size: 30,
-                  shape: BoxShape.circle,
+                  borderRadius: 100,
                 ),
                 xSpace(width: 10),
                 Expanded(

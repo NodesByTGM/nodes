@@ -55,7 +55,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: profileLinearGradient,
+        color: PROFILEBG,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,70 +95,25 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (1 < 2) ...[
-                            FormWithLabel(
-                              label: "Logo",
-                              form: GestureDetector(
-                                onTap: () {
-                                  multipleImagePicker(
-                                    isLogo: true,
-                                  );
-                                },
-                                child: Stack(
-                                  children: [
-                                    if (isObjectEmpty(logoImage)) ...[
-                                      CustomDottedBorder(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(28.0),
-                                          child: Center(
-                                            child: subtext(
-                                              "Click to browse your files\nRecommended image size: 280 x 160px",
-                                              fontSize: 14,
-                                              color: GRAY,
-                                              fontWeight: FontWeight.w400,
-                                              textAlign: TextAlign.center,
-                                              height: 1.5,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                    if (!isObjectEmpty(logoImage)) ...[
-                                      Row(
-                                        children: [
-                                          cachedNetworkImage(
-                                            imgUrl:
-                                                "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-                                            size: 100,
-                                          ),
-                                          xSpace(width: 16),
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: labelText(
-                                              "Replace",
-                                              color: PRIMARY,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-
-                                    /// Loading Dialog on Empty Box
-                                    if (isLoadingLogo) ...[
-                                      Positioned(
-                                        top: 90,
-                                        left: screenWidth(context) * .42,
-                                        child: const CircularProgressIndicator
-                                            .adaptive(),
-                                      ),
-                                    ],
-                                  ],
+                          Row(
+                            children: [
+                              cachedNetworkImage(
+                                imgUrl:
+                                    "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                                size: 100,
+                              ),
+                              xSpace(width: 16),
+                              GestureDetector(
+                                onTap: () {},
+                                child: labelText(
+                                  "Replace Logo",
+                                  color: PRIMARY,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                           ySpace(height: 32),
                           FormWithLabel(
                             label: "Name of Business",

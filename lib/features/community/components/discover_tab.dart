@@ -12,12 +12,12 @@ class SpaceDiscoverTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 40),
       padding: screenPadding,
       child: ListView(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
-          ySpace(),
+          ySpace(height: 40),
           const Subsection(
             leftSection: "Recommended for you",
             withDivider: false,
@@ -47,12 +47,12 @@ class SpaceDiscoverTab extends StatelessWidget {
                 onTap: () {
                   // send this space details to provider...
                   context
-                              .read<ComController>()
-                              .setDummyIsCreatedSpaceVal(false);
-                    context
-                        .read<NavController>()
-                        .updatePageListStack(SpaceDetailsScreen.routeName);
-                  },
+                      .read<ComController>()
+                      .setDummyIsCreatedSpaceVal(false);
+                  context
+                      .read<NavController>()
+                      .updatePageListStack(SpaceDetailsScreen.routeName);
+                },
               );
             },
             separatorBuilder: (c, i) => ySpace(height: 24),

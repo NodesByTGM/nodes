@@ -64,7 +64,7 @@ Text subtext(
     maxLines: maxLines,
     style: TextStyle(
       color: color ?? const Color(0xff212121),
-      fontSize: fontSize ?? 15,
+      fontSize: fontSize ?? 14,
       fontWeight: fontWeight ?? FontWeight.w400,
       decoration: textDecoration,
       height: height,

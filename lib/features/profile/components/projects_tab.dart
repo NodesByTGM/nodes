@@ -60,13 +60,13 @@ class _ProjectsTabState extends State<ProjectsTab> {
               ),
             ),
           )
-        : ListView.separated(
-            shrinkWrap: true,
-            itemCount: 5,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (c, i) {
-              return CustomDottedBorder(
-                child: Column(
+        : ProfileCard(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: 5,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (c, i) {
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
@@ -145,10 +145,14 @@ class _ProjectsTabState extends State<ProjectsTab> {
                       )
                     ],
                   ],
-                ),
-              );
-            },
-            separatorBuilder: (c, i) => ySpace(height: 40),
+                );
+              },
+              separatorBuilder: (c, i) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: dottedLines(),
+              ),
+              // separatorBuilder: (c, i) => ySpace(height: 40),
+            ),
           );
   }
 

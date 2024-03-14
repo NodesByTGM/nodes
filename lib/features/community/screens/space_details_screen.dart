@@ -1,4 +1,3 @@
-import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/components/space_about_tab.dart';
@@ -6,6 +5,7 @@ import 'package:nodes/features/community/components/space_discussion_tab.dart';
 import 'package:nodes/features/community/components/space_members_tab.dart';
 import 'package:nodes/features/community/view_model/com_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class SpaceDetailsScreen extends StatefulWidget {
   const SpaceDetailsScreen({
@@ -20,177 +20,174 @@ class SpaceDetailsScreen extends StatefulWidget {
   State<SpaceDetailsScreen> createState() => _SpaceDetailsScreenState();
 }
 
-class _SpaceDetailsScreenState extends State<SpaceDetailsScreen>
-    with SingleTickerProviderStateMixin {
+class _SpaceDetailsScreenState extends State<SpaceDetailsScreen> {
   int currentTabIndex = 0;
   late ComController comCtrl;
-
-  late TabController tabController;
-
-  @override
-  void initState() {
-    comCtrl = locator.get<ComController>();
-    tabController = TabController(vsync: this, length: 3);
-    super.initState();
-    tabController.addListener(() {
-      setState(() {
-        currentTabIndex = tabController.index;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     comCtrl = context.watch<ComController>();
-    return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return [
-          SliverAppBar(
-            backgroundColor: TRANSPARENT,
-            expandedHeight: screenHeight(context) * 0.55,
-            pinned: true,
-            scrolledUnderElevation: 0,
-            flexibleSpace: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return FlexibleSpaceBar(
-                  background: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ySpace(height: 40),
-                      GestureDetector(
-                        onTap: () {
-                          context.read<NavController>().popPageListStack();
-                        },
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        ySpace(height: 40),
+        GestureDetector(
+          onTap: () {
+            context.read<NavController>().popPageListStack();
+          },
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              const Icon(
+                Icons.keyboard_arrow_left,
+                color: BORDER,
+              ),
+              subtext(
+                "Go Back",
+                fontSize: 12,
+              ),
+            ],
+          ),
+        ),
+        ySpace(height: 30),
+        CommunitySpaceCardTemplate(
+          imgUrl:
+              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          title: "Lorem ipsum dolor sit amet, con...",
+          height: 300,
+          width: screenWidth(context),
+          marginRight: 0,
+          onTapTitle: widget.isCreateSpace ? "Share space" : "Invite a friend",
+          onTap: () {},
+          popupMenu: !comCtrl.dummyIsCreatedSpace
+              ? null
+              : PopupMenuButton<String>(
+                  onSelected: (value) {},
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        value: 'private',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(
-                              Icons.keyboard_arrow_left,
-                              color: BORDER,
-                            ),
-                            subtext(
-                              "Go Back",
-                              fontSize: 12,
-                            ),
+                            subtext("Make private"),
                           ],
                         ),
                       ),
-                      ySpace(height: 30),
-                      CommunitySpaceCardTemplate(
-                        imgUrl:
-                            "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-                        title: "Lorem ipsum dolor sit amet, con...",
-                        height: 300,
-                        width: screenWidth(context),
-                        marginRight: 0,
-                        onTapTitle: widget.isCreateSpace
-                            ? "Share space"
-                            : "Invite a friend",
-                        onTap: () {},
-                        popupMenu: !comCtrl.dummyIsCreatedSpace
-                            ? null
-                            : PopupMenuButton<String>(
-                                onSelected: (value) {},
-                                itemBuilder: (context) {
-                                  return [
-                                    PopupMenuItem(
-                                      value: 'private',
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          subtext("Make private"),
-                                        ],
-                                      ),
-                                    ),
-                                    PopupMenuItem(
-                                      value: 'delete',
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          subtext(
-                                            "Delete space",
-                                            color: RED,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ];
-                                },
-                                // offset: const Offset(0, 40),
-                                color: WHITE,
-                                elevation: 2,
-                                child: const Icon(
-                                  Icons.more_vert,
-                                ),
-                              ),
-                      ),
-                    ],
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            subtext(
+                              "Delete space",
+                              color: RED,
+                            ),
+                          ],
+                        ),
+                      )
+                    ];
+                  },
+                  // offset: const Offset(0, 40),
+                  color: WHITE,
+                  elevation: 2,
+                  child: const Icon(
+                    Icons.more_vert,
                   ),
-                  title: TabBar(
-                    padding: const EdgeInsets.all(0),
-                    indicatorWeight: 1,
-                    labelPadding: const EdgeInsets.all(0),
-                    splashFactory: NoSplash.splashFactory,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    dividerColor: TRANSPARENT,
-                    controller: tabController,
-                    onTap: (int i) {
-                      setState(() {
-                        currentTabIndex = i;
-                      });
-                    },
-                    tabs: [
-                      Tab(
-                        height: 30,
-                        child: subtext(
-                          "Discussion",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Tab(
-                        height: 30,
-                        child: subtext(
-                          "About",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Tab(
-                        height: 30,
-                        child: subtext(
-                          "Members",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // centerTitle: true,
-                );
-              },
+                ),
+        ),
+        ySpace(height: 30),
+        StickyHeader(
+          header: Container(
+            padding: const EdgeInsets.only(top: 5),
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(width: 1, color: BORDER),
+              ),
+              color: WHITE,
             ),
-            leading: const SizedBox.shrink(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                tabHeader(
+                  isActive: currentTabIndex == 0,
+                  title: "Discussion",
+                  onTap: () {
+                    setState(() {
+                      currentTabIndex = 0;
+                    });
+                  },
+                ),
+                xSpace(width: 10),
+                tabHeader(
+                  isActive: currentTabIndex == 1,
+                  title: "About",
+                  onTap: () {
+                    setState(() {
+                      currentTabIndex = 1;
+                    });
+                  },
+                ),
+                xSpace(width: 10),
+                tabHeader(
+                  isActive: currentTabIndex == 2,
+                  title: "Members",
+                  onTap: () {
+                    setState(() {
+                      currentTabIndex = 2;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
-        ];
-      },
-      body: TabBarView(
-        controller: tabController,
-        children: const [
-          SpaceDiscussionTab(),
-          SpaceAboutTab(),
-          SpaceMembersTab(),
-        ],
+          content: getTabBody(),
+        ),
+      ],
+    );
+  }
+
+  GestureDetector tabHeader({
+    required bool isActive,
+    required String title,
+    required GestureTapCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.only(
+          bottom: 10,
+          left: 16,
+          right: 16,
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: isActive ? PRIMARY : TRANSPARENT,
+            ),
+          ),
+        ),
+        child: labelText(
+          title,
+          fontSize: 16,
+          color: isActive ? PRIMARY : BLACK,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
+  getTabBody() {
+    switch (currentTabIndex) {
+      case 0:
+        return const SpaceDiscussionTab();
+      case 1:
+        return const SpaceAboutTab();
+      case 2:
+        return const SpaceMembersTab();
+      default:
+        return const SpaceDiscussionTab();
+    }
   }
 }

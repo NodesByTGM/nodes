@@ -50,7 +50,7 @@ class CustomDottedBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return DottedBorder(
       color: DOTTED_BORDER,
-      strokeWidth: 0.7,
+      strokeWidth: 0.8,
       borderType: BorderType.RRect,
       dashPattern: const <double>[8, 8],
       padding: const EdgeInsets.all(16),

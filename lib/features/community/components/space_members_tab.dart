@@ -15,6 +15,7 @@ class _SpaceMembersTabState extends State<SpaceMembersTab> {
       margin: const EdgeInsets.only(top: 40),
       child: ListView(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

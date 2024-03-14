@@ -28,7 +28,7 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
       margin: EdgeInsets.only(right: marginRight ?? 20),
       padding: const EdgeInsets.only(top: 25),
       width: width ?? screenWidth(context) * 0.6,
-      height: height,
+      // height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(width: 0.7, color: BORDER),
@@ -45,7 +45,7 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 cachedNetworkImage(
-                  imgUrl: "",
+                  imgUrl: "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
                   size: 80,
                 ),
                 Row(
@@ -99,7 +99,7 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
                       SvgPicture.asset(ImageUtils.commentOutlineIcon),
                       xSpace(width: 5),
                       subtext(
-                        "3 new posts last week",
+                        "3 new posts",
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                       ),
@@ -113,7 +113,7 @@ class CommunitySpaceCardTemplate extends StatelessWidget {
               title,
               fontSize: 14,
               fontWeight: FontWeight.w400,
-              // maxLine: 1,
+              maxLine: 3,
             ),
             ySpace(height: 24),
           ],

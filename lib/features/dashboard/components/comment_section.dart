@@ -38,7 +38,7 @@ class _CommentSectionState extends State<CommentSection> {
                   cachedNetworkImage(
                     imgUrl: "",
                     size: 30,
-                    shape: BoxShape.circle,
+                    borderRadius: 100,
                   ),
                   xSpace(width: 10),
                   Expanded(
@@ -179,7 +179,7 @@ class _CommentSectionState extends State<CommentSection> {
                     leading: cachedNetworkImage(
                       imgUrl: "",
                       size: 30,
-                      shape: BoxShape.circle,
+                      borderRadius: 100,
                     ),
                     title: labelText(
                       "Jane Doe",

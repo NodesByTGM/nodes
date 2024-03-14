@@ -13,7 +13,15 @@ class CreateSpaceTab extends StatelessWidget {
     return Container(
       child: 1 > 2
           ? Container(
-              color: WHITE,
+              margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+              decoration: BoxDecoration(
+                color: WHITE,
+                border: Border.all(
+                  width: 0.7,
+                  color: BORDER,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: Center(
                 child: SingleChildScrollView(
                   child: Column(
@@ -33,7 +41,7 @@ class CreateSpaceTab extends StatelessWidget {
                       ),
                       ySpace(height: 40),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 100),
                         child: SubmitBtn(
                           onPressed: () => showCreateSpaceBottomSheet(context),
                           title: btnTxt(
@@ -42,7 +50,6 @@ class CreateSpaceTab extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ySpace(height: 40),
                       SvgPicture.asset(ImageUtils.spaceEmptyIcon),
                     ],
                   ),
@@ -51,9 +58,9 @@ class CreateSpaceTab extends StatelessWidget {
             )
           : Container(
               padding: screenPadding,
-              margin: const EdgeInsets.only(top: 40),
               child: ListView(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   ySpace(),
                   const Subsection(

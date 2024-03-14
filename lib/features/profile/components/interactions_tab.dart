@@ -6,13 +6,13 @@ class InteractionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 20,
-      itemBuilder: (c, i) {
-        return CustomDottedBorder(
-          child: Column(
+    return ProfileCard(
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 20,
+        itemBuilder: (c, i) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               labelText(
@@ -40,10 +40,14 @@ class InteractionsTab extends StatelessWidget {
                 ],
               ),
             ],
-          ),
-        );
-      },
-      separatorBuilder: (c, i) => ySpace(height: 40),
+          );
+        },
+        separatorBuilder: (c, i) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: dottedLines(),
+        ),
+        // separatorBuilder: (c, i) => ySpace(height: 40),
+      ),
     );
   }
 }

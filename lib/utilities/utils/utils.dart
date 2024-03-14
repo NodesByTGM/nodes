@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
@@ -323,12 +324,13 @@ cachedNetworkImage({
   required String imgUrl,
   EdgeInsets? margin,
   double size = 50,
-  BoxShape shape = BoxShape.rectangle,
+  double borderRadius = 5,
 }) {
   final empty = Container(
     decoration: BoxDecoration(
       color: Colors.grey,
-      shape: shape,
+      // shape: shape,
+      borderRadius: BorderRadius.circular(borderRadius),
       border: Border.all(width: 1, color: Colors.white),
     ),
   );
@@ -337,7 +339,8 @@ cachedNetworkImage({
     imageBuilder: (context, imageProvider) => Container(
       margin: const EdgeInsets.only(left: 0, top: 0),
       decoration: BoxDecoration(
-        shape: shape,
+        // shape: shape,
+        borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(width: 1, color: Colors.white),
         image: DecorationImage(
           image: imageProvider,
@@ -679,4 +682,21 @@ Future<ShareResultStatus> shareDoc(BuildContext context) async {
     print('Thank you for sharing my website!');
   }
   return ShareResultStatus.success;
+}
+
+dottedLines() {
+  return DottedLine(
+    direction: Axis.horizontal,
+    alignment: WrapAlignment.center,
+    lineLength: double.infinity,
+    lineThickness: 1.0,
+    dashLength: 4.0,
+    dashColor: BORDER,
+    // dashGradient: [Colors.red, Colors.blue],
+    dashRadius: 0.0,
+    dashGapLength: 4.0,
+    dashGapColor: Colors.transparent,
+    // dashGapGradient: [Colors.red, Colors.blue],
+    dashGapRadius: 0.0,
+  );
 }

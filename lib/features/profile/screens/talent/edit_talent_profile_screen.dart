@@ -57,7 +57,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: profileLinearGradient,
+        color: PROFILEBG,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

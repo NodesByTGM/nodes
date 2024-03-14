@@ -27,7 +27,84 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
           ListView(
             shrinkWrap: true,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const NeverScrollableScrollPhysics(),
             children: [
+              Container(
+                // height: 128,
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
+                  left: 16,
+                  right: 16,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 0.7, color: BORDER),
+                  borderRadius: BorderRadius.circular(8),
+                  color: WHITE,
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(
+                        1,
+                        2,
+                      ),
+                      blurRadius: 2,
+                      color: BORDER,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: PRIMARY,
+                          child: labelText("JD", color: WHITE),
+                        ),
+                        xSpace(width: 10),
+                        Expanded(
+                          child: FormBuilderTextField(
+                            name: "comment",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "Ask the members a question...",
+                              isTransparentBorder: true,
+                              verticalPadding: 10,
+                            ),
+                            readOnly: true,
+                            onTap: () {
+                              // open the chat box
+                            },
+                            style: FORM_STYLE,
+                            cursorColor: BLACK,
+                            controller: msgCtrl,
+                            onChanged: (val) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SvgPicture.asset(ImageUtils.attachmentIcon),
+                        xSpace(width: 16),
+                        SvgPicture.asset(ImageUtils.galleryIcon),
+                        xSpace(width: 16),
+                        SizedBox(
+                          width: 100,
+                          child: SubmitBtn(
+                            onPressed: () {},
+                            title: btnTxt("Post", WHITE),
+                            height: 48,
+                          ),
+                        ),
+                        // Form
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              ySpace(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -91,7 +168,6 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
                 ],
               ),
               ySpace(height: 40),
-              ySpace(height: 24),
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -104,83 +180,83 @@ class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
               ySpace(height: 150),
             ],
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              height: 128,
-              padding: const EdgeInsets.only(
-                top: 6,
-                bottom: 2,
-                left: 16,
-                right: 16,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(width: 0.7, color: BORDER),
-                borderRadius: BorderRadius.circular(8),
-                color: WHITE,
-                boxShadow: const [
-                  BoxShadow(
-                    offset: Offset(
-                      1,
-                      2,
-                    ),
-                    blurRadius: 2,
-                    color: BORDER,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: PRIMARY,
-                        child: labelText("JD", color: WHITE),
-                      ),
-                      xSpace(width: 10),
-                      Expanded(
-                        child: FormBuilderTextField(
-                          name: "comment",
-                          decoration: FormUtils.formDecoration(
-                            hintText: "Ask the members a question...",
-                            isTransparentBorder: true,
-                            verticalPadding: 10,
-                          ),
-                          keyboardType: TextInputType.multiline,
-                          style: FORM_STYLE,
-                          cursorColor: BLACK,
-                          controller: msgCtrl,
-                          maxLines: 2,
-                          onChanged: (val) {},
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SvgPicture.asset(ImageUtils.attachmentIcon),
-                      xSpace(width: 16),
-                      SvgPicture.asset(ImageUtils.galleryIcon),
-                      xSpace(width: 16),
-                      SizedBox(
-                        width: 100,
-                        child: SubmitBtn(
-                          onPressed: () {},
-                          title: btnTxt("Post", WHITE),
-                          height: 48,
-                        ),
-                      ),
-                      // Form
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: AnimatedContainer(
+          //     duration: const Duration(milliseconds: 100),
+          //     height: 128,
+          //     padding: const EdgeInsets.only(
+          //       top: 6,
+          //       bottom: 2,
+          //       left: 16,
+          //       right: 16,
+          //     ),
+          //     decoration: BoxDecoration(
+          //       border: Border.all(width: 0.7, color: BORDER),
+          //       borderRadius: BorderRadius.circular(8),
+          //       color: WHITE,
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           offset: Offset(
+          //             1,
+          //             2,
+          //           ),
+          //           blurRadius: 2,
+          //           color: BORDER,
+          //         ),
+          //       ],
+          //     ),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Row(
+          //           crossAxisAlignment: CrossAxisAlignment.center,
+          //           children: [
+          //             CircleAvatar(
+          //               backgroundColor: PRIMARY,
+          //               child: labelText("JD", color: WHITE),
+          //             ),
+          //             xSpace(width: 10),
+          //             Expanded(
+          //               child: FormBuilderTextField(
+          //                 name: "comment",
+          //                 decoration: FormUtils.formDecoration(
+          //                   hintText: "Ask the members a question...",
+          //                   isTransparentBorder: true,
+          //                   verticalPadding: 10,
+          //                 ),
+          //                 keyboardType: TextInputType.multiline,
+          //                 style: FORM_STYLE,
+          //                 cursorColor: BLACK,
+          //                 controller: msgCtrl,
+          //                 maxLines: 2,
+          //                 onChanged: (val) {},
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.end,
+          //           children: [
+          //             SvgPicture.asset(ImageUtils.attachmentIcon),
+          //             xSpace(width: 16),
+          //             SvgPicture.asset(ImageUtils.galleryIcon),
+          //             xSpace(width: 16),
+          //             SizedBox(
+          //               width: 100,
+          //               child: SubmitBtn(
+          //                 onPressed: () {},
+          //                 title: btnTxt("Post", WHITE),
+          //                 height: 48,
+          //               ),
+          //             ),
+          //             // Form
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );

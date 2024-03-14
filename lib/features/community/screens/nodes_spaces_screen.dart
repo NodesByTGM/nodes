@@ -7,6 +7,7 @@ import 'package:nodes/features/community/components/topic_interests_modal.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class NodeSpacesScreen extends StatefulWidget {
   const NodeSpacesScreen({super.key});
@@ -16,195 +17,141 @@ class NodeSpacesScreen extends StatefulWidget {
   State<NodeSpacesScreen> createState() => _NodeSpacesScreenState();
 }
 
-class _NodeSpacesScreenState extends State<NodeSpacesScreen>
-    with SingleTickerProviderStateMixin {
-  var top = 91.0;
+class _NodeSpacesScreenState extends State<NodeSpacesScreen> {
   int currentTabIndex = 0;
-
-  late TabController tabController;
 
   @override
   void initState() {
-    // Launch the into modal on init...
-    // But first check if user has selected any topics, if yes, then don't launch, else.. launch
-    tabController = TabController(vsync: this, length: 3);
-    super.initState();
-    tabController.addListener(() {
-      setState(() {
-        currentTabIndex = tabController.index;
-      });
-    });
     showWelcomeModal();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: top < 90 ? null : linearGradient,
-      ),
-      child: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              backgroundColor: TRANSPARENT,
-              expandedHeight: screenHeight(context) * 0.45,
-              pinned: true,
-              scrolledUnderElevation: 0,
-              flexibleSpace: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  top = constraints.biggest.height;
-                  _getTop(top);
-                  return FlexibleSpaceBar(
-                    background: Padding(
-                      padding: screenPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ySpace(height: 64),
-                          labelText(
-                            "Welcome to Nodes Spaces!",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                          ),
-                          ySpace(height: 16),
-                          subtext(
-                            "We believe in the power of every individual's creative spark. ",
-                          ),
-                          ySpace(height: 24),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SubmitBtn(
-                                  onPressed: () {
-                                    context
-                                        .read<NavController>()
-                                        .updatePageListStack(
-                                            NodeCommunityScreen.routeName);
-                                  },
-                                  title: btnTxt(
-                                    "See Community",
-                                    WHITE,
-                                  ),
-                                ),
-                              ),
-                              if (currentTabIndex == 2) ...[
-                                xSpace(width: 16),
-                                Expanded(
-                                  child: OutlineBtn(
-                                    onPressed: () =>
-                                        showCreateSpaceBottomSheet(),
-                                    borderColor: PRIMARY,
-                                    color: WHITE,
-                                    height: 48,
-                                    child: btnTxt(
-                                      "Create space",
-                                      PRIMARY,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              if (currentTabIndex < 2) const Spacer()
-                            ],
-                          ),
-                          ySpace(height: 40),
-                          FormBuilderTextField(
-                            name: "email",
-                            decoration: FormUtils.formDecoration(
-                              hintText: "ex: actors",
-                              prefixIcon: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.search,
-                                ),
-                              ),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            style: FORM_STYLE,
-                            // controller: searchCtrl,
-
-                            onChanged: (val) {},
-                          ),
-                        ],
+      color: PROFILEBG,
+      child: ListView(
+        children: [
+          Container(
+            padding: screenPadding,
+            color: WHITE,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ySpace(height: 32),
+                labelText(
+                  "Welcome to Nodes Spaces!",
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20,
+                ),
+                ySpace(height: 16),
+                subtext(
+                  "We believe in the power of every individual's creative spark. ",
+                ),
+                ySpace(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SubmitBtn(
+                        onPressed: () {
+                          context.read<NavController>().updatePageListStack(
+                              NodeCommunityScreen.routeName);
+                        },
+                        title: btnTxt(
+                          "See Community",
+                          WHITE,
+                        ),
                       ),
                     ),
-                    title: TabBar(
-                      padding: const EdgeInsets.all(0),
-                      indicatorWeight: 1,
-                      labelPadding: const EdgeInsets.all(0),
-                      splashFactory: NoSplash.splashFactory,
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      dividerColor: TRANSPARENT,
-                      controller: tabController,
-                      onTap: (int i) {
-                        setState(() {
-                          currentTabIndex = i;
-                        });
-                      },
-                      tabs: [
-                        Tab(
-                          height: 30,
-                          child: subtext(
-                            "Discover",
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
+                    if (currentTabIndex == 2) ...[
+                      xSpace(width: 16),
+                      Expanded(
+                        child: OutlineBtn(
+                          onPressed: () => showCreateSpaceBottomSheet(),
+                          borderColor: PRIMARY,
+                          color: WHITE,
+                          height: 48,
+                          child: btnTxt(
+                            "Create space",
+                            PRIMARY,
                           ),
                         ),
-                        Tab(
-                          height: 30,
-                          child: subtext(
-                            "Following",
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Tab(
-                          height: 30,
-                          child: subtext(
-                            "Created",
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                      ),
+                    ],
+                    if (currentTabIndex < 2) const Spacer()
+                  ],
+                ),
+                ySpace(height: 40),
+                FormBuilderTextField(
+                  name: "email",
+                  decoration: FormUtils.formDecoration(
+                    hintText: "ex: actors",
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.search,
+                      ),
                     ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  style: FORM_STYLE,
+                  // controller: searchCtrl,
 
-                    // centerTitle: true,
-                  );
-                },
-              ),
-              leading: const SizedBox.shrink(),
+                  onChanged: (val) {},
+                ),
+                ySpace(height: 24),
+              ],
             ),
-          ];
-        },
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            const SpaceDiscoverTab(),
-            SpaceFollowingTab(discoverBtn: () {
-              tabController.index = 0;
-            }),
-            const CreateSpaceTab(),
-          ],
-        ),
+          ),
+          StickyHeader(
+            header: Container(
+              padding: const EdgeInsets.only(top: 5),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1, color: BORDER),
+                ),
+                color: WHITE,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  tabHeader(
+                    isActive: currentTabIndex == 0,
+                    title: "Discover",
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 0;
+                      });
+                    },
+                  ),
+                  xSpace(width: 10),
+                  tabHeader(
+                    isActive: currentTabIndex == 1,
+                    title: "Following",
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 1;
+                      });
+                    },
+                  ),
+                  xSpace(width: 10),
+                  tabHeader(
+                    isActive: currentTabIndex == 2,
+                    title: "Created",
+                    onTap: () {
+                      setState(() {
+                        currentTabIndex = 2;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            content: getTabBody(),
+          ),
+        ],
       ),
     );
-  }
-
-  void _getTop(double t) {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (top != t) {
-        setState(() {
-          top = t;
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
   }
 
   showWelcomeModal() async {
@@ -331,6 +278,54 @@ class _NodeSpacesScreenState extends State<NodeSpacesScreen>
         );
       },
     );
+  }
+
+  GestureDetector tabHeader({
+    required bool isActive,
+    required String title,
+    required GestureTapCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.only(
+          bottom: 10,
+          left: 16,
+          right: 16,
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: isActive ? PRIMARY : TRANSPARENT,
+            ),
+          ),
+        ),
+        child: labelText(
+          title,
+          fontSize: 16,
+          color: isActive ? PRIMARY : BLACK,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  getTabBody() {
+    switch (currentTabIndex) {
+      case 0:
+        return const SpaceDiscoverTab();
+      case 1:
+        return SpaceFollowingTab(discoverBtn: () {
+          setState(() {
+            currentTabIndex = 0;
+          });
+        });
+      case 2:
+        return const CreateSpaceTab();
+      default:
+        return const SpaceDiscoverTab();
+    }
   }
 
   showOptionModal() async {

@@ -36,8 +36,8 @@ class _EditIndividualProfileScreenState
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: profileLinearGradient,
-      ),
+          // gradient: profileLinearGradient,
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

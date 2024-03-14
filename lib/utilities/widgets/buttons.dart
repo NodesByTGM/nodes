@@ -68,10 +68,7 @@ class SubmitBtn extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: leftIcon,
                         ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0),
-                        child: title,
-                      ),
+                      title,
                       if (!isObjectEmpty(rightIcon))
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),

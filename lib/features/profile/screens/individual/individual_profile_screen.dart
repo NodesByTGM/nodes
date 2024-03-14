@@ -14,159 +14,127 @@ class IndividualProfileScreen extends StatelessWidget {
     bool isRegistered = true;
     return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            right: 8,
-            top: 40,
-          ),
-          child: ProfileCard(
-            child: Column(
-              children: [
-                cachedNetworkImage(
+        Container(
+          color: WHITE,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                contentPadding: const EdgeInsets.all(0),
+                leading: cachedNetworkImage(
                   imgUrl:
                       "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
                   size: 100,
                 ),
-                ySpace(height: 24),
-                labelText(
+                title: labelText(
                   "Jane Doe",
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
-                ySpace(height: 8),
-                labelText(
+                subtitle: labelText(
                   "@JD",
                   fontSize: 14,
                   color: GRAY,
                   fontWeight: FontWeight.w500,
                 ),
-                ySpace(height: 24),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Wrap(
-                        spacing: 2,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            ImageUtils.mapLocationIcon,
-                            color: GRAY,
-                          ),
-                          xSpace(width: 5),
-                          subtext(
-                            "Add Location",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: GRAY,
-                          ),
-                        ],
-                      ),
-                      xSpace(width: 10),
-                      Wrap(
-                        spacing: 2,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            ImageUtils.chainLinkIcon,
-                            color: GRAY,
-                          ),
-                          xSpace(width: 5),
-                          subtext(
-                            "Add Websites",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: GRAY,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              ),
+              ySpace(height: 24),
+              CustomDottedBorder(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    labelText(
+                      "Your headline and bio goes here",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    ySpace(height: 10),
+                    subtext(
+                      "Share more about yourself and what you hope to accomplish",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
                 ),
-                ySpace(height: 40),
-                CustomDottedBorder(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              ySpace(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      labelText(
-                        "Your headline and bio goes here",
+                      SvgPicture.asset(
+                        ImageUtils.mapLocationIcon,
+                        color: GRAY,
+                      ),
+                      xSpace(width: 5),
+                      subtext(
+                        "Location",
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                      ),
-                      ySpace(height: 10),
-                      subtext(
-                        // "Share more about yourself and what you hope to accomplish",
-                        "Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. ",
-
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                        color: GRAY,
                       ),
                     ],
                   ),
-                ),
-                if (isRegistered) ...[
-                  ySpace(height: 40),
-                  SubmitBtn(
-                    onPressed: () {
-                      context.read<NavController>().updatePageListStack(
-                          EditIndividualProfileScreen.routeName);
-                    },
-                    height: 48,
-                    title: btnTxt(
-                      "Edit Your Profile",
-                      WHITE,
-                    ),
+                  xSpace(width: 10),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        ImageUtils.chainLinkIcon,
+                        color: GRAY,
+                      ),
+                      xSpace(width: 5),
+                      subtext(
+                        "Websites",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: GRAY,
+                      ),
+                    ],
                   ),
                 ],
+              ),
+              ySpace(height: 24),
+              if (isRegistered) ...[
+                ySpace(height: 10),
+                SubmitBtn(
+                  onPressed: () {
+                    context.read<NavController>().updatePageListStack(
+                        EditIndividualProfileScreen.routeName);
+                  },
+                  height: 48,
+                  title: btnTxt(
+                    "Edit Your Profile",
+                    WHITE,
+                  ),
+                ),
+                ySpace(height: 16),
               ],
-            ),
+            ],
           ),
         ),
-        ySpace(),
-        // StickyHeader(
-        //   header: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: Container(
-        //       decoration: const BoxDecoration(
-        //           // gradient: profileLinearGradient,
-        //           // color: Color.fromARGB(173, 213, 222, 33),
-        //           ),
-        //       child: Row(
-        //         children: [
-        //           Container(
-        //             padding: const EdgeInsets.only(bottom: 10),
-        //             margin: const EdgeInsets.only(bottom: 10),
-        //             decoration: const BoxDecoration(
-        //               border: Border(
-        //                 bottom: BorderSide(width: 1, color: PRIMARY),
-        //               ),
-        //             ),
-        //             child: labelText(
-        //               "Interactions",
-        //               fontSize: 16,
-        //               color: PRIMARY,
-        //               fontWeight: FontWeight.w500,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        //   content: const ProfileCard(
-        //     child: InteractionsTab(),
-        //   ),
-        // ),
         StickyHeaderBuilder(
           builder: (context, stuckAmount) {
             return Container(
-              padding: const EdgeInsets.only(top: 10),
-              color: stuckAmount <= -0.54 ? WHITE : null,
+              padding: const EdgeInsets.only(top: 28),
+              // color: stuckAmount <= -0.54 ? WHITE : null,
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1, color: BORDER),
+                ),
+                color: WHITE,
+              ),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(
+                      bottom: 10,
+                      left: 16,
+                      right: 16,
+                    ),
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(width: 1, color: PRIMARY),
@@ -183,7 +151,8 @@ class IndividualProfileScreen extends StatelessWidget {
               ),
             );
           },
-          content: const ProfileCard(
+          content: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             child: InteractionsTab(),
           ),
         ),

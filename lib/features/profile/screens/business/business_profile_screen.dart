@@ -21,55 +21,53 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        ProfileCard(
+        Container(
+          color: WHITE,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              cachedNetworkImage(
-                imgUrl:
-                    "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-                size: 100,
+              ListTile(
+                contentPadding: const EdgeInsets.all(0),
+                leading: cachedNetworkImage(
+                  imgUrl:
+                      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                  size: 100,
+                ),
+                title: labelText(
+                  "Name of company",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+                subtitle: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ySpace(height: 2),
+                    subtext(
+                      "Year of establishment",
+                      color: GRAY,
+                    ),
+                    ySpace(height: 5),
+                    Wrap(
+                      spacing: 2,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        labelText(
+                          "26",
+                          fontSize: 12,
+                        ),
+                        subtext(
+                          "Followers",
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               ySpace(height: 24),
-              labelText(
-                "Name of company",
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-              ySpace(height: 8),
-              labelText(
-                "@JD",
-                fontSize: 14,
-                color: GRAY,
-                fontWeight: FontWeight.w500,
-              ),
-              ySpace(height: 24),
-              subtext(
-                "Year of establishment",
-                color: GRAY,
-              ),
-              ySpace(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  xSpace(width: 10),
-                  Wrap(
-                    spacing: 2,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      labelText(
-                        "26",
-                        fontSize: 12,
-                      ),
-                      subtext(
-                        "Followers",
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              ySpace(height: 40),
               CustomDottedBorder(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,24 +78,24 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                     ySpace(height: 10),
-                    // Find a way to work with the overflowww...
                     subtext(
-                      // "Share more about yourself and what you hope to accomplish",
-                      "Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. ",
+                      "Share more about yourself and what you hope to accomplish",
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      overflow: TextOverflow.fade,
                     ),
                   ],
                 ),
               ),
+              ySpace(height: 24),
               if (isRegistered) ...[
-                ySpace(height: 40),
+                ySpace(height: 10),
                 Row(
                   children: [
                     Expanded(
                       child: OutlineBtn(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final res = await shareDoc(context);
+                        },
                         borderColor: PRIMARY,
                         color: WHITE,
                         height: 48,
@@ -124,46 +122,55 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                   ],
                 ),
               ],
+              ySpace(height: 32),
             ],
           ),
         ),
-        ySpace(),
+        //
+        //
+        //
         StickyHeaderBuilder(
           builder: (context, stuckAmount) {
             return Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              padding: const EdgeInsets.only(top: 10),
-              color: stuckAmount <= -0.54 ? WHITE : null,
+              padding: const EdgeInsets.only(top: 5),
+              // color: stuckAmount <= -0.54 ? WHITE : null,
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1, color: BORDER),
+                ),
+                color: WHITE,
+              ),
               child: Row(
                 children: [
                   tabHeader(
-                      isActive: currentIndex == 0,
-                      title: "Jobs/Events",
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 0;
-                        });
-                      }),
-                  xSpace(width: 50),
+                    isActive: currentIndex == 0,
+                    title: "Jobs/Events",
+                    onTap: () {
+                      setState(() {
+                        currentIndex = 0;
+                      });
+                    },
+                  ),
+                  xSpace(width: 10),
                   tabHeader(
-                      isActive: currentIndex == 1,
-                      title: "Projects",
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 1;
-                        });
-                      }),
+                    isActive: currentIndex == 1,
+                    title: "Projects",
+                    onTap: () {
+                      setState(() {
+                        currentIndex = 1;
+                      });
+                    },
+                  ),
                 ],
               ),
             );
           },
           content: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            child: ProfileCard(
-              child: getTabBody(),
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            child: getTabBody(),
           ),
         ),
+        //
       ],
     );
   }
@@ -176,8 +183,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.only(bottom: 10),
-        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(
+          bottom: 10,
+          left: 16,
+          right: 16,
+        ),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(

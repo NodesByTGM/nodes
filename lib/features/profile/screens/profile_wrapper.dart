@@ -10,23 +10,15 @@ class ProfileWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-        bottom: 10,
-      ),
       decoration: const BoxDecoration(
-        gradient: profileLinearGradient,
+        color: PROFILEBG,
       ),
       child: getUserProfile(),
     );
   }
-  // Widget build(BuildContext context) {
-  //   return getUserProfile();
-  // }
 
   Widget getUserProfile() {
-    switch (1) {
+    switch (2) {
       case 1:
         return const IndividualProfileScreen();
       case 2:
