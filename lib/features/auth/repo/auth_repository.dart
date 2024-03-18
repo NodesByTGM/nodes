@@ -12,32 +12,101 @@ part 'auth_repository.g.dart';
 class AuthApis {
   static const baseApi = API_ENDPOINT;
   static const auth = "$API_ENDPOINT/auth";
-  static const refreshToken = "$auth/refresh/";
-  static const login = "$auth/login/";
-  static const userSignup = "$auth/signup/";
-  static const verifyOtp = "$auth/verify/";
+  static const register = "$auth/register";
+  static const login = "$auth/login";
+  static const refreshToken = "$auth/refresh-token";
+  static const sendOTP = "$auth/send-otp";
+  static const verifyEmail = "$auth/verify-email";
+  static const verifyOTP = "$auth/verify-otp";
+  static const forgotPassword = "$auth/forgot-password";
+
+  static const resetPassword = "$baseApi/reset-password/{accountId}/{token}";
+  static const changePassword = "$baseApi/change-password";
+  static const logout = "$baseApi/logout";
+
+  // Onboarding
+  static const onboardingApi = "$baseApi/onboarding";
+  static const talentOnboarding = "$onboardingApi/talent";
+  static const businessOnboarding = "$onboardingApi/business";
+
+  // Profile
+  static const profileApi = "$baseApi/users/profile";
+
+  // Upgrades
+  static const upgradeApi = "$baseApi/upgrades";
+  static const talentAccountUpgradeApi = "$upgradeApi/talent";
+  static const businessAccountUpgradeApi = "$upgradeApi/business";
+
+  // Media Uploads
+  static const mediaUploadsApi = "$baseApi/uploads/media";
+  static const deleteMediaApi = "$mediaUploadsApi/delete/{id}";
 }
 
 @RestApi()
 abstract class AuthRepository {
   factory AuthRepository(Dio dio, {String? baseUrl}) = _AuthRepository;
 
-  // @POST(AuthApis.login)
-  // Future<ApiResponse> login(@Body() LoginDetails payload);
+  @POST(AuthApis.login)
+  Future<ApiResponse> login(@Body() payload);
 
+  @POST(AuthApis.register)
+  Future<ApiResponse> register(@Body() payload);
 
-  // @MultiPart()
-  // @POST(AuthApis.manageSecurity)
-  // Future<ApiResponse> createSecurity(
-  //   @Part(name: "identification_photo", fileName: "lol.png") File identification_photo,
-  //   @Part(name: "nin") String nin,
-  //   @Part(name: "active_from") String active_from,
-  //   @Part(name: "active_to") String active_to,
-  //   @Part(name: "phone_no") String phone_no,
-  //   @Part(name: "first_name") String first_name,
-  //   @Part(name: "last_name") String last_name,
-  //   @Part(name: "email") String email, {
-  //   @SendProgress() ProgressCallback? onSendProgress,
-  // });
+  @POST(AuthApis.refreshToken)
+  Future<ApiResponse> refreshToken(@Body() payload);
+
+  @POST(AuthApis.sendOTP)
+  Future<ApiResponse> sendOTP(@Body() payload);
+
+  @POST(AuthApis.verifyEmail)
+  Future<ApiResponse> verifyEmail(@Body() payload);
+
+  @POST(AuthApis.verifyOTP)
+  Future<ApiResponse> verifyOTP(@Body() payload);
+
+  @POST(AuthApis.forgotPassword)
+  Future<ApiResponse> forgotPassword(@Body() payload);
+
+  @POST(AuthApis.resetPassword)
+  Future<ApiResponse> resetPassword(
+    @Path('accountId') String accountId,
+    @Path('token') String token,
+    @Body() payload,
+  );
+
+  @POST(AuthApis.changePassword)
+  Future<ApiResponse> changePassword(@Body() payload);
+
+  @POST(AuthApis.logout)
+  Future<ApiResponse> logout();
+
+  @POST(AuthApis.onboardingApi)
+  Future<ApiResponse> individualOnboarding(@Body() payload);
+
+  @POST(AuthApis.talentOnboarding)
+  Future<ApiResponse> talentOnboarding(@Body() payload);
+
+  @POST(AuthApis.businessOnboarding)
+  Future<ApiResponse> businessOnboarding(@Body() payload);
+
+  @GET(AuthApis.profileApi)
+  Future<ApiResponse> fetchProfile();
+
+  @PUT(AuthApis.profileApi)
+  Future<ApiResponse> updateProfile(@Body() payload);
+
+  @POST(AuthApis.talentAccountUpgradeApi)
+  Future<ApiResponse> talentAccountUpgrade(@Body() payload);
+
+  @POST(AuthApis.businessAccountUpgradeApi)
+  Future<ApiResponse> businessAccountUpgrade(@Body() payload);
+
+  @POST(AuthApis.mediaUploadsApi)
+  Future<ApiResponse> mediaUpload(@Body() payload);
+
+  @DELETE(AuthApis.deleteMediaApi)
+  Future<ApiResponse> deleteMedia(
+    @Path('id') String id,
+  );
 
 }

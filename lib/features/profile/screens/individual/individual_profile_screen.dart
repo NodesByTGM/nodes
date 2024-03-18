@@ -20,6 +20,7 @@ class IndividualProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ySpace(height: 24),
               ListTile(
                 contentPadding: const EdgeInsets.all(0),
                 leading: cachedNetworkImage(

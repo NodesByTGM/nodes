@@ -1,11 +1,14 @@
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/register_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/otp_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
-import 'package:password_strength_indicator/password_strength_indicator.dart';
+import 'package:nodes/utilities/widgets/strength_widget.dart';
 
 class GeneralSignupScreen extends StatefulWidget {
   const GeneralSignupScreen({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class GeneralSignupScreen extends StatefulWidget {
 }
 
 class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
+  late AuthController authCtrl;
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController pwdCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
@@ -32,8 +36,17 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
   int? selectedYear;
   String? passwordValue;
 
+  double pwdStrengthVal = 0;
+
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return AppWrapper(
       isCancel: false,
       title: Image.asset(
@@ -233,98 +246,20 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                           ),
                         ),
                         ySpace(height: 5),
-                        // Password bar...
-                        PasswordStrengthIndicator(
-                          password: passwordValue,
-                          thickness: 4,
-                          backgroundColor: BORDER,
-                          radius: 2,
-                          colors: const StrengthColors(
-                            weak: RED,
-                            medium: Colors.amber,
-                            strong: Colors.green,
-                          ),
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                          callback: (double strength) {
-                            // Receive the strength value of the password
-                            debugPrint('Password Strength: $strength');
+                        StrengthWidget(
+                          controller: pwdCtrl,
+                          valueCallback: (val) {
+                            setState(() {
+                              pwdStrengthVal = val;
+                            });
                           },
-                          strengthBuilder: (String password) {
-                            // Implement a custom strength builder to calculate the strength based on your criteria
-                            // Return a value between 0.0 (too weak) and 1.0 (very strong)
-                            // Example:
-                            // return password.length / 10;
-                            if (password.isEmpty) return 0.0;
-
-                            // Check which types of characters are used and create an opinionated bonus.
-                            // double charsetBonus;
-                            // if (RegExp(r'^[a-z]*$').hasMatch(password)) {
-                            //   charsetBonus = 0.1;
-                            // } else if (RegExp(r'^[a-z0-9]*$')
-                            //     .hasMatch(password)) {
-                            //   charsetBonus = 0.2;
-                            // } else if (RegExp(r'^[a-zA-Z]*$')
-                            //     .hasMatch(password)) {
-                            //   charsetBonus = 0.3;
-                            // } else if (RegExp(r'^[a-z\-_!?]*$')
-                            //     .hasMatch(password)) {
-                            //   charsetBonus = 0.4;
-                            // } else if (RegExp(r'^[a-zA-Z0-9]*$')
-                            //     .hasMatch(password)) {
-                            //   charsetBonus = 0.5;
-                            // } else if (password.length > 8) {
-                            //   charsetBonus = 0.8;
-                            // } else {
-                            //   charsetBonus = 1.0; // bug
-                            // }
-                            // return charsetBonus;
-
-                            double charsetBonus = 0.0;
-                            if (RegExp(r'^[a-z]*$').hasMatch(password)) {
-                              // Small letter
-                              charsetBonus = 0.1;
-                            } else if (RegExp(r'^[a-z0-9]*$')
-                                .hasMatch(password)) {
-                              // small letters and numbers
-                              charsetBonus = 0.2;
-                            } else if (RegExp(r'^[a-zA-Z]*$')
-                                .hasMatch(password)) {
-                              // small letters and capslock
-                              charsetBonus = 0.3;
-                            } else if (RegExp(r'^[a-z\-_!?]*$')
-                                .hasMatch(password)) {
-                              // small letters and special characters
-                              charsetBonus = 0.4;
-                            } else if (RegExp(r'^[a-zA-Z0-9]*$')
-                                .hasMatch(password)) {
-                              // Caps Letter and Number
-                              print(password.length);
-                              charsetBonus = 0.5;
-                              // } else if (password.length > 8) {
-                            } else if (!RegExp(r'.{8,30}').hasMatch(password)) {
-                              charsetBonus = 0.8;
-                            } else {
-                              // charsetBonus = 1.0; // bug
-                              charsetBonus = charsetBonus;
-                            }
-                            return charsetBonus;
-
-                            /**
-                             * weak password- less than 8 characters
-                                good password- 8 characters inclusive of a number or 8 numbers inclusive of a special character
-                                Great password- 8 characters inclusive of a number and special character.
-                             */
-                          },
-                          style: StrengthBarStyle.dashed,
                         ),
-
                         ySpace(height: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             subtext(
-                              "Password strenth:",
+                              "Password strength: ${pwdStrengthText(pwdStrengthVal)}",
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color: GRAY,
@@ -359,8 +294,9 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                             obscureText: !isConfirmPwd,
                             validator: FormBuilderValidators.compose(
                               [
-                                FormBuilderValidators.required(
+                                FormBuilderValidators.equal(
                                   context,
+                                  pwdCtrl.text,
                                   errorText: Constants.confirmPassword,
                                 ),
                               ],
@@ -429,6 +365,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                         SubmitBtn(
                           onPressed: _submit,
                           title: btnTxt("Sign In", WHITE),
+                          loading: authCtrl.loading,
                         ),
                       ],
                     ),
@@ -467,15 +404,31 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
 
   void _submit() async {
     closeKeyPad(context);
-    navigateTo(
-      context,
-      OtpScreen.routeName,
-      arguments: OtpScreenData(
-        email: emailCtrl.text,
-        from: KeyString.talentSignupScreen,
-        to: TalentStepperWrapperScreen.routeName,
-      ),
-    );
+    if (formKey.currentState!.saveAndValidate()) {
+      if (!tosStatus) {
+        showError(message: "Please check the Terms of Service box to continue");
+        return;
+      }
+      bool done = await authCtrl.sendOTP(emailCtrl.text);
+      if (done && mounted) {
+        authCtrl.setRegisterData(RegisterModel(
+          name: fullnameCtrl.text,
+          username: usernameCtrl.text,
+          email: emailCtrl.text,
+          dob: registerDate("$selectedYear-$selectedMonth-$selectedDay"),
+          password: pwdCtrl.text,
+        ));
+        navigateTo(
+          context,
+          OtpScreen.routeName,
+          arguments: OtpScreenData(
+            email: emailCtrl.text,
+            from: KeyString.talentSignupScreen,
+            to: TalentStepperWrapperScreen.routeName,
+          ),
+        );
+      }
+    }
     // if (formKey.currentState!.saveAndValidate()) {
     //   // LoginResponse? response =
     //   //     await context.read<AuthController>().signIn(_request);

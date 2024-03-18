@@ -1,7 +1,7 @@
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/screens/space_details_screen.dart';
-import 'package:nodes/features/community/view_model/com_controller.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';

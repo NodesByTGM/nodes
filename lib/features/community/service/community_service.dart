@@ -4,7 +4,7 @@
 import 'package:logging/logging.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/services/local_storage.dart';
-import 'package:nodes/features/community/repo/com_repository.dart';
+import 'package:nodes/features/community/repo/community_repository.dart';
 
 class ComService {
   final log = Logger('ComService');

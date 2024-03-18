@@ -27,6 +27,7 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ySpace(height: 24),
               ListTile(
                 contentPadding: const EdgeInsets.all(0),
                 leading: cachedNetworkImage(

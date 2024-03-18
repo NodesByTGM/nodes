@@ -9,9 +9,9 @@ import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/features/auth/repo/auth_repository.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/community/repo/com_repository.dart';
-import 'package:nodes/features/community/service/com_service.dart';
-import 'package:nodes/features/community/view_model/com_controller.dart';
+import 'package:nodes/features/community/repo/community_repository.dart';
+import 'package:nodes/features/community/service/community_service.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/interceptor/http_dio_interceptor.dart';
 
 import 'env.config.dart' as envConfig;

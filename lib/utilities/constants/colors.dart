@@ -24,6 +24,7 @@ const Color LIGHT_BLUE = Color(0xFF4285F4);
 const Color PURPLE = Color(0xFF562694);
 const Color TRANSPARENT = Colors.transparent;
 const Color PROFILEBG = Color(0xffFBFBFB);
+const Color YELLOW = Color(0xFFFFEB3B);
 
 const primarySwatches = <int, Color>{
   50: PRIMARY,

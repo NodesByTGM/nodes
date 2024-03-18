@@ -3,7 +3,7 @@ import 'package:nodes/features/community/components/community_space_card_templat
 import 'package:nodes/features/community/components/space_about_tab.dart';
 import 'package:nodes/features/community/components/space_discussion_tab.dart';
 import 'package:nodes/features/community/components/space_members_tab.dart';
-import 'package:nodes/features/community/view_model/com_controller.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 

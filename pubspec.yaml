@@ -47,7 +47,8 @@ dependencies:
   uuid: ^4.2.1
   flutter_dialogs: ^3.0.0
   datepicker_dropdown: ^0.0.7+5
-  password_strength_indicator: ^1.0.1
+  # password_strength_indicator: ^1.0.1
+  # flutter_pw_validator: ^1.6.0
   multiple_search_selection: ^2.6.1
   flutter_textfield_autocomplete: ^1.0.2
   shimmer: ^3.0.0

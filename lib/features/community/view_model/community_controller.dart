@@ -2,7 +2,7 @@
 
 import 'package:logging/logging.dart';
 import 'package:nodes/core/controller/base_controller.dart';
-import 'package:nodes/features/community/service/com_service.dart';
+import 'package:nodes/features/community/service/community_service.dart';
 
 class ComController extends BaseController {
   final log = Logger('ComController');

@@ -53,7 +53,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           ySpace(height: 40),
           PinCodeView(
-            length: 6,
+            length: 4,
             onChanged: (val) {
               otpCode = val;
               setState(() {});

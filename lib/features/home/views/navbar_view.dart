@@ -178,10 +178,13 @@ class _NavbarViewState extends State<NavbarView> {
   }
 }
 
-void logout(BuildContext context) {
-  context.read<AuthController>().logout();
-  // context.read<NavController>().resetValues();
-  // context.read<ProfileController>().resetController();
-  context.read<AuthController>().setCurrentScreen(WelcomeBackScreen.routeName);
-  navigateAndClearAll(context, WelcomeBackScreen.routeName);
+void logout(BuildContext context) async{
+   bool done = await context.read<AuthController>().serverLogout();
+    if(done) {
+      context.read<AuthController>().logout();
+      // context.read<NavController>().resetValues();
+      // context.read<ProfileController>().resetController();
+      context.read<AuthController>().setCurrentScreen(WelcomeBackScreen.routeName);
+      navigateAndClearAll(context, WelcomeBackScreen.routeName);
+    }
 }

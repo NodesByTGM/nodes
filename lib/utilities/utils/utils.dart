@@ -58,6 +58,8 @@ String formatDateOnly(DateTime now) => DateFormat.yMMMEd().format(now);
 String formatDate(DateTime now) => DateFormat('yMd').format(now);
 String fullDate(DateTime now) => DateFormat('d MMMM, y').format(now);
 String shortDate(DateTime now) => DateFormat('dd MMMM, yyyy').format(now);
+DateTime registerDate(String dateTime) =>
+    DateFormat("yyyy-MM-dd").parse(dateTime);
 
 // Routing Configs
 navigateTo(BuildContext context, String route, {dynamic arguments}) {
@@ -685,7 +687,7 @@ Future<ShareResultStatus> shareDoc(BuildContext context) async {
 }
 
 dottedLines() {
-  return DottedLine(
+  return const DottedLine(
     direction: Axis.horizontal,
     alignment: WrapAlignment.center,
     lineLength: double.infinity,
@@ -699,4 +701,19 @@ dottedLines() {
     // dashGapGradient: [Colors.red, Colors.blue],
     dashGapRadius: 0.0,
   );
+}
+
+String pwdStrengthText(val) {
+  if (val == 0) {
+    // empty
+    return "";
+  } else if (val <= .5) {
+    // weak
+    return "WEAK";
+  } else if (val > .6 && val < 1) {
+    // medium
+    return "MEDIUM";
+  }
+  // strong
+  return "STRONG";
 }

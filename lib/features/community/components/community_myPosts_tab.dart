@@ -20,7 +20,15 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
   Widget build(BuildContext context) {
     return 1 > 2
         ? Container(
-            color: WHITE,
+            margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+            decoration: BoxDecoration(
+              color: WHITE,
+              border: Border.all(
+                width: 0.7,
+                color: BORDER,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: Center(
               child: SingleChildScrollView(
                 child: Column(
@@ -38,7 +46,6 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
                       fontWeight: FontWeight.w400,
                       textAlign: TextAlign.center,
                     ),
-                    ySpace(height: 40),
                     SvgPicture.asset(ImageUtils.spaceEmptyIcon),
                   ],
                 ),
@@ -49,6 +56,7 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
             margin: const EdgeInsets.only(top: 40),
             child: ListView(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               children: [
                 Row(

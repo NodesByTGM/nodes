@@ -1,4 +1,5 @@
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
+import 'package:nodes/features/auth/views/general_signup_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -170,7 +171,9 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                       fontWeight: FontWeight.w400,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        navigateTo(context, GeneralSignupScreen.routeName);
+                      },
                       child: labelText(
                         "Sign Up",
                         fontSize: 16,

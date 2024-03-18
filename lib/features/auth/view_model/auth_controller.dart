@@ -10,7 +10,9 @@ import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
 import 'package:nodes/core/models/page.dart';
+import 'package:nodes/features/auth/models/register_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
+import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class AuthController extends BaseController {
@@ -18,13 +20,17 @@ class AuthController extends BaseController {
   final AuthService _authService;
   final LocalStorageService _storageService;
 
-  AuthController(this._authService, this._storageService);
+  AuthController(
+    this._authService,
+    this._storageService,
+  );
 
   // Variables
   // UserModel _currentUser = const UserModel();
   int _tStepperVal = 1;
   int _bStepperVal = 1;
-
+  RegisterModel _registerData = const RegisterModel();
+  double _passwordStrength = 0.0;
   // Getters
 
   // UserModel get currentUser => _currentUser;
@@ -39,7 +45,8 @@ class AuthController extends BaseController {
 
   int get tStepperVal => _tStepperVal;
   int get bStepperVal => _bStepperVal;
-
+  RegisterModel get registerData => _registerData;
+  double get passwordStrength => _passwordStrength;
   // Setters
 
   setTStepper(int val) {
@@ -60,6 +67,16 @@ class AuthController extends BaseController {
 
   dummySession(Map<String, dynamic> json) {
     _saveSession(json);
+  }
+
+  setPasswordStrength(double val) {
+    _passwordStrength += val;
+    notifyListeners();
+  }
+
+  setRegisterData(RegisterModel data) {
+    _registerData = data;
+    notifyListeners();
   }
 
   set currentUserVal(CurrentSession session) {
@@ -104,78 +121,391 @@ class AuthController extends BaseController {
   }
 
   // Functions
-  // Future<bool> login(LoginDetails _details) async {
-  //   setBusy(true);
-  //   try {
-  //     ApiResponse response = await _authService.login(_details);
-  //     if (response.status == KeyString.error) {
-  //       showError(message: errorMessageObjectToString(response.message));
-  //       return false;
-  //     }
-  //     await _customSaveSession(response);
-  //     setCurrentScreen(NavbarView.routeName);
-  //     return true;
-  //   } on NetworkException catch (e) {
-  //     showError(message: e.toString());
-  //     return false;
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // }
-
   Future<String?> _deviceToken() async {
     // return await FirebaseMessaging.instance.getToken();
     return "";
   }
 
-  // Future<bool> verifyOtp(String otp) async {
-  //   setBusy(true);
-  //   try {
-  //     ApiResponse response = await _authService.verifyOtp(otp);
+  Future<bool> login(_details) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.login(_details);
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // await _customSaveSession(response);
+      // setCurrentScreen(NavbarView.routeName);
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
 
-  //     if (response.status == KeyString.error) {
-  //       showError(message: errorMessageObjectToString(response.message));
-  //       return false;
-  //     }
-  //     await _customSaveSession(response);
-  //     return true;
-  //   } on NetworkException catch (e) {
-  //     showError(message: e.toString());
-  //     return false;
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // }
+  ///
+  ///
 
-  // Future<List<GuestModel>> searchGuest({required String query}) async {
-  //   setBusy(true);
-  //   try {
-  //     ApiResponse response = await _authService.searchGuest(query);
+  Future<bool> register(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.register(payload);
 
-  //     if (response.status == KeyString.error) {
-  //       debugPrint(errorMessageObjectToString(response.message));
-  //       return <GuestModel>[];
-  //     }
-  //     //
-  //     Page<GuestModel> p = const Page<GuestModel>()
-  //         .fromJson(response.data as Map<String, dynamic>, const GuestModel());
-  //     if (!isObjectEmpty(p.results)) {
-  //       return p.results as List<GuestModel>;
-  //     }
-  //     return <GuestModel>[];
-  //   } on NetworkException catch (e) {
-  //     debugPrint(e.toString());
-  //     return [];
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // }
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
 
+  Future<bool> refreshToken() async {
+    setBusy(true);
+    try {
+      var refreshToken = ''; // from session
+      ApiResponse response = await _authService.refreshToken(refreshToken);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> sendOTP(String email) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.sendOTP({'email': email});
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> verifyEmail(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.verifyEmail(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> verifyOTP(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.verifyOTP(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.forgotPassword(email);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> resetPassword({
+    required dynamic id,
+    required dynamic token,
+    required dynamic payload,
+  }) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.resetPassword(
+        id: id,
+        token: token,
+        payload: payload,
+      );
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> changePassword(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.changePassword(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> serverLogout() async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.logout();
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> individualOnboarding(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.individualOnboarding(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> talentOnboarding(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.talentOnboarding(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> businessOnboarding(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.businessOnboarding(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> fetchProfile() async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.fetchProfile();
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> updateProfile(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.updateProfile(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> talentAccountUpgrade(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.talentAccountUpgrade(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> businessAccountUpgrade(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.businessAccountUpgrade(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> mediaUpload(dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.mediaUpload(payload);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> deleteMedia(String id) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.deleteMedia(id);
+
+      if (response.status == KeyString.error) {
+        showError(message: errorMessageObjectToString(response.message));
+        return false;
+      }
+      // TODO: DO SOMETHING HERE
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  ///
   logout() {
     setBusy(false);
     _storageService.deleteSecure(KeyString.currentSession);
     _storageService.deleteSecure(KeyString.token);
     // _currentUser = const UserModel();
+
     notifyListeners();
   }
 }
