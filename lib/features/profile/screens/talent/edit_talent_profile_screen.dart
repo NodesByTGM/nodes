@@ -21,7 +21,10 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController firstNameCtrl = TextEditingController();
   final TextEditingController lastNameCtrl = TextEditingController();
+  final TextEditingController usernameCtrl = TextEditingController();
   final TextEditingController locationCtrl = TextEditingController();
+  final TextEditingController heightCtrl = TextEditingController();
+  final TextEditingController ageCtrl = TextEditingController();
   final TextEditingController headlineCtrl = TextEditingController();
   final TextEditingController bioCtrl = TextEditingController();
   final TextEditingController websiteCtrl = TextEditingController();
@@ -201,6 +204,26 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                               onChanged: (val) {},
                             ),
                           ),
+                          FormWithLabel(
+                            label: "Username",
+                            form: FormBuilderTextField(
+                              name: "username",
+                              decoration: FormUtils.formDecoration(
+                                hintText: "",
+                              ),
+                              keyboardType: TextInputType.text,
+                              style: FORM_STYLE,
+                              controller: usernameCtrl,
+                              readOnly: true,
+                              onSaved: (value) =>
+                                  formValues['username'] = trimValue(value),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(context,
+                                    errorText: Constants.emptyFieldError),
+                              ]),
+                              onChanged: (val) {},
+                            ),
+                          ),
                           FormUtils.formSpacer(),
                           FormWithLabel(
                             label: "Location",
@@ -220,6 +243,48 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                               ]),
                               onChanged: (val) {},
                             ),
+                          ),
+                          FormUtils.formSpacer(),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: FormWithLabel(
+                                  label: "Height(cm)",
+                                  form: FormBuilderTextField(
+                                    name: "height",
+                                    decoration: FormUtils.formDecoration(
+                                      hintText: "Enter your height",
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    style: FORM_STYLE,
+                                    controller: heightCtrl,
+                                    readOnly: true,
+                                    onSaved: (value) =>
+                                        formValues['height'] = trimValue(value),
+                                    onChanged: (val) {},
+                                  ),
+                                ),
+                              ),
+                              xSpace(width: 15),
+                              Expanded(
+                                child: FormWithLabel(
+                                  label: "Age(years)",
+                                  form: FormBuilderTextField(
+                                    name: "age",
+                                    decoration: FormUtils.formDecoration(
+                                      hintText: "Enter your age",
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    style: FORM_STYLE,
+                                    controller: ageCtrl,
+                                    readOnly: true,
+                                    onSaved: (value) =>
+                                        formValues['height'] = trimValue(value),
+                                    onChanged: (val) {},
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
@@ -940,7 +1005,10 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   void dispose() {
     firstNameCtrl.dispose();
     lastNameCtrl.dispose();
+    usernameCtrl.dispose();
     locationCtrl.dispose();
+    heightCtrl.dispose();
+    ageCtrl.dispose();
     headlineCtrl.dispose();
     bioCtrl.dispose();
     websiteCtrl.dispose();

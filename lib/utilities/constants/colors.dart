@@ -9,6 +9,7 @@ const Color WHITE = Color(0xFFFFFFFF);
 const Color BLACK = Color(0xFF000000);
 const Color ORANGE = Color(0xFFF7B307);
 const Color SECONDARY = Color(0xFFD9E41E);
+const Color TAG_CHIP = Color(0xFFD6DE21);
 const Color LIGHT_SECONDARY = Color(0xFFFBFCE9);
 
 const Color TITLE_COLOR = Color(0xFF1D1A42);
@@ -17,7 +18,7 @@ const Color GREEN = Color(0xFF378E5A);
 const Color BORDER = Color(0xFFD6D6D6);
 // const Color DOTTED_BORDER = Color(0xFF212121);
 const Color DOTTED_BORDER = Color(0xFFD6D6D6);
-const Color GRAY = Color(0xFF757575);
+const Color GRAY = Color(0xFF,);
 // const Color GRAY = Color(0xFF979797);
 const Color ACTIVE_LABEL = Color(0xFF76768D);
 const Color LIGHT_BLUE = Color(0xFF4285F4);

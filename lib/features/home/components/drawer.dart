@@ -3,7 +3,9 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
+import 'package:nodes/features/settings/screens/account_settings_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
@@ -148,7 +150,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.briefcaseIcon,
                         title: KeyString.forBusinessScreen,
                         route: DrawerRouteTitle.ForBusiness,
-                        isActive: false,
+                        isActive: getActiveDrawer(navCtrl, KeyString.forBusinessScreen),
                         onTap: () {
                           closeDrawer();
                           //
@@ -158,7 +160,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.cubeIcon,
                         title: KeyString.subscriptionScreen,
                         route: DrawerRouteTitle.Subscription,
-                        isActive: false,
+                        isActive: getActiveDrawer(navCtrl, KeyString.subscriptionScreen),
                         onTap: () {
                           closeDrawer();
                           //
@@ -168,103 +170,71 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.gridToolIcon,
                         title: KeyString.gridToolScreen,
                         route: DrawerRouteTitle.Subscription,
-                        isActive: false,
+                        isActive:
+                            getActiveDrawer(navCtrl, KeyString.gridToolScreen),
                         onTap: () {
                           closeDrawer();
-                          //
+                          navCtrl.updatePageListStack(
+                            GridToolsScreen.routeName,
+                          );
                         },
                       ),
-                      ySpace(height: 32),
-                      GestureDetector(
+                      _menuItem(
+                        icon: ImageUtils.upgradeToProIcon,
+                        title: KeyString.upgradeToProScreen,
+                        route: DrawerRouteTitle.UpgradeToPro,
+                        isActive: getActiveDrawer(
+                            navCtrl, KeyString.upgradeToProScreen),
                         onTap: () {
-                          //
+                          closeDrawer();
+                          // navCtrl.updatePageListStack(
+                          //   UpgradeToProScreen.routeName,
+                          // );
                         },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 12),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 13,
-                            horizontal: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: PRIMARY,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Row(
-                            children: [
-                              xSpace(width: 8),
-                              Image.asset(
-                                ImageUtils.appIcon,
-                                height: 20,
-                                color: WHITE,
-                              ),
-                              xSpace(width: 10),
-                              labelText(
-                                KeyString.upgradeToProScreen,
-                                color: WHITE,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
-                              )
-                            ],
-                          ),
-                        ),
                       ),
-                      ySpace(height: 20),
+                      // _menuItem(
+                      //   icon: ImageUtils.upgradeToProIcon,
+                      //   title: "Trending",
+                      //   route: "Send to individuals dashboard...",
+                      //   isActive: false,
+                      //   onTap: () {
+                      //     closeDrawer();
+                      //     // navCtrl.updatePageListStack(
+                      //     //   UpgradeToProScreen.routeName,
+                      //     // );
+                      //   },
+                      // ),
+                      ySpace(height: 10),
                     ],
                   ),
                 ),
                 customDivider(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
-                GestureDetector(
+                _menuItem(
+                  icon: ImageUtils.settingsIcon,
+                  title: KeyString.accountSettingsScreen,
+                  route: DrawerRouteTitle.AccountSettings,
+                  isActive: false,
                   onTap: () {
-                    setState(() {
-                      settingsStatus = !settingsStatus;
-                    });
+                    closeDrawer();
+                    navCtrl.updatePageListStack(
+                      AccountSettingsScreen.routeName,
+                    );
                   },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        labelText(
-                          "Settings and support",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        xSpace(width: 10),
-                        Icon(
-                          settingsStatus
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          size: 25,
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
-                ExpandableSection(
-                  expand: settingsStatus,
-                  child: Column(
-                    children: [
-                      _menuItem(
-                        icon: ImageUtils.gridToolIcon,
-                        title: "Logout",
-                        route: DrawerRouteTitle.Profile,
-                        isActive: false,
-                        onTap: () {
-                          closeDrawer();
-                          // Get to know who's logged in, i.e individual, Talent or Business, and direct them properly...
-                          navCtrl.resetPageListStack();
-                          context.read<AuthController>().logout();
-                          navigateAndClearAll(
-                              context, WelcomeBackScreen.routeName);
-                        },
-                      ),
-                    ],
-                  ),
+                _menuItem(
+                  icon: ImageUtils.logoutIcon,
+                  title: "Logout",
+                  route: DrawerRouteTitle.Profile,
+                  isActive: false,
+                  onTap: () {
+                    closeDrawer();
+                    // Get to know who's logged in, i.e individual, Talent or Business, and direct them properly...
+                    navCtrl.resetPageListStack();
+                    context.read<AuthController>().logout();
+                    navigateAndClearAll(context, WelcomeBackScreen.routeName);
+                  },
                 ),
               ],
             ),

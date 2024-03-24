@@ -8,7 +8,7 @@ class RegisterModel extends Equatable {
   final String? name;
   final String? username;
   final String? email;
-  final DateTime? dob;
+  final String? dob;
   final String? otp;
   final String? password;
 

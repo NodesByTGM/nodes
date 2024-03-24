@@ -1,5 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:nodes/features/auth/models/register_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/pin_code.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -16,6 +21,16 @@ class OtpScreen extends StatefulWidget {
 // Pass data, email etc...
 class _OtpScreenState extends State<OtpScreen> {
   String? otpCode;
+
+  late CountdownTimerController controller;
+  int _endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30;
+  int _retries = 0;
+
+  @override
+  void initState() {
+    controller = CountdownTimerController(endTime: _endTime);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +100,15 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: SubmitBtn(
                   onPressed: _submit,
                   title: btnTxt(Constants.continueText, WHITE),
+                  loading: context.watch<AuthController>().loading,
                 ),
               ),
             ],
           ),
           ySpace(height: 40),
-          Wrap(
-            spacing: 2,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               labelText(
                 "Did you get your code?",
@@ -100,15 +116,30 @@ class _OtpScreenState extends State<OtpScreen> {
                 textAlign: TextAlign.center,
                 fontWeight: FontWeight.w400,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: labelText(
-                  "Send a new code",
-                  fontSize: 16,
-                  textAlign: TextAlign.center,
-                  fontWeight: FontWeight.w400,
-                  color: PRIMARY,
-                ),
+              xSpace(width: 10),
+              CountdownTimer(
+                controller: controller,
+                endTime: _endTime,
+                widgetBuilder: (context, timer) {
+                  return Consumer<AuthController>(
+                    builder: (_, model, __) {
+                      return GestureDetector(
+                        onTap: (timer != null) || model.verifyOTPStatus
+                            ? null
+                            : resendOTP,
+                        child: labelText(
+                          (timer != null)
+                              ? "Re-send Code in ${timer.min ?? 0}:${timer.sec ?? 0}"
+                              : "Send a new code",
+                          fontSize: 14,
+                          textAlign: TextAlign.center,
+                          fontWeight: FontWeight.w400,
+                          color: PRIMARY,
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),
@@ -119,7 +150,62 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _submit() async {
     closeKeyPad(context);
+    // bool done = await context.read<AuthController>().verifyOTP(
+    //   {
+    //     "otp": otpCode,
+    //     "email": "${widget.otpData.email}",
+    //   },
+    // );
+    // if (done && mounted) {
+    // }
+    // OTP Verified
+    // check where this particular screen was called from.
+    // 1. if from signup, then proceed to register user.
+    switch (widget.otpData.from) {
+      case KeyString.talentSignupScreen:
+        // Signup user...
+        RegisterModel data = widget.otpData.data as RegisterModel;
+        bool isDone = await context.read<AuthController>().register(
+          {
+            "name": data.name,
+            "username": data.username,
+            "dob": data.dob,
+            "otp": otpCode,
+            "email": "${widget.otpData.email}",
+            "password": data.password
+          },
+        );
+        if (isDone && mounted) {
+          nextScreen();
+        }
+        break;
+      default:
+      // do nothing...
+      // showText(message: "OTP SENT");
+    }
+    // 2. else, do the next thing...
+    // navigateTo(context, "${widget.otpData.to}");
+  }
+
+  void nextScreen() {
     navigateTo(context, "${widget.otpData.to}");
+  }
+
+  void resendOTP() async {
+    closeKeyPad(context);
+    bool sent =
+        await context.read<AuthController>().sendOTP("${widget.otpData.email}");
+    if (sent) {
+      int addTime = _updateCount() * 1000 * 30;
+      _endTime = DateTime.now().millisecondsSinceEpoch + addTime;
+      controller = CountdownTimerController(endTime: _endTime);
+      setState(() {});
+    }
+  }
+
+  int _updateCount() {
+    _retries = _retries + 1;
+    return _retries;
   }
 }
 

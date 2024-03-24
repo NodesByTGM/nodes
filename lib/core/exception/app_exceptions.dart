@@ -17,7 +17,7 @@ class NetworkException implements Exception {
           e.response?.data is Map<String, dynamic>) {
         ApiResponse response = ApiResponse.fromJson(e.response?.data);
         return response;
-      } 
+      }
     }
 // If it gets to this part, means it did not hit the server at all...
     throw NetworkException(
@@ -30,11 +30,11 @@ String exceptionHandler(DioExceptionType? errorType, int? statusCode,
     {BuildContext? ctx}) {
   if (DioExceptionType.connectionTimeout == errorType ||
       DioExceptionType.connectionError == errorType) {
-    return "Please check your internet connection and try again!";
+    return "Bad internet connection and please try again!";
   } else if (DioExceptionType.receiveTimeout == errorType &&
       DioExceptionType.sendTimeout == errorType) {
-    return "Your request has been timed out";
-  }  else {
-    return "Something went wrong, Please try again later!";
+    return "Request has been timed out";
+  } else {
+    return "There seems to be a problem, Please try again later!";
   }
 }

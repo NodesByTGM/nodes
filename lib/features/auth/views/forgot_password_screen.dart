@@ -1,3 +1,4 @@
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -76,6 +77,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             SubmitBtn(
               onPressed: _submit,
               title: btnTxt("Reset password", WHITE),
+              loading: context.watch<AuthController>().loading,
             ),
           ],
         ),
@@ -86,27 +88,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {
-      // LoginResponse? response =
-      //     await context.read<AuthController>().signIn(_request);
-      var response = "";
-
-      if (!isObjectEmpty(response) && mounted) {
-        safeNavigate(() {
-          formKey.currentState!.reset();
-          // if (response!.route == VerifyAccount.route) {
-          //   navigateAndClearPrev(
-          //     context,
-          //     VerifyAccount.route,
-          //     arguments: VerifyData(
-          //       email: _request.email,
-          //       nextRoute: NavbarView.routeName,
-          //     ),
-          //   );
-          //   return;
-          // }
-          // navigateAndClearPrev(context, response.route);
-          // context.read<AuthController>().resetVisibility();
-        });
+      bool done =
+          await context.read<AuthController>().forgotPassword(emailCtrl.text);
+      if (done && mounted) {
+        formKey.currentState!.reset();
+        // probably redirect user to login...
+        navigateBack(context);
       }
     }
   }

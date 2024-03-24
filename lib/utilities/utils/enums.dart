@@ -9,6 +9,8 @@ enum DrawerRouteTitle{
   Community,
   ForBusiness,
   Subscription,
+  UpgradeToPro,
+  AccountSettings,
 }
 
 enum HorizontalSlidingCardDataSource {
@@ -26,4 +28,10 @@ enum HorizontalSlidingCardDataSource {
 enum FilterSort {
   Filter,
   Sort
+}
+
+enum SocialMediaTypes {
+  Instagram,
+  Twitter,
+  Linkedin,
 }

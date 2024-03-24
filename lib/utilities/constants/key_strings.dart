@@ -17,4 +17,5 @@ class KeyString {
   static const subscriptionScreen = "Subscription";
   static const upgradeToProScreen = "Upgrade To Pro";
   static const gridToolScreen = "Grid Tools";
+  static const accountSettingsScreen = "Account settings";
 }

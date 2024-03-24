@@ -1,5 +1,6 @@
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -40,58 +41,36 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
           fontWeight: FontWeight.w500,
         ),
         ySpace(height: 40),
-        todoCheckbox(
-          value: connectWithCreatives,
-          title: 'Connect with fellow creatives ',
-          onTap: () {
-            setState(() {
-              connectWithCreatives = !connectWithCreatives;
-            });
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: onboardingPurposeArray.length,
+          itemBuilder: (c, i) {
+            String title = onboardingPurposeArray[i].title;
+            bool status = onboardingPurposeArray[i].status;
+            return todoCheckbox(
+              value: status,
+              title: title,
+              onTap: () {
+                setState(() {
+                  // de-selecting the 'something else' option
+                  other = false;
+                  // clearing the data in the 'something else' input field.
+                  otherCtrl.clear();
+                  onboardingPurposeArray[i].status =
+                      !onboardingPurposeArray[i].status;
+                });
+              },
+              isActive: connectWithCreatives,
+            );
           },
-          isActive: connectWithCreatives,
-        ),
-        ySpace(height: 8),
-        todoCheckbox(
-          value: findJobs,
-          title: 'Find exciting job opportunities and gigs. ',
-          onTap: () {
-            setState(() {
-              findJobs = !findJobs;
-            });
-          },
-          isActive: findJobs,
-        ),
-        ySpace(height: 8),
-        todoCheckbox(
-          value: increaseVisibility,
-          title: 'Increase visibility and showcase my work. ',
-          onTap: () {
-            setState(() {
-              increaseVisibility = !increaseVisibility;
-            });
-          },
-          isActive: increaseVisibility,
-        ),
-        ySpace(height: 8),
-        todoCheckbox(
-          value: exploreAndDiscover,
-          title: 'Explore and discover inspiring projects. ',
-          onTap: () {
-            setState(() {
-              exploreAndDiscover = !exploreAndDiscover;
-            });
-          },
-          isActive: exploreAndDiscover,
+          separatorBuilder: (c, i) => ySpace(height: 8),
         ),
         ySpace(height: 8),
         todoCheckbox(
           value: other,
           title: 'Something else ',
-          onTap: () {
-            setState(() {
-              other = !other;
-            });
-          },
+          onTap: somethingElseOptionFn,
           isActive: other,
           isOther: true,
         ),
@@ -114,6 +93,34 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
         ),
       ],
     );
+  }
+
+  List<PurposeModel> onboardingPurposeArray = [
+    PurposeModel(
+      title: "Connect with fellow creatives",
+      status: false,
+    ),
+    PurposeModel(
+      title: "Find exciting job opportunities and gigs.",
+      status: false,
+    ),
+    PurposeModel(
+      title: 'Increase visibility and showcase my work. ',
+      status: false,
+    ),
+    PurposeModel(
+      title: 'Explore and discover inspiring projects. ',
+      status: false,
+    ),
+  ];
+
+  void somethingElseOptionFn() {
+    setState(() {
+      other = !other;
+      for (var i = 0; i < onboardingPurposeArray.length; i++) {
+        onboardingPurposeArray[i].status = false;
+      }
+    });
   }
 
   Column todoCheckbox({
@@ -180,6 +187,36 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
 
   void _submit() async {
     closeKeyPad(context);
+    // setting up the data....
+    int index = onboardingPurposeArray.indexWhere((element) => element.status);
+    if (index == -1 && !other) {
+      // this means user didn't select anything.
+      showText(message: "Please select at least  ONE purpose");
+      return;
+    }
+    _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
+      onboardingPurpose: index > -1 ? (index + 1) : 0,
+      // for now, i'm getting the index of the first value that is true...until backend updates this value to an array of selectable items.
+      // The index + 1, is so that i can match the array from the BE, i.e,
+      /**
+       * OnboaringPurpose {
+            NotSelected = 0,
+            Connection = 1,
+            Jobs = 2,
+            Showcase = 3,
+            ExploreProjects = 4,
+            Others = 5,
+        }
+       */
+      otherPurpose: !isObjectEmpty(otherCtrl.text) ? otherCtrl.text : null,
+    ));
     _authCtrl.setTStepper(2);
   }
+}
+
+class PurposeModel {
+  final String title;
+  bool status;
+
+  PurposeModel({required this.title, required this.status});
 }

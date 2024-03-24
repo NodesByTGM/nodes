@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -21,6 +22,14 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
   void initState() {
     _authCtrl = locator.get<AuthController>();
     super.initState();
+    preloadData();
+  }
+
+  preloadData() {
+    // Check if the avatar has been selected
+    IndividualTalentOnboardingModel data = _authCtrl.individualTalentData;
+    if (isObjectEmpty(data.avatarFilePath)) return;
+    profilePicture = File("${data.avatarFilePath}");
   }
 
   @override
@@ -99,6 +108,14 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
 
   void _submit() async {
     closeKeyPad(context);
+    // Send image binary file to server...and retrieve the url...actually do this last, before processing the onboarding, because as of then, user fit change their mind for choice of image
+    if (isObjectEmpty(profilePicture)) {
+      showText(message: "Please upload a picture to continue");
+      return;
+    }
+    _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
+      avatarFilePath: profilePicture?.path,
+    ));
     _authCtrl.setTStepper(5);
   }
 }

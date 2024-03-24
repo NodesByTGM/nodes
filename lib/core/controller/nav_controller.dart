@@ -2,22 +2,20 @@
 
 import 'package:nodes/config/dynamic_page_routes.dart';
 import 'package:nodes/core/controller/base_controller.dart';
-import 'package:nodes/features/dashboard/screen/dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
+import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
 class NavController extends BaseController {
   // ##################### VARIABLES #####################
   int _currentIndex = 0;
   bool _isFullyExpanded = false;
-  List<String> _pageListStack = [
-    DashboardScreen.routeName,
-  ];
+  List<String> _pageListStack = [DashboardWrapper.routeName];
   HorizontalSlidingCardDataSource _dashboardDynamicItem =
       HorizontalSlidingCardDataSource.Empty;
 
   // ##################### GETTERS #####################
   Map<String, dynamic> get persistentRoutes => persistentRoutesSettings;
-  
 
   int get currentIndex => _currentIndex;
   bool get isFullyExpanded => _isFullyExpanded;
@@ -41,7 +39,7 @@ class NavController extends BaseController {
 
   popPageListStack() {
     // This is used to remove all, except the first (index 0) item
-    // Being the DashboardScreen
+    // Being the IndividualDashboardScreen
     if (_pageListStack.length > 1) {
       _pageListStack.removeLast();
       notifyListeners();
@@ -51,7 +49,7 @@ class NavController extends BaseController {
   // To be called when the home button is pressed...
   resetPageListStack() {
     _pageListStack = [
-      DashboardScreen.routeName,
+      DashboardWrapper.routeName,
     ];
     notifyListeners();
   }

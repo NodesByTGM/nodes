@@ -34,7 +34,8 @@ class CommunityCardTemplate extends StatelessWidget {
             Row(
               children: [
                 cachedNetworkImage(
-                  imgUrl: "",
+                  imgUrl:
+                      "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
                   size: 30,
                   borderRadius: 100,
                 ),

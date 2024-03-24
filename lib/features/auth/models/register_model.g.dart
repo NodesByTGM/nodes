@@ -11,7 +11,7 @@ RegisterModel _$RegisterModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       username: json['username'] as String?,
       email: json['email'] as String?,
-      dob: json['dob'] == null ? null : DateTime.parse(json['dob'] as String),
+      dob: json['dob'] as String?,
       otp: json['otp'] as String?,
       password: json['password'] as String?,
     );
@@ -21,7 +21,7 @@ Map<String, dynamic> _$RegisterModelToJson(RegisterModel instance) =>
       'name': instance.name,
       'username': instance.username,
       'email': instance.email,
-      'dob': instance.dob?.toIso8601String(),
+      'dob': instance.dob,
       'otp': instance.otp,
       'password': instance.password,
     };

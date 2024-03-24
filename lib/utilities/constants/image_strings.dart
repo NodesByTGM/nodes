@@ -3,6 +3,10 @@ class ImageUtils {
   static const appIcon = "assets/images/png/app_icon.png";
   static const talentAuthImage = "assets/images/png/talent_auth_image.png";
   static const businessAuthImage = "assets/images/png/business_auth_image.png";
+  static const multiSpaceEmptyPngIcon =
+      "assets/images/png/multi_space_png_icon.png";
+  static const jobDpIcon = "assets/images/png/job_dp.png";
+  static const dottedBgOverlay = "assets/images/png/dotted_bg.png";
 
   // Animations
   // static const nodeLoader = "assets/animations/loading_animation.json";
@@ -28,6 +32,9 @@ class ImageUtils {
   static const briefcaseIcon = "assets/images/svg/briefcase_icon.svg";
   static const cubeIcon = "assets/images/svg/cube_icon.svg";
   static const gridToolIcon = "assets/images/svg/grid_tool_icon.svg";
+  static const upgradeToProIcon = "assets/images/svg/upgrade_to_pro_icon.svg";
+  static const settingsIcon = "assets/images/svg/settings_icon.svg";
+  static const logoutIcon = "assets/images/svg/logout_icon.svg";
   static const menuIcon = "assets/images/svg/menu_icon.svg";
   static const bellIcon = "assets/images/svg/bell_icon.svg";
   static const starIcon = "assets/images/svg/star_icon.svg";
@@ -38,11 +45,16 @@ class ImageUtils {
   static const rightCircleDirectionIcon =
       "assets/images/svg/right_circle_direction_icon.svg";
   static const multipleUserIcon = "assets/images/svg/multiple_users_icon.svg";
-  static const commentOutlineIcon = "assets/images/svg/comment_outline_icon.svg";
+  static const commentOutlineIcon =
+      "assets/images/svg/comment_outline_icon.svg";
   static const attachmentIcon = "assets/images/svg/attachment_icon.svg";
   static const galleryIcon = "assets/images/svg/gallery_icon.svg";
   static const spaceEmptyIcon = "assets/images/svg/space_empty_icon.svg";
   static const multiSpaceEmptyIcon = "assets/images/svg/multi_space_people.svg";
   static const mapLocationIcon = "assets/images/svg/map_location.svg";
   static const chainLinkIcon = "assets/images/svg/chain_link.svg";
+  static const saveJobIcon = "assets/images/svg/save_job.svg";
+  static const headIcon = "assets/images/svg/head_icon.svg";
+  static const thrunkIcon = "assets/images/svg/thrunk_icon.svg";
+  static const legsIcon = "assets/images/svg/legs_icon.svg";
 }

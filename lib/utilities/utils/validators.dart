@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 
 String? validateEmail(String? t) {
   String text = t ?? "";
@@ -62,6 +63,22 @@ String? validatePassword(String? value) {
     return 'Passwords does not meet criteria!';
   }
   return null;
+}
+
+bool validateSocialMediaField({
+  required String value,
+  required SocialMediaTypes? type,
+}) {
+  switch (type) {
+    case SocialMediaTypes.Instagram:
+      return value.toLowerCase().contains('instagram');
+    case SocialMediaTypes.Twitter:
+      return value.toLowerCase().contains('twitter');
+    case SocialMediaTypes.Linkedin:
+      return value.toLowerCase().contains('linkedin');
+    default:
+      return false;
+  }
 }
 
 String getNairaSign() {

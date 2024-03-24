@@ -58,8 +58,10 @@ String formatDateOnly(DateTime now) => DateFormat.yMMMEd().format(now);
 String formatDate(DateTime now) => DateFormat('yMd').format(now);
 String fullDate(DateTime now) => DateFormat('d MMMM, y').format(now);
 String shortDate(DateTime now) => DateFormat('dd MMMM, yyyy').format(now);
-DateTime registerDate(String dateTime) =>
-    DateFormat("yyyy-MM-dd").parse(dateTime);
+String registerDate(String dateTime) =>
+    DateFormat("yyyy-MM-dd").parse(dateTime).toString().substring(0, 10);
+// Jiffy.parseFromDateTime(DateFormat("yyyy-MM-dd").parse(dateTime)).format();
+// DateFormat("yyyy-MM-dd").parse(dateTime);
 
 // Routing Configs
 navigateTo(BuildContext context, String route, {dynamic arguments}) {

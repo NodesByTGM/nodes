@@ -20,6 +20,7 @@ class EditBusinessProfileScreen extends StatefulWidget {
 class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController businessNameCtrl = TextEditingController();
+  final TextEditingController usernameCtrl = TextEditingController();
   final TextEditingController locationCtrl = TextEditingController();
   final TextEditingController headlineCtrl = TextEditingController();
   final TextEditingController bioCtrl = TextEditingController();
@@ -148,6 +149,26 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
 
                               onSaved: (value) =>
                                   formValues['doe'] = trimValue(value),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(context,
+                                    errorText: Constants.emptyFieldError),
+                              ]),
+                              onChanged: (val) {},
+                            ),
+                          ),
+                           FormWithLabel(
+                            label: "Username",
+                            form: FormBuilderTextField(
+                              name: "username",
+                              decoration: FormUtils.formDecoration(
+                                hintText: "",
+                              ),
+                              keyboardType: TextInputType.text,
+                              style: FORM_STYLE,
+                              controller: usernameCtrl,
+                              readOnly: true,
+                              onSaved: (value) =>
+                                  formValues['username'] = trimValue(value),
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(context,
                                     errorText: Constants.emptyFieldError),
@@ -891,6 +912,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
   @override
   void dispose() {
     businessNameCtrl.dispose();
+    usernameCtrl.dispose();
     locationCtrl.dispose();
     headlineCtrl.dispose();
     bioCtrl.dispose();

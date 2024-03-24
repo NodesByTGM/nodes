@@ -365,7 +365,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                         SubmitBtn(
                           onPressed: _submit,
                           title: btnTxt("Sign In", WHITE),
-                          loading: authCtrl.loading,
+                          loading: authCtrl.verifyOTPStatus,
                         ),
                       ],
                     ),
@@ -404,20 +404,24 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
 
   void _submit() async {
     closeKeyPad(context);
+    // For developement purpose...
+    // navigateTo(context, TalentStepperWrapperScreen.routeName);
     if (formKey.currentState!.saveAndValidate()) {
       if (!tosStatus) {
         showError(message: "Please check the Terms of Service box to continue");
         return;
       }
       bool done = await authCtrl.sendOTP(emailCtrl.text);
+      RegisterModel data = RegisterModel(
+        name: fullnameCtrl.text,
+        username: usernameCtrl.text,
+        email: emailCtrl.text,
+        dob: registerDate("$selectedYear-$selectedMonth-$selectedDay"),
+        password: pwdCtrl.text,
+      );
       if (done && mounted) {
-        authCtrl.setRegisterData(RegisterModel(
-          name: fullnameCtrl.text,
-          username: usernameCtrl.text,
-          email: emailCtrl.text,
-          dob: registerDate("$selectedYear-$selectedMonth-$selectedDay"),
-          password: pwdCtrl.text,
-        ));
+        authCtrl.setRegisterData(data);
+        formKey.currentState!.reset();
         navigateTo(
           context,
           OtpScreen.routeName,
@@ -425,34 +429,11 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
             email: emailCtrl.text,
             from: KeyString.talentSignupScreen,
             to: TalentStepperWrapperScreen.routeName,
+            data: data,
           ),
         );
       }
     }
-    // if (formKey.currentState!.saveAndValidate()) {
-    //   // LoginResponse? response =
-    //   //     await context.read<AuthController>().signIn(_request);
-    //   var response = "";
-
-    //   if (!isObjectEmpty(response) && mounted) {
-    //     safeNavigate(() {
-    //       formKey.currentState!.reset();
-    //       // if (response!.route == VerifyAccount.route) {
-    //       //   navigateAndClearPrev(
-    //       //     context,
-    //       //     VerifyAccount.route,
-    //       //     arguments: VerifyData(
-    //       //       email: _request.email,
-    //       //       nextRoute: NavbarView.routeName,
-    //       //     ),
-    //       //   );
-    //       //   return;
-    //       // }
-    //       // navigateAndClearPrev(context, response.route);
-    //       // context.read<AuthController>().resetVisibility();
-    //     });
-    //   }
-    // }
   }
 
   @override

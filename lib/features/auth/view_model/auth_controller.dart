@@ -4,16 +4,22 @@ import 'dart:io';
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
+import 'package:nodes/config/country_states.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
 import 'package:nodes/core/models/page.dart';
+import 'package:nodes/features/auth/models/country_state_model.dart';
+import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/register_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+
+
+
 
 class AuthController extends BaseController {
   final log = Logger('Authcontroller');
@@ -31,6 +37,11 @@ class AuthController extends BaseController {
   int _bStepperVal = 1;
   RegisterModel _registerData = const RegisterModel();
   double _passwordStrength = 0.0;
+  IndividualTalentOnboardingModel _individualTalentData =
+      const IndividualTalentOnboardingModel();
+
+List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(countryStatesData);
+
   // Getters
 
   // UserModel get currentUser => _currentUser;
@@ -47,6 +58,12 @@ class AuthController extends BaseController {
   int get bStepperVal => _bStepperVal;
   RegisterModel get registerData => _registerData;
   double get passwordStrength => _passwordStrength;
+  IndividualTalentOnboardingModel get individualTalentData =>
+      _individualTalentData;
+
+  List<CountryStateModel> get countryStatesList    =>  _countryStatesList;
+
+
   // Setters
 
   setTStepper(int val) {
@@ -76,6 +93,11 @@ class AuthController extends BaseController {
 
   setRegisterData(RegisterModel data) {
     _registerData = data;
+    notifyListeners();
+  }
+
+  setIndividualTalentData(IndividualTalentOnboardingModel data) {
+    _individualTalentData = data;
     notifyListeners();
   }
 
@@ -188,7 +210,7 @@ class AuthController extends BaseController {
   }
 
   Future<bool> sendOTP(String email) async {
-    setBusy(true);
+    setVerifyOTP(true);
     try {
       ApiResponse response = await _authService.sendOTP({'email': email});
 
@@ -196,13 +218,13 @@ class AuthController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      showText(message: response.message);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return false;
     } finally {
-      setBusy(false);
+      setVerifyOTP(false);
     }
   }
 
@@ -215,7 +237,7 @@ class AuthController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      showText(message: response.message);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -234,7 +256,7 @@ class AuthController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      showText(message: response.message);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -254,6 +276,8 @@ class AuthController extends BaseController {
         return false;
       }
       // TODO: DO SOMETHING HERE
+      // Password reset link sent successfully
+      showText(message: response.message);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());

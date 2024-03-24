@@ -4,18 +4,18 @@ import 'package:nodes/features/dashboard/components/comment_section.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
-import 'package:nodes/utilities/utils/form_utils.dart';
 
-class DashboardSingleItemDetailsScreen extends StatefulWidget {
-  const DashboardSingleItemDetailsScreen({super.key});
-  static const String routeName = "/dashboard_single_item_details";
+class IndividualDashboardSingleItemDetailsScreen extends StatefulWidget {
+  const IndividualDashboardSingleItemDetailsScreen({super.key});
+  static const String routeName = "/individual_dashboard_single_item_details";
+
   @override
-  State<DashboardSingleItemDetailsScreen> createState() =>
-      _DashboardSingleItemDetailsScreenState();
+  State<IndividualDashboardSingleItemDetailsScreen> createState() =>
+      _IndividualDashboardSingleItemDetailsScreenState();
 }
 
-class _DashboardSingleItemDetailsScreenState
-    extends State<DashboardSingleItemDetailsScreen> {
+class _IndividualDashboardSingleItemDetailsScreenState
+    extends State<IndividualDashboardSingleItemDetailsScreen> {
   @override
   void initState() {
     super.initState();

@@ -123,14 +123,14 @@ class AuthService {
       return NetworkException.errorHandler(e);
     }
   }
-  
 
   Future<ApiResponse> individualOnboarding(payload) async {
     try {
       ApiResponse res = await authRepository.individualOnboarding(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @individualOnboarding ::===> ${e.response?.data}");
+      log.severe(
+          "Error message @individualOnboarding ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
@@ -150,7 +150,8 @@ class AuthService {
       ApiResponse res = await authRepository.businessOnboarding(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @businessOnboarding ::===> ${e.response?.data}");
+      log.severe(
+          "Error message @businessOnboarding ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
@@ -180,7 +181,8 @@ class AuthService {
       ApiResponse res = await authRepository.talentAccountUpgrade(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @talentAccountUpgrade ::===> ${e.response?.data}");
+      log.severe(
+          "Error message @talentAccountUpgrade ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
@@ -190,7 +192,8 @@ class AuthService {
       ApiResponse res = await authRepository.businessAccountUpgrade(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @businessAccountUpgrade ::===> ${e.response?.data}");
+      log.severe(
+          "Error message @businessAccountUpgrade ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
@@ -214,5 +217,4 @@ class AuthService {
       return NetworkException.errorHandler(e);
     }
   }
-
 }

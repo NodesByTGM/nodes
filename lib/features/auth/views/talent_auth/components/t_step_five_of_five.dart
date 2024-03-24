@@ -1,7 +1,9 @@
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class TStepFiveOfFive extends StatefulWidget {
@@ -24,7 +26,15 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
   @override
   void initState() {
     _authCtrl = locator.get<AuthController>();
-    super.initState();
+    preloadData();
+  }
+
+  preloadData() {
+    // Check if the avatar has been selected
+    IndividualTalentOnboardingModel data = _authCtrl.individualTalentData;
+    linkedinCtrl.text = data.linkedIn ?? '';
+    instagramCtrl.text = data.instagram ?? '';
+    xCtrl.text = data.twitter ?? '';
   }
 
   @override
@@ -82,7 +92,7 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
             form: FormBuilderTextField(
               name: "x",
               decoration: FormUtils.formDecoration(
-                hintText: "EntEnter your X url",
+                hintText: "Enter your X url",
                 isTransparentBorder: true,
                 verticalPadding: 10,
               ),
@@ -118,8 +128,48 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
 
   void _submit() async {
     closeKeyPad(context);
-    if (formKey.currentState!.saveAndValidate()) {}
-    navigateTo(context, PricePlanScreen.routeName);
+    // if (formKey.currentState!.saveAndValidate()) {}
+    // Atleast ONE must be provided...
+    bool hasLinkedIn = isObjectEmpty(linkedinCtrl.text);
+    bool hasTwitter = isObjectEmpty(xCtrl.text);
+    bool hasInstagram = isObjectEmpty(instagramCtrl.text);
+    //
+    bool isValidLinkedIn = validateSocialMediaField(
+      type: SocialMediaTypes.Linkedin,
+      value: linkedinCtrl.text,
+    );
+    bool isValidTwitter = validateSocialMediaField(
+      type: SocialMediaTypes.Twitter,
+      value: xCtrl.text,
+    );
+    bool isValidInstagram = validateSocialMediaField(
+      type: SocialMediaTypes.Instagram,
+      value: instagramCtrl.text,
+    );
+    if (hasLinkedIn && hasInstagram && hasTwitter) {
+      showText(message: "Please provide atleast ONE social media account");
+      return;
+    }
+    if (!hasLinkedIn && !isValidLinkedIn) {
+      // User entered linkedIn, but it's not a valid url
+      showError(message: "Oops!!! This is not a valid LinkedIn URL");
+      return;
+    } else if (!hasInstagram && !isValidInstagram) {
+      // User entered instagram, but it's not a valid url
+      showError(message: "Oops!!! This is not a valid Instagram URL");
+      return;
+    } else if (!hasTwitter && !isValidTwitter) {
+      // User entered twitter, but it's not a valid url
+      showError(message: "Oops!!! This is not a valid X  URL");
+      return;
+    } else {
+      _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
+        linkedIn: hasLinkedIn ? "" : linkedinCtrl.text,
+        instagram: hasInstagram ? "" : instagramCtrl.text,
+        twitter: hasTwitter ? "" : xCtrl.text,
+      ));
+      navigateTo(context, PricePlanScreen.routeName);
+    }
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -15,10 +16,13 @@ class TStepTwoOfFive extends StatefulWidget {
 class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
   MultipleSearchController controller = MultipleSearchController();
   late AuthController _authCtrl;
+  List<String> selectedSkills = [];
+  List<String>? initialPickedItems = [];
 
   @override
   void initState() {
     _authCtrl = locator.get<AuthController>();
+    initialPickedItems = _authCtrl.individualTalentData.skills;
     super.initState();
   }
 
@@ -35,6 +39,7 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
         ),
         ySpace(height: 40),
         MultipleSearchSelection<String>(
+          initialPickedItems: initialPickedItems,
           searchField: TextField(
             decoration: FormUtils.formDecoration(
               hintText: "Add up to 3 skills",
@@ -43,12 +48,7 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
           onSearchChanged: (text) {
             // print('Text is $text');
           },
-          items: const [
-            'Production assitant',
-            'Producer',
-            'Production manager',
-            'Project manager'
-          ],
+          items: skillsList,
           fieldToCheck: (c) {
             return c; // String
           },
@@ -95,7 +95,11 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
             );
           },
           onTapShowedItem: () {},
-          onPickedChange: (items) {},
+          onPickedChange: (items) {
+            setState(() {
+              selectedSkills = items;
+            });
+          },
           onItemAdded: (item) {},
           onItemRemoved: (item) {},
           sortShowedItems: true,
@@ -145,8 +149,22 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
     );
   }
 
+  List<String> skillsList = const [
+    'Production assitant',
+    'Producer',
+    'Production manager',
+    'Project manager'
+  ];
+
   void _submit() async {
     closeKeyPad(context);
+    // if (isObjectEmpty(selectedSkills)) {
+    //   showText(message: "Please  select at least one skill");
+    //   return;
+    // }
+    _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
+      skills: selectedSkills,
+    ));
     _authCtrl.setTStepper(3);
   }
 }

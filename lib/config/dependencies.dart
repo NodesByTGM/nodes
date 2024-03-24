@@ -12,6 +12,9 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/repo/community_repository.dart';
 import 'package:nodes/features/community/service/community_service.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
+import 'package:nodes/features/dashboard/repo/dashboard_repository.dart';
+import 'package:nodes/features/dashboard/service/dashboard_service.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/interceptor/http_dio_interceptor.dart';
 
 import 'env.config.dart' as envConfig;
@@ -41,6 +44,11 @@ void setUpLocator() {
       dioConfig(),
     ),
   );
+  locator.registerSingleton<DashboardRepository>(
+    DashboardRepository(
+      dioConfig(),
+    ),
+  );
 
   // services
   locator.registerSingleton<AuthService>(
@@ -51,6 +59,11 @@ void setUpLocator() {
   locator.registerSingleton<ComService>(
     ComService(
       locator.get<ComRepository>(),
+    ),
+  );
+  locator.registerSingleton<DashboardService>(
+    DashboardService(
+      locator.get<DashboardRepository>(),
     ),
   );
 
@@ -64,6 +77,11 @@ void setUpLocator() {
   locator.registerSingleton<ComController>(
     ComController(
       locator.get<ComService>(),
+    ),
+  );
+  locator.registerSingleton<DashboardController>(
+    DashboardController(
+      locator.get<DashboardService>(),
     ),
   );
   locator.registerSingleton<NavController>(

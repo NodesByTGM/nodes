@@ -17,6 +17,7 @@ class _EditIndividualProfileScreenState
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController firstNameCtrl = TextEditingController();
   final TextEditingController lastNameCtrl = TextEditingController();
+  final TextEditingController usernameCtrl = TextEditingController();
   final TextEditingController locationCtrl = TextEditingController();
   final TextEditingController headlineCtrl = TextEditingController();
   final TextEditingController bioCtrl = TextEditingController();
@@ -128,6 +129,27 @@ class _EditIndividualProfileScreenState
                               controller: lastNameCtrl,
                               onSaved: (value) =>
                                   formValues['lastName'] = trimValue(value),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(context,
+                                    errorText: Constants.emptyFieldError),
+                              ]),
+                              onChanged: (val) {},
+                            ),
+                          ),
+                          FormUtils.formSpacer(),
+                          FormWithLabel(
+                            label: "Username",
+                            form: FormBuilderTextField(
+                              name: "username",
+                              decoration: FormUtils.formDecoration(
+                                hintText: "",
+                              ),
+                              keyboardType: TextInputType.text,
+                              style: FORM_STYLE,
+                              controller: usernameCtrl,
+                              readOnly: true,
+                              onSaved: (value) =>
+                                  formValues['username'] = trimValue(value),
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(context,
                                     errorText: Constants.emptyFieldError),
@@ -424,6 +446,7 @@ class _EditIndividualProfileScreenState
   void dispose() {
     firstNameCtrl.dispose();
     lastNameCtrl.dispose();
+    usernameCtrl.dispose();
     locationCtrl.dispose();
     headlineCtrl.dispose();
     bioCtrl.dispose();

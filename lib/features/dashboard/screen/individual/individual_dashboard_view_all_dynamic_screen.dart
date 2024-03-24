@@ -1,21 +1,22 @@
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/card_template.dart';
-import 'package:nodes/features/dashboard/screen/dashboard_single_item_details.dart';
+import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_single_item_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
-class DashboardViewAllDynamicScreen extends StatefulWidget {
-  const DashboardViewAllDynamicScreen({super.key});
-  static const String routeName = "/dashboard_view_all_dynamic_screen";
+class IndividualDashboardViewAllDynamicScreen extends StatefulWidget {
+  const IndividualDashboardViewAllDynamicScreen({super.key});
+  static const String routeName = "/individual_dashboard_view_all_dynamic_screen";
+  
   @override
-  State<DashboardViewAllDynamicScreen> createState() =>
-      _DashboardViewAllDynamicScreenState();
+  State<IndividualDashboardViewAllDynamicScreen> createState() =>
+      _IndividualDashboardViewAllDynamicScreenState();
 }
 
-class _DashboardViewAllDynamicScreenState
-    extends State<DashboardViewAllDynamicScreen> {
+class _IndividualDashboardViewAllDynamicScreenState
+    extends State<IndividualDashboardViewAllDynamicScreen> {
   late String selectedFilter;
   late String selectedSort;
   List<String> filterOptions = ['All', 'some'];
@@ -130,7 +131,7 @@ class _DashboardViewAllDynamicScreenState
                     title: "Lorem ipsum dolor sit amet, con...",
                     onTap: () {
                       navCtrl.updatePageListStack(
-                        DashboardSingleItemDetailsScreen.routeName,
+                        IndividualDashboardSingleItemDetailsScreen.routeName,
                       );
                     },
                     height: 240,

@@ -1,3 +1,4 @@
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/individual/individual_profile_screen.dart';
 import 'package:nodes/features/profile/screens/talent/talent_profile_screen.dart';
@@ -18,6 +19,7 @@ class ProfileWrapper extends StatelessWidget {
   }
 
   Widget getUserProfile() {
+    // context.read<AuthController>().userType;
     switch (2) {
       case 1:
         return const IndividualProfileScreen();
