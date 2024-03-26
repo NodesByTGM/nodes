@@ -5,6 +5,11 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
+import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/home/components/drawer.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
@@ -172,19 +177,25 @@ class _NavbarViewState extends State<NavbarView> {
       EditTalentProfileScreen.routeName,
       BusinessProfileScreen.routeName,
       EditBusinessProfileScreen.routeName,
+      //
+      // DashboardWrapper.routeName,
+      // TalentJobCenterScreen.routeName,
+      BusinessJobDetailsScreen.routeName,
     ].contains(ctrl.currentPageListStackItem)
         ? const EdgeInsets.all(0)
         : null;
   }
 }
 
-void logout(BuildContext context) async{
-   bool done = await context.read<AuthController>().serverLogout();
-    if(done) {
-      context.read<AuthController>().logout();
-      // context.read<NavController>().resetValues();
-      // context.read<ProfileController>().resetController();
-      context.read<AuthController>().setCurrentScreen(WelcomeBackScreen.routeName);
-      navigateAndClearAll(context, WelcomeBackScreen.routeName);
-    }
+void logout(BuildContext context) async {
+  bool done = await context.read<AuthController>().serverLogout();
+  if (done) {
+    context.read<AuthController>().logout();
+    // context.read<NavController>().resetValues();
+    // context.read<ProfileController>().resetController();
+    context
+        .read<AuthController>()
+        .setCurrentScreen(WelcomeBackScreen.routeName);
+    navigateAndClearAll(context, WelcomeBackScreen.routeName);
+  }
 }

@@ -1,10 +1,15 @@
+import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/job_details.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class JobCard extends StatelessWidget {
   const JobCard({
     super.key,
+    this.isFromBusiness = false,
   });
+
+  final bool isFromBusiness;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class JobCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(width: 1, color: BORDER),
-        // color: RED,
+        color: WHITE,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -88,17 +93,35 @@ class JobCard extends StatelessWidget {
               ],
             ),
             ySpace(height: 16),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () => showCreateSpaceBottomSheet(context),
-                child: labelText(
-                  "View job",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: PRIMARY,
+            Row(
+              mainAxisAlignment: isFromBusiness
+                  ? MainAxisAlignment.spaceBetween
+                  : MainAxisAlignment.end,
+              children: [
+                if (isFromBusiness) ...[
+                  subtext(
+                    "20 applicants",
+                    color: PRIMARY,
+                    fontSize: 14,
+                  ),
+                ],
+                GestureDetector(
+                  // onTap: () =>  showCreateSpaceBottomSheet(context),
+                  onTap: () {
+                    isFromBusiness
+                        ? context.read<NavController>().updatePageListStack(
+                              BusinessJobDetailsScreen.routeName,
+                            )
+                        : showCreateSpaceBottomSheet(context);
+                  },
+                  child: labelText(
+                    isFromBusiness ? "View details" : "View job",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: PRIMARY,
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

@@ -39,517 +39,523 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ySpace(height: 40),
-        labelText(
-          "Hi, Jane Nice to have you here.",
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-        ),
-        customDivider(height: 40),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 26,
-            horizontal: 16,
+    return Container(
+      decoration: const BoxDecoration(
+        // gradient: profileLinearGradient,
+        // color: RED,
+      ),
+      child: ListView(
+        children: [
+          ySpace(height: 40),
+          labelText(
+            "Hi, Jane Nice to have you here.",
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: PRIMARY,
+          customDivider(height: 40),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 26,
+              horizontal: 16,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: PRIMARY,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                labelText(
+                  "Welcome to Nodes! ",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: WHITE,
+                ),
+                ySpace(height: 10),
+                subtext(
+                  "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: WHITE,
+                ),
+                ySpace(height: 40),
+                QuickSetupCard(
+                  title: "Complete your\nprofile",
+                  btnTitle: "Complete Profile",
+                  icon: ImageUtils.headIcon,
+                  onTap: () {},
+                ),
+                ySpace(height: 24),
+                QuickSetupCard(
+                  title: "Connect with\nothers",
+                  btnTitle: "Discover",
+                  icon: ImageUtils.thrunkIcon,
+                  onTap: () {},
+                ),
+                ySpace(height: 24),
+                QuickSetupCard(
+                  title: "Find your\nnext job",
+                  btnTitle: "Browse jobs",
+                  icon: ImageUtils.legsIcon,
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
-          child: Column(
+          ySpace(height: 72),
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               labelText(
-                "Welcome to Nodes! ",
+                "Jobs you have applied to",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: WHITE,
               ),
               ySpace(height: 10),
-              subtext(
-                "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: WHITE,
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updatePageListStack(
+                        TalentJobCenterScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "See more",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          ySpace(height: 24),
+          SizedBox(
+            height: 320,
+            child: PageView.builder(
+              itemCount: jobLength,
+              controller: jobsCardCtrl,
+              onPageChanged: (val) {
+                currentJobIndex = val;
+                setState(() {});
+              },
+              itemBuilder: (context, index) {
+                return JobCard();
+              },
+            ),
+          ),
+          ySpace(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...List.generate(jobLength, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: CardDotIndicator(
+                        isActive: currentJobIndex == index,
+                      ),
+                    );
+                  })
+                ],
               ),
-              ySpace(height: 40),
-              QuickSetupCard(
-                title: "Complete your\nprofile",
-                btnTitle: "Complete Profile",
-                icon: ImageUtils.headIcon,
-                onTap: () {},
-              ),
-              ySpace(height: 24),
-              QuickSetupCard(
-                title: "Connect with\nothers",
-                btnTitle: "Discover",
-                icon: ImageUtils.thrunkIcon,
-                onTap: () {},
-              ),
-              ySpace(height: 24),
-              QuickSetupCard(
-                title: "Find your\nnext job",
-                btnTitle: "Browse jobs",
-                icon: ImageUtils.legsIcon,
-                onTap: () {},
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: false,
+                        totoalLength: jobLength,
+                        currentIndex: currentJobIndex,
+                        ctrl: jobsCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.leftCircleDirectionIcon,
+                    ),
+                  ),
+                  xSpace(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: true,
+                        totoalLength: jobLength,
+                        currentIndex: currentJobIndex,
+                        ctrl: jobsCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.rightCircleDirectionIcon,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ),
-        ySpace(height: 72),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            labelText(
-              "Jobs you have applied to",
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-            ySpace(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: subtext(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-                    fontSize: 14,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    navCtrl.updatePageListStack(
-                      TalentJobCenterScreen.routeName,
-                    );
-                  },
-                  child: subtext(
-                    "See more",
-                    fontSize: 14,
-                    color: PRIMARY,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-        ySpace(height: 24),
-        SizedBox(
-          height: 320,
-          child: PageView.builder(
-            itemCount: jobLength,
-            controller: jobsCardCtrl,
-            onPageChanged: (val) {
-              currentJobIndex = val;
-              setState(() {});
-            },
-            itemBuilder: (context, index) {
-              return JobCard();
-            },
-          ),
-        ),
-        ySpace(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ...List.generate(jobLength, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: CardDotIndicator(
-                      isActive: currentJobIndex == index,
+          ySpace(height: 72),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Jobs for you",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                      fontSize: 14,
                     ),
-                  );
-                })
-              ],
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: subtext(
+                      "See more",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          ySpace(height: 24),
+          SizedBox(
+            height: 320,
+            child: PageView.builder(
+              itemCount: jobsForYouLength,
+              controller: jobsForYouCtrl,
+              onPageChanged: (val) {
+                currentJobsIndex = val;
+                setState(() {});
+              },
+              itemBuilder: (context, index) {
+                return const JobCard();
+              },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: false,
-                      totoalLength: jobLength,
-                      currentIndex: currentJobIndex,
-                      ctrl: jobsCardCtrl,
+          ),
+          ySpace(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...List.generate(jobsForYouLength, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: CardDotIndicator(
+                        isActive: currentJobsIndex == index,
+                      ),
                     );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.leftCircleDirectionIcon,
+                  })
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: false,
+                        totoalLength: jobsForYouLength,
+                        currentIndex: currentJobsIndex,
+                        ctrl: jobsForYouCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.leftCircleDirectionIcon,
+                    ),
                   ),
-                ),
-                xSpace(width: 24),
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: true,
-                      totoalLength: jobLength,
-                      currentIndex: currentJobIndex,
-                      ctrl: jobsCardCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.rightCircleDirectionIcon,
+                  xSpace(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: true,
+                        totoalLength: jobsForYouLength,
+                        currentIndex: currentJobsIndex,
+                        ctrl: jobsForYouCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.rightCircleDirectionIcon,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        ySpace(height: 72),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            labelText(
-              "Jobs for you",
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-            ySpace(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: subtext(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-                    fontSize: 14,
+                ],
+              ),
+            ],
+          ),
+          ySpace(height: 72),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Spaces you might like",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                GestureDetector(
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updatePageListStack(
+                        NodeSpacesScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "See more",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          ySpace(height: 20),
+          SizedBox(
+            height: 320,
+            child: PageView.builder(
+              itemCount: spaceLength,
+              controller: spaceCardCtrl,
+              onPageChanged: (val) {
+                currentSpaceIndex = val;
+                setState(() {});
+              },
+              itemBuilder: (context, index) {
+                return CommunitySpaceCardTemplate(
+                  imgUrl:
+                      "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+                  title: "Lorem ipsum dolor sit amet, con...",
+                  height: 300,
+                  marginRight: 0,
                   onTap: () {},
-                  child: subtext(
-                    "See more",
-                    fontSize: 14,
-                    color: PRIMARY,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-        ySpace(height: 24),
-        SizedBox(
-          height: 320,
-          child: PageView.builder(
-            itemCount: jobsForYouLength,
-            controller: jobsForYouCtrl,
-            onPageChanged: (val) {
-              currentJobsIndex = val;
-              setState(() {});
-            },
-            itemBuilder: (context, index) {
-              return const JobCard();
-            },
+                );
+              },
+            ),
           ),
-        ),
-        ySpace(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ...List.generate(jobsForYouLength, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: CardDotIndicator(
-                      isActive: currentJobsIndex == index,
+          ySpace(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...List.generate(spaceLength, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: CardDotIndicator(
+                        isActive: currentSpaceIndex == index,
+                      ),
+                    );
+                  })
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: false,
+                        totoalLength: spaceLength,
+                        currentIndex: currentSpaceIndex,
+                        ctrl: spaceCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.leftCircleDirectionIcon,
                     ),
-                  );
-                })
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: false,
-                      totoalLength: jobsForYouLength,
-                      currentIndex: currentJobsIndex,
-                      ctrl: jobsForYouCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.leftCircleDirectionIcon,
                   ),
-                ),
-                xSpace(width: 24),
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: true,
-                      totoalLength: jobsForYouLength,
-                      currentIndex: currentJobsIndex,
-                      ctrl: jobsForYouCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.rightCircleDirectionIcon,
+                  xSpace(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: true,
+                        totoalLength: spaceLength,
+                        currentIndex: currentSpaceIndex,
+                        ctrl: spaceCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.rightCircleDirectionIcon,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        ySpace(height: 72),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            labelText(
-              "Spaces you might like",
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-            ySpace(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: subtext(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                    fontSize: 14,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    navCtrl.updatePageListStack(
-                      NodeSpacesScreen.routeName,
-                    );
-                  },
-                  child: subtext(
-                    "See more",
-                    fontSize: 14,
-                    color: PRIMARY,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-        ySpace(height: 20),
-        SizedBox(
-          height: 320,
-          child: PageView.builder(
-            itemCount: spaceLength,
-            controller: spaceCardCtrl,
-            onPageChanged: (val) {
-              currentSpaceIndex = val;
-              setState(() {});
-            },
-            itemBuilder: (context, index) {
-              return CommunitySpaceCardTemplate(
-                imgUrl:
-                    "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-                title: "Lorem ipsum dolor sit amet, con...",
-                height: 300,
-                marginRight: 0,
-                onTap: () {},
-              );
-            },
+                ],
+              ),
+            ],
           ),
-        ),
-        ySpace(height: 24),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ...List.generate(spaceLength, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: CardDotIndicator(
-                      isActive: currentSpaceIndex == index,
-                    ),
-                  );
-                })
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: false,
-                      totoalLength: spaceLength,
-                      currentIndex: currentSpaceIndex,
-                      ctrl: spaceCardCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.leftCircleDirectionIcon,
-                  ),
-                ),
-                xSpace(width: 24),
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: true,
-                      totoalLength: spaceLength,
-                      currentIndex: currentSpaceIndex,
-                      ctrl: spaceCardCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.rightCircleDirectionIcon,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        ySpace(height: 72),
-        labelText(
-          "Trending",
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        ySpace(height: 8),
-        subtext(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-          fontSize: 14,
-        ),
-        ySpace(height: 24),
-        SizedBox(
-          height: 368,
-          child: PageView.builder(
-            itemCount: trendingLength,
-            controller: trendingCtrl,
-            onPageChanged: (val) {
-              currentTrendingIndex = val;
-              setState(() {});
-            },
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: const NetworkImage(
-                        "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg"),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      // Colors.black.withOpacity(0.6),
-                      Colors.black.withOpacity(0.4),
-                      BlendMode.multiply,
+          ySpace(height: 72),
+          labelText(
+            "Trending",
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          ySpace(height: 8),
+          subtext(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+            fontSize: 14,
+          ),
+          ySpace(height: 24),
+          SizedBox(
+            height: 368,
+            child: PageView.builder(
+              itemCount: trendingLength,
+              controller: trendingCtrl,
+              onPageChanged: (val) {
+                currentTrendingIndex = val;
+                setState(() {});
+              },
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    image: DecorationImage(
+                      image: const NetworkImage(
+                          "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg"),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        // Colors.black.withOpacity(0.6),
+                        Colors.black.withOpacity(0.4),
+                        BlendMode.multiply,
+                      ),
                     ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          labelText(
-                            "Name of event",
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: WHITE,
-                            maxLine: 1,
-                          ),
-                          ySpace(height: 8),
-                          subtext(
-                            "Date & Time",
-                            color: WHITE,
-                            fontSize: 14,
-                          ),
-                          ySpace(height: 24),
-                          Wrap(
-                            spacing: 5,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.location_on_outlined,
-                                color: WHITE,
-                              ),
-                              subtext(
-                                "Lagos | Nigeria",
-                                color: WHITE.withOpacity(0.9),
-                                fontSize: 14,
-                              ),
-                            ],
-                          ),
-                          ySpace(height: 40),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: labelText(
-                                "View details",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: WHITE,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            labelText(
+                              "Name of event",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: WHITE,
+                              maxLine: 1,
+                            ),
+                            ySpace(height: 8),
+                            subtext(
+                              "Date & Time",
+                              color: WHITE,
+                              fontSize: 14,
+                            ),
+                            ySpace(height: 24),
+                            Wrap(
+                              spacing: 5,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                  color: WHITE,
+                                ),
+                                subtext(
+                                  "Lagos | Nigeria",
+                                  color: WHITE.withOpacity(0.9),
+                                  fontSize: 14,
+                                ),
+                              ],
+                            ),
+                            ySpace(height: 40),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: labelText(
+                                  "View details",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: WHITE,
+                                ),
                               ),
                             ),
-                          ),
-                          ySpace(height: 24),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        ySpace(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ...List.generate(trendingLength, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: CardDotIndicator(
-                      isActive: currentTrendingIndex == index,
+                            ySpace(height: 24),
+                          ],
+                        ),
+                      ],
                     ),
-                  );
-                })
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: false,
-                      totoalLength: trendingLength,
-                      currentIndex: currentTrendingIndex,
-                      ctrl: trendingCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.leftCircleDirectionIcon,
                   ),
-                ),
-                xSpace(width: 24),
-                GestureDetector(
-                  onTap: () {
-                    customAnimatePageView(
-                      isInc: true,
-                      totoalLength: trendingLength,
-                      currentIndex: currentTrendingIndex,
-                      ctrl: trendingCtrl,
-                    );
-                  },
-                  child: SvgPicture.asset(
-                    ImageUtils.rightCircleDirectionIcon,
-                  ),
-                ),
-              ],
+                );
+              },
             ),
-          ],
-        ),
-      ],
+          ),
+          ySpace(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...List.generate(trendingLength, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: CardDotIndicator(
+                        isActive: currentTrendingIndex == index,
+                      ),
+                    );
+                  })
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: false,
+                        totoalLength: trendingLength,
+                        currentIndex: currentTrendingIndex,
+                        ctrl: trendingCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.leftCircleDirectionIcon,
+                    ),
+                  ),
+                  xSpace(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: true,
+                        totoalLength: trendingLength,
+                        currentIndex: currentTrendingIndex,
+                        ctrl: trendingCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.rightCircleDirectionIcon,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

@@ -3,7 +3,9 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/community/screens/space_details_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_single_item_details.dart';
@@ -30,6 +32,8 @@ const Map<String, dynamic> persistentRoutesSettings = {
     IndividualDashboardSingleItemDetailsScreen.routeName,
     TalentDashboardScreen.routeName,
     BusinessDashboardScreen.routeName,
+    BusinessJobCenterScreen.routeName,
+    BusinessJobDetailsScreen.routeName,
   ],
   // Profile Screen
   KeyString.profileScreen: [
@@ -81,6 +85,8 @@ Widget getDynamicScreen(NavController m) {
     TalentDashboardScreen.routeName => const TalentDashboardScreen(),
     // Business Dashboard
     BusinessDashboardScreen.routeName => const BusinessDashboardScreen(),
+    BusinessJobCenterScreen.routeName => const BusinessJobCenterScreen(),
+    BusinessJobDetailsScreen.routeName => const BusinessJobDetailsScreen(),
 
     // Spaces and Community
     NodeSpacesScreen.routeName => const NodeSpacesScreen(),

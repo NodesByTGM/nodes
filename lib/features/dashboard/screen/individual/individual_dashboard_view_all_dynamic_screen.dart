@@ -9,7 +9,6 @@ import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 class IndividualDashboardViewAllDynamicScreen extends StatefulWidget {
   const IndividualDashboardViewAllDynamicScreen({super.key});
   static const String routeName = "/individual_dashboard_view_all_dynamic_screen";
-  
   @override
   State<IndividualDashboardViewAllDynamicScreen> createState() =>
       _IndividualDashboardViewAllDynamicScreenState();

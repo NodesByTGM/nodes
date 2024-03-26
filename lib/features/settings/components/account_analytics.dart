@@ -13,8 +13,8 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 40),
       children: [
-        ySpace(height: 40),
         Row(
           children: [
             Expanded(
@@ -46,40 +46,6 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
         ),
         ySpace(height: 10),
       ],
-    );
-  }
-
-  Container analyticsCard({
-    required String title,
-    required String value,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(
-        16,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 0.7,
-          color: BORDER,
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          labelText(
-            title,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          ySpace(height: 20),
-          labelText(
-            value,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ],
-      ),
     );
   }
 }

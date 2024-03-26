@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
-import 'package:nodes/utilities/constants/colors.dart';
+import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class DashboardWrapper extends StatelessWidget {
   const DashboardWrapper({super.key});
@@ -11,15 +11,16 @@ class DashboardWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: PROFILEBG,
-      ),
+      // padding: screenPadding,
+      // decoration: const BoxDecoration(
+      //   gradient: profileLinearGradient,
+      // ),
       child: getDashboard(),
     );
   }
 
   Widget getDashboard() {
-    switch (2) {
+    switch (3) {
       case 1:
         return const IndividualDashboardScreen();
       case 2:

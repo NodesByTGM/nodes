@@ -105,7 +105,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     children: [
                       _menuItem(
                         icon: ImageUtils.homeIcon,
-                        title: KeyString.homeScreen,
+                        // title: KeyString.homeScreen,
+                        title: "Dashboard",
                         route: DrawerRouteTitle.Home,
                         // or any of the Home children screen is the currentPageListStackItem
                         isActive:
@@ -150,7 +151,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.briefcaseIcon,
                         title: KeyString.forBusinessScreen,
                         route: DrawerRouteTitle.ForBusiness,
-                        isActive: getActiveDrawer(navCtrl, KeyString.forBusinessScreen),
+                        isActive: getActiveDrawer(
+                            navCtrl, KeyString.forBusinessScreen),
                         onTap: () {
                           closeDrawer();
                           //
@@ -160,10 +162,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         icon: ImageUtils.cubeIcon,
                         title: KeyString.subscriptionScreen,
                         route: DrawerRouteTitle.Subscription,
-                        isActive: getActiveDrawer(navCtrl, KeyString.subscriptionScreen),
+                        isActive: getActiveDrawer(
+                            navCtrl, KeyString.subscriptionScreen),
                         onTap: () {
                           closeDrawer();
                           //
+                        },
+                      ),
+                      _menuItem(
+                        icon: ImageUtils.starOutlineIcon,
+                        title: KeyString.trendingScreen,
+                        route: DrawerRouteTitle
+                            .Trending, // Send to individual dashboard... or reproduce it...
+                        isActive: false,
+                        onTap: () {
+                          closeDrawer();
+                          // navCtrl.updatePageListStack(
+                          //   UpgradeToProScreen.routeName,
+                          // );
                         },
                       ),
                       _menuItem(
@@ -192,24 +208,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           // );
                         },
                       ),
-                      // _menuItem(
-                      //   icon: ImageUtils.upgradeToProIcon,
-                      //   title: "Trending",
-                      //   route: "Send to individuals dashboard...",
-                      //   isActive: false,
-                      //   onTap: () {
-                      //     closeDrawer();
-                      //     // navCtrl.updatePageListStack(
-                      //     //   UpgradeToProScreen.routeName,
-                      //     // );
-                      //   },
-                      // ),
                       ySpace(height: 10),
                     ],
                   ),
                 ),
                 customDivider(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
+                ),
+                _menuItem(
+                  icon: ImageUtils.saveJobIcon,
+                  title: KeyString.savesScreen,
+                  route: DrawerRouteTitle.SavedJobs,
+                  isActive: false,
+                  onTap: () {
+                    closeDrawer();
+                    // navCtrl.updatePageListStack(
+                    //   UpgradeToProScreen.routeName,
+                    // );
+                  },
                 ),
                 _menuItem(
                   icon: ImageUtils.settingsIcon,
@@ -276,6 +292,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             SvgPicture.asset(
               icon,
               color: BLACK.withOpacity(0.6),
+              height: 20,
             ),
             xSpace(width: 10),
             Expanded(
@@ -290,6 +307,67 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       ),
     );
   }
+
+  // GestureDetector _menuItem({
+  //   required String icon,
+  //   required String title,
+  //   required DrawerRouteTitle route,
+  //   required GestureCancelCallback onTap,
+  //   bool isActive = false,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.symmetric(
+  //             // vertical: 10,
+  //             horizontal: 12,
+  //           ),
+  //           margin: const EdgeInsets.only(
+  //             // bottom: 12,
+  //             left: 12,
+  //             right: 12,
+  //           ),
+  //           decoration: BoxDecoration(
+  //             color: isActive ? BORDER.withOpacity(0.4) : WHITE,
+  //             borderRadius: BorderRadius.circular(4),
+  //           ),
+  //           child: Row(
+  //             children: [
+  //               SvgPicture.asset(
+  //                 icon,
+  //                 color: BLACK.withOpacity(0.6),
+  //                 height: 20,
+  //               ),
+  //               xSpace(width: 10),
+  //               Expanded(
+  //                 child: subtext(
+  //                   title,
+  //                   fontSize: 14,
+  //                   fontWeight: FontWeight.w400,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         ExpandableSection(
+  //           expand: true,
+  //           child: Column(
+  //             children: [
+  //               ListTile(
+  //                 contentPadding: const EdgeInsets.only(left: 50),
+  //                 title: labelText("Dashboard"),
+  //                 onTap: () {},
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   getActiveDrawer(NavController nCtrl, String route) {
     return nCtrl.persistentRoutes[route]

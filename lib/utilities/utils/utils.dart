@@ -719,3 +719,69 @@ String pwdStrengthText(val) {
   // strong
   return "STRONG";
 }
+
+GestureDetector tabHeader({
+  required bool isActive,
+  required String title,
+  required GestureTapCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.only(
+        bottom: 10,
+        left: 16,
+        right: 16,
+      ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: isActive ? PRIMARY : TRANSPARENT,
+          ),
+        ),
+      ),
+      child: labelText(
+        title,
+        fontSize: 16,
+        color: isActive ? PRIMARY : BLACK,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+  );
+}
+
+Container analyticsCard({
+  required String title,
+  required String value,
+}) {
+  return Container(
+    padding: const EdgeInsets.all(
+      16,
+    ),
+    decoration: BoxDecoration(
+      color: WHITE,
+      border: Border.all(
+        width: 0.7,
+        color: BORDER,
+      ),
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        labelText(
+          title,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        ySpace(height: 20),
+        labelText(
+          value,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+      ],
+    ),
+  );
+}

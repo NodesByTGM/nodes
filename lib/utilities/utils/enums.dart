@@ -10,6 +10,8 @@ enum DrawerRouteTitle{
   ForBusiness,
   Subscription,
   UpgradeToPro,
+  Trending,
+  SavedJobs,
   AccountSettings,
 }
 

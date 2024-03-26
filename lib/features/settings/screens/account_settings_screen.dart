@@ -82,36 +82,6 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     );
   }
 
-  GestureDetector tabHeader({
-    required bool isActive,
-    required String title,
-    required GestureTapCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.only(
-          bottom: 10,
-          left: 16,
-          right: 16,
-        ),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: 1,
-              color: isActive ? PRIMARY : TRANSPARENT,
-            ),
-          ),
-        ),
-        child: labelText(
-          title,
-          fontSize: 16,
-          color: isActive ? PRIMARY : BLACK,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
 
   getTabBody() {
     return currentIndex == 0 ? AccountForm() : AccountAnalytics();

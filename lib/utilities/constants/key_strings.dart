@@ -14,8 +14,10 @@ class KeyString {
   static const profileScreen = "Profile";
   static const communityScreen = "Community";
   static const forBusinessScreen = "For Business";
-  static const subscriptionScreen = "Subscription";
+  static const subscriptionScreen = "Subscriptions";
+  static const trendingScreen = "Trending";
   static const upgradeToProScreen = "Upgrade To Pro";
   static const gridToolScreen = "Grid Tools";
+  static const savesScreen = "Saves";
   static const accountSettingsScreen = "Account settings";
 }

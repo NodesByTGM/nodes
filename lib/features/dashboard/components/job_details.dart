@@ -3,7 +3,12 @@ import 'package:nodes/utilities/widgets/dot_divider.dart';
 import 'package:nodes/utilities/widgets/tag_chip.dart';
 
 class JobDetails extends StatefulWidget {
-  const JobDetails({super.key});
+  const JobDetails({
+    super.key,
+    this.isFromBusiness = false,
+  });
+
+  final bool isFromBusiness;
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
@@ -16,39 +21,41 @@ class _JobDetailsState extends State<JobDetails> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        ListTile(
-          leading: Image.asset(
-            ImageUtils.jobDpIcon,
-            height: 44,
-          ),
-          title: labelText(
-            "Name of company",
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-          ),
-          subtitle: subtext(
-            "Lagos, Nigeria",
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        ySpace(height: 14),
-        Row(
-          children: [
-            subtext(
-              "Posted ${shortTime(DateTime.now())}",
-              fontSize: 12,
+        if (!widget.isFromBusiness) ...[
+          ListTile(
+            leading: Image.asset(
+              ImageUtils.jobDpIcon,
+              height: 44,
+            ),
+            title: labelText(
+              "Name of company",
+              fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
-            const CustomDot(),
-            subtext(
-              "25 applicants",
-              fontSize: 12,
+            subtitle: subtext(
+              "Lagos, Nigeria",
+              fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: BLACK.withOpacity(0.7),
             ),
-          ],
-        ),
+          ),
+          ySpace(height: 14),
+          Row(
+            children: [
+              subtext(
+                "Posted ${shortTime(DateTime.now())}",
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+              ),
+              const CustomDot(),
+              subtext(
+                "25 applicants",
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: BLACK.withOpacity(0.7),
+              ),
+            ],
+          ),
+        ],
         ySpace(height: 27),
         Container(
           padding: const EdgeInsets.symmetric(
@@ -57,6 +64,7 @@ class _JobDetailsState extends State<JobDetails> {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
+            color: WHITE,
             border: Border.all(
               width: 0.7,
               color: BORDER,
@@ -82,28 +90,31 @@ class _JobDetailsState extends State<JobDetails> {
           ),
         ),
         ySpace(height: 24),
-        Row(
-          children: [
-            SvgPicture.asset(ImageUtils.saveJobIcon),
-            xSpace(width: 16),
-            Expanded(
-              child: SubmitBtn(
-                onPressed: () {},
-                title: btnTxt(
-                  "Apply",
-                  WHITE,
+        if (!widget.isFromBusiness) ...[
+          Row(
+            children: [
+              SvgPicture.asset(ImageUtils.saveJobIcon),
+              xSpace(width: 16),
+              Expanded(
+                child: SubmitBtn(
+                  onPressed: () {},
+                  title: btnTxt(
+                    "Apply",
+                    WHITE,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        ySpace(height: 24),
+            ],
+          ),
+          ySpace(height: 24),
+        ],
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,
           ),
           decoration: BoxDecoration(
+            color: WHITE,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               width: 0.7,
@@ -163,6 +174,7 @@ class _JobDetailsState extends State<JobDetails> {
             vertical: 12,
           ),
           decoration: BoxDecoration(
+            color: WHITE,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               width: 0.7,
