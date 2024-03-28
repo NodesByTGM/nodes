@@ -37,3 +37,10 @@ enum SocialMediaTypes {
   Twitter,
   Linkedin,
 }
+
+enum LoggedInAccountType {
+  Individual,
+  Talent,
+  Business,
+  BusinessTalent,
+}

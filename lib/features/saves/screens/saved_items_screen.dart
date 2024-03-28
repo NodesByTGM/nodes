@@ -1,22 +1,19 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/dashboard/components/job_analytics.dart';
-import 'package:nodes/features/dashboard/components/job_applicants.dart';
-import 'package:nodes/features/dashboard/components/job_details.dart';
+import 'package:nodes/features/saves/components/saved_events.dart';
+import 'package:nodes/features/saves/components/saved_jobs.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class BusinessJobDetailsScreen extends StatefulWidget {
-  const BusinessJobDetailsScreen({super.key});
+class SavedItemScreen extends StatefulWidget {
+  const SavedItemScreen({super.key});
 
-  static const String routeName = "/business_dashboard_job_details_screen";
+  static const String routeName = "/saved_item_screen";
 
   @override
-  State<BusinessJobDetailsScreen> createState() =>
-      _BusinessJobDetailsScreenState();
+  State<SavedItemScreen> createState() => _BusinessEventDetailsScreenState();
 }
 
-class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
+class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
   int currentIndex = 0;
 
   @override
@@ -29,19 +26,21 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
           children: [
             Padding(
               padding: screenPadding,
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   labelText(
-                    "Job title",
+                    "Saves",
                     maxLine: 1,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
-                  const Spacer(),
-                  actionBtn(icon: ImageUtils.trashOutlineIcon, onTap: () {}),
-                  actionBtn(
-                      icon: ImageUtils.editPencileOutlineIcon, onTap: () {}),
-                  actionBtn(icon: ImageUtils.shareOutlineIcon, onTap: () {}),
+                  ySpace(height: 14),
+                  subtext(
+                    "Something something about saved jobs and events",
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ],
               ),
             ),
@@ -58,32 +57,23 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
                     color: WHITE,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       tabHeader(
                         isActive: currentIndex == 0,
-                        title: "Details",
+                        title: "Jobs (2)",
                         onTap: () {
                           setState(() {
                             currentIndex = 0;
                           });
                         },
                       ),
+                      xSpace(width: 30),
                       tabHeader(
                         isActive: currentIndex == 1,
-                        title: "Applicants (2)",
+                        title: "Events (2)",
                         onTap: () {
                           setState(() {
                             currentIndex = 1;
-                          });
-                        },
-                      ),
-                      tabHeader(
-                        isActive: currentIndex == 2,
-                        title: "Analytics",
-                        onTap: () {
-                          setState(() {
-                            currentIndex = 2;
                           });
                         },
                       ),
@@ -131,13 +121,11 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
   getTabBody() {
     switch (currentIndex) {
       case 0:
-        return const JobDetails(isFromBusiness: true);
+        return const SavedJobs();
       case 1:
-        return const JobApplicants();
-      case 2:
-        return const JobAnalytics();
+        return const SavedEvents();
       default:
-        return const JobDetails(isFromBusiness: true);
+        return const SavedJobs();
     }
   }
 

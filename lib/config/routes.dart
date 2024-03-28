@@ -11,6 +11,7 @@ import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_auth_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_signup_screen.dart';
+import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/home/views/home_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 
@@ -27,6 +28,11 @@ class Routes {
         );
       case ForgotPasswordScreen.routeName:
         const page = ForgotPasswordScreen();
+        return MaterialPageRoute(
+          builder: (_) => page,
+        );
+      case WelcomeBackScreen.routeName:
+        const page = WelcomeBackScreen();
         return MaterialPageRoute(
           builder: (_) => page,
         );
@@ -73,7 +79,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (_) => page,
         );
-        
+
       case BusinessStepperWrapperScreen.routeName:
         const page = BusinessStepperWrapperScreen();
         return MaterialPageRoute(

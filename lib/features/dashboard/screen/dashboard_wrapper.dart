@@ -20,7 +20,12 @@ class DashboardWrapper extends StatelessWidget {
   }
 
   Widget getDashboard() {
-    switch (3) {
+    /**
+     * The business dashboard, is supposedly, meant to be at the For Business side of the app
+     * If the logged in account is business, then the home should be their talent's profile...
+     * Not entirely clear on how this should be anyways...
+     */
+    switch (1) {
       case 1:
         return const IndividualDashboardScreen();
       case 2:

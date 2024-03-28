@@ -146,31 +146,56 @@ class BottomSheetWrapper extends StatelessWidget {
             ),
           ),
         ),
-        if (!isObjectEmpty(title))
-          Positioned(
-            left: 0,
-            top: 16,
-            child: Container(
-              padding: const EdgeInsets.only(top: 16, right: 30),
-              margin: const EdgeInsets.only(left: 20),
-              color: WHITE,
-              child: title,
+        // if (!isObjectEmpty(title))
+        //   Positioned(
+        //     left: 0,
+        //     top: 16,
+        //     child: Container(
+        //       padding: const EdgeInsets.only(top: 16, right: 30),
+        //       margin: const EdgeInsets.only(left: 20),
+        //       color: WHITE,
+        //       child: title,
+        //     ),
+        //   ),
+        // if (closeOnTap)
+        //   Positioned(
+        //     right: 0,
+        //     top: 16,
+        //     child: MaterialButton(
+        //       highlightColor: Colors.transparent,
+        //       onPressed: () => navigateBack(context),
+        //       child: SizedBox(
+        //         height: 40,
+        //         width: 40,
+        //         child: SvgPicture.asset(ImageUtils.cancel),
+        //       ),
+        //     ),
+        //   ),
+        Container(
+          decoration: const BoxDecoration(
+            color: WHITE,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
             ),
           ),
-        if (closeOnTap)
-          Positioned(
-            right: 0,
-            top: 16,
-            child: MaterialButton(
-              highlightColor: Colors.transparent,
-              onPressed: () => navigateBack(context),
-              child: SizedBox(
-                height: 40,
-                width: 40,
-                child: SvgPicture.asset(ImageUtils.cancel),
-              ),
-            ),
+          width: screenWidth(context),
+          child: ListTile(
+            title: isObjectEmpty(title)
+                ? null
+                : Container(
+                    padding: const EdgeInsets.only(top: 16),
+                    color: WHITE,
+                    child: title,
+                  ),
+            trailing: !closeOnTap
+                ? null
+                : GestureDetector(
+                    onTap: () => navigateBack(context),
+                    child: SvgPicture.asset(ImageUtils.cancel),
+                  ),
           ),
+        )
       ],
     );
   }

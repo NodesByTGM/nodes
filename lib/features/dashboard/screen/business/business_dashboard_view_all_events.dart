@@ -1,20 +1,20 @@
 import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/dashboard/components/create_job_post.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/create_event.dart';
+import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class BusinessJobCenterScreen extends StatefulWidget {
-  const BusinessJobCenterScreen({super.key});
-  static const String routeName = "/business_job_center_screen";
+class BusinessEventCenterScreen extends StatefulWidget {
+  const BusinessEventCenterScreen({super.key});
+  static const String routeName = "/business_event_center_screen";
 
   @override
-  State<BusinessJobCenterScreen> createState() =>
-      _BusinessJobCenterScreenState();
+  State<BusinessEventCenterScreen> createState() =>
+      _BusinessEventCenterScreenState();
 }
 
-class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
+class _BusinessEventCenterScreenState extends State<BusinessEventCenterScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +30,7 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
             padding: const EdgeInsets.only(top: 40, bottom: 100),
             children: [
               labelText(
-                "Manage your job postings",
+                "Manage your events",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -44,36 +44,23 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                     ),
                     // color: stuckAmount <= -0.54 ? WHITE : null,
                     color: WHITE,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FormBuilderTextField(
-                          name: "jobSearch",
-                          decoration: FormUtils.formDecoration(
-                            hintText: "Search for jobs",
-                            verticalPadding: 12,
-                            prefixIcon: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.search,
-                              ),
-                            ),
+                    child: FormBuilderTextField(
+                      name: "eventSearch",
+                      decoration: FormUtils.formDecoration(
+                        hintText: "Search for events",
+                        verticalPadding: 12,
+                        prefixIcon: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.search,
                           ),
-                          keyboardType: TextInputType.text,
-                          style: FORM_STYLE,
-                          // controller: searchCtrl,
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                      style: FORM_STYLE,
+                      // controller: searchCtrl,
 
-                          onChanged: (val) {},
-                        ),
-                        ySpace(height: 8),
-                        // Hide this at a certain scrool George...
-                        subtext(
-                          "You can search based on skill, roles and job type",
-                          fontSize: 14,
-                          color: GRAY,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ],
+                      onChanged: (val) {},
                     ),
                   );
                 },
@@ -82,7 +69,12 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: 10,
                   itemBuilder: (c, i) {
-                    return const JobCard(isFromBusiness: true);
+                    return const EventCard(
+                      isFromBusiness: true,
+                      hasDelete: true,
+                      hasSave: false,
+                    );
+                    // return labelText("label");
                   },
                   separatorBuilder: (c, i) => ySpace(height: 24),
                 ),
@@ -122,7 +114,7 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                     child: SubmitBtn(
                       onPressed: showCreateJobBottomSheet,
                       title: btnTxt(
-                        "Create a job posting",
+                        "Create an event",
                         WHITE,
                       ),
                     ),
@@ -152,11 +144,11 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
         return BottomSheetWrapper(
           closeOnTap: true,
           title: labelText(
-            "Create a Job Post",
+            "Create an event",
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
-          child: const CreateJobPost(),
+          child: const CreateEvent(),
         );
       },
     );

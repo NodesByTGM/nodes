@@ -3,9 +3,13 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
+import 'package:nodes/features/saves/screens/saved_items_screen.dart';
 import 'package:nodes/features/settings/screens/account_settings_screen.dart';
+import 'package:nodes/features/subscriptions/screen/proceed_with_payment_screen.dart';
+import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
@@ -19,6 +23,7 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   bool profileStatus = true;
   bool settingsStatus = true;
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<NavController, AuthController>(
@@ -155,7 +160,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             navCtrl, KeyString.forBusinessScreen),
                         onTap: () {
                           closeDrawer();
-                          //
+                          navCtrl.updatePageListStack(
+                            BusinessDashboardScreen.routeName,
+                          );
                         },
                       ),
                       _menuItem(
@@ -166,7 +173,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             navCtrl, KeyString.subscriptionScreen),
                         onTap: () {
                           closeDrawer();
-                          //
+                          navCtrl.updatePageListStack(
+                            SubscriptionScreen.routeName,
+                          );
                         },
                       ),
                       _menuItem(
@@ -174,6 +183,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         title: KeyString.trendingScreen,
                         route: DrawerRouteTitle
                             .Trending, // Send to individual dashboard... or reproduce it...
+                        // isActive: getActiveDrawer(
+                        //     navCtrl, KeyString.trendingScreen),
                         isActive: false,
                         onTap: () {
                           closeDrawer();
@@ -203,9 +214,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             navCtrl, KeyString.upgradeToProScreen),
                         onTap: () {
                           closeDrawer();
-                          // navCtrl.updatePageListStack(
-                          //   UpgradeToProScreen.routeName,
-                          // );
+                          navCtrl.updatePageListStack(
+                            ProceedWithPayment.routeName,
+                            // get the pro/talent data passed to it.. or just look for another way of passing data bro
+                          );
                         },
                       ),
                       ySpace(height: 10),
@@ -219,12 +231,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   icon: ImageUtils.saveJobIcon,
                   title: KeyString.savesScreen,
                   route: DrawerRouteTitle.SavedJobs,
-                  isActive: false,
+                  isActive: getActiveDrawer(navCtrl, KeyString.savesScreen),
                   onTap: () {
                     closeDrawer();
-                    // navCtrl.updatePageListStack(
-                    //   UpgradeToProScreen.routeName,
-                    // );
+                    navCtrl.updatePageListStack(
+                      SavedItemScreen.routeName,
+                    );
                   },
                 ),
                 _menuItem(
@@ -299,6 +311,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: subtext(
                 title,
                 fontSize: 14,
+                color: BLACK,
                 fontWeight: FontWeight.w400,
               ),
             ),

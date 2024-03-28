@@ -1,6 +1,7 @@
 import 'package:nodes/features/auth/views/business_auth/business_auth_screen.dart';
 import 'package:nodes/features/auth/views/general_signup_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_auth_screen.dart';
+import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -121,7 +122,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       fontWeight: FontWeight.w400,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        navigateTo(context, WelcomeBackScreen.routeName);
+                      },
                       child: labelText(
                         "Log In",
                         fontSize: 16,
@@ -132,6 +135,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ],
                 ),
+                ySpace(height: 20),
               ],
             ),
           ),

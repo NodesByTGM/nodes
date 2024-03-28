@@ -130,7 +130,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
   }
 
   Text titleFn(String title) {
-    return subtext(
+    return labelText(
       title,
       fontSize: 12,
       fontWeight: FontWeight.w400,

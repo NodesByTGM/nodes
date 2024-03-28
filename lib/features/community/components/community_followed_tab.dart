@@ -49,6 +49,7 @@ class _CommunityFollowedTabState extends State<CommunityFollowedTab> {
             margin: const EdgeInsets.only(top: 40),
             child: ListView(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               children: [
                 Row(

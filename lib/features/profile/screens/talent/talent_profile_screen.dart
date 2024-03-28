@@ -94,7 +94,7 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                     subtext(
                       "Share more about yourself and what you hope to accomplish",
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
+                      // fontWeight: FontWeight.w400,
                     ),
                   ],
                 ),
@@ -258,7 +258,6 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
       ],
     );
   }
-
 
   getTabBody() {
     return currentIndex == 0 ? ProjectsTab() : InteractionsTab();

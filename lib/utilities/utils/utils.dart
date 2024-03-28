@@ -13,6 +13,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -62,6 +63,11 @@ String registerDate(String dateTime) =>
     DateFormat("yyyy-MM-dd").parse(dateTime).toString().substring(0, 10);
 // Jiffy.parseFromDateTime(DateFormat("yyyy-MM-dd").parse(dateTime)).format();
 // DateFormat("yyyy-MM-dd").parse(dateTime);
+String timOfDay(TimeOfDay now) {
+  return now.period == DayPeriod.pm
+      ? '${now.hour - 12}:${now.minute}PM'
+      : "${now.hour}:${now.minute}AM";
+}
 
 // Routing Configs
 navigateTo(BuildContext context, String route, {dynamic arguments}) {
@@ -355,7 +361,7 @@ cachedNetworkImage({
     fit: BoxFit.cover,
     width: size,
     height: size,
-    placeholder: (context, url) => const CircularProgressIndicator.adaptive(),
+    placeholder: (context, url) => const Loader(),
     errorWidget: (context, url, error) => empty,
   );
 }

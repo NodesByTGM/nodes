@@ -5,10 +5,12 @@ class CustomTagChip extends StatelessWidget {
     super.key,
     required this.title,
     this.color = TAG_CHIP,
+    this.borderRadius = 4,
   });
 
   final String title;
   final Color color;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class CustomTagChip extends StatelessWidget {
         vertical: 4,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(borderRadius),
         color: color.withOpacity(0.1),
       ),
       child: labelText(

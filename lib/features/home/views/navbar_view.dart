@@ -5,6 +5,7 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_event_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
@@ -18,6 +19,8 @@ import 'package:nodes/features/profile/screens/individual/individual_profile_scr
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/profile/screens/talent/edit_talent_profile_screen.dart';
 import 'package:nodes/features/profile/screens/talent/talent_profile_screen.dart';
+import 'package:nodes/features/saves/screens/saved_items_screen.dart';
+import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class NavbarView extends StatefulWidget {
@@ -61,8 +64,11 @@ class _NavbarViewState extends State<NavbarView> {
     return WillPopScope(
       onWillPop: () async {
         // navCtrl.popPageListStack();
-        // if (navCtrl.pageListStack.length == 1) {
-        if (navCtrl.currentIndex == 0) {
+        // Check if the dashboard is the only data in the pageList, if yes, continue with prompt.
+        // Else, call the reset list, or pop last item...
+        if (navCtrl.currentIndex == 0 &&
+            navCtrl.currentPageListStackItem == DashboardWrapper.routeName) {
+          // if (navCtrl.currentIndex == 0) {
           final result = await showAlertDialog(
             context,
             body: subtext("Are you sure you want to logout?", fontSize: 13),
@@ -74,6 +80,7 @@ class _NavbarViewState extends State<NavbarView> {
           }
           return false;
         }
+        navCtrl.popPageListStack(); // Remove the last added page...
         navCtrl.currentIndexVal = 0;
         return false;
       },
@@ -181,6 +188,9 @@ class _NavbarViewState extends State<NavbarView> {
       // DashboardWrapper.routeName,
       // TalentJobCenterScreen.routeName,
       BusinessJobDetailsScreen.routeName,
+      BusinessEventDetailsScreen.routeName,
+      SavedItemScreen.routeName,
+      // SubscriptionScreen.routeName,
     ].contains(ctrl.currentPageListStackItem)
         ? const EdgeInsets.all(0)
         : null;

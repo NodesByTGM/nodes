@@ -1,22 +1,21 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/dashboard/components/job_analytics.dart';
-import 'package:nodes/features/dashboard/components/job_applicants.dart';
-import 'package:nodes/features/dashboard/components/job_details.dart';
+import 'package:nodes/features/dashboard/components/event_details.dart';
+import 'package:nodes/features/dashboard/components/saved_event_card.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class BusinessJobDetailsScreen extends StatefulWidget {
-  const BusinessJobDetailsScreen({super.key});
+class BusinessEventDetailsScreen extends StatefulWidget {
+  const BusinessEventDetailsScreen({super.key});
 
-  static const String routeName = "/business_dashboard_job_details_screen";
+  static const String routeName = "/business_dashboard_event_details_screen";
 
   @override
-  State<BusinessJobDetailsScreen> createState() =>
-      _BusinessJobDetailsScreenState();
+  State<BusinessEventDetailsScreen> createState() =>
+      _BusinessEventDetailsScreenState();
 }
 
-class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
+class _BusinessEventDetailsScreenState
+    extends State<BusinessEventDetailsScreen> {
   int currentIndex = 0;
 
   @override
@@ -32,16 +31,24 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
               child: Row(
                 children: [
                   labelText(
-                    "Job title",
+                    "Name of Event",
                     maxLine: 1,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                   const Spacer(),
-                  actionBtn(icon: ImageUtils.trashOutlineIcon, onTap: () {}),
                   actionBtn(
-                      icon: ImageUtils.editPencileOutlineIcon, onTap: () {}),
-                  actionBtn(icon: ImageUtils.shareOutlineIcon, onTap: () {}),
+                    icon: ImageUtils.trashOutlineIcon,
+                    onTap: () {},
+                  ),
+                  actionBtn(
+                    icon: ImageUtils.editPencileOutlineIcon,
+                    onTap: () {},
+                  ),
+                  actionBtn(
+                    icon: ImageUtils.shareOutlineIcon,
+                    onTap: () {},
+                  ),
                 ],
               ),
             ),
@@ -58,7 +65,6 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
                     color: WHITE,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       tabHeader(
                         isActive: currentIndex == 0,
@@ -69,21 +75,13 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
                           });
                         },
                       ),
+                      xSpace(width: 30),
                       tabHeader(
                         isActive: currentIndex == 1,
-                        title: "Applicants (2)",
+                        title: "Saves",
                         onTap: () {
                           setState(() {
                             currentIndex = 1;
-                          });
-                        },
-                      ),
-                      tabHeader(
-                        isActive: currentIndex == 2,
-                        title: "Analytics",
-                        onTap: () {
-                          setState(() {
-                            currentIndex = 2;
                           });
                         },
                       ),
@@ -131,13 +129,11 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
   getTabBody() {
     switch (currentIndex) {
       case 0:
-        return const JobDetails(isFromBusiness: true);
+        return const EventDetails(isFromBusiness: true);
       case 1:
-        return const JobApplicants();
-      case 2:
-        return const JobAnalytics();
+        return const SavedEventCard();
       default:
-        return const JobDetails(isFromBusiness: true);
+        return const EventDetails(isFromBusiness: true);
     }
   }
 

@@ -7,6 +7,7 @@ class ImageUtils {
       "assets/images/png/multi_space_png_icon.png";
   static const jobDpIcon = "assets/images/png/job_dp.png";
   static const dottedBgOverlay = "assets/images/png/dotted_bg.png";
+  static const paystackIcon = "assets/images/png/paystack_icon.png";
 
   // Animations
   // static const nodeLoader = "assets/animations/loading_animation.json";
@@ -54,7 +55,17 @@ class ImageUtils {
   static const mapLocationIcon = "assets/images/svg/map_location.svg";
   static const chainLinkIcon = "assets/images/svg/chain_link.svg";
   static const saveJobIcon = "assets/images/svg/save_job.svg";
+  static const saveJobFilledIcon = "assets/images/svg/save_job_filled.svg";
   static const headIcon = "assets/images/svg/head_icon.svg";
   static const thrunkIcon = "assets/images/svg/thrunk_icon.svg";
   static const legsIcon = "assets/images/svg/legs_icon.svg";
+  static const trashOutlineIcon = "assets/images/svg/trash_outline.svg";
+  static const editPencileOutlineIcon =
+      "assets/images/svg/edit_pencil_outline.svg";
+  static const shareOutlineIcon = "assets/images/svg/share_outline.svg";
+  static const mapMarkerOutlineIcon =
+      "assets/images/svg/map_marker_outline.svg";
+  static const clockOutlineIcon = "assets/images/svg/clock_outline.svg";
+  static const calendarOutlineIcon = "assets/images/svg/calendar_outline.svg";
+  static const cardOutlineIcon = "assets/images/svg/card_outline.svg";
 }

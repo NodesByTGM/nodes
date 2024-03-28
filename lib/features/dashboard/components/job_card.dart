@@ -7,9 +7,11 @@ class JobCard extends StatelessWidget {
   const JobCard({
     super.key,
     this.isFromBusiness = false,
+    this.isSaved = false,
   });
 
   final bool isFromBusiness;
+  final bool isSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,9 @@ class JobCard extends StatelessWidget {
                   ImageUtils.jobDpIcon,
                   height: 72,
                 ),
-                SvgPicture.asset(ImageUtils.saveJobIcon),
+                SvgPicture.asset(isSaved
+                    ? ImageUtils.saveJobFilledIcon
+                    : ImageUtils.saveJobIcon),
               ],
             ),
             ySpace(height: 16),
@@ -106,13 +110,13 @@ class JobCard extends StatelessWidget {
                   ),
                 ],
                 GestureDetector(
-                  // onTap: () =>  showCreateSpaceBottomSheet(context),
+                  // onTap: () =>  showJobDetailsBottomSheet(context),
                   onTap: () {
                     isFromBusiness
                         ? context.read<NavController>().updatePageListStack(
                               BusinessJobDetailsScreen.routeName,
                             )
-                        : showCreateSpaceBottomSheet(context);
+                        : showJobDetailsBottomSheet(context);
                   },
                   child: labelText(
                     isFromBusiness ? "View details" : "View job",
@@ -129,7 +133,7 @@ class JobCard extends StatelessWidget {
     );
   }
 
-  showCreateSpaceBottomSheet(BuildContext context) {
+  showJobDetailsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

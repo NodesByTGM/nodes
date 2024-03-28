@@ -3,6 +3,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
+import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
@@ -77,78 +78,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                      image: const NetworkImage(
-                          "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg"),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        // Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.4),
-                        BlendMode.multiply,
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            labelText(
-                              "Name of event",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: WHITE,
-                              maxLine: 1,
-                            ),
-                            ySpace(height: 8),
-                            subtext(
-                              "Date & Time",
-                              color: WHITE,
-                              fontSize: 14,
-                            ),
-                            ySpace(height: 24),
-                            Wrap(
-                              spacing: 5,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  color: WHITE,
-                                ),
-                                subtext(
-                                  "Lagos | Nigeria",
-                                  color: WHITE.withOpacity(0.9),
-                                  fontSize: 14,
-                                ),
-                              ],
-                            ),
-                            ySpace(height: 40),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: labelText(
-                                  "View details",
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: WHITE,
-                                ),
-                              ),
-                            ),
-                            ySpace(height: 24),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                return const EventCard(
+                  hasDelete: false,
+                  hasSave: true,
                 );
               },
             ),

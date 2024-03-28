@@ -1,7 +1,11 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/dashboard/components/create_event.dart';
+import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
+import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_events.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_jobs.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
@@ -23,6 +27,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
   int currentTrendingIndex = 0;
   final trendingCtrl = PageController(viewportFraction: 1);
   final jobsCardCtrl = PageController(viewportFraction: 1);
+
+  // dummy data
+  bool hasJobs = true;
+  bool hasEvents = true;
 
   @override
   void initState() {
@@ -110,7 +118,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                       title: "Create a job\npost",
                       btnTitle: "Discover",
                       icon: ImageUtils.thrunkIcon,
-                      onTap: () {},
+                      onTap: () => showCreateJobBottomSheet(0),
                     ),
                   ],
                 ),
@@ -150,74 +158,85 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                 ],
               ),
               ySpace(height: 24),
-              SizedBox(
-                height: 320,
-                child: PageView.builder(
-                  itemCount: jobLength,
-                  controller: jobsCardCtrl,
-                  onPageChanged: (val) {
-                    currentJobIndex = val;
-                    setState(() {});
-                  },
-                  itemBuilder: (context, index) {
-                    return const JobCard(
-                      isFromBusiness: true,
-                    );
-                  },
+              if (!hasJobs) ...[
+                EmptyStateWithTextBtn(
+                  title: "Hi Aderinsola!",
+                  content:
+                      "Nothing to see here yet,\nCreate a job post to get started.",
+                  onTap: () => showCreateJobBottomSheet(0),
+                  btnText: "Create job post",
                 ),
-              ),
-              ySpace(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ...List.generate(jobLength, (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 2),
-                          child: CardDotIndicator(
-                            isActive: currentJobIndex == index,
+              ],
+              if (hasJobs) ...[
+                SizedBox(
+                  height: 320,
+                  child: PageView.builder(
+                    itemCount: jobLength,
+                    controller: jobsCardCtrl,
+                    onPageChanged: (val) {
+                      currentJobIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      return const JobCard(
+                        isFromBusiness: true,
+                      );
+                    },
+                  ),
+                ),
+                ySpace(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ...List.generate(jobLength, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 2),
+                            child: CardDotIndicator(
+                              isActive: currentJobIndex == index,
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: false,
+                              totoalLength: jobLength,
+                              currentIndex: currentJobIndex,
+                              ctrl: jobsCardCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.leftCircleDirectionIcon,
                           ),
-                        );
-                      })
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          customAnimatePageView(
-                            isInc: false,
-                            totoalLength: jobLength,
-                            currentIndex: currentJobIndex,
-                            ctrl: jobsCardCtrl,
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          ImageUtils.leftCircleDirectionIcon,
                         ),
-                      ),
-                      xSpace(width: 24),
-                      GestureDetector(
-                        onTap: () {
-                          customAnimatePageView(
-                            isInc: true,
-                            totoalLength: jobLength,
-                            currentIndex: currentJobIndex,
-                            ctrl: jobsCardCtrl,
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          ImageUtils.rightCircleDirectionIcon,
+                        xSpace(width: 24),
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: true,
+                              totoalLength: jobLength,
+                              currentIndex: currentJobIndex,
+                              ctrl: jobsCardCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.rightCircleDirectionIcon,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              ySpace(height: 72),
+                      ],
+                    ),
+                  ],
+                ),
+                ySpace(height: 72),
+              ],
               labelText(
                 "Exclusive events",
                 fontSize: 16,
@@ -234,9 +253,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // navCtrl.updatePageListStack(
-                      //   BusinessJobCenterScreen.routeName,
-                      // );
+                      navCtrl.updatePageListStack(
+                        BusinessEventCenterScreen.routeName,
+                      );
                     },
                     child: subtext(
                       "See more",
@@ -247,143 +266,86 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                 ],
               ),
               ySpace(height: 24),
-              SizedBox(
-                height: 368,
-                child: PageView.builder(
-                  itemCount: trendingLength,
-                  controller: trendingCtrl,
-                  onPageChanged: (val) {
-                    currentTrendingIndex = val;
-                    setState(() {});
-                  },
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
-                          image: const NetworkImage(
-                              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg"),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            // Colors.black.withOpacity(0.6),
-                            Colors.black.withOpacity(0.4),
-                            BlendMode.multiply,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Spacer(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                labelText(
-                                  "Name of event",
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: WHITE,
-                                  maxLine: 1,
-                                ),
-                                ySpace(height: 8),
-                                subtext(
-                                  "Date & Time",
-                                  color: WHITE,
-                                  fontSize: 14,
-                                ),
-                                ySpace(height: 24),
-                                Wrap(
-                                  spacing: 5,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.location_on_outlined,
-                                      color: WHITE,
-                                    ),
-                                    subtext(
-                                      "Lagos | Nigeria",
-                                      color: WHITE.withOpacity(0.9),
-                                      fontSize: 14,
-                                    ),
-                                  ],
-                                ),
-                                ySpace(height: 40),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: labelText(
-                                      "View details",
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: WHITE,
-                                    ),
-                                  ),
-                                ),
-                                ySpace(height: 24),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+              if (!hasEvents) ...[
+                EmptyStateWithTextBtn(
+                  title: "Hi Aderinsola!",
+                  content:
+                      "Nothing to see here yet,\nCreate events to get started.",
+                  onTap: () => showCreateJobBottomSheet(1),
+                  btnText: "Create event",
                 ),
-              ),
-              ySpace(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ...List.generate(trendingLength, (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 2),
-                          child: CardDotIndicator(
-                            isActive: currentTrendingIndex == index,
+              ],
+              if (hasEvents) ...[
+                SizedBox(
+                  // height: 368,
+                  height: 250,
+                  child: PageView.builder(
+                    itemCount: trendingLength,
+                    controller: trendingCtrl,
+                    onPageChanged: (val) {
+                      currentTrendingIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      return const EventCard(
+                        hasDelete: false,
+                        hasSave: true,
+                      );
+                    },
+                  ),
+                ),
+                ySpace(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ...List.generate(trendingLength, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 2),
+                            child: CardDotIndicator(
+                              isActive: currentTrendingIndex == index,
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: false,
+                              totoalLength: trendingLength,
+                              currentIndex: currentTrendingIndex,
+                              ctrl: trendingCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.leftCircleDirectionIcon,
                           ),
-                        );
-                      })
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          customAnimatePageView(
-                            isInc: false,
-                            totoalLength: trendingLength,
-                            currentIndex: currentTrendingIndex,
-                            ctrl: trendingCtrl,
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          ImageUtils.leftCircleDirectionIcon,
                         ),
-                      ),
-                      xSpace(width: 24),
-                      GestureDetector(
-                        onTap: () {
-                          customAnimatePageView(
-                            isInc: true,
-                            totoalLength: trendingLength,
-                            currentIndex: currentTrendingIndex,
-                            ctrl: trendingCtrl,
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          ImageUtils.rightCircleDirectionIcon,
+                        xSpace(width: 24),
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: true,
+                              totoalLength: trendingLength,
+                              currentIndex: currentTrendingIndex,
+                              ctrl: trendingCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.rightCircleDirectionIcon,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ],
           );
   }
@@ -407,6 +369,79 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
       currentIndex,
       curve: Curves.easeInOut,
       duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  showCreateJobBottomSheet(int index) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return BottomSheetWrapper(
+          closeOnTap: true,
+          title: labelText(
+            index == 0 ? "Create a Job Post" : "Create an event",
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          child: index == 0 ? const CreateJobPost() : const CreateEvent(),
+        );
+      },
+    );
+  }
+}
+
+class EmptyStateWithTextBtn extends StatelessWidget {
+  const EmptyStateWithTextBtn({
+    super.key,
+    required this.title,
+    required this.content,
+    required this.btnText,
+    required this.onTap,
+  });
+
+  final String title;
+  final String content;
+  final String btnText;
+  final GestureTapCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ySpace(height: 20),
+        labelText(
+          title,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        ySpace(height: 8),
+        subtext(
+          content,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          textAlign: TextAlign.center,
+        ),
+        ySpace(height: 16),
+        GestureDetector(
+          onTap: onTap,
+          child: labelText(
+            btnText,
+            color: PRIMARY,
+          ),
+        ),
+        SvgPicture.asset(
+          ImageUtils.spaceEmptyIcon,
+        ),
+      ],
     );
   }
 }

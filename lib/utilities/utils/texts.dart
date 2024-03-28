@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nodes/utilities/constants/colors.dart';
 import 'package:nodes/utilities/utils/utils.dart';
 
 Text labelText(
@@ -63,7 +64,8 @@ Text subtext(
     overflow: overflow,
     maxLines: maxLines,
     style: TextStyle(
-      color: color ?? const Color(0xff212121),
+      // color: color ?? const Color(0xff212121),
+      color: color ?? GRAY,
       fontSize: fontSize ?? 14,
       fontWeight: fontWeight ?? FontWeight.w400,
       decoration: textDecoration,

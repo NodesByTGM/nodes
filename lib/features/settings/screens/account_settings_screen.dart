@@ -1,8 +1,7 @@
-import 'package:nodes/features/profile/components/interactions_tab.dart';
-import 'package:nodes/features/profile/components/projects_tab.dart';
 import 'package:nodes/features/settings/components/account_analytics.dart';
 import 'package:nodes/features/settings/components/account_form.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class AccountSettingsScreen extends StatefulWidget {
@@ -16,9 +15,14 @@ class AccountSettingsScreen extends StatefulWidget {
 
 class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   int currentIndex = 0;
+  // Get who is logged in.
+
+  LoggedInAccountType accountType = LoggedInAccountType.BusinessTalent;
 
   @override
   Widget build(BuildContext context) {
+    bool isBusiness = accountType == LoggedInAccountType.Business ||
+        accountType == LoggedInAccountType.BusinessTalent;
     return ListView(
       shrinkWrap: true,
       children: [
@@ -51,39 +55,67 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 ),
                 color: WHITE,
               ),
-              child: Row(
-                children: [
-                  tabHeader(
-                    isActive: currentIndex == 0,
-                    title: "Account",
-                    onTap: () {
-                      setState(() {
-                        currentIndex = 0;
-                      });
-                    },
-                  ),
-                  xSpace(width: 10),
-                  tabHeader(
-                    isActive: currentIndex == 1,
-                    title: "Analytics",
-                    onTap: () {
-                      setState(() {
-                        currentIndex = 1;
-                      });
-                    },
-                  ),
-                ],
+              child: SingleChildScrollView(
+                scrollDirection: isBusiness ? Axis.horizontal : Axis.vertical,
+                child: Row(
+                  mainAxisAlignment: isBusiness
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.start,
+                  children: [
+                    tabHeader(
+                      isActive: currentIndex == 0,
+                      title: "Account",
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 0;
+                        });
+                      },
+                    ),
+                    if (!isBusiness) ...[
+                      xSpace(width: 10),
+                    ],
+                    tabHeader(
+                      isActive: currentIndex == 1,
+                      title: isBusiness ? "Personal Analytics" : "Analytics",
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 1;
+                        });
+                      },
+                    ),
+                    if (isBusiness) ...[
+                      tabHeader(
+                        isActive: currentIndex == 2,
+                        title: "Business Analytics",
+                        onTap: () {
+                          setState(() {
+                            currentIndex = 2;
+                          });
+                        },
+                      ),
+                    ],
+                  ],
+                ),
               ),
             );
           },
-          content: getTabBody(), 
+          content: getTabBody(),
         ),
       ],
     );
   }
 
-
   getTabBody() {
-    return currentIndex == 0 ? AccountForm() : AccountAnalytics();
+    switch (currentIndex) {
+      case 0:
+        return const AccountForm();
+      case 1:
+        return AccountAnalytics(accountType: accountType);
+      case 2:
+        return const AccountAnalytics(
+            accountType: LoggedInAccountType.Business);
+      default:
+        return const AccountForm();
+    }
   }
 }
