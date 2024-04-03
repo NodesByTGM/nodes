@@ -1,5 +1,6 @@
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
-import 'package:nodes/features/auth/views/general_signup_screen.dart';
+import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/home/views/welcome_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -158,7 +159,12 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 ySpace(height: 24),
                 SubmitBtn(
                   onPressed: _submit,
+                  // onPressed: () {
+                  //   // Test Purpose...
+                  //   navigateTo(context, PricePlanScreen.routeName);
+                  // },
                   title: btnTxt("Sign In", WHITE),
+                  loading: context.watch<AuthController>().loading,
                 ),
                 const Spacer(),
                 Wrap(
@@ -173,7 +179,6 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // navigateTo(context, GeneralSignupScreen.routeName);
                         navigateTo(context, WelcomeScreen.routeName);
                       },
                       child: labelText(
@@ -196,30 +201,34 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
 
   void _submit() async {
     closeKeyPad(context);
-    navigateTo(context, NavbarView.routeName);
+    // navigateTo(context, NavbarView.routeName); // Uncomment for testings only
     if (formKey.currentState!.saveAndValidate()) {
-      // LoginResponse? response =
-      //     await context.read<AuthController>().signIn(_request);
-      var response = "";
+      dynamic res = await context.read<AuthController>().login(
+        {
+          "email": "niweb33325@nimadir.com",
+          "password": "Test@1234",
+        },
+      );
+      // var res = "";
 
-      if (!isObjectEmpty(response) && mounted) {
-        safeNavigate(() {
-          formKey.currentState!.reset();
-          // if (response!.route == VerifyAccount.route) {
-          //   navigateAndClearPrev(
-          //     context,
-          //     VerifyAccount.route,
-          //     arguments: VerifyData(
-          //       email: _request.email,
-          //       nextRoute: NavbarView.routeName,
-          //     ),
-          //   );
-          //   return;
-          // }
-          // navigateAndClearPrev(context, response.route);
-          // context.read<AuthController>().resetVisibility();
-        });
-      }
+      // if (!isObjectEmpty(res) && mounted) {
+      //   safeNavigate(() {
+      //     formKey.currentState!.reset();
+      //     // if (response!.route == VerifyAccount.route) {
+      //     //   navigateAndClearPrev(
+      //     //     context,
+      //     //     VerifyAccount.route,
+      //     //     arguments: VerifyData(
+      //     //       email: _request.email,
+      //     //       nextRoute: NavbarView.routeName,
+      //     //     ),
+      //     //   );
+      //     //   return;
+      //     // }
+      //     // navigateAndClearPrev(context, response.route);
+      //     // context.read<AuthController>().resetVisibility();
+      //   });
+      // }
     }
   }
 

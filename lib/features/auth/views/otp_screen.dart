@@ -4,7 +4,6 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:nodes/features/auth/models/register_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/pin_code.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -150,14 +149,15 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _submit() async {
     closeKeyPad(context);
+    // nextScreen(); // Dev Mode Testing
+    // For some reasons, once an OTP is verified, I can't use it again to register the user...
     // bool done = await context.read<AuthController>().verifyOTP(
     //   {
     //     "otp": otpCode,
     //     "email": "${widget.otpData.email}",
     //   },
     // );
-    // if (done && mounted) {
-    // }
+    // if (done && mounted) {}
     // OTP Verified
     // check where this particular screen was called from.
     // 1. if from signup, then proceed to register user.
@@ -180,8 +180,8 @@ class _OtpScreenState extends State<OtpScreen> {
         }
         break;
       default:
-      // do nothing...
-      // showText(message: "OTP SENT");
+        // do nothing...
+        showText(message: "OTP SENT");
     }
     // 2. else, do the next thing...
     // navigateTo(context, "${widget.otpData.to}");

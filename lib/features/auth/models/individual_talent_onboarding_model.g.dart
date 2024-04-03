@@ -20,6 +20,9 @@ IndividualTalentOnboardingModel _$IndividualTalentOnboardingModelFromJson(
       otherPurpose: json['otherPurpose'] as String?,
       step: json['step'] as int?,
       onboardingPurpose: json['onboardingPurpose'] as int?,
+      onboardingPurposes: (json['onboardingPurposes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$IndividualTalentOnboardingModelToJson(
@@ -35,4 +38,5 @@ Map<String, dynamic> _$IndividualTalentOnboardingModelToJson(
       'otherPurpose': instance.otherPurpose,
       'step': instance.step,
       'onboardingPurpose': instance.onboardingPurpose,
+      'onboardingPurposes': instance.onboardingPurposes,
     };

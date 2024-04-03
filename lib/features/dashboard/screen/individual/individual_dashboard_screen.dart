@@ -1,5 +1,7 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
@@ -7,6 +9,7 @@ import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
+import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
@@ -21,6 +24,8 @@ class IndividualDashboardScreen extends StatefulWidget {
 
 class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   late NavController navCtrl;
+  late AuthController authCtrl;
+  late UserModel user;
   int currentJobsIndex = 0;
   int currentTrendingIndex = 0;
   int currentSpaceIndex = 0;
@@ -34,11 +39,14 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   @override
   void initState() {
     navCtrl = locator.get<NavController>();
+    authCtrl = locator.get<AuthController>();
+    user = authCtrl.currentUser;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return SingleChildScrollView(
       child: Column(
         // Can't use ListView here, as it rebuilds the Widget that handles the Future.builder
@@ -47,7 +55,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
         children: [
           ySpace(height: 40),
           labelText(
-            "Welcome to Nodes, Jane ",
+            "Welcome to Nodes, ${user.name?.split(' ').first} ",
             fontSize: 20,
           ),
           ySpace(height: 8),
@@ -184,7 +192,11 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     SizedBox(
                       width: 200,
                       child: SubmitBtn(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<NavController>().updatePageListStack(
+                                SubscriptionScreen.routeName,
+                              );
+                        },
                         title: btnTxt(
                           "Upgrade your account",
                           WHITE,

@@ -1,9 +1,6 @@
-
 // ignore_for_file: constant_identifier_names
 
-
-
-enum DrawerRouteTitle{
+enum DrawerRouteTitle {
   Profile,
   Home,
   Community,
@@ -27,10 +24,7 @@ enum HorizontalSlidingCardDataSource {
   Recommended,
 }
 
-enum FilterSort {
-  Filter,
-  Sort
-}
+enum FilterSort { Filter, Sort }
 
 enum SocialMediaTypes {
   Instagram,
@@ -43,4 +37,31 @@ enum LoggedInAccountType {
   Talent,
   Business,
   BusinessTalent,
+}
+
+enum AccountType {
+  Default, //0
+  Talent, // 1
+  Business, // 2
+}
+
+enum AccountRules {
+  USER,
+  ADMIN,
+}
+
+enum JobTypes {
+  FULL_TIME,
+  PART_TIME,
+  CONTRACT,
+}
+
+enum PostTypes {
+  Community,
+  Space,
+}
+
+enum MembersTypes {
+  Member,
+  Admin,
 }

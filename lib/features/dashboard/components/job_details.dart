@@ -93,11 +93,18 @@ class _JobDetailsState extends State<JobDetails> {
         if (!widget.isFromBusiness) ...[
           Row(
             children: [
-              SvgPicture.asset(ImageUtils.saveJobIcon),
+              GestureDetector(
+                onTap: () {
+                  showSuccess(message: "Job Saved");
+                },
+                child: SvgPicture.asset(ImageUtils.saveJobIcon),
+              ),
               xSpace(width: 16),
               Expanded(
                 child: SubmitBtn(
-                  onPressed: () {},
+                  onPressed: () {
+                    showSuccess(message: "Applied");
+                  },
                   title: btnTxt(
                     "Apply",
                     WHITE,

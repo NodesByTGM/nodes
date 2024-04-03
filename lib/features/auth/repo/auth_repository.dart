@@ -101,12 +101,32 @@ abstract class AuthRepository {
   @POST(AuthApis.businessAccountUpgradeApi)
   Future<ApiResponse> businessAccountUpgrade(@Body() payload);
 
+  // @MultiPart()
+  // @POST(AuthApis.mediaUploadsApi)
+  // Future<ApiResponse> mediaUpload(
+  //   @Part(name: "file", fileName: "lol.png") File file,
+  //   // @Body() payload,
+  // );
+
   @POST(AuthApis.mediaUploadsApi)
-  Future<ApiResponse> mediaUpload(@Body() payload);
+  Future<ApiResponse> mediaUpload(
+   
+    @Body() payload,
+  );
 
   @DELETE(AuthApis.deleteMediaApi)
   Future<ApiResponse> deleteMedia(
     @Path('id') String id,
   );
-
 }
+
+
+      // final response = await dio.get(
+      //   Consts.baseUrl + endPointUrl,
+      //   queryParameters: {'_id': xxx, 'type': 'xxx'},
+      //   options: Options(
+      //     responseType: ResponseType.bytes,
+      //     headers: {'Authorization': Consts.apiKey},
+      //     contentType: 'application/octet-stream',
+      //   ),
+      // );

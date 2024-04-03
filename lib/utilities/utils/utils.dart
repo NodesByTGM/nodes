@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names, implementation_imports, prefer_generic_function_type_aliases
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -791,3 +792,6 @@ Container analyticsCard({
     ),
   );
 }
+
+Future<Uint8List> convertFileToBytes(String filePath) async =>
+    await File(filePath).readAsBytes();

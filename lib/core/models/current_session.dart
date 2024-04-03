@@ -2,42 +2,35 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 
 part 'current_session.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CurrentSession extends Equatable {
-  final String? refresh;
-  final String? access;
-  final String? user_type;
-  final String? uid;
+  final String? refreshToken;
+  final String? accessToken;
+  final UserModel? user;
   final bool loggedIn;
-  // final UserModel? user;
 
   const CurrentSession({
-    this.refresh,
-    this.access,
-    this.user_type,
-    this.uid,
+    this.refreshToken,
+    this.accessToken,
+    this.user,
     this.loggedIn = false,
-    // this.user,
   });
 
   CurrentSession copyWith({
-    String? refresh,
-    String? access,
-    String? user_type,
-    String? uid,
+    String? refreshToken,
+    String? accessToken,
     bool? loggedIn,
-    // UserModel? user,
+    UserModel? user,
   }) =>
       CurrentSession(
-        refresh: refresh ?? this.refresh,
-        access: access ?? this.access,
-        user_type: user_type ?? this.user_type,
-        uid: uid ?? this.uid,
+        refreshToken: refreshToken ?? this.refreshToken,
+        accessToken: accessToken ?? this.accessToken, 
+        user: user ?? this.user,
         loggedIn: loggedIn ?? this.loggedIn,
-        // user: user ?? this.user,
       );
 
   factory CurrentSession.fromJson(Map<String, dynamic> json) =>
@@ -47,11 +40,9 @@ class CurrentSession extends Equatable {
 
   @override
   List<dynamic> get props => [
-        refresh,
-        access,
-        user_type,
-        uid,
+        refreshToken,
+        accessToken, 
+        user,
         loggedIn,
-        // user,
       ];
 }

@@ -17,7 +17,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   int currentIndex = 0;
   // Get who is logged in.
 
-  LoggedInAccountType accountType = LoggedInAccountType.BusinessTalent;
+  LoggedInAccountType accountType = LoggedInAccountType.Individual;
 
   @override
   Widget build(BuildContext context) {

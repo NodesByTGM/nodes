@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
@@ -27,6 +30,7 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
   void initState() {
     _authCtrl = locator.get<AuthController>();
     preloadData();
+    super.initState();
   }
 
   preloadData() {
@@ -117,6 +121,7 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
                 child: SubmitBtn(
                   onPressed: _submit,
                   title: btnTxt(Constants.continueText, WHITE),
+                  loading: _authCtrl.isUploadingMedia,
                 ),
               ),
             ],
@@ -128,6 +133,12 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
 
   void _submit() async {
     closeKeyPad(context);
+    // if (1 < 2) {
+    //   // Testing purpose
+    //   print("George here is the currentSession: ${_authCtrl.currentUser}");
+    //   navigateTo(context, PricePlanScreen.routeName);
+    //   return;
+    // }
     // if (formKey.currentState!.saveAndValidate()) {}
     // Atleast ONE must be provided...
     bool hasLinkedIn = isObjectEmpty(linkedinCtrl.text);
@@ -168,7 +179,41 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
         instagram: hasInstagram ? "" : instagramCtrl.text,
         twitter: hasTwitter ? "" : xCtrl.text,
       ));
-      navigateTo(context, PricePlanScreen.routeName);
+      // Onboard user first, before sending to the pricing screen....
+      // 1. Upload the image to server, retrieve the url.
+
+      // convert the avatar to binary
+      Uint8List imageByte = await convertFileToBytes(
+          "${_authCtrl.individualTalentData.avatarFilePath}");
+
+      // String? imageUrl = await _authCtrl.mediaUpload(
+      //   File("${_authCtrl.individualTalentData.avatarFilePath}"),
+      // );
+
+      String? imageUrl = await _authCtrl.mediaUpload(imageByte);
+      if (isObjectEmpty(imageUrl)) {
+        showError(
+            message:
+                "Oops!! an error occured while uploading you image, try again");
+        return;
+      }
+      bool done = await _authCtrl.individualOnboarding({
+        "skills": _authCtrl.individualTalentData.skills,
+        "location": _authCtrl.individualTalentData.location,
+        "avatar": imageUrl,
+        "linkedIn": _authCtrl.individualTalentData.linkedIn,
+        "instagram": _authCtrl.individualTalentData.instagram,
+        "twitter": _authCtrl.individualTalentData.twitter,
+        "otherPurpose": _authCtrl.individualTalentData.otherPurpose,
+        "step": 5, // Meaning we have completed the onboarding process...
+        "onboardingPurpose": _authCtrl.individualTalentData.onboardingPurpose,
+        "onboardingPurposes": _authCtrl.individualTalentData.onboardingPurposes
+      });
+      if (done && mounted) {
+        navigateAndClearPrev(context, PricePlanScreen.routeName);
+      }
+
+      // Comment out for now...
     }
   }
 

@@ -13,6 +13,7 @@ import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/services/push_notifications.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
+import 'package:nodes/features/community/view_model/space_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/constant_strings.dart';
 import 'package:nodes/utilities/utils/themes.dart';
@@ -73,6 +74,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider<DashboardController>(
           create: (_) => locator.get<DashboardController>(),
+        ),
+        ChangeNotifierProvider<SpaceController>(
+          create: (_) => locator.get<SpaceController>(),
         ),
       ],
       child: MaterialApp(

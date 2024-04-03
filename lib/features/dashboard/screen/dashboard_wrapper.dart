@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
@@ -15,22 +17,23 @@ class DashboardWrapper extends StatelessWidget {
       // decoration: const BoxDecoration(
       //   gradient: profileLinearGradient,
       // ),
-      child: getDashboard(),
+      child: getDashboard(context),
     );
   }
 
-  Widget getDashboard() {
+  Widget getDashboard(BuildContext context) {
     /**
      * The business dashboard, is supposedly, meant to be at the For Business side of the app
      * If the logged in account is business, then the home should be their talent's profile...
      * Not entirely clear on how this should be anyways...
      */
-    switch (1) {
-      case 1:
+    UserModel user = context.read<AuthController>().currentUser;
+    switch (user.type) {
+      case 0:
         return const IndividualDashboardScreen();
-      case 2:
+      case 1:
         return const TalentDashboardScreen();
-      case 3:
+      case 2:
         return const BusinessDashboardScreen();
       default:
         return const IndividualDashboardScreen();

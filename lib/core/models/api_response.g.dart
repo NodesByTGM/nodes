@@ -7,18 +7,20 @@ part of 'api_response.dart';
 // **************************************************************************
 
 ApiResponse _$ApiResponseFromJson(Map<String, dynamic> json) => ApiResponse(
-      data: json['data'],
-      status_code: json['status_code'] as int?,
-      message: json['message'],
+      apiObject: json['apiObject'] as String?,
+      code: json['code'] as int?,
       status: json['status'] as String?,
+      message: json['message'],
+      result: json['result'],
       isError: json['isError'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$ApiResponseToJson(ApiResponse instance) =>
     <String, dynamic>{
+      'apiObject': instance.apiObject,
+      'code': instance.code,
       'status': instance.status,
-      'status_code': instance.status_code,
-      'data': instance.data,
-      'message': instance.message,
       'isError': instance.isError,
+      'message': instance.message,
+      'result': instance.result,
     };

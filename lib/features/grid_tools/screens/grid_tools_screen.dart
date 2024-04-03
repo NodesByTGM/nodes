@@ -32,7 +32,9 @@ class GridToolsScreen extends StatelessWidget {
                 SizedBox(
                   width: 200,
                   child: SubmitBtn(
-                    onPressed: () {},
+                    onPressed: () {
+                      showSuccess(message: "Comming Soon");
+                    },
                     title: btnTxt(
                       "Check it out",
                       WHITE,

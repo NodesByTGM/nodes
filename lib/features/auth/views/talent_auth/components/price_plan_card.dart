@@ -69,10 +69,10 @@ class PricePlanCard extends StatelessWidget {
           SubmitBtn(
             onPressed: onTap,
             title: btnTxt(btnText, WHITE),
-            rightIcon: const Icon(
-              Icons.arrow_forward,
-              color: WHITE,
-            ),
+            // rightIcon: const Icon(
+            //   Icons.arrow_forward,
+            //   color: WHITE,
+            // ),
           ),
           ySpace(height: 24),
         ],

@@ -12,6 +12,13 @@ class ComApis {
 
   // Projects
   static const projectApi = "$baseApi/projects";
+
+  // Community
+  static const communityApi = "$baseApi/community";
+  static const communityPost = "$communityApi/posts/";
+  static const singleCommunityPost = "$communityApi/posts/{id}";
+  static const singleCommunityPostLike = "$communityApi/posts/like/{id}";
+  static const singleCommunityPostUnlike = "$communityApi/posts/unlike/{id}";
 }
 
 @RestApi()
@@ -23,4 +30,27 @@ abstract class ComRepository {
 
   @GET(ComApis.projectApi)
   Future<ApiResponse> fetchProject();
+
+  @POST(ComApis.communityPost)
+  Future<ApiResponse> createCommunityPost(
+    @Body() payload,
+  );
+
+  @GET(ComApis.communityPost)
+  Future<ApiResponse> fetchAllCommunityPosts();
+
+  @GET(ComApis.singleCommunityPost)
+  Future<ApiResponse> fetchSingleCommunityPost(
+    @Path('id') String id,
+  );
+
+  @POST(ComApis.singleCommunityPostLike)
+  Future<ApiResponse> likeSingleCommunityPost(
+    @Path('id') String id,
+  );
+
+  @POST(ComApis.singleCommunityPostLike)
+  Future<ApiResponse> unlikeSingleCommunityPost(
+    @Path('id') String id,
+  );
 }

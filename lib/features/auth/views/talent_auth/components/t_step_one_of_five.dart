@@ -208,9 +208,26 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
             Others = 5,
         }
        */
+      onboardingPurposes: getOnboardingPurposes(),
       otherPurpose: !isObjectEmpty(otherCtrl.text) ? otherCtrl.text : null,
     ));
     _authCtrl.setTStepper(2);
+  }
+
+  List<String> getOnboardingPurposes() {
+    List<String> arr = [];
+    // if the other option was selected
+    if (!isObjectEmpty(otherCtrl.text)) {
+      arr.add(otherCtrl.text);
+      return arr;
+    }
+    // else, run through the purposes.
+    for (PurposeModel d in onboardingPurposeArray) {
+      if (d.status) {
+        arr.add(d.title);
+      }
+    }
+    return arr;
   }
 }
 

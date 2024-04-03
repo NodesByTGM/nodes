@@ -198,9 +198,19 @@ class AuthService {
     }
   }
 
-  Future<ApiResponse> mediaUpload(payload) async {
+  // Future<ApiResponse> mediaUpload(File file) async {
+  //   try {
+  //     ApiResponse res = await authRepository.mediaUpload(file);
+  //     return res;
+  //   } on DioException catch (e) {
+  //     log.severe("Error message @mediaUpload ::===> ${e.response?.data}");
+  //     return NetworkException.errorHandler(e);
+  //   }
+  // }
+
+  Future<ApiResponse> mediaUpload(dynamic file) async {
     try {
-      ApiResponse res = await authRepository.mediaUpload(payload);
+      ApiResponse res = await authRepository.mediaUpload(file);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @mediaUpload ::===> ${e.response?.data}");

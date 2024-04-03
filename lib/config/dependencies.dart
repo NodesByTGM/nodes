@@ -10,8 +10,11 @@ import 'package:nodes/features/auth/repo/auth_repository.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/repo/community_repository.dart';
+import 'package:nodes/features/community/repo/space_repository.dart';
 import 'package:nodes/features/community/service/community_service.dart';
+import 'package:nodes/features/community/service/space_service.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
+import 'package:nodes/features/community/view_model/space_controller.dart';
 import 'package:nodes/features/dashboard/repo/dashboard_repository.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -49,6 +52,11 @@ void setUpLocator() {
       dioConfig(),
     ),
   );
+  locator.registerSingleton<SpaceRepository>(
+    SpaceRepository(
+      dioConfig(),
+    ),
+  );
 
   // services
   locator.registerSingleton<AuthService>(
@@ -64,6 +72,11 @@ void setUpLocator() {
   locator.registerSingleton<DashboardService>(
     DashboardService(
       locator.get<DashboardRepository>(),
+    ),
+  );
+  locator.registerSingleton<SpaceService>(
+    SpaceService(
+      locator.get<SpaceRepository>(),
     ),
   );
 
@@ -82,6 +95,11 @@ void setUpLocator() {
   locator.registerSingleton<DashboardController>(
     DashboardController(
       locator.get<DashboardService>(),
+    ),
+  );
+  locator.registerSingleton<SpaceController>(
+    SpaceController(
+      locator.get<SpaceService>(),
     ),
   );
   locator.registerSingleton<NavController>(

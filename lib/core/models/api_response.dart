@@ -7,36 +7,38 @@ part 'api_response.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ApiResponse extends Equatable {
+  final String? apiObject;
+  final int? code;
   final String? status;
-  final int? status_code;
-  final Object? data;
-  // final Map<String, dynamic>? message;
+  final bool? isError;
   final dynamic message;
-  final bool isError;
+  final dynamic result;
 
   /// message , status_code and status
 
   const ApiResponse({
-    this.data,
-    this.status_code,
-    this.message,
+    this.apiObject,
+    this.code,
     this.status,
+    this.message,
+    this.result,
     this.isError = false,
   });
 
   ApiResponse copyWith({
+    String? apiObject,
+    int? code,
     String? status,
-    int? status_code,
-    Object? data,
-    // Map<String, dynamic>? message,
-    dynamic message,
     bool? isError,
+    dynamic message,
+    dynamic result,
   }) {
     return ApiResponse(
+      apiObject: apiObject ?? this.apiObject,
+      code: code ?? this.code,
       status: status ?? this.status,
-      status_code: status_code ?? this.status_code,
-      data: data ?? this.data,
       message: message ?? this.message,
+      result: result ?? this.result,
       isError: isError ?? this.isError,
     );
   }
@@ -48,11 +50,11 @@ class ApiResponse extends Equatable {
 
   @override
   List<dynamic> get props => [
+        apiObject,
+        code,
         status,
-        status_code,
-        data,
         message,
+        result,
         isError,
       ];
 }
-

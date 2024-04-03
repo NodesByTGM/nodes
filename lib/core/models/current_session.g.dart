@@ -8,18 +8,18 @@ part of 'current_session.dart';
 
 CurrentSession _$CurrentSessionFromJson(Map<String, dynamic> json) =>
     CurrentSession(
-      refresh: json['refresh'] as String?,
-      access: json['access'] as String?,
-      user_type: json['user_type'] as String?,
-      uid: json['uid'] as String?,
+      refreshToken: json['refreshToken'] as String?,
+      accessToken: json['accessToken'] as String?,
+      user: json['user'] == null
+          ? null
+          : UserModel.fromJson(json['user'] as Map<String, dynamic>),
       loggedIn: json['loggedIn'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$CurrentSessionToJson(CurrentSession instance) =>
     <String, dynamic>{
-      'refresh': instance.refresh,
-      'access': instance.access,
-      'user_type': instance.user_type,
-      'uid': instance.uid,
+      'refreshToken': instance.refreshToken,
+      'accessToken': instance.accessToken,
+      'user': instance.user?.toJson(),
       'loggedIn': instance.loggedIn,
     };

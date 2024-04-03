@@ -42,7 +42,7 @@ class _NavbarViewState extends State<NavbarView> {
     _authCtrl = context.read<AuthController>();
     // CurrentSession? session = await _authCtrl.currentSession;
     CurrentSession? session = await _authCtrl.currentSession;
-    if (!isObjectEmpty(session?.access)) {
+    if (!isObjectEmpty(session?.accessToken)) {
       _authCtrl.currentUserVal = session!;
     } else {
       debugPrint("This user does not have an accessToken");

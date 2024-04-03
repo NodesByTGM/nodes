@@ -15,18 +15,18 @@ class HttpDioInterceptors extends InterceptorsWrapper {
     var localStorageService = locator<LocalStorageService>();
     Map<String, dynamic>? jsonModel =
         await localStorageService.getSecureJson(KeyString.currentSession);
-    if (jsonModel != null && jsonModel['access'] != null) {
+    if (jsonModel != null && jsonModel['accessToken'] != null) {
       // put it back later sha...
       CurrentSession session = CurrentSession.fromJson(jsonModel);
-      options.headers["Authorization"] = "Bearer ${session.access}";
+      options.headers["Authorization"] = "Bearer ${session.accessToken}";
       options.headers["content-type"] = 'application/json';
       options.headers["accept"] = 'application/json';
 
       // log.info("REQUEST DATA ${options.baseUrl}");
       // log.info("REQUEST DATA ${options.uri.toString()}");
-      // log.info("REQUEST DATA ${options.path}");
-      // log.info("REQUEST DATA ${options.headers}");
-      // log.info("REQUEST DATA ${options.data}");
+      log.info("REQUEST DATA ${options.path}");
+      log.info("REQUEST DATA ${options.headers}");
+      log.info("REQUEST DATA ${options.data}");
       return handler.next(options);
     }
     log.info("REQUEST DATA ${options.path}");

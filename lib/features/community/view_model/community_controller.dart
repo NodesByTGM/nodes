@@ -2,7 +2,11 @@
 
 import 'package:logging/logging.dart';
 import 'package:nodes/core/controller/base_controller.dart';
+import 'package:nodes/core/exception/app_exceptions.dart';
+import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/features/community/service/community_service.dart';
+import 'package:nodes/utilities/constants/key_strings.dart';
+import 'package:nodes/utilities/utils/utils.dart';
 
 class ComController extends BaseController {
   final log = Logger('ComController');
@@ -37,22 +41,96 @@ class ComController extends BaseController {
   // }
 
   // Functions
-  // Future<bool> login(LoginDetails _details) async {
-  //   setBusy(true);
-  //   try {
-  //     ApiResponse response = await _comService.login(_details);
-  //     if (response.status == KeyString.error) {
-  //       showError(message: errorMessageObjectToString(response.message));
-  //       return false;
-  //     }
-  //     await _customSaveSession(response);
-  //     setCurrentScreen(NavbarView.routeName);
-  //     return true;
-  //   } on NetworkException catch (e) {
-  //     showError(message: e.toString());
-  //     return false;
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // }
+  Future<bool> createCommunityPost(dynamic _details) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _comService.createCommunityPost(_details);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      // TODO: Do Something here...
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> fetchAllCommunityPosts() async {
+    setFetchCommunityPost(true);
+    try {
+      ApiResponse response = await _comService.fetchAllCommunityPosts();
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      // TODO: Do Something here...
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setFetchCommunityPost(false);
+    }
+  }
+
+  Future<bool> fetchSingleCommunityPost(dynamic _details) async {
+    setFetchSingleCommunityPost(true);
+    try {
+      ApiResponse response =
+          await _comService.fetchSingleCommunityPost(_details);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      // TODO: Do Something here...
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setFetchSingleCommunityPost(false);
+    }
+  }
+
+  Future<bool> likeSingleCommunityPost(dynamic _details) async {
+    setLikeUnlikecommunityPost(true);
+    try {
+      ApiResponse response =
+          await _comService.likeSingleCommunityPost(_details);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      // TODO: Do Something here...
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setLikeUnlikecommunityPost(false);
+    }
+  }
+
+  Future<bool> unlikeSingleCommunityPost(dynamic _details) async {
+    setLikeUnlikecommunityPost(true);
+    try {
+      ApiResponse response =
+          await _comService.unlikeSingleCommunityPost(_details);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      // TODO: Do Something here...
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setLikeUnlikecommunityPost(false);
+    }
+  }
 }

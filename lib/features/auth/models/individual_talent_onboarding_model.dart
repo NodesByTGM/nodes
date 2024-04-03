@@ -17,6 +17,7 @@ class IndividualTalentOnboardingModel extends Equatable {
   final String? otherPurpose;
   final int? step;
   final int? onboardingPurpose;
+  final List<String>? onboardingPurposes;
 
  const IndividualTalentOnboardingModel({
     this.skills,
@@ -29,6 +30,7 @@ class IndividualTalentOnboardingModel extends Equatable {
     this.otherPurpose,
     this.step,
     this.onboardingPurpose,
+    this.onboardingPurposes,
   });
 
   IndividualTalentOnboardingModel copyWith({
@@ -42,6 +44,7 @@ class IndividualTalentOnboardingModel extends Equatable {
     String? otherPurpose,
     int? step,
     int? onboardingPurpose,
+    List<String>? onboardingPurposes,
   }) =>
       IndividualTalentOnboardingModel(
         skills: skills ?? this.skills,
@@ -54,6 +57,7 @@ class IndividualTalentOnboardingModel extends Equatable {
         otherPurpose: otherPurpose ?? this.otherPurpose,
         step: step ?? this.step,
         onboardingPurpose: onboardingPurpose ?? this.onboardingPurpose,
+        onboardingPurposes: onboardingPurposes ?? this.onboardingPurposes,
       );
 
   factory IndividualTalentOnboardingModel.fromJson(Map<String, dynamic> json) =>
@@ -74,5 +78,6 @@ class IndividualTalentOnboardingModel extends Equatable {
         otherPurpose,
         step,
         onboardingPurpose,
+        onboardingPurposes,
       ];
 }

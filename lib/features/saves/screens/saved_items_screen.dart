@@ -1,4 +1,5 @@
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/components/saved_events.dart';
 import 'package:nodes/features/saves/components/saved_jobs.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -15,6 +16,13 @@ class SavedItemScreen extends StatefulWidget {
 
 class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    safeNavigate(() => context.read<DashboardController>().fetchAllJobs());
+    safeNavigate(() => context.read<DashboardController>().fetchAllEvents());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

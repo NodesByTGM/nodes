@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/talent_auth/components/price_plan_card.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
 
 class PricePlanScreen extends StatefulWidget {
   const PricePlanScreen({Key? key}) : super(key: key);
@@ -19,10 +22,13 @@ class _PricePlanScreen extends State<PricePlanScreen> {
   int planIndex = 0;
   double talentProPlanAmt = 4900;
   double talentOngoingProPlanAmt = 7900;
+  double businessPlanAmt = 19800;
+  // late final PaystackPlugin paystackPlugin;
 
   @override
   void initState() {
     _authCtrl = locator.get<AuthController>();
+    // paystackPlugin = locator.get<PaystackPlugin>();
     super.initState();
   }
 
@@ -115,18 +121,19 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
               ),
-              priceDescription: "Free forever",
+              priceDescription: "Free/forever",
               features: const [
-                "Feature 1",
-                "Feature 2",
-                "Feature 3",
+                "Community Engagement",
+                "Networking Opportunities",
+                "Stay Informed on Creative Trends",
               ],
+              // onTap: pay,
               onTap: submit,
               btnText: "Continue for free",
             ),
             ySpace(height: 24),
             PricePlanCard(
-              type: "Talent Pro",
+              type: "Pro",
               description: "Lorem Ipsum dolor sit amet",
               icon: ImageUtils.proPlanIcon,
               price: Wrap(
@@ -146,16 +153,53 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                   ),
                 ],
               ),
+              // priceDescription: "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
+              priceDescription: "Get one month free if you subscribe now",
+              features: const [
+                "Enhanced Visibility",
+                "Access to Premium Jobs",
+                "Expanded Project Showcase",
+                "Advanced Analytics and Insights",
+                "Access to GridTools Discovery Pack (Free)",
+              ],
+              onTap: submit,
+              btnText: "Subscribe now",
+            ),
+            ySpace(height: 24),
+            PricePlanCard(
+              type: "Business",
+              description: "Lorem Ipsum dolor sit amet",
+              icon: ImageUtils.businessPlanIcon,
+              price: Wrap(
+                spacing: 2,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  labelText(
+                    formatCurrencyAmount(Constants.naira, businessPlanAmt),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  subtext(
+                    "/${planIndex == 0 ? 'month' : 'year'}",
+                    fontSize: 12,
+                    color: GRAY,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ],
+              ),
               priceDescription:
                   "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
               features: const [
-                "Feature 1",
-                "Feature 2",
-                "Feature 3",
+                "Premium Talent Pool Access",
+                "Featured Job Listings",
+                "Analytics and Performance Metrics",
+                "Promotion and Marketing Opportunities",
+                "Access to GridTools Discovery Pack (Free)",
               ],
               onTap: submit,
-              btnText: "Start your 30-day free trial",
+              btnText: "Subscribe now",
             ),
+            ySpace(height: 24),
           ],
         ),
       ),
@@ -204,5 +248,25 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     _authCtrl.dummySession({
       "loggedIn": true,
     });
+  }
+
+  pay() {
+    var _ref =
+        "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
+    FlutterPaystackPlus.openPaystackPopup(
+      customerEmail: "g.ikwegbu@gmail.com",
+      context: context,
+      currency: KeyString.ngn,
+      secretKey: PAYSTACK_PRO_PAN_SK,
+      amount: (200 * 100).toString(),
+      reference: _ref,
+      callBackUrl: "[GET IT FROM YOUR PAYSTACK DASHBOARD]",
+      onClosed: () {
+        debugPrint('Could\'nt finish payment');
+      },
+      onSuccess: () async {
+        debugPrint('successful payment');
+      },
+    );
   }
 }

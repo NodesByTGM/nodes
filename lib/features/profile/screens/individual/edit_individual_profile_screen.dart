@@ -1,6 +1,10 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/profile/components/expanable_profile_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class EditIndividualProfileScreen extends StatefulWidget {
@@ -14,6 +18,8 @@ class EditIndividualProfileScreen extends StatefulWidget {
 
 class _EditIndividualProfileScreenState
     extends State<EditIndividualProfileScreen> {
+  late AuthController authCtrl;
+  late UserModel user;
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController firstNameCtrl = TextEditingController();
   final TextEditingController lastNameCtrl = TextEditingController();
@@ -34,7 +40,32 @@ class _EditIndividualProfileScreenState
   bool enableComments = true;
 
   @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    user = authCtrl.currentUser;
+    super.initState();
+    loadProfile();
+  }
+
+  loadProfile() {
+    firstNameCtrl.text = "${user.name?.split(' ').first}";
+    lastNameCtrl.text = "${user.name?.split(' ').last}";
+    usernameCtrl.text = "${user.username}";
+    locationCtrl.text = "${user.location}";
+    headlineCtrl.text = "${user.headline}";
+    bioCtrl.text = "${user.bio}";
+
+    websiteCtrl.text = "${user.website}";
+    linkedinCtrl.text = "${user.linkedIn}";
+    instagramCtrl.text = "${user.instagram}";
+    xCtrl.text = "${user.twitter}";
+    enableSpaces = user.spaces ?? false;
+    enableComments = user.comments ?? false;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return Container(
       decoration: const BoxDecoration(
           // gradient: profileLinearGradient,
@@ -143,6 +174,10 @@ class _EditIndividualProfileScreenState
                               name: "username",
                               decoration: FormUtils.formDecoration(
                                 hintText: "",
+                                prefix: labelText(
+                                  '@ ',
+                                  color: GRAY,
+                                ),
                               ),
                               keyboardType: TextInputType.text,
                               style: FORM_STYLE,
@@ -179,8 +214,9 @@ class _EditIndividualProfileScreenState
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
-                            onPressed: _submit,
+                            onPressed: () => _submit(0),
                             title: btnTxt("Save and Continue", WHITE),
+                            loading: authCtrl.loading,
                           ),
                           ySpace(height: 20),
                         ],
@@ -241,8 +277,9 @@ class _EditIndividualProfileScreenState
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
-                            onPressed: _submit,
+                            onPressed: () => _submit(1),
                             title: btnTxt("Save and Continue", WHITE),
+                            loading: authCtrl.loading,
                           ),
                           ySpace(height: 20),
                         ],
@@ -340,8 +377,9 @@ class _EditIndividualProfileScreenState
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
-                            onPressed: _submit,
+                            onPressed: () => _submit(2),
                             title: btnTxt("Save and Continue", WHITE),
+                            loading: authCtrl.loading,
                           ),
                           ySpace(height: 20),
                         ],
@@ -379,6 +417,9 @@ class _EditIndividualProfileScreenState
                                   setState(() {
                                     enableSpaces = !enableSpaces;
                                   });
+                                  if (enableSpaces) {
+                                    _submit(3);
+                                  }
                                 },
                               ),
                             ),
@@ -386,6 +427,9 @@ class _EditIndividualProfileScreenState
                               setState(() {
                                 enableSpaces = !enableSpaces;
                               });
+                              if (enableSpaces) {
+                                _submit(3);
+                              }
                             },
                           ),
                           FormUtils.formSpacer(),
@@ -413,6 +457,9 @@ class _EditIndividualProfileScreenState
                                   setState(() {
                                     enableComments = !enableComments;
                                   });
+                                  if (enableComments) {
+                                    _submit(4);
+                                  }
                                 },
                               ),
                             ),
@@ -420,6 +467,9 @@ class _EditIndividualProfileScreenState
                               setState(() {
                                 enableComments = !enableComments;
                               });
+                              if (enableComments) {
+                                _submit(4);
+                              }
                             },
                           ),
                           ySpace(height: 16),
@@ -436,10 +486,108 @@ class _EditIndividualProfileScreenState
     );
   }
 
-  void _submit() async {
+  void updateAvata() async {
+    //
+  }
+
+  void _submit(int index) {
     closeKeyPad(context);
+    switch (index) {
+      case 0:
+        // Update the personal info
+        // Check if any madatory field is empty...
+        if (isObjectEmpty(firstNameCtrl.text) ||
+            isObjectEmpty(lastNameCtrl.text) ||
+            isObjectEmpty(locationCtrl.text)) {
+          showText(message: "Oops!! Please complete Personal Info section");
+          return;
+        }
+        updateUserProfile(user.copyWith(
+          name: "${firstNameCtrl.text} ${lastNameCtrl.text}",
+          location: locationCtrl.text,
+        ));
+        return;
+      case 1:
+        // Update the introduction
+        // Check if any madatory field is empty...
+        if (isObjectEmpty(headlineCtrl.text) || isObjectEmpty(bioCtrl.text)) {
+          showText(message: "Oops!! Please complete Introduction section");
+          return;
+        }
+        updateUserProfile(user.copyWith(
+          headline: headlineCtrl.text,
+          bio: bioCtrl.text,
+        ));
+        return;
+      case 2:
+        // Update the online profiles
+        // Check if at least one field is provided...
+        bool hasLinkedIn = isObjectEmpty(linkedinCtrl.text);
+        bool hasTwitter = isObjectEmpty(xCtrl.text);
+        bool hasInstagram = isObjectEmpty(instagramCtrl.text);
+        //
+        bool isValidLinkedIn = validateSocialMediaField(
+          type: SocialMediaTypes.Linkedin,
+          value: linkedinCtrl.text,
+        );
+        bool isValidTwitter = validateSocialMediaField(
+          type: SocialMediaTypes.Twitter,
+          value: xCtrl.text,
+        );
+        bool isValidInstagram = validateSocialMediaField(
+          type: SocialMediaTypes.Instagram,
+          value: instagramCtrl.text,
+        );
+        if (hasLinkedIn && hasInstagram && hasTwitter) {
+          showText(message: "Please provide atleast ONE social media account");
+          return;
+        }
+        if (!hasLinkedIn && !isValidLinkedIn) {
+          // User entered linkedIn, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid LinkedIn URL");
+          return;
+        } else if (!hasInstagram && !isValidInstagram) {
+          // User entered instagram, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid Instagram URL");
+          return;
+        } else if (!hasTwitter && !isValidTwitter) {
+          // User entered twitter, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid X  URL");
+          return;
+        }
+        updateUserProfile(user.copyWith(
+          website: websiteCtrl.text,
+          linkedIn: linkedinCtrl.text,
+          instagram: instagramCtrl.text,
+          twitter: xCtrl.text,
+        ));
+        return;
+      case 3:
+        // Update the Toggle Spaces
+        // Check if at least one field is provided...
+
+        updateUserProfile(user.copyWith(
+          spaces: enableSpaces,
+          comments: enableComments,
+        ));
+        return;
+      case 4:
+        // Update the Toggle Comments
+        // Check if at least one field is provided...
+
+        updateUserProfile(user.copyWith(
+          spaces: enableSpaces,
+          comments: enableComments,
+        ));
+        return;
+      default:
+    }
     if (formKey.currentState!.saveAndValidate()) {}
     formKey.currentState!.reset();
+  }
+
+  void updateUserProfile(UserModel user) async {
+    bool done = await authCtrl.updateProfile(user.toJson());
   }
 
   @override

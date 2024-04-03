@@ -69,7 +69,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   labelText(
-                    "Business",
+                    "Pro",
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -85,7 +85,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       labelText(
-                        formatCurrencyAmount(Constants.naira, 19800),
+                        formatCurrencyAmount(Constants.naira, 7600),
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         color: PRIMARY,

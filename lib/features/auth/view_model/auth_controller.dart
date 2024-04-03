@@ -1,8 +1,8 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:io';
 
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/config/country_states.dart';
 import 'package:nodes/core/controller/base_controller.dart';
@@ -10,16 +10,13 @@ import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
-import 'package:nodes/core/models/page.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/register_model.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
-import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-
-
-
 
 class AuthController extends BaseController {
   final log = Logger('Authcontroller');
@@ -32,7 +29,7 @@ class AuthController extends BaseController {
   );
 
   // Variables
-  // UserModel _currentUser = const UserModel();
+  UserModel _currentUser = const UserModel();
   int _tStepperVal = 1;
   int _bStepperVal = 1;
   RegisterModel _registerData = const RegisterModel();
@@ -40,11 +37,12 @@ class AuthController extends BaseController {
   IndividualTalentOnboardingModel _individualTalentData =
       const IndividualTalentOnboardingModel();
 
-List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(countryStatesData);
+  List<CountryStateModel> _countryStatesList =
+      const CountryStateModel().fromList(countryStatesData);
 
   // Getters
 
-  // UserModel get currentUser => _currentUser;
+  UserModel get currentUser => _currentUser;
   Future<CurrentSession?> get currentSession async {
     var currentUser =
         await _storageService.getSecureJson(KeyString.currentSession);
@@ -61,8 +59,7 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
   IndividualTalentOnboardingModel get individualTalentData =>
       _individualTalentData;
 
-  List<CountryStateModel> get countryStatesList    =>  _countryStatesList;
-
+  List<CountryStateModel> get countryStatesList => _countryStatesList;
 
   // Setters
 
@@ -102,7 +99,7 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
   }
 
   set currentUserVal(CurrentSession session) {
-    // _currentUser = session.user as UserModel;
+    _currentUser = session.user as UserModel;
     notifyListeners();
   }
 
@@ -112,6 +109,7 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
 
   Future<void> _saveSession(Map<String, dynamic> session) async {
     var _session = CurrentSession.fromJson(session);
+    print("George this is the saved sesseion: ${_session.toJson()}");
     await saveCurrentSession(_session);
   }
 
@@ -120,9 +118,10 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     await _storageService.saveSecureJson(KeyString.currentSession, session);
   }
 
-  Future<void> _customSaveSession(ApiResponse res) async {
+  Future<void> _authCustomSaveSession(ApiResponse res) async {
+    print("Hi Georgeeeee this is the res for  custom auth : ${res.toJson()}");
     CurrentSession _ =
-        CurrentSession.fromJson(res.data as Map<String, dynamic>);
+        CurrentSession.fromJson(res.result as Map<String, dynamic>);
     CurrentSession? cS = await currentSession;
     if (isObjectEmpty(cS)) {
       // Meaning user is only signing in
@@ -130,16 +129,12 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     }
     await _saveSession(cS!
         .copyWith(
-          access: _.access,
-          refresh: _.refresh,
-          user_type: _.user_type,
-          uid: _.uid,
-          // user: currentUser.copyWith(
-          //   user_type: _.user_type,
-          //   uid: _.uid,
-          // ),
+          accessToken: _.accessToken,
+          refreshToken: _.refreshToken,
+          user: _.user,
         )
         .toJson());
+    print("Hi Master, the _authCustomSaveSession was saved successfully");
   }
 
   // Functions
@@ -152,11 +147,12 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     setBusy(true);
     try {
       ApiResponse response = await _authService.login(_details);
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
-      // await _customSaveSession(response);
+      showSuccess(message: response.message); // For login o
+      await _authCustomSaveSession(response);
       // setCurrentScreen(NavbarView.routeName);
       return true;
     } on NetworkException catch (e) {
@@ -175,11 +171,13 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.register(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      print("George here is the register user message: ${response.toJson()}");
+      // save the users data to localStorage
+      await _authCustomSaveSession(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -195,8 +193,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
       var refreshToken = ''; // from session
       ApiResponse response = await _authService.refreshToken(refreshToken);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -214,8 +212,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.sendOTP({'email': email});
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       showText(message: response.message);
@@ -233,8 +231,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.verifyEmail(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       showText(message: response.message);
@@ -252,8 +250,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.verifyOTP(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       showText(message: response.message);
@@ -271,8 +269,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.forgotPassword(email);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -300,8 +298,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
         payload: payload,
       );
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -319,8 +317,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.changePassword(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -338,8 +336,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.logout();
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -357,8 +355,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.individualOnboarding(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -376,8 +374,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.talentOnboarding(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -395,8 +393,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.businessOnboarding(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -414,8 +412,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.fetchProfile();
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -433,11 +431,13 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.updateProfile(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      print("George, the profile has been updated: ${response.toJson()}");
+      showSuccess(message: response.message);
+      // await _authCustomSaveSession(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -452,8 +452,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.talentAccountUpgrade(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -471,8 +471,8 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     try {
       ApiResponse response = await _authService.businessAccountUpgrade(payload);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -485,32 +485,57 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     }
   }
 
-  Future<bool> mediaUpload(dynamic payload) async {
-    setBusy(true);
-    try {
-      ApiResponse response = await _authService.mediaUpload(payload);
+  // Future<String?> mediaUpload(File file) async {
+  //   setUploadingMedia(true);
+  //   try {
+  //     ApiResponse response = await _authService.mediaUpload(file);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
-        return false;
+  //     if (response.status == KeyString.failure) {
+  //       showError(message: response.message);
+  //       return null;
+  //     }
+  //     print("George here is the file response: ${response.toJson()}");
+  //     MediaUploadModel data =
+  //         MediaUploadModel.fromJson(response.result as Map<String, dynamic>);
+  //     return data.url;
+  //   } on NetworkException catch (e) {
+  //     showError(message: e.toString());
+  //     return null;
+  //   } finally {
+  //     setUploadingMedia(false);
+  //   }
+  // }
+
+  Future<String?> mediaUpload(dynamic file) async {
+    setUploadingMedia(true);
+    try {
+      ApiResponse response = await _authService.mediaUpload({
+        "file": file,
+      });
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return null;
       }
-      // TODO: DO SOMETHING HERE
-      return true;
+      print("George here is the file response: ${response.toJson()}");
+      MediaUploadModel data =
+          MediaUploadModel.fromJson(response.result as Map<String, dynamic>);
+      return data.url;
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
-      setBusy(false);
+      setUploadingMedia(false);
     }
   }
 
   Future<bool> deleteMedia(String id) async {
-    setBusy(true);
+    setUploadingMedia(true);
     try {
       ApiResponse response = await _authService.deleteMedia(id);
 
-      if (response.status == KeyString.error) {
-        showError(message: errorMessageObjectToString(response.message));
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
         return false;
       }
       // TODO: DO SOMETHING HERE
@@ -519,7 +544,7 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
       showError(message: e.toString());
       return false;
     } finally {
-      setBusy(false);
+      setUploadingMedia(false);
     }
   }
 
@@ -528,7 +553,7 @@ List<CountryStateModel> _countryStatesList = const CountryStateModel().fromList(
     setBusy(false);
     _storageService.deleteSecure(KeyString.currentSession);
     _storageService.deleteSecure(KeyString.token);
-    // _currentUser = const UserModel();
+    _currentUser = const UserModel();
 
     notifyListeners();
   }

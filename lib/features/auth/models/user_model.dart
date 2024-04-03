@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/models/subscription_model.dart';
 
 part 'user_model.g.dart';
 
@@ -7,95 +10,122 @@ part 'user_model.g.dart';
 class UserModel extends Equatable {
   final String? id;
   final String? name;
-  final String? email;
   final String? username;
+  final String? email;
   final DateTime? dob;
-  final int? type;
-  final String? avatar;
-  final bool? verified;
+  final MediaUploadModel? avatar;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final String? accessToken;
-  final String? skills;
-  final String? location;
-  final String? linkedIn;
-  final String? instagram;
-  final String? twitter;
-  final bool? spaces;
+  final bool? verified;
+  final int? type;
+  final String? age;
+  final String? bio;
   final bool? comments;
   final String? headline;
-  final String? bio;
+  final String? height;
+  final String? instagram;
+  final String? linkedIn;
+  final String? location;
+  final int? onboardingPurpose;
+  final String? otherPurpose;
+  final List<String>? skills;
+  final bool? spaces;
+  final int? step;
+  final String? twitter;
   final String? website;
+  final BusinessAccountModel? business;
+  final SubscriptionModel? subscription;
+  final bool? visible;
 
   const UserModel({
     this.id,
     this.name,
-    this.email,
     this.username,
+    this.email,
     this.dob,
-    this.type,
     this.avatar,
-    this.verified,
     this.createdAt,
     this.updatedAt,
-    this.accessToken,
-    this.skills,
-    this.location,
-    this.linkedIn,
-    this.instagram,
-    this.twitter,
-    this.spaces,
+    this.verified,
+    this.type,
+    this.age,
+    this.bio,
     this.comments,
     this.headline,
-    this.bio,
+    this.height,
+    this.instagram,
+    this.linkedIn,
+    this.location,
+    this.onboardingPurpose,
+    this.otherPurpose,
+    this.skills,
+    this.spaces,
+    this.step,
+    this.twitter,
     this.website,
+    this.business,
+    this.subscription,
+    this.visible,
   });
-
-  UserModel copyWith({
+  copyWith({
     String? id,
     String? name,
-    String? email,
     String? username,
+    String? email,
     DateTime? dob,
-    int? type,
-    String? avatar,
-    bool? verified,
+    MediaUploadModel? avatar,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? accessToken,
-    String? skills,
-    String? location,
-    String? linkedIn,
-    String? instagram,
-    String? twitter,
-    bool? spaces,
+    bool? verified,
+    int? type,
+    String? age,
+    String? bio,
     bool? comments,
     String? headline,
-    String? bio,
+    String? height,
+    String? instagram,
+    String? linkedIn,
+    String? location,
+    int? onboardingPurpose,
+    String? otherPurpose,
+    List<String>? skills,
+    bool? spaces,
+    int? step,
+    String? twitter,
     String? website,
+    BusinessAccountModel? business,
+    SubscriptionModel? subscription,
+    bool? visible,
   }) =>
       UserModel(
         id: id ?? this.id,
         name: name ?? this.name,
-        email: email ?? this.email,
         username: username ?? this.username,
+        email: email ?? this.email,
         dob: dob ?? this.dob,
-        type: type ?? this.type,
         avatar: avatar ?? this.avatar,
-        verified: verified ?? this.verified,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
-        accessToken: accessToken ?? this.accessToken,
-        skills: skills ?? this.skills,
-        location: location ?? this.location,
-        linkedIn: linkedIn ?? this.linkedIn,
-        instagram: instagram ?? this.instagram,
-        twitter: twitter ?? this.twitter,
-        spaces: spaces ?? this.spaces,
+        verified: verified ?? this.verified,
+        type: type ?? this.type,
+        age: age ?? this.age,
+        bio: bio ?? this.bio,
         comments: comments ?? this.comments,
         headline: headline ?? this.headline,
-        bio: bio ?? this.bio,
+        height: height ?? this.height,
+        instagram: instagram ?? this.instagram,
+        linkedIn: linkedIn ?? this.linkedIn,
+        location: location ?? this.location,
+        onboardingPurpose: onboardingPurpose ?? this.onboardingPurpose,
+        otherPurpose: otherPurpose ?? this.otherPurpose,
+        skills: skills ?? this.skills,
+        spaces: spaces ?? this.spaces,
+        step: step ?? this.step,
+        twitter: twitter ?? this.twitter,
         website: website ?? this.website,
+        business: business ?? this.business,
+        subscription: subscription ?? this.subscription,
+        visible: visible ?? this.visible,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -107,25 +137,32 @@ class UserModel extends Equatable {
   List<Object?> get props => [
         id,
         name,
-        email,
         username,
+        email,
         dob,
-        type,
         avatar,
-        verified,
         createdAt,
         updatedAt,
-        accessToken,
-        skills,
-        location,
-        linkedIn,
-        instagram,
-        twitter,
-        spaces,
+        verified,
+        type,
+        age,
+        bio,
         comments,
         headline,
-        bio,
+        height,
+        instagram,
+        linkedIn,
+        location,
+        onboardingPurpose,
+        otherPurpose,
+        skills,
+        spaces,
+        step,
+        twitter,
         website,
+        business,
+        subscription,
+        visible,
       ];
 
   // List<UserModel> fromList(List items) {

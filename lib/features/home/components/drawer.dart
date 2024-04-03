@@ -188,6 +188,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         isActive: false,
                         onTap: () {
                           closeDrawer();
+                          navCtrl.resetPageListStack();
                           // navCtrl.updatePageListStack(
                           //   UpgradeToProScreen.routeName,
                           // );

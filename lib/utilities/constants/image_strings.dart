@@ -25,8 +25,9 @@ class ImageUtils {
   static const gallery = "assets/images/svg/gallery.svg";
   static const radioUnselected = "assets/images/svg/radio_unselected.svg";
   static const radioSelected = "assets/images/svg/radio_selected.svg";
-  static const proPlanIcon = "assets/images/svg/pro_plan_icon.svg";
   static const standardPlanIcon = "assets/images/svg/standard_plan_icon.svg";
+  static const proPlanIcon = "assets/images/svg/pro_plan_icon.svg";
+  static const businessPlanIcon = "assets/images/svg/business_plan_icon.svg";
   static const profileIcon = "assets/images/svg/profile_icon.svg";
   static const homeIcon = "assets/images/svg/home_icon.svg";
   static const globeIcon = "assets/images/svg/globe_icon.svg";
@@ -68,4 +69,7 @@ class ImageUtils {
   static const clockOutlineIcon = "assets/images/svg/clock_outline.svg";
   static const calendarOutlineIcon = "assets/images/svg/calendar_outline.svg";
   static const cardOutlineIcon = "assets/images/svg/card_outline.svg";
+  static const linkedinIcon = "assets/images/svg/linkedin_icon.svg";
+  static const instagramIcon = "assets/images/svg/instagram_icon.svg";
+  static const twitterIcon = "assets/images/svg/twitter_icon.svg";
 }

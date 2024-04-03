@@ -30,9 +30,9 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllEvents() async {
+  Future<ApiResponse> fetchAllEvents({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllEvents();
+      ApiResponse res = await dashboardRepository.fetchAllEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllEvents ::===> ${e.response?.data}");
@@ -83,6 +83,38 @@ class DashboardService {
     }
   }
 
+  Future<ApiResponse> unSaveEvent(dynamic id) async {
+    try {
+      ApiResponse res = await dashboardRepository.unSaveEvent(id);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @unSaveEvent ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> fetchAllSavedEvents() async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchAllSavedEvents();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchAllSavedEvents ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> fetchAllAllMyCreatedEvents() async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchAllAllMyCreatedEvents();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchAllAllMyCreatedEvents ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
 // Jobs
   Future<ApiResponse> createJob(dynamic payload) async {
     try {
@@ -94,9 +126,10 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllJobs() async {
+  Future<ApiResponse> fetchAllJobs({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllJobs();
+      ApiResponse res = await dashboardRepository.fetchAllJobs(page, pageSize);
+      print("George,,,,i'm here nowsdsd>...");
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllJobs ::===> ${e.response?.data}");
@@ -143,6 +176,58 @@ class DashboardService {
       return res;
     } on DioException catch (e) {
       log.severe("Error message @applyForJob ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> saveJob(dynamic id) async {
+    try {
+      ApiResponse res = await dashboardRepository.saveJob(id);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @saveJob ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> unSaveJob(dynamic id) async {
+    try {
+      ApiResponse res = await dashboardRepository.unSaveJob(id);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @unSaveJob ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> fetchAllSavedJobs() async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchAllSavedJobs();
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @fetchAllSavedJobs ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> fetchAllAppliedJobs() async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchAllAppliedJobs();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchAllAppliedJobs ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> fetchAllMyCreatedJobs() async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchAllMyCreatedJobs();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchAllMyCreatedJobs ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }

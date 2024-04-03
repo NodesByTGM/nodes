@@ -10,15 +10,28 @@ part 'dashboard_repository.g.dart';
 class DashboardApis {
   static const baseApi = API_ENDPOINT;
 
+    // Projects
+  static const projectApi = "$baseApi/projects";
+
   // Events
-  static const events = "$baseApi/events";
+  static const events = "$baseApi/events/";
   static const singleEvent = "$events/{id}";
   static const saveEvent = "$events/save/{id}";
 
+  static const unSaveEvent = "$events/unsave/{id}";
+  static const allSavedEvents = "$events/saved/";
+  static const myCreatedEvents = "$events/mine";
+
   // Jobs
-  static const jobs = "$baseApi/jobs";
+  static const jobs = "$baseApi/jobs/";
   static const singleJob = "$jobs/{id}";
   static const applyForJob = "$jobs/apply/{id}";
+
+  static const saveJob = "$jobs/save/{id}";
+  static const unSaveJob = "$jobs/unsave/{id}";
+  static const allSavedJobs = "$jobs/saved";
+  static const allAppliedJobs = "$jobs/applied";
+  static const myCreatedJobs = "$jobs/mine";
 }
 
 @RestApi()
@@ -26,13 +39,22 @@ abstract class DashboardRepository {
   factory DashboardRepository(Dio dio, {String? baseUrl}) =
       _DashboardRepository;
 
-// Events
+  // Projects
+  @POST(DashboardApis.projectApi)
+  Future<ApiResponse> createProject(@Body() payload);
 
+  @GET(DashboardApis.projectApi)
+  Future<ApiResponse> fetchProject();
+
+// Events
   @POST(DashboardApis.events)
   Future<ApiResponse> createEvent(@Body() payload);
 
   @GET(DashboardApis.events)
-  Future<ApiResponse> fetchAllEvents();
+  Future<ApiResponse> fetchAllEvents(
+    @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
   @GET(DashboardApis.singleEvent)
   Future<ApiResponse> fetchEvent(
@@ -55,13 +77,27 @@ abstract class DashboardRepository {
     @Path('id') dynamic id,
   );
 
+  @POST(DashboardApis.unSaveEvent)
+  Future<ApiResponse> unSaveEvent(
+    @Path('id') dynamic id,
+  );
+
+  @GET(DashboardApis.allSavedEvents)
+  Future<ApiResponse> fetchAllSavedEvents();
+
+  @GET(DashboardApis.myCreatedEvents)
+  Future<ApiResponse> fetchAllAllMyCreatedEvents();
+
 // Jobs
 
   @POST(DashboardApis.jobs)
   Future<ApiResponse> createJob(@Body() payload);
 
   @GET(DashboardApis.jobs)
-  Future<ApiResponse> fetchAllJobs();
+  Future<ApiResponse> fetchAllJobs(
+    @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
   @GET(DashboardApis.singleJob)
   Future<ApiResponse> fetchJob(
@@ -83,4 +119,23 @@ abstract class DashboardRepository {
   Future<ApiResponse> applyForJob(
     @Path('id') dynamic id,
   );
+
+  @POST(DashboardApis.saveJob)
+  Future<ApiResponse> saveJob(
+    @Path('id') dynamic id,
+  );
+
+  @POST(DashboardApis.unSaveJob)
+  Future<ApiResponse> unSaveJob(
+    @Path('id') dynamic id,
+  );
+
+  @GET(DashboardApis.allSavedJobs)
+  Future<ApiResponse> fetchAllSavedJobs();
+
+  @GET(DashboardApis.allAppliedJobs)
+  Future<ApiResponse> fetchAllAppliedJobs();
+
+  @GET(DashboardApis.myCreatedJobs)
+  Future<ApiResponse> fetchAllMyCreatedJobs();
 }

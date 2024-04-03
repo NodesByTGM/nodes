@@ -9,7 +9,7 @@
 
 
 
-
+// const lol({this.});
 
 //   factory Lol.fromJson(Map<String, dynamic> json) =>
 //       _$LolFromJson(json);
