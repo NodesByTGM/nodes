@@ -211,24 +211,25 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
       );
       // var res = "";
 
-      // if (!isObjectEmpty(res) && mounted) {
-      //   safeNavigate(() {
-      //     formKey.currentState!.reset();
-      //     // if (response!.route == VerifyAccount.route) {
-      //     //   navigateAndClearPrev(
-      //     //     context,
-      //     //     VerifyAccount.route,
-      //     //     arguments: VerifyData(
-      //     //       email: _request.email,
-      //     //       nextRoute: NavbarView.routeName,
-      //     //     ),
-      //     //   );
-      //     //   return;
-      //     // }
-      //     // navigateAndClearPrev(context, response.route);
-      //     // context.read<AuthController>().resetVisibility();
-      //   });
-      // }
+      if (!isObjectEmpty(res) && mounted) {
+        safeNavigate(() {
+          formKey.currentState!.reset();
+          navigateAndClearPrev(context, NavbarView.routeName);
+          // if (response!.route == VerifyAccount.route) {
+          //   navigateAndClearPrev(
+          //     context,
+          //     VerifyAccount.route,
+          //     arguments: VerifyData(
+          //       email: _request.email,
+          //       nextRoute: NavbarView.routeName,
+          //     ),
+          //   );
+          //   return;
+          // }
+          // navigateAndClearPrev(context, response.route);
+          // context.read<AuthController>().resetVisibility();
+        });
+      }
     }
   }
 

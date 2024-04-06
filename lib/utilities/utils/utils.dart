@@ -64,10 +64,14 @@ String registerDate(String dateTime) =>
     DateFormat("yyyy-MM-dd").parse(dateTime).toString().substring(0, 10);
 // Jiffy.parseFromDateTime(DateFormat("yyyy-MM-dd").parse(dateTime)).format();
 // DateFormat("yyyy-MM-dd").parse(dateTime);
-String timOfDay(TimeOfDay now) {
+String timeOfDay(TimeOfDay now) {
   return now.period == DayPeriod.pm
       ? '${now.hour - 12}:${now.minute}PM'
       : "${now.hour}:${now.minute}AM";
+}
+
+String fromDatTimeToTimeOfDay(DateTime now) {
+  return timeOfDay(TimeOfDay.fromDateTime(now));
 }
 
 // Routing Configs

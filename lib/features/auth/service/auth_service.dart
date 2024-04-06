@@ -8,6 +8,7 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
+import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:nodes/features/auth/repo/auth_repository.dart';
 
 class AuthService {
@@ -224,6 +225,16 @@ class AuthService {
       return res;
     } on DioException catch (e) {
       log.severe("Error message @deleteMedia ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
+
+  Future<ApiResponse> getPaystackAuthUrl(CustomPaystackModel payload) async {
+    try {
+      ApiResponse res = await authRepository.getPaystackAuthUrl(payload);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @getPaystackAuthUrl ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }

@@ -6,6 +6,8 @@ import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 
@@ -148,7 +150,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return JobCard();
+                return  JobCard(job: JobModel(),);
               },
             ),
           ),
@@ -244,7 +246,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return const JobCard();
+                return  JobCard(job: JobModel(),);
               },
             ),
           ),
@@ -428,9 +430,10 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return const EventCard(
+                return  EventCard(
                   hasDelete: false,
                   hasSave: true,
+                  event: EventModel(),
                 );
               },
             ),

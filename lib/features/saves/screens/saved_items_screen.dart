@@ -19,8 +19,9 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
 
   @override
   void initState() {
-    safeNavigate(() => context.read<DashboardController>().fetchAllJobs());
-    safeNavigate(() => context.read<DashboardController>().fetchAllEvents());
+    safeNavigate(() => context.read<DashboardController>().fetchAllSavedJobs());
+    safeNavigate(
+        () => context.read<DashboardController>().fetchAllSavedEvents());
     super.initState();
   }
 
@@ -68,7 +69,9 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
                     children: [
                       tabHeader(
                         isActive: currentIndex == 0,
-                        title: "Jobs (2)",
+                        // title: "Jobs (2)",
+                        title:
+                            "Jobs (${context.watch<DashboardController>().savedJobs.length})",
                         onTap: () {
                           setState(() {
                             currentIndex = 0;
@@ -78,7 +81,8 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
                       xSpace(width: 30),
                       tabHeader(
                         isActive: currentIndex == 1,
-                        title: "Events (2)",
+                        title:
+                            "Events (${context.watch<DashboardController>().savedEvents.length})",
                         onTap: () {
                           setState(() {
                             currentIndex = 1;

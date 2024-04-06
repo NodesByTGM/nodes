@@ -14,7 +14,7 @@ class DashboardApis {
   static const projectApi = "$baseApi/projects";
 
   // Events
-  static const events = "$baseApi/events/";
+  static const events = "$baseApi/events";
   static const singleEvent = "$events/{id}";
   static const saveEvent = "$events/save/{id}";
 
@@ -23,7 +23,7 @@ class DashboardApis {
   static const myCreatedEvents = "$events/mine";
 
   // Jobs
-  static const jobs = "$baseApi/jobs/";
+  static const jobs = "$baseApi/jobs";
   static const singleJob = "$jobs/{id}";
   static const applyForJob = "$jobs/apply/{id}";
 
@@ -83,10 +83,16 @@ abstract class DashboardRepository {
   );
 
   @GET(DashboardApis.allSavedEvents)
-  Future<ApiResponse> fetchAllSavedEvents();
+  Future<ApiResponse> fetchAllSavedEvents(
+     @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
   @GET(DashboardApis.myCreatedEvents)
-  Future<ApiResponse> fetchAllAllMyCreatedEvents();
+  Future<ApiResponse> fetchAllAllMyCreatedEvents(
+     @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
 // Jobs
 
@@ -131,11 +137,20 @@ abstract class DashboardRepository {
   );
 
   @GET(DashboardApis.allSavedJobs)
-  Future<ApiResponse> fetchAllSavedJobs();
+  Future<ApiResponse> fetchAllSavedJobs(
+     @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
   @GET(DashboardApis.allAppliedJobs)
-  Future<ApiResponse> fetchAllAppliedJobs();
+  Future<ApiResponse> fetchAllAppliedJobs(
+     @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
   @GET(DashboardApis.myCreatedJobs)
-  Future<ApiResponse> fetchAllMyCreatedJobs();
+  Future<ApiResponse> fetchAllMyCreatedJobs(
+     @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 }

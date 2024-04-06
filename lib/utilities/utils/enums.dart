@@ -65,3 +65,15 @@ enum MembersTypes {
   Member,
   Admin,
 }
+
+enum PaymentStatus {
+  Successful,
+  Cancelled,
+}
+
+enum SubscriptionPlanKeys {
+  pro,
+  pro_annual, // use '-' instead of '_'
+  business,
+  business_annual,
+}

@@ -5,7 +5,8 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/talent_auth/components/price_plan_card.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:flutter_paystack_plus/flutter_paystack_plus.dart';
+import 'package:nodes/utilities/utils/enums.dart';
+import 'package:nodes/utilities/widgets/paystack_webview.dart';
 
 class PricePlanScreen extends StatefulWidget {
   const PricePlanScreen({Key? key}) : super(key: key);
@@ -162,7 +163,9 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                 "Advanced Analytics and Insights",
                 "Access to GridTools Discovery Pack (Free)",
               ],
-              onTap: submit,
+              onTap: () => _paystackPayment(
+                  planIndex == 0 ? talentMonthlySub : talentYearlySub),
+
               btnText: "Subscribe now",
             ),
             ySpace(height: 24),
@@ -196,7 +199,8 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                 "Promotion and Marketing Opportunities",
                 "Access to GridTools Discovery Pack (Free)",
               ],
-              onTap: submit,
+              onTap: () => _paystackPayment(
+                  planIndex == 0 ? busMonthlySub : busYearlySub),
               btnText: "Subscribe now",
             ),
             ySpace(height: 24),
@@ -250,23 +254,50 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     });
   }
 
-  pay() {
-    var _ref =
-        "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
-    FlutterPaystackPlus.openPaystackPopup(
-      customerEmail: "g.ikwegbu@gmail.com",
-      context: context,
-      currency: KeyString.ngn,
-      secretKey: PAYSTACK_PRO_PAN_SK,
-      amount: (200 * 100).toString(),
-      reference: _ref,
-      callBackUrl: "[GET IT FROM YOUR PAYSTACK DASHBOARD]",
-      onClosed: () {
-        debugPrint('Could\'nt finish payment');
-      },
-      onSuccess: () async {
-        debugPrint('successful payment');
-      },
-    );
+  _paystackPayment(String type) async {
+    // var ref = "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
+    var ref = "t5o5vnfu13";
+
+    try {
+      // Make the call to the API, get the auth token.
+      if (1 < 2) {
+        bool res = await Navigator.of(context).push<dynamic>(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => CustomPaystackWebview(
+              authUrl: "https://checkout.paystack.com/1ppg9rs3n0yx9dc",
+              ref: ref,
+            ),
+          ),
+        );
+        // if (!isObjectEmpty(res) && mounted) {
+        if (!res && mounted) {
+          // Call the verification ENDPOINT...
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      showError(message: "Something went wrong, Try again");
+    }
+  }
+
+  _onSuccessfulPaystackPayment({
+    required String ref,
+    required int totalAmt,
+    required PaymentStatus paymentStatus,
+  }) async {
+    // Make the request to load the wallet...
+    // bool _res = await _profileCtrl.addMoneyToWallet(
+    //   amount: totalAmt,
+    //   paymentStatus: paymentStatus,
+    //   paystackTransactionId: ref,
+    // );
+
+    // if (_res && mounted) {
+    //   // Money was added successfully
+
+    //   showSuccess(
+    //     message: "Payment Successful",
+    //   );
+    // }
   }
 }

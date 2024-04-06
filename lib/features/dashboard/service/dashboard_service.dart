@@ -93,9 +93,9 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllSavedEvents() async {
+  Future<ApiResponse> fetchAllSavedEvents({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllSavedEvents();
+      ApiResponse res = await dashboardRepository.fetchAllSavedEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -104,9 +104,9 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllAllMyCreatedEvents() async {
+  Future<ApiResponse> fetchAllAllMyCreatedEvents({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllAllMyCreatedEvents();
+      ApiResponse res = await dashboardRepository.fetchAllAllMyCreatedEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -129,7 +129,6 @@ class DashboardService {
   Future<ApiResponse> fetchAllJobs({required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllJobs(page, pageSize);
-      print("George,,,,i'm here nowsdsd>...");
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllJobs ::===> ${e.response?.data}");
@@ -200,9 +199,9 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllSavedJobs() async {
+  Future<ApiResponse> fetchAllSavedJobs({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllSavedJobs();
+      ApiResponse res = await dashboardRepository.fetchAllSavedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllSavedJobs ::===> ${e.response?.data}");
@@ -210,9 +209,9 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllAppliedJobs() async {
+  Future<ApiResponse> fetchAllAppliedJobs({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllAppliedJobs();
+      ApiResponse res = await dashboardRepository.fetchAllAppliedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -221,9 +220,9 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllMyCreatedJobs() async {
+  Future<ApiResponse> fetchAllMyCreatedJobs({required int page, required int pageSize,}) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllMyCreatedJobs();
+      ApiResponse res = await dashboardRepository.fetchAllMyCreatedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(

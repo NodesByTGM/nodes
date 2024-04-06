@@ -9,6 +9,8 @@ import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
@@ -89,6 +91,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 return const EventCard(
                   hasDelete: false,
                   hasSave: true,
+                  event: EventModel(),
                 );
               },
             ),
@@ -213,7 +216,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               labelText(
-                "Trending obs on Nodes",
+                "Trending jobs on Nodes",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -249,7 +252,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return const JobCard();
+                return JobCard(
+                  job: JobModel(),
+                );
               },
             ),
           ),

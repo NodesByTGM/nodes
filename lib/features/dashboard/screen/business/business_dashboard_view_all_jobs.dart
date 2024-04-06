@@ -1,6 +1,7 @@
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -82,7 +83,10 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: 10,
                   itemBuilder: (c, i) {
-                    return const JobCard(isFromBusiness: true);
+                    return const JobCard(
+                      isFromBusiness: true,
+                      job: JobModel(),
+                    );
                   },
                   separatorBuilder: (c, i) => ySpace(height: 24),
                 ),

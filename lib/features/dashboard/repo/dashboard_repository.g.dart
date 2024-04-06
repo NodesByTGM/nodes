@@ -86,7 +86,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/',
+              'https://nodes-server-v1.onrender.com/api/v1/events',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -119,7 +119,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/',
+              'https://nodes-server-v1.onrender.com/api/v1/events',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -146,7 +146,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/events/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -176,7 +176,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/events/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -203,7 +203,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/events/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -230,7 +230,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//save/${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/events/save/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -257,7 +257,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//unsave/${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/events/unsave/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -271,9 +271,15 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchAllSavedEvents() async {
+  Future<ApiResponse> fetchAllSavedEvents(
+    int page,
+    int pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -284,7 +290,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//saved/',
+              'https://nodes-server-v1.onrender.com/api/v1/events/saved/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -298,9 +304,15 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchAllAllMyCreatedEvents() async {
+  Future<ApiResponse> fetchAllAllMyCreatedEvents(
+    int page,
+    int pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -311,7 +323,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events//mine',
+              'https://nodes-server-v1.onrender.com/api/v1/events/mine',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -338,7 +350,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -371,7 +383,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -398,7 +410,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -428,7 +440,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -455,7 +467,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -482,7 +494,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//apply/${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/apply/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -509,7 +521,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//save/${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/save/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -536,7 +548,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//unsave/${id}',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/unsave/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -550,9 +562,15 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchAllSavedJobs() async {
+  Future<ApiResponse> fetchAllSavedJobs(
+    int page,
+    int pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -563,7 +581,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//saved',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/saved',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -577,9 +595,15 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchAllAppliedJobs() async {
+  Future<ApiResponse> fetchAllAppliedJobs(
+    int page,
+    int pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -590,7 +614,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//applied',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/applied',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -604,9 +628,15 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchAllMyCreatedJobs() async {
+  Future<ApiResponse> fetchAllMyCreatedJobs(
+    int page,
+    int pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -617,7 +647,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs//mine',
+              'https://nodes-server-v1.onrender.com/api/v1/jobs/mine',
               queryParameters: queryParameters,
               data: _data,
             )

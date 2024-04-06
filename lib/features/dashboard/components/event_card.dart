@@ -1,7 +1,10 @@
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_event_details_screen.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
@@ -10,12 +13,14 @@ class EventCard extends StatelessWidget {
     this.hasDelete = false,
     this.hasSave = false,
     this.isSaved = false,
+    required this.event,
   });
 
   final bool isFromBusiness;
   final bool hasDelete;
   final bool hasSave;
   final bool isSaved;
+  final EventModel event;
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +48,34 @@ class EventCard extends StatelessWidget {
           children: [
             // if (hasDelete || hasSave)
             if (hasSave)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: SvgPicture.asset(
-                    isSaved
-                        ? ImageUtils.saveJobFilledIcon
-                        : ImageUtils.saveJobIcon,
-                    color: WHITE,
-                  ),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  context.watch<DashboardController>().isSavingUnsavedEvent
+                      ? const Padding(
+                          padding: EdgeInsets.only(top: 10, right: 15),
+                          child: SaveIconLoader(
+                            color: WHITE,
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            saveUnsaveEvent(context, event);
+                          },
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: SvgPicture.asset(
+                                event.saved
+                                    ? ImageUtils.saveJobFilledIcon
+                                    : ImageUtils.saveJobIcon,
+                                color: WHITE,
+                              ),
+                            ),
+                          ),
+                        ),
+                ],
               ),
             if (hasDelete)
               Align(
@@ -71,7 +93,7 @@ class EventCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 labelText(
-                  "Name of event",
+                  "${event.name}",
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: WHITE,
@@ -79,7 +101,7 @@ class EventCard extends StatelessWidget {
                 ),
                 ySpace(height: 8),
                 subtext(
-                  "Date & Time",
+                  "${shortDate(event.dateTime ?? DateTime.now())} by ${fromDatTimeToTimeOfDay(event.dateTime ?? DateTime.now())}",
                   color: WHITE,
                   fontSize: 14,
                 ),
@@ -93,7 +115,8 @@ class EventCard extends StatelessWidget {
                       color: WHITE,
                     ),
                     subtext(
-                      "Lagos | Nigeria",
+                      // "Lagos | Nigeria",
+                      "${event.location}",
                       color: WHITE.withOpacity(0.9),
                       fontSize: 14,
                     ),
@@ -110,7 +133,7 @@ class EventCard extends StatelessWidget {
                       ? context.read<NavController>().updatePageListStack(
                             BusinessEventDetailsScreen.routeName,
                           )
-                      : showEventDetailsBottomSheet(context);
+                      : showEventDetailsBottomSheet(context, event);
                 },
                 child: labelText(
                   "View details",
@@ -127,7 +150,13 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  showEventDetailsBottomSheet(BuildContext context) {
+  saveUnsaveEvent(BuildContext context, EventModel event) async {
+    event.saved
+        ? await context.read<DashboardController>().unSaveEvent(event.id)
+        : await context.read<DashboardController>().saveEvent(event.id);
+  }
+
+  showEventDetailsBottomSheet(BuildContext context, EventModel event) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -145,11 +174,11 @@ class EventCard extends StatelessWidget {
             return BottomSheetWrapper(
               closeOnTap: true,
               title: labelText(
-                "Event Name",
+                "${event.name}",
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
-              child: const EventDetails(),
+              child: EventDetails(event: event),
             );
           },
         );

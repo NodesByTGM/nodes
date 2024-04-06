@@ -1,25 +1,56 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
-class SavedJobs extends StatefulWidget {
+class SavedJobs extends StatelessWidget {
   const SavedJobs({super.key});
 
   @override
-  State<SavedJobs> createState() => _SavedJobsState();
-}
-
-class _SavedJobsState extends State<SavedJobs> {
-  @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(top: 27),
-      itemCount: 5,
-      itemBuilder: (c, i) {
-        return const JobCard(isSaved: true);
+    return Consumer<DashboardController>(
+      builder: (contex, dashCtrl, _) {
+        bool isLoading = dashCtrl.isFetchingAllSavedJobs;
+        bool hasData = isObjectEmpty(dashCtrl.savedJobs);
+        if (isLoading || isObjectEmpty(dashCtrl.savedJobs)) {
+          return DataReload(
+            maxHeight: screenHeight(context) * .19,
+            isLoading: isLoading,
+            loader: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ShimmerLoader(
+                scrollDirection: Axis.vertical,
+                width: screenWidth(context),
+                marginBottom: 10,
+              ),
+            ), // Pass the shimmer here...
+            onTap: () => _reloadData(),
+            isEmpty: hasData,
+          );
+        } else {
+          List<JobModel> savedJobs = dashCtrl.savedJobs;
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(top: 27),
+            itemCount: savedJobs.length,
+            itemBuilder: (c, i) {
+              return JobCard(
+                isSaved: true,
+                job: savedJobs[i],
+              );
+            },
+            separatorBuilder: (c, i) => ySpace(height: 14),
+          );
+        }
       },
-      separatorBuilder: (c, i) => ySpace(height: 14),
     );
+  }
+
+  void _reloadData() {
+    safeNavigate(() => locator.get<DashboardController>().fetchAllSavedJobs());
   }
 }

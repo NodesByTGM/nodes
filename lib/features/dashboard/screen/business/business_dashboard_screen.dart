@@ -7,6 +7,8 @@ import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_events.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 
@@ -180,6 +182,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     itemBuilder: (context, index) {
                       return const JobCard(
                         isFromBusiness: true,
+                        job: JobModel(),
                       );
                     },
                   ),
@@ -290,6 +293,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                       return const EventCard(
                         hasDelete: false,
                         hasSave: true,
+                        event: EventModel(),
                       );
                     },
                   ),

@@ -1,6 +1,7 @@
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/components/saved_event_card.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
@@ -129,11 +130,17 @@ class _BusinessEventDetailsScreenState
   getTabBody() {
     switch (currentIndex) {
       case 0:
-        return const EventDetails(isFromBusiness: true);
+        return EventDetails(
+          isFromBusiness: true,
+          event: EventModel(),
+        );
       case 1:
         return const SavedEventCard();
       default:
-        return const EventDetails(isFromBusiness: true);
+        return EventDetails(
+          isFromBusiness: true,
+          event: EventModel(),
+        );
     }
   }
 

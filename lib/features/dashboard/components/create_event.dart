@@ -45,8 +45,7 @@ class _CreateEventState extends State<CreateEvent> {
                     FormBuilderValidators.required(context,
                         errorText: Constants.emptyFieldError),
                   ]),
-                  onChanged: (val) {
-                  },
+                  onChanged: (val) {},
                 ),
               ),
               FormUtils.formSpacer(),
@@ -111,7 +110,7 @@ class _CreateEventState extends State<CreateEvent> {
                             initialTime: TimeOfDay.now(),
                           );
                           if (pickedTime == null) return;
-                          timeCtrl.text = timOfDay(pickedTime);
+                          timeCtrl.text = timeOfDay(pickedTime);
                         },
                       ),
                     ),

@@ -8,13 +8,16 @@ class Constants {
   static const emailError = "Email is required";
   static const emailInvalid = "Enter a valid email";
   static const password = "Password";
-  static const passwordError =
-      "Password is weak";
+  static const passwordError = "Password is weak";
   static const passwordLenError = "Password length must be 6 or more";
   static const confirmPassword = "Confirm Password";
   static const passwordMatchError = "Password does not match!";
   static const naira = "₦";
 
-  
-
+  static const jobType = [
+    'Full-time',
+    'Part-time',
+    'Contract',
+    'Remote',
+  ];
 }

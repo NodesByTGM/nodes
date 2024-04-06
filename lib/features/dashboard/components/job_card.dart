@@ -1,17 +1,22 @@
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/job_details.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class JobCard extends StatelessWidget {
   const JobCard({
     super.key,
     this.isFromBusiness = false,
     this.isSaved = false,
+    required this.job,
   });
 
   final bool isFromBusiness;
   final bool isSaved;
+  final JobModel job;
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +42,37 @@ class JobCard extends StatelessWidget {
                   ImageUtils.jobDpIcon,
                   height: 72,
                 ),
-                SvgPicture.asset(isSaved
-                    ? ImageUtils.saveJobFilledIcon
-                    : ImageUtils.saveJobIcon),
+                // SvgPicture.asset(isSaved
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    context.watch<DashboardController>().isSavingUnsavedJobs
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 10, right: 15),
+                            child: SaveIconLoader(),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              saveUnsaveJob(context, job);
+                            },
+                            child: SvgPicture.asset(job.saved
+                                ? ImageUtils.saveJobFilledIcon
+                                : ImageUtils.saveJobIcon),
+                          ),
+                  ],
+                ),
               ],
             ),
             ySpace(height: 16),
             labelText(
-              "Job description/title",
+              capitalize("${job.name}"),
               fontSize: 14,
               fontWeight: FontWeight.w500,
               maxLine: 1,
             ),
             ySpace(height: 16),
             subtext(
-              "Name of company",
+              "${job.business?.name}",
               fontSize: 14,
             ),
             ySpace(height: 16),
@@ -61,7 +82,8 @@ class JobCard extends StatelessWidget {
               children: [
                 const Icon(Icons.credit_card_sharp),
                 subtext(
-                  "\$10-1k/hr",
+                  // "\$10-1k/hr",
+                  "${job.payRate}",
                   fontSize: 14,
                 ),
               ],
@@ -76,7 +98,8 @@ class JobCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.calendar_today_outlined),
                     subtext(
-                      "\$20 hrs/wk",
+                      // "\$20 hrs/wk",
+                      "${job.workRate}",
                       fontSize: 14,
                     ),
                   ],
@@ -104,7 +127,7 @@ class JobCard extends StatelessWidget {
               children: [
                 if (isFromBusiness) ...[
                   subtext(
-                    "20 applicants",
+                    "${job.applicants?.length} applicants",
                     color: PRIMARY,
                     fontSize: 14,
                   ),
@@ -116,7 +139,7 @@ class JobCard extends StatelessWidget {
                         ? context.read<NavController>().updatePageListStack(
                               BusinessJobDetailsScreen.routeName,
                             )
-                        : showJobDetailsBottomSheet(context);
+                        : showJobDetailsBottomSheet(context, job);
                   },
                   child: labelText(
                     isFromBusiness ? "View details" : "View job",
@@ -133,7 +156,13 @@ class JobCard extends StatelessWidget {
     );
   }
 
-  showJobDetailsBottomSheet(BuildContext context) {
+  saveUnsaveJob(BuildContext context, JobModel job) async {
+    job.saved
+        ? await context.read<DashboardController>().unSaveJob(job.id)
+        : await context.read<DashboardController>().saveJob(job.id);
+  }
+
+  showJobDetailsBottomSheet(BuildContext context, JobModel job) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -151,11 +180,11 @@ class JobCard extends StatelessWidget {
             return BottomSheetWrapper(
               closeOnTap: true,
               title: labelText(
-                "Job title",
+                "${job.name}",
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
-              child: const JobDetails(),
+              child: JobDetails(job: job),
             );
           },
         );

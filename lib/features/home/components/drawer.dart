@@ -1,5 +1,6 @@
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
@@ -28,6 +29,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     return Consumer2<NavController, AuthController>(
       builder: (context, navCtrl, authCtrl, _) {
+        UserModel user = authCtrl.currentUser;
         return Container(
           width: screenWidth(context) - 80,
           decoration: const BoxDecoration(
@@ -82,14 +84,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     child: Row(
                       children: [
                         cachedNetworkImage(
-                          imgUrl: "",
+                          imgUrl: "${user.avatar}",
                           size: 30,
                           borderRadius: 100,
                         ),
                         xSpace(width: 10),
                         Expanded(
                           child: labelText(
-                            "Jane Doe",
+                            "${user.name}",
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
@@ -178,22 +180,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           );
                         },
                       ),
-                      _menuItem(
-                        icon: ImageUtils.starOutlineIcon,
-                        title: KeyString.trendingScreen,
-                        route: DrawerRouteTitle
-                            .Trending, // Send to individual dashboard... or reproduce it...
-                        // isActive: getActiveDrawer(
-                        //     navCtrl, KeyString.trendingScreen),
-                        isActive: false,
-                        onTap: () {
-                          closeDrawer();
-                          navCtrl.resetPageListStack();
-                          // navCtrl.updatePageListStack(
-                          //   UpgradeToProScreen.routeName,
-                          // );
-                        },
-                      ),
+                      if (user.type != 0) ...[
+                        // Where 0 is Default user
+                        _menuItem(
+                          icon: ImageUtils.starOutlineIcon,
+                          title: KeyString.trendingScreen,
+                          route: DrawerRouteTitle
+                              .Trending, // Send to individual dashboard... or reproduce it...
+                          // isActive: getActiveDrawer(
+                          //     navCtrl, KeyString.trendingScreen),
+                          isActive: false,
+                          onTap: () {
+                            closeDrawer();
+                            navCtrl.resetPageListStack();
+                            // navCtrl.updatePageListStack(
+                            //   UpgradeToProScreen.routeName,
+                            // );
+                          },
+                        ),
+                      ],
                       _menuItem(
                         icon: ImageUtils.gridToolIcon,
                         title: KeyString.gridToolScreen,
@@ -228,18 +233,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 customDivider(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
-                _menuItem(
-                  icon: ImageUtils.saveJobIcon,
-                  title: KeyString.savesScreen,
-                  route: DrawerRouteTitle.SavedJobs,
-                  isActive: getActiveDrawer(navCtrl, KeyString.savesScreen),
-                  onTap: () {
-                    closeDrawer();
-                    navCtrl.updatePageListStack(
-                      SavedItemScreen.routeName,
-                    );
-                  },
-                ),
+                if (user.type != 0) ...[
+                  _menuItem(
+                    icon: ImageUtils.saveJobIcon,
+                    title: KeyString.savesScreen,
+                    route: DrawerRouteTitle.SavedJobs,
+                    isActive: getActiveDrawer(navCtrl, KeyString.savesScreen),
+                    onTap: () {
+                      closeDrawer();
+                      navCtrl.updatePageListStack(
+                        SavedItemScreen.routeName,
+                      );
+                    },
+                  ),
+                ],
                 _menuItem(
                   icon: ImageUtils.settingsIcon,
                   title: KeyString.accountSettingsScreen,

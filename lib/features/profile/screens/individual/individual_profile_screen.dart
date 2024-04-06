@@ -96,6 +96,7 @@ class IndividualProfileScreen extends StatelessWidget {
                     xSpace(width: 10),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 15,
                       children: userSocials(user),
                     ),
                   ],

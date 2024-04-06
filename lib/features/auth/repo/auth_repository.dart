@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:nodes/config/env.config.dart';
 import 'package:nodes/core/models/api_response.dart';
+import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_repository.g.dart';
@@ -40,6 +41,9 @@ class AuthApis {
   // Media Uploads
   static const mediaUploadsApi = "$baseApi/uploads/media";
   static const deleteMediaApi = "$mediaUploadsApi/delete/{id}";
+
+  // Paystack
+  static const paystackInitialize = "$baseApi/transactions/subscription/initiate";
 }
 
 @RestApi()
@@ -118,15 +122,10 @@ abstract class AuthRepository {
   Future<ApiResponse> deleteMedia(
     @Path('id') String id,
   );
+
+  @POST(AuthApis.paystackInitialize)
+  Future<ApiResponse> getPaystackAuthUrl(
+    @Body() CustomPaystackModel payload,
+  );
 }
 
-
-      // final response = await dio.get(
-      //   Consts.baseUrl + endPointUrl,
-      //   queryParameters: {'_id': xxx, 'type': 'xxx'},
-      //   options: Options(
-      //     responseType: ResponseType.bytes,
-      //     headers: {'Authorization': Consts.apiKey},
-      //     contentType: 'application/octet-stream',
-      //   ),
-      // );

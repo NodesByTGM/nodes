@@ -502,7 +502,7 @@ class _EditIndividualProfileScreenState
           showText(message: "Oops!! Please complete Personal Info section");
           return;
         }
-        updateUserProfile(user.copyWith(
+        updateUserProfile(user = user.copyWith(
           name: "${firstNameCtrl.text} ${lastNameCtrl.text}",
           location: locationCtrl.text,
         ));
@@ -514,7 +514,7 @@ class _EditIndividualProfileScreenState
           showText(message: "Oops!! Please complete Introduction section");
           return;
         }
-        updateUserProfile(user.copyWith(
+        updateUserProfile(user = user.copyWith(
           headline: headlineCtrl.text,
           bio: bioCtrl.text,
         ));
@@ -555,7 +555,7 @@ class _EditIndividualProfileScreenState
           showError(message: "Oops!!! This is not a valid X  URL");
           return;
         }
-        updateUserProfile(user.copyWith(
+        updateUserProfile(user = user.copyWith(
           website: websiteCtrl.text,
           linkedIn: linkedinCtrl.text,
           instagram: instagramCtrl.text,
@@ -566,7 +566,7 @@ class _EditIndividualProfileScreenState
         // Update the Toggle Spaces
         // Check if at least one field is provided...
 
-        updateUserProfile(user.copyWith(
+        updateUserProfile(user = user.copyWith(
           spaces: enableSpaces,
           comments: enableComments,
         ));
@@ -575,7 +575,7 @@ class _EditIndividualProfileScreenState
         // Update the Toggle Comments
         // Check if at least one field is provided...
 
-        updateUserProfile(user.copyWith(
+        updateUserProfile(user = user.copyWith(
           spaces: enableSpaces,
           comments: enableComments,
         ));

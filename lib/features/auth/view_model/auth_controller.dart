@@ -13,6 +13,7 @@ import 'package:nodes/core/models/current_session.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:nodes/features/auth/models/register_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
@@ -119,7 +120,6 @@ class AuthController extends BaseController {
   }
 
   Future<void> _authCustomSaveSession(ApiResponse res) async {
-    print("Hi Georgeeeee this is the res for  custom auth : ${res.toJson()}");
     CurrentSession _ =
         CurrentSession.fromJson(res.result as Map<String, dynamic>);
     CurrentSession? cS = await currentSession;
@@ -134,7 +134,6 @@ class AuthController extends BaseController {
           user: _.user,
         )
         .toJson());
-    print("Hi Master, the _authCustomSaveSession was saved successfully");
   }
 
   // Functions
@@ -435,9 +434,8 @@ class AuthController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      print("George, the profile has been updated: ${response.toJson()}");
       showSuccess(message: response.message);
-      // await _authCustomSaveSession(response);
+      await _authCustomSaveSession(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -545,6 +543,29 @@ class AuthController extends BaseController {
       return false;
     } finally {
       setUploadingMedia(false);
+    }
+  }
+
+  Future<CustomPaystackResModel?> getPaystackAuthUrl(
+    CustomPaystackModel payload,
+  ) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.getPaystackAuthUrl(
+        payload,
+      );
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return null;
+      }
+      return CustomPaystackResModel.fromJson(
+          response.result as Map<String, dynamic>);
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return null;
+    } finally {
+      setBusy(false);
     }
   }
 

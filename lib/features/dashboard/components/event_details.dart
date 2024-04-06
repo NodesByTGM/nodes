@@ -1,18 +1,29 @@
+import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class EventDetails extends StatefulWidget {
   const EventDetails({
     super.key,
     this.isFromBusiness = false,
+    required this.event,
   });
 
   final bool isFromBusiness;
+  final EventModel event;
 
   @override
   State<EventDetails> createState() => _EventDetailsState();
 }
 
 class _EventDetailsState extends State<EventDetails> {
+  late EventModel event;
+
+  @override
+  void initState() {
+    event = widget.event;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -38,22 +49,23 @@ class _EventDetailsState extends State<EventDetails> {
             children: [
               infoItem(
                 icon: ImageUtils.mapMarkerOutlineIcon,
-                title: "Lagos | Nigeria",
+                title: capitalize("${event.location}"),
               ),
               ySpace(height: 19),
               infoItem(
                 icon: ImageUtils.clockOutlineIcon,
-                title: timOfDay(TimeOfDay.now()),
+                title: fromDatTimeToTimeOfDay(event.dateTime ?? DateTime.now()),
               ),
               ySpace(height: 19),
               infoItem(
                 icon: ImageUtils.calendarOutlineIcon,
-                title: shortDate(DateTime.now()),
+                title: shortDate(event.dateTime ?? DateTime.now()),
               ),
               ySpace(height: 19),
               infoItem(
                 icon: ImageUtils.cardOutlineIcon,
-                title: "Free",
+                // title: "Free",
+                title: capitalize("${event.paymentType}"),
               ),
               ySpace(height: 19),
             ],
@@ -83,7 +95,7 @@ class _EventDetailsState extends State<EventDetails> {
               ),
               ySpace(height: 24),
               subtext(
-                "Lorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.\n\n\nLorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.\n\nLorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.\n\n\nLorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.",
+                "${event.description}",
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 height: 1.5,

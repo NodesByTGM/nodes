@@ -1,4 +1,8 @@
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/dot_divider.dart';
 import 'package:nodes/utilities/widgets/tag_chip.dart';
 
@@ -6,17 +10,30 @@ class JobDetails extends StatefulWidget {
   const JobDetails({
     super.key,
     this.isFromBusiness = false,
+    required this.job,
   });
 
   final bool isFromBusiness;
+  final JobModel job;
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
 }
 
 class _JobDetailsState extends State<JobDetails> {
+  late JobModel job;
+  late DashboardController dashCtrl;
+
+  @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    job = widget.job;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -28,7 +45,7 @@ class _JobDetailsState extends State<JobDetails> {
               height: 44,
             ),
             title: labelText(
-              "Name of company",
+              "${job.business?.name}",
               fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
@@ -42,13 +59,14 @@ class _JobDetailsState extends State<JobDetails> {
           Row(
             children: [
               subtext(
-                "Posted ${shortTime(DateTime.now())}",
+                "Posted ${shortTime(job.createdAt ?? DateTime.now())}",
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
               ),
               const CustomDot(),
               subtext(
-                "25 applicants",
+                "${job.applicants?.length} applicants",
+                // "0 applicants",
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: BLACK.withOpacity(0.7),
@@ -79,13 +97,15 @@ class _JobDetailsState extends State<JobDetails> {
               xSpace(width: 5),
               subtext(
                 "20 hrs/wk",
+                // "${job.workRate}",
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
               const CustomDot(),
-              CustomTagChip(title: "Remote"),
-              const CustomDot(),
-              CustomTagChip(title: "Full-time"),
+              // CustomTagChip(title: "Remote"),
+              CustomTagChip(
+                title: Constants.jobType[job.jobType as int],
+              ),
             ],
           ),
         ),
@@ -93,22 +113,29 @@ class _JobDetailsState extends State<JobDetails> {
         if (!widget.isFromBusiness) ...[
           Row(
             children: [
-              GestureDetector(
-                onTap: () {
-                  showSuccess(message: "Job Saved");
-                },
-                child: SvgPicture.asset(ImageUtils.saveJobIcon),
-              ),
+              dashCtrl.isSavingUnsavedJobs
+                  ? const Loader()
+                  : GestureDetector(
+                      onTap: () {
+                        saveJob();
+                      },
+                      child: SvgPicture.asset(job.saved
+                          ? ImageUtils.saveJobFilledIcon
+                          : ImageUtils.saveJobIcon),
+                    ),
               xSpace(width: 16),
               Expanded(
                 child: SubmitBtn(
-                  onPressed: () {
-                    showSuccess(message: "Applied");
-                  },
+                  onPressed: job.applied
+                      ? null
+                      : () {
+                          applyForJob();
+                        },
                   title: btnTxt(
-                    "Apply",
+                    job.applied ? "Applied" : "Apply",
                     WHITE,
                   ),
+                  loading: dashCtrl.isApplyingForJob,
                 ),
               ),
             ],
@@ -160,13 +187,13 @@ class _JobDetailsState extends State<JobDetails> {
               Wrap(
                 children: [
                   ...List.generate(
-                    7,
-                    (index) => const Padding(
-                      padding: EdgeInsets.only(
+                    (job.skills?.length ?? 0),
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(
                         right: 5,
                         bottom: 4,
                       ),
-                      child: CustomTagChip(title: "Remote"),
+                      child: CustomTagChip(title: "${job.skills?[index]}"),
                     ),
                   )
                 ],
@@ -198,7 +225,7 @@ class _JobDetailsState extends State<JobDetails> {
               ),
               ySpace(height: 24),
               subtext(
-                "Lorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.\n\n\nLorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.\n\nLorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.\n\n\nLorem ipsum dolor sit amet consectetur. Tincidunt sit mattis pellentesque imperdiet etiam curabitur. Sit vitae vel et justo egestas sit enim turpis. Blandit in ullamcorper non vel volutpat. Quam condimentum faucibus auctor mattis sed consectetur viverra.",
+                "${job.description}",
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
@@ -208,5 +235,13 @@ class _JobDetailsState extends State<JobDetails> {
         ),
       ],
     );
+  }
+
+  void saveJob() async {
+    await dashCtrl.saveJob(job.id);
+  }
+
+  void applyForJob() async {
+    await dashCtrl.applyForJob(job.id);
   }
 }
