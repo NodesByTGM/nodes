@@ -10,7 +10,7 @@ CustomPaystackModel _$CustomPaystackModelFromJson(Map<String, dynamic> json) =>
     CustomPaystackModel(
       planKey: json['planKey'] as String?,
       reference: json['reference'] as String?,
-      callbackUrl: json['callbackUrl'] as String?,
+      callback_url: json['callback_url'] as String?,
       metadata: json['metadata'] == null
           ? null
           : PaystackMetadataModel.fromJson(
@@ -22,20 +22,20 @@ Map<String, dynamic> _$CustomPaystackModelToJson(
     <String, dynamic>{
       'planKey': instance.planKey,
       'reference': instance.reference,
-      'callbackUrl': instance.callbackUrl,
+      'callback_url': instance.callback_url,
       'metadata': instance.metadata?.toJson(),
     };
 
 PaystackMetadataModel _$PaystackMetadataModelFromJson(
         Map<String, dynamic> json) =>
     PaystackMetadataModel(
-      cancelAction: json['cancelAction'] as String?,
+      cancel_action: json['cancel_action'] as String?,
     );
 
 Map<String, dynamic> _$PaystackMetadataModelToJson(
         PaystackMetadataModel instance) =>
     <String, dynamic>{
-      'cancelAction': instance.cancelAction,
+      'cancel_action': instance.cancel_action,
     };
 
 CustomPaystackResModel _$CustomPaystackResModelFromJson(

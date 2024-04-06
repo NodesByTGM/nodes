@@ -234,7 +234,8 @@ class AuthService {
       ApiResponse res = await authRepository.getPaystackAuthUrl(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @getPaystackAuthUrl ::===> ${e.response?.data}");
+      log.severe(
+          "Error message @getPaystackAuthUrl ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }

@@ -502,7 +502,7 @@ class _EditIndividualProfileScreenState
           showText(message: "Oops!! Please complete Personal Info section");
           return;
         }
-        updateUserProfile(user = user.copyWith(
+        updateUserProfile(user.copyWith(
           name: "${firstNameCtrl.text} ${lastNameCtrl.text}",
           location: locationCtrl.text,
         ));
@@ -514,7 +514,7 @@ class _EditIndividualProfileScreenState
           showText(message: "Oops!! Please complete Introduction section");
           return;
         }
-        updateUserProfile(user = user.copyWith(
+        updateUserProfile(user.copyWith(
           headline: headlineCtrl.text,
           bio: bioCtrl.text,
         ));
@@ -555,7 +555,7 @@ class _EditIndividualProfileScreenState
           showError(message: "Oops!!! This is not a valid X  URL");
           return;
         }
-        updateUserProfile(user = user.copyWith(
+        updateUserProfile(user.copyWith(
           website: websiteCtrl.text,
           linkedIn: linkedinCtrl.text,
           instagram: instagramCtrl.text,
@@ -566,7 +566,7 @@ class _EditIndividualProfileScreenState
         // Update the Toggle Spaces
         // Check if at least one field is provided...
 
-        updateUserProfile(user = user.copyWith(
+        updateUserProfile(user.copyWith(
           spaces: enableSpaces,
           comments: enableComments,
         ));
@@ -575,7 +575,7 @@ class _EditIndividualProfileScreenState
         // Update the Toggle Comments
         // Check if at least one field is provided...
 
-        updateUserProfile(user = user.copyWith(
+        updateUserProfile(user.copyWith(
           spaces: enableSpaces,
           comments: enableComments,
         ));
@@ -585,6 +585,105 @@ class _EditIndividualProfileScreenState
     if (formKey.currentState!.saveAndValidate()) {}
     formKey.currentState!.reset();
   }
+  /**
+   * 
+   * 
+    void _submit(int index) {
+      closeKeyPad(context);
+      switch (index) {
+        case 0:
+          // Update the personal info
+          // Check if any madatory field is empty...
+          if (isObjectEmpty(firstNameCtrl.text) ||
+              isObjectEmpty(lastNameCtrl.text) ||
+              isObjectEmpty(locationCtrl.text)) {
+            showText(message: "Oops!! Please complete Personal Info section");
+            return;
+          }
+          updateUserProfile(user.copyWith(
+            name: "${firstNameCtrl.text} ${lastNameCtrl.text}",
+            location: locationCtrl.text,
+          ));
+          return;
+        case 1:
+          // Update the introduction
+          // Check if any madatory field is empty...
+          if (isObjectEmpty(headlineCtrl.text) || isObjectEmpty(bioCtrl.text)) {
+            showText(message: "Oops!! Please complete Introduction section");
+            return;
+          }
+          updateUserProfile(user.copyWith(
+            headline: headlineCtrl.text,
+            bio: bioCtrl.text,
+          ));
+          return;
+        case 2:
+          // Update the online profiles
+          // Check if at least one field is provided...
+          bool hasLinkedIn = isObjectEmpty(linkedinCtrl.text);
+          bool hasTwitter = isObjectEmpty(xCtrl.text);
+          bool hasInstagram = isObjectEmpty(instagramCtrl.text);
+          //
+          bool isValidLinkedIn = validateSocialMediaField(
+            type: SocialMediaTypes.Linkedin,
+            value: linkedinCtrl.text,
+          );
+          bool isValidTwitter = validateSocialMediaField(
+            type: SocialMediaTypes.Twitter,
+            value: xCtrl.text,
+          );
+          bool isValidInstagram = validateSocialMediaField(
+            type: SocialMediaTypes.Instagram,
+            value: instagramCtrl.text,
+          );
+          if (hasLinkedIn && hasInstagram && hasTwitter) {
+            showText(message: "Please provide atleast ONE social media account");
+            return;
+          }
+          if (!hasLinkedIn && !isValidLinkedIn) {
+            // User entered linkedIn, but it's not a valid url
+            showError(message: "Oops!!! This is not a valid LinkedIn URL");
+            return;
+          } else if (!hasInstagram && !isValidInstagram) {
+            // User entered instagram, but it's not a valid url
+            showError(message: "Oops!!! This is not a valid Instagram URL");
+            return;
+          } else if (!hasTwitter && !isValidTwitter) {
+            // User entered twitter, but it's not a valid url
+            showError(message: "Oops!!! This is not a valid X  URL");
+            return;
+          }
+          updateUserProfile(user.copyWith(
+            website: websiteCtrl.text,
+            linkedIn: linkedinCtrl.text,
+            instagram: instagramCtrl.text,
+            twitter: xCtrl.text,
+          ));
+          return;
+        case 3:
+          // Update the Toggle Spaces
+          // Check if at least one field is provided...
+
+          updateUserProfile(user.copyWith(
+            spaces: enableSpaces,
+            comments: enableComments,
+          ));
+          return;
+        case 4:
+          // Update the Toggle Comments
+          // Check if at least one field is provided...
+
+          updateUserProfile(user.copyWith(
+            spaces: enableSpaces,
+            comments: enableComments,
+          ));
+          return;
+        default:
+      }
+      if (formKey.currentState!.saveAndValidate()) {}
+      formKey.currentState!.reset();
+    }
+   */
 
   void updateUserProfile(UserModel user) async {
     bool done = await authCtrl.updateProfile(user.toJson());

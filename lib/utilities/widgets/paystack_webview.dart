@@ -15,16 +15,16 @@ class CustomPaystackWebview extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true;
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   leading: SizedBox.shrink(),
-        // ),
+        appBar: AppBar(
+            // leading: SizedBox.shrink(),
+            ),
         body: Padding(
           padding: const EdgeInsets.only(top: 55),
           child: WebView(
-            initialUrl: authUrl.toString(),
+            initialUrl: authUrl,
             javascriptMode: JavascriptMode.unrestricted,
             userAgent: 'Flutter;Webview',
             navigationDelegate: (navigation) {
@@ -38,6 +38,7 @@ class CustomPaystackWebview extends StatelessWidget {
 
               // Call back from a success transaction
               if (navigation.url == paystackCallbackUrl(ref)) {
+                // if (navigation.url.contains(tGMWebsite)) {
                 // Navigator.of(context).pop(ref);
                 Navigator.of(context).pop(true);
               }

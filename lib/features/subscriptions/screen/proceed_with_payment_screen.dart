@@ -212,11 +212,11 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
       CustomPaystackResModel? paystackRes = await authCtrl.getPaystackAuthUrl(
         CustomPaystackModel(
           reference: ref,
-          callbackUrl: paystackCallbackUrl(ref),
+          callback_url: tGMWebsite,
           // SubscriptionPlanKeys.business
           planKey: busYearlySub,
           metadata: const PaystackMetadataModel(
-              cancelAction: paystackCancelActionUrl),
+              cancel_action: paystackCancelActionUrl),
         ),
       );
       print("George....we here now ${paystackRes?.toJson()}");

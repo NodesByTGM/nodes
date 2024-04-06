@@ -22,3 +22,6 @@ const talentMonthlySub = "pro";
 const talentYearlySub = "pro-annual";
 
 paystackCallbackUrl(ref) => "$tGMWebsite/?trxref=$ref&reference=$ref";
+
+
+// sk_test_812646584458dfec2bf133db969dd587e34f6ebb

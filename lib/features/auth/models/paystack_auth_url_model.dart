@@ -10,26 +10,26 @@ part "paystack_auth_url_model.g.dart";
 class CustomPaystackModel extends Equatable {
   final String? planKey;
   final String? reference;
-  final String? callbackUrl;
+  final String? callback_url;
   final PaystackMetadataModel? metadata;
 
   const CustomPaystackModel({
     this.planKey,
     this.reference,
-    this.callbackUrl,
+    this.callback_url,
     this.metadata,
   });
 
   CustomPaystackModel copyWith({
     String? planKey,
     String? reference,
-    String? callbackUrl,
+    String? callback_url,
     PaystackMetadataModel? metadata,
   }) =>
       CustomPaystackModel(
         planKey: planKey ?? this.planKey,
         reference: reference ?? this.reference,
-        callbackUrl: callbackUrl ?? this.callbackUrl,
+        callback_url: callback_url ?? this.callback_url,
         metadata: metadata ?? this.metadata,
       );
 
@@ -42,24 +42,24 @@ class CustomPaystackModel extends Equatable {
   List<Object?> get props => [
         planKey,
         reference,
-        callbackUrl,
+        callback_url,
         metadata,
       ];
 }
 
 @JsonSerializable(explicitToJson: true)
 class PaystackMetadataModel extends Equatable {
-  final String? cancelAction;
+  final String? cancel_action;
 
   const PaystackMetadataModel({
-    this.cancelAction,
+    this.cancel_action,
   });
 
   PaystackMetadataModel copyWith({
-    String? cancelAction,
+    String? cancel_action,
   }) =>
       PaystackMetadataModel(
-        cancelAction: cancelAction ?? this.cancelAction,
+        cancel_action: cancel_action ?? this.cancel_action,
       );
 
   factory PaystackMetadataModel.fromJson(Map<String, dynamic> json) =>
@@ -68,7 +68,7 @@ class PaystackMetadataModel extends Equatable {
   Map<String, dynamic> toJson() => _$PaystackMetadataModelToJson(this);
 
   @override
-  List<Object?> get props => [cancelAction];
+  List<Object?> get props => [cancel_action];
 }
 
 @JsonSerializable(explicitToJson: true)

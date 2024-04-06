@@ -59,6 +59,9 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   # flutter_paystack_plus: ^1.2.0
   webview_flutter: ^3.0.4
+  # webview_flutter: ^4.2.4
+  # flutter_paystack_plus:
+  #   path: ../flutter_paystack_plus
 
 dev_dependencies:
   flutter_test:
