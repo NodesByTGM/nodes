@@ -1,13 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'page.dart';
+part of 'custom_page.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Page<T> _$PageFromJson<T extends BaseData>(Map<String, dynamic> json) =>
-    Page<T>(
+CustomPage<T> _$CustomPageFromJson<T extends BaseData>(
+        Map<String, dynamic> json) =>
+    CustomPage<T>(
       currentPage: json['currentPage'] as int?,
       pageSize: json['pageSize'] as int?,
       totalPages: json['totalPages'] as int?,
@@ -15,7 +16,8 @@ Page<T> _$PageFromJson<T extends BaseData>(Map<String, dynamic> json) =>
       items: json['items'] as List<dynamic>?,
     );
 
-Map<String, dynamic> _$PageToJson<T extends BaseData>(Page<T> instance) =>
+Map<String, dynamic> _$CustomPageToJson<T extends BaseData>(
+        CustomPage<T> instance) =>
     <String, dynamic>{
       'currentPage': instance.currentPage,
       'pageSize': instance.pageSize,

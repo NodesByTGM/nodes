@@ -29,8 +29,7 @@ class IndividualProfileScreen extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(0),
                   leading: cachedNetworkImage(
                     // image here...
-                    imgUrl:
-                        "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                    imgUrl: "${user.avatar?.url}",
                     size: 100,
                   ),
                   title: labelText(
@@ -75,23 +74,25 @@ class IndividualProfileScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          ImageUtils.mapLocationIcon,
-                          color: GRAY,
-                        ),
-                        xSpace(width: 5),
-                        subtext(
-                          !isObjectEmpty(user.location)
-                              ? "${user.location}"
-                              : "Location",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: GRAY,
-                        ),
-                      ],
+                    Expanded(
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            ImageUtils.mapLocationIcon,
+                            color: GRAY,
+                          ),
+                          xSpace(width: 5),
+                          subtext(
+                            !isObjectEmpty(user.location)
+                                ? "${user.location}"
+                                : "Location",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: GRAY,
+                          ),
+                        ],
+                      ),
                     ),
                     xSpace(width: 10),
                     Wrap(
@@ -203,7 +204,7 @@ class IndividualProfileScreen extends StatelessWidget {
       iconArr.add(
         iconWithLink(
           onTap: () {},
-          icon: ImageUtils.appIcon,
+          icon: ImageUtils.globeIcon,
         ),
       );
     }

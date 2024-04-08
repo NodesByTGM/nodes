@@ -1,5 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/models/community_post_model.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 
 class CommunityGeneralTab extends StatefulWidget {
   const CommunityGeneralTab({super.key});
@@ -10,9 +19,20 @@ class CommunityGeneralTab extends StatefulWidget {
 
 class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
   TextEditingController msgCtrl = TextEditingController();
+  late ComController comCtrl;
+  late AuthController authCtrl;
+  @override
+  initState() {
+    comCtrl = locator.get<ComController>();
+    authCtrl = locator.get<AuthController>();
+    super.initState();
+    _reloadData();
+  }
 
   @override
   Widget build(BuildContext context) {
+    comCtrl = context.watch<ComController>();
+    authCtrl = context.watch<AuthController>();
     return Container(
       margin: const EdgeInsets.only(top: 40),
       child: ListView(
@@ -52,7 +72,10 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
                   children: [
                     CircleAvatar(
                       backgroundColor: PRIMARY,
-                      child: labelText("JD", color: WHITE),
+                      child: labelText(
+                        getShortName("${authCtrl.currentUser.name}"),
+                        color: WHITE,
+                      ),
                     ),
                     xSpace(width: 10),
                     Expanded(
@@ -159,17 +182,45 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
               ),
             ],
           ),
-          ySpace(height: 40),
-          ySpace(height: 24),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemBuilder: (c, i) {
-              return commentCard();
-            },
-            separatorBuilder: (c, i) => ySpace(height: 20),
+          ySpace(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Consumer<ComController>(
+              builder: (contex, comCtrl, _) {
+                bool isLoading = comCtrl.isFetchingPost;
+                bool hasData = isObjectEmpty(comCtrl.PostList);
+                if (isLoading || isObjectEmpty(comCtrl.PostList)) {
+                  return DataReload(
+                    maxHeight: screenHeight(context) * .19,
+                    isLoading: isLoading,
+                    loader: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: ShimmerLoader(
+                        scrollDirection: Axis.vertical,
+                        width: screenWidth(context),
+                        marginBottom: 10,
+                      ),
+                    ), // Pass the shimmer here...
+                    onTap: () => _reloadData(),
+                    isEmpty: hasData,
+                  );
+                } else {
+                  List<PostModel> posts = comCtrl.PostList;
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(top: 27),
+                    itemCount: posts.length,
+                    itemBuilder: (c, i) {
+                      return commentCard(
+                        post: posts[i],
+                      );
+                    },
+                    separatorBuilder: (c, i) => ySpace(height: 40),
+                  );
+                }
+              },
+            ),
           ),
           ySpace(height: 150),
         ],
@@ -177,7 +228,11 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
     );
   }
 
-  Container commentCard() {
+  void _reloadData() {
+    safeNavigate(() => comCtrl.fetchAllPosts(context));
+  }
+
+  Container commentCard({required PostModel post}) {
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 20,
@@ -206,7 +261,11 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
             children: [
               CircleAvatar(
                 backgroundColor: PRIMARY,
-                child: labelText("JD", color: WHITE),
+                child: labelText(
+                    getShortName(
+                      "${post.author?.name}",
+                    ),
+                    color: WHITE),
               ),
               xSpace(width: 10),
               Expanded(
@@ -214,12 +273,12 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     labelText(
-                      "Aderinsola Adejuwon",
+                      capitalize("${post.author?.name}"),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                     subtext(
-                      shortTime(DateTime.now()),
+                      shortTime(post.createdAt!),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: GRAY,
@@ -268,44 +327,76 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
           GestureDetector(
             onTap: () {},
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 labelText(
-                  "Lorem ipsum dolor sit amet consectetur. Feugiat senectus ut aenean commodo dictum malesuada. Imperdiet orci magnis donec malesuada mi massa magna lectus viverra. Nunc quam congue vulputate etiam dapibus vel suscipit cras pretium. Ut donec vulputate etiam consectetur vel.",
+                  "${post.body}",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   height: 1.5,
                 ),
                 ySpace(height: 20),
-                Container(
-                  width: screenWidth(context),
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: cachedNetworkImage(
-                      imgUrl:
-                          "https://images.pexels.com/photos/13734188/pexels-photo-13734188.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+                if (!isObjectEmpty(post.attachments)) ...[
+                  Container(
+                    width: screenWidth(context),
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 2,
+                        mainAxisSpacing: 2,
+                        crossAxisCount: post.attachments!.length < 2 ? 1 : 2,
+                        // childAspectRatio: 1.92,
+                        childAspectRatio:
+                            post.attachments!.length < 3 ? 1 : 1.92,
+                      ),
+                      itemCount: post.attachments?.length,
+                      itemBuilder: (context, index) {
+                        String url = "${post.attachments?[index].url}";
+                        return GestureDetector(
+                          onTap: () => imagePreviewer(
+                            context,
+                            images: post.attachments!,
+                            index: index,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: cachedNetworkImage(
+                              imgUrl: url,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ),
+                ],
+                ySpace(height: 20),
               ],
             ),
           ),
-          ySpace(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               socialBtn(
-                title: '24',
+                title: '${post.comments?.length}',
                 icon: Icons.chat_bubble_outline_outlined,
                 onTap: () {},
               ),
               socialBtn(
-                title: '29',
+                title: '${post.likes?.length}',
                 icon: Icons.thumb_up_alt_outlined,
-                onTap: () {},
+                onTap: () {
+                  // check if your ID is here, then it means we are unliking... else, we like...
+                  likeUnlikeFn(
+                      post: post,
+                      // check if the current user's ID is found within the likes arr
+                      // If NOT found, then proceed to like. hence true
+                      // If found, then unlike, hence false...
+                      likedPost: post.liked);
+                },
               ),
               socialBtn(
                 title: 'Share',
@@ -356,9 +447,46 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
     );
   }
 
+  likeUnlikeFn({
+    required bool likedPost,
+    required PostModel post,
+  }) async {
+    likedPost
+        ? await comCtrl.unlikeSinglePost(context, post.copyWith(liked: false))
+        : await comCtrl.likeSinglePost(context, post.copyWith(liked: true));
+  }
+
   @override
   void dispose() {
     msgCtrl.dispose();
     super.dispose();
+  }
+
+  imagePreviewer(
+    context, {
+    required List<MediaUploadModel> images,
+    required int index,
+  }) {
+    List<ImageProvider> _arr = [];
+    for (var i in images) {
+      if (!isObjectEmpty(i.url)) {
+        _arr.add(CachedNetworkImageProvider(i.url));
+      }
+    }
+    MultiImageProvider multiImageProvider = MultiImageProvider(_arr);
+
+    showImageViewerPager(
+      context,
+      multiImageProvider,
+      useSafeArea: true,
+      closeButtonColor: RED,
+      backgroundColor: Colors.transparent,
+      onPageChanged: (page) {
+        // print("page changed to $page");
+      },
+      onViewerDismissed: (page) {
+        // print("dismissed while on page $page");
+      },
+    );
   }
 }

@@ -4,7 +4,10 @@ import 'package:logging/logging.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
+import 'package:nodes/core/models/custom_page.dart';
+import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/service/community_service.dart';
+import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
 import 'package:nodes/utilities/utils/utils.dart';
 
@@ -15,14 +18,15 @@ class ComController extends BaseController {
   ComController(this._comService);
 
   // Variables
-  dynamic _currentlyViewedSpace =
-      ""; // This should somehow have the description to denote if it was created by the user or not in the model.
-
+  // This should somehow have the description to denote if it was created by the user or not in the model.
+  dynamic _currentlyViewedSpace = "";
   bool _dummyIsCreatedSpace = false;
+  List<PostModel> _postList = [];
 
   // Getters
   get currentlyViewedSpace => _currentlyViewedSpace;
   bool get dummyIsCreatedSpace => _dummyIsCreatedSpace;
+  List<PostModel> get PostList => _postList;
 
   // Setters
 
@@ -36,15 +40,32 @@ class ComController extends BaseController {
     notifyListeners();
   }
 
+  setPosts(List<PostModel> list) {
+    _postList = list;
+    notifyListeners();
+  }
+
+  updatePostData(PostModel post) {
+    // Fetching the ID of the post
+    int index = _postList.indexWhere((e) => e.id == post.id);
+    if (index > -1) {
+      //  i.e, found something...
+      _postList[index] = post;
+      notifyListeners();
+    } else {
+      showError(message: "Oops!!! Post does not exist again");
+    }
+  }
+
   // set currentUserVal(CurrentSession session) {
   //   notifyListeners();
   // }
 
   // Functions
-  Future<bool> createCommunityPost(dynamic _details) async {
+  Future<bool> createPost(BuildContext ctx, dynamic _details) async {
     setBusy(true);
     try {
-      ApiResponse response = await _comService.createCommunityPost(_details);
+      ApiResponse response = await _comService.createPost(ctx, _details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -59,29 +80,30 @@ class ComController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllCommunityPosts() async {
-    setFetchCommunityPost(true);
+  Future<bool> fetchAllPosts(
+    BuildContext ctx,
+  ) async {
+    setFetchPost(true);
     try {
-      ApiResponse response = await _comService.fetchAllCommunityPosts();
+      ApiResponse response = await _comService.fetchAllPosts(ctx);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: Do Something here...
+      setPosts(_resolvePaginatedPosts(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return false;
     } finally {
-      setFetchCommunityPost(false);
+      setFetchPost(false);
     }
   }
 
-  Future<bool> fetchSingleCommunityPost(dynamic _details) async {
-    setFetchSingleCommunityPost(true);
+  Future<bool> fetchSinglePost(BuildContext ctx, dynamic _details) async {
+    setFetchSinglePost(true);
     try {
-      ApiResponse response =
-          await _comService.fetchSingleCommunityPost(_details);
+      ApiResponse response = await _comService.fetchSinglePost(ctx, _details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -92,45 +114,63 @@ class ComController extends BaseController {
       showError(message: e.toString());
       return false;
     } finally {
-      setFetchSingleCommunityPost(false);
+      setFetchSinglePost(false);
     }
   }
 
-  Future<bool> likeSingleCommunityPost(dynamic _details) async {
-    setLikeUnlikecommunityPost(true);
+  Future<bool> likeSinglePost(BuildContext ctx, PostModel details) async {
+    setLikeUnlikePost(true);
     try {
-      ApiResponse response =
-          await _comService.likeSingleCommunityPost(_details);
+      // This will update the data, whilst waiting for the network feedback, hence emulating the fast update...
+      updatePostData(details);
+      ApiResponse response = await _comService.likeSinglePost(ctx, details.id);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: Do Something here...
+      updatePostData(
+          PostModel.fromJson(response.result as Map<String, dynamic>));
+      // This returns the data for post, so use it to update the postList arr...
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return false;
     } finally {
-      setLikeUnlikecommunityPost(false);
+      setLikeUnlikePost(false);
     }
   }
 
-  Future<bool> unlikeSingleCommunityPost(dynamic _details) async {
-    setLikeUnlikecommunityPost(true);
+  Future<bool> unlikeSinglePost(BuildContext ctx, PostModel details) async {
+    setLikeUnlikePost(true);
     try {
+      // This will update the data, whilst waiting for the network feedback, hence emulating the fast update...
+      updatePostData(details);
       ApiResponse response =
-          await _comService.unlikeSingleCommunityPost(_details);
+          await _comService.unlikeSinglePost(ctx, details.id);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: Do Something here...
+      updatePostData(
+          PostModel.fromJson(response.result as Map<String, dynamic>));
+      // This returns the data for post, so use it to update the postList arr...
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return false;
     } finally {
-      setLikeUnlikecommunityPost(false);
+      setLikeUnlikePost(false);
     }
+  }
+
+// Handling Paginated Data...
+  List<PostModel> _resolvePaginatedPosts(ApiResponse response) {
+    CustomPage<PostModel> p = const CustomPage<PostModel>()
+        .fromJson(response.result as Map<String, dynamic>, const PostModel());
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<PostModel>;
+    }
+    return [];
   }
 }

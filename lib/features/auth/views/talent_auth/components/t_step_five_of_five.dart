@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -183,34 +184,35 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
       // 1. Upload the image to server, retrieve the url.
 
       // convert the avatar to binary
-      Uint8List imageByte = await convertFileToBytes(
+      String imageByte = await convertFileToString(
           "${_authCtrl.individualTalentData.avatarFilePath}");
 
       // String? imageUrl = await _authCtrl.mediaUpload(
       //   File("${_authCtrl.individualTalentData.avatarFilePath}"),
       // );
 
-      String? imageUrl = await _authCtrl.mediaUpload(imageByte);
-      if (isObjectEmpty(imageUrl)) {
-        showError(
-            message:
-                "Oops!! an error occured while uploading you image, try again");
-        return;
-      }
-      bool done = await _authCtrl.individualOnboarding({
-        "skills": _authCtrl.individualTalentData.skills,
-        "location": _authCtrl.individualTalentData.location,
-        "avatar": imageUrl,
-        "linkedIn": _authCtrl.individualTalentData.linkedIn,
-        "instagram": _authCtrl.individualTalentData.instagram,
-        "twitter": _authCtrl.individualTalentData.twitter,
-        "otherPurpose": _authCtrl.individualTalentData.otherPurpose,
-        "step": 5, // Meaning we have completed the onboarding process...
-        "onboardingPurpose": _authCtrl.individualTalentData.onboardingPurpose,
-        "onboardingPurposes": _authCtrl.individualTalentData.onboardingPurposes
-      });
-      if (done && mounted) {
-        navigateAndClearPrev(context, PricePlanScreen.routeName);
+      MediaUploadModel? imageUrl = await _authCtrl.mediaUpload(imageByte);
+      if (!isObjectEmpty(imageUrl)) {
+        // showError(
+        //     message:
+        //         "Oops!! an error occured while uploading you image, try again");
+        // return;
+        bool done = await _authCtrl.individualOnboarding({
+          "skills": _authCtrl.individualTalentData.skills,
+          "location": _authCtrl.individualTalentData.location,
+          "avatar": imageUrl?.toJson(),
+          "linkedIn": _authCtrl.individualTalentData.linkedIn,
+          "instagram": _authCtrl.individualTalentData.instagram,
+          "twitter": _authCtrl.individualTalentData.twitter,
+          "otherPurpose": _authCtrl.individualTalentData.otherPurpose,
+          "step": 5, // Meaning we have completed the onboarding process...
+          "onboardingPurpose": _authCtrl.individualTalentData.onboardingPurpose,
+          "onboardingPurposes":
+              _authCtrl.individualTalentData.onboardingPurposes
+        });
+        if (done && mounted) {
+          navigateAndClearPrev(context, PricePlanScreen.routeName);
+        }
       }
 
       // Comment out for now...

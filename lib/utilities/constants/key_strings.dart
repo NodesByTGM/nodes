@@ -21,4 +21,8 @@ class KeyString {
   static const savesScreen = "Saves";
   static const accountSettingsScreen = "Account settings";
   static const ngn = "NGN";
+  static const pro = "Pro";
+  static const bus = "Business";
+  static const month = "month";
+  static const year = "year";
 }

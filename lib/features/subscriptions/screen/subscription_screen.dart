@@ -1,4 +1,6 @@
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/subscriptions/screen/proceed_with_payment_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/tag_chip.dart';
@@ -13,6 +15,15 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  int planIndex = 0;
+  double proAmt = 7900;
+  double businessAmt = 19800;
+  //
+  double talentProPlanAmt = 7900;
+  double talentOngoingProPlanAmt = 89800;
+  double businessPlanAmt = 19800;
+  double businessOngoingPlanAmt = 214800;
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -31,18 +42,39 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           textAlign: TextAlign.center,
         ),
         ySpace(height: 32),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            planTabHeader(
+              title: "Monthly billing",
+              isActive: planIndex == 0,
+              onTap: () {
+                setState(() {
+                  planIndex = 0;
+                  updateAmt();
+                });
+              },
+            ),
+            planTabHeader(
+              title: "Yearly billing",
+              isActive: planIndex == 1,
+              onTap: () {
+                setState(() {
+                  planIndex = 1;
+                  updateAmt();
+                });
+              },
+            ),
+          ],
+        ),
+        ySpace(height: 32),
         SubscriptionCard(
           type: "Pro",
           description: "One sentence  supporting text",
-          price: 7900,
+          price: formatCurrencyAmount(Constants.naira, proAmt),
+          planIndex: planIndex,
           isRecommended: true,
-          features: const [
-            "Enhanced Visibility",
-            "Access to Premium Jobs 1",
-            "Expanded Project Showcase",
-            "Access to GridTools Discovery Pack (Free)",
-            "Advanced Analytics and Insights ",
-          ],
+          features: Constants.proFeatures,
           onTap: () => submit(isPro: true),
           btnText: "Upgrade Plan",
         ),
@@ -50,15 +82,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         SubscriptionCard(
           type: "Business",
           description: "One sentence  supporting text",
-          price: 19800,
+          price: formatCurrencyAmount(Constants.naira, businessAmt),
+          planIndex: planIndex,
           isRecommended: false,
-          features: const [
-            "Premium Talent Pool Access",
-            "Featured Job Listings",
-            "Analytics and Performance Metrics",
-            "Access to GridTools Discovery Pack (Free)",
-            "Promotion and Marketing Opportunities ",
-          ],
+          features: Constants.businessFeatures,
           onTap: () => submit(isPro: false),
           btnText: "Upgrade Plan",
         ),
@@ -66,8 +93,55 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 
+  updateAmt() {
+    if (planIndex == 0) {
+      setState(() {
+        proAmt = 7900;
+        businessAmt = 19800;
+      });
+    } else {
+      setState(() {
+        proAmt = 89800;
+        businessAmt = 214800;
+      });
+    }
+  }
+
+  GestureDetector planTabHeader({
+    required String title,
+    required bool isActive,
+    required GestureCancelCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Wrap(
+        spacing: 10,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          SvgPicture.asset(
+            isActive ? ImageUtils.radioSelected : ImageUtils.radioUnselected,
+          ),
+          labelText(
+            title,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ],
+      ),
+    );
+  }
+
   submit({required bool isPro}) {
     // Save the upgrade type/data, either pro or business
+    context.read<AuthController>().setSubUpgrade(
+          SubscriptionUpgrade(
+            type: isPro ? KeyString.pro : KeyString.bus,
+            amount: isPro ? proAmt : businessAmt,
+            period: planIndex == 0 ? KeyString.month : KeyString.year,
+            features:
+                isPro ? Constants.proFeatures : Constants.businessFeatures,
+          ),
+        );
     context.read<NavController>().updatePageListStack(
           ProceedWithPayment.routeName,
         );
@@ -84,15 +158,17 @@ class SubscriptionCard extends StatelessWidget {
     required this.features,
     required this.onTap,
     required this.btnText,
+    required this.planIndex,
   });
 
   final String type;
   final String description;
-  final double price;
+  final String price;
   final bool isRecommended;
   final List<String> features;
   final GestureCancelCallback onTap;
   final String btnText;
+  final int planIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -140,13 +216,13 @@ class SubscriptionCard extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               labelText(
-                formatCurrencyAmount(Constants.naira, price),
+                price,
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
                 color: PRIMARY,
               ),
               subtext(
-                "/month",
+                "/${planIndex == 0 ? 'month' : 'year'}",
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
               ),

@@ -19,9 +19,9 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
 
   @override
   void initState() {
-    safeNavigate(() => context.read<DashboardController>().fetchAllSavedJobs());
+    safeNavigate(() => context.read<DashboardController>().fetchAllSavedJobs(context));
     safeNavigate(
-        () => context.read<DashboardController>().fetchAllSavedEvents());
+        () => context.read<DashboardController>().fetchAllSavedEvents(context));
     super.initState();
   }
 

@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names, implementation_imports, prefer_generic_function_type_aliases
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -55,7 +56,8 @@ closeKeyPad(BuildContext context) {
 
 // Time/Date Formatters
 
-String shortTime(DateTime now) => Jiffy.now().fromNow();
+// String shortTime(DateTime now) => Jiffy.now().fromNow();
+String shortTime(DateTime now) => Jiffy.parseFromDateTime(now).fromNow();
 String formatDateOnly(DateTime now) => DateFormat.yMMMEd().format(now);
 String formatDate(DateTime now) => DateFormat('yMd').format(now);
 String fullDate(DateTime now) => DateFormat('d MMMM, y').format(now);
@@ -370,6 +372,41 @@ cachedNetworkImage({
     errorWidget: (context, url, error) => empty,
   );
 }
+
+// ccachedNetworkImage({
+//   required String imgUrl,
+//   EdgeInsets? margin,
+//   double size = 50,
+//   double borderRadius = 5,
+// }) {
+//   final empty = Container(
+//     decoration: BoxDecoration(
+//       color: Colors.grey,
+//       // shape: shape,
+//       borderRadius: BorderRadius.circular(borderRadius),
+//       border: Border.all(width: 1, color: Colors.white),
+//     ),
+//   );
+//   return CachedNetworkImageProvider(imgUrl,
+//     // imageBuilder: (context, imageProvider) => Container(
+//     //   margin: const EdgeInsets.only(left: 0, top: 0),
+//     //   decoration: BoxDecoration(
+//     //     // shape: shape,
+//     //     borderRadius: BorderRadius.circular(borderRadius),
+//     //     border: Border.all(width: 1, color: Colors.white),
+//     //     image: DecorationImage(
+//     //       image: imageProvider,
+//     //       fit: BoxFit.cover,
+//     //     ),
+//     //   ),
+//     // ),
+//     // fit: BoxFit.cover,
+//     // width: size,
+//     // height: size,
+//     // placeholder: (context, url) => const Loader(),
+//     // errorWidget: (context, url, error) => empty,
+//   );
+// }
 
 Future<File?> selectImageFromGallery() async {
   var selectedImage =
@@ -797,5 +834,8 @@ Container analyticsCard({
   );
 }
 
-Future<Uint8List> convertFileToBytes(String filePath) async =>
-    await File(filePath).readAsBytes();
+Future<String> convertFileToString(String filePath) async =>
+    "data:image/png;base64,${base64Encode(await (File(filePath).readAsBytes()))}";
+
+
+  String getShortName(String name) =>  name.substring(0, 2).toUpperCase();

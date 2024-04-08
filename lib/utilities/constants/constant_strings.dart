@@ -20,4 +20,24 @@ class Constants {
     'Contract',
     'Remote',
   ];
+  static const standardFeatures = [
+    "Access to nodes community",
+    "Networking opportunities",
+    "Stay informed on creative trends and movies",
+  ];
+  static const proFeatures = [
+    "Everything on the standard plan",
+    "Access to events",
+    "Enhanced visibility",
+    "Access to premium jobs",
+    "Expanded project showcase",
+    "Advanced analytics & insights",
+    "Access to Gridtools Discovery Pack (Free)",
+  ];
+  static const businessFeatures = [
+    "Everything on the pro plan",
+    "Premium talent pool access",
+    "Featured job listings",
+    "Promotion and marketing opportunities",
+  ];
 }

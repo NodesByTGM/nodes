@@ -1,8 +1,10 @@
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
+import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
@@ -150,7 +152,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         onTap: () {
                           closeDrawer();
                           navCtrl.updatePageListStack(
-                            NodeSpacesScreen.routeName,
+                            // NodeSpacesScreen.routeName,
+                            // Starting with Community as an MVP
+                            NodeCommunityScreen.routeName,
                           );
                         },
                       ),
@@ -220,6 +224,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             navCtrl, KeyString.upgradeToProScreen),
                         onTap: () {
                           closeDrawer();
+                          context.read<AuthController>().setSubUpgrade(
+                                const SubscriptionUpgrade(
+                                  type: KeyString.pro,
+                                  amount: 7900,
+                                  period: KeyString.month,
+                                  features: Constants.proFeatures,
+                                ),
+                              );
                           navCtrl.updatePageListStack(
                             ProceedWithPayment.routeName,
                             // get the pro/talent data passed to it.. or just look for another way of passing data bro

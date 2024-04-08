@@ -133,7 +133,6 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
     switch (currentIndex) {
       case 0:
         return const JobDetails(
-          isFromBusiness: true,
           job: JobModel(),
         );
       case 1:
@@ -142,7 +141,6 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
         return const JobAnalytics();
       default:
         return const JobDetails(
-          isFromBusiness: true,
           job: JobModel(),
         );
     }

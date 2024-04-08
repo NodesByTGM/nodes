@@ -4,9 +4,9 @@ import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
+import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/paystack_webview.dart';
 
 class ProceedWithPayment extends StatefulWidget {
@@ -23,20 +23,16 @@ class ProceedWithPayment extends StatefulWidget {
 class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   late AuthController authCtrl;
   late NavController navCtrl;
+  late SubscriptionUpgrade subUpgrade;
   bool seeMore = false;
 
-  List<String> features = [
-    "Premium Talent Pool Access",
-    "Featured Job Listings",
-    "Analytics and Performance Metrics",
-    "Access to GridTools Discovery Pack (Free)",
-    "Promotion and Marketing Opportunities ",
-  ];
+  // Send the subscription type, month or year, amount, description.
 
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
     navCtrl = locator.get<NavController>();
+    subUpgrade = authCtrl.subUpgrade;
     super.initState();
   }
 
@@ -44,7 +40,6 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
     navCtrl = context.watch<NavController>();
-
     return Stack(
       children: [
         ListView(
@@ -74,13 +69,13 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   labelText(
-                    "Pro",
+                    "${subUpgrade.type}",
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                   ySpace(height: 16),
                   subtext(
-                    "One sentence supporting text",
+                    subUpgrade.description ?? '',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
@@ -90,13 +85,14 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       labelText(
-                        formatCurrencyAmount(Constants.naira, 7600),
+                        formatCurrencyAmount(
+                            Constants.naira, subUpgrade.amount!),
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         color: PRIMARY,
                       ),
                       subtext(
-                        "/month",
+                        "/${subUpgrade.period}",
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
@@ -140,7 +136,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
             ),
             ySpace(height: 40),
             OutlineBtn(
-              onPressed: () => _paystackPayment(busMonthlySub),
+              onPressed: () => _paystackPayment(),
               // to be controlled dynamically later...
               borderColor: BORDER,
               leftIcon: Image.asset(
@@ -181,9 +177,9 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   }
 
   getFeatures() {
-    if (isObjectEmpty(features)) return Container();
+    if (isObjectEmpty(subUpgrade.features)) return Container();
     List<Widget> _ = [];
-    for (var f in features) {
+    for (var f in (subUpgrade.features!)) {
       _.add(ListTile(
         contentPadding: const EdgeInsets.all(0),
         visualDensity: VisualDensity.compact,
@@ -202,24 +198,24 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
     return _;
   }
 
-  _paystackPayment(String type) async {
+  _paystackPayment() async {
     var ref =
         "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
-    // var ref = "t5o5vnfu13";
 
     try {
       // Make the call to the API, get the auth token.
       CustomPaystackResModel? paystackRes = await authCtrl.getPaystackAuthUrl(
+        context,
         CustomPaystackModel(
           reference: ref,
           callback_url: tGMWebsite,
           // SubscriptionPlanKeys.business
-          planKey: busYearlySub,
+          planKey: getSubscriptPlanKey(),
           metadata: const PaystackMetadataModel(
-              cancel_action: paystackCancelActionUrl),
+            cancel_action: paystackCancelActionUrl,
+          ),
         ),
       );
-      print("George....we here now ${paystackRes?.toJson()}");
       if (!isObjectEmpty(paystackRes) && mounted) {
         bool res = await Navigator.of(context).push<dynamic>(
           MaterialPageRoute<void>(
@@ -229,8 +225,8 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
             ),
           ),
         );
-        if (!res && mounted) {
-          // Call the verification ENDPOINT...
+        if (res && mounted) {
+          _onSuccessfulPaystackPayment(ref);
         }
       }
     } catch (e) {
@@ -239,9 +235,24 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
     }
   }
 
-  _onSuccessfulPaystackPayment({
-    required String ref,
-    required int totalAmt,
-    required PaymentStatus paymentStatus,
-  }) async {}
+  _onSuccessfulPaystackPayment(ref) async {
+    bool done = await authCtrl.verifyAndUpgradeSubscription(ref);
+    if (done && mounted) {
+      //
+    } else {
+      // Sorta send the ref to BE, so as to document and track this payment...
+    }
+  }
+
+  getSubscriptPlanKey() {
+    if (subUpgrade.type == KeyString.pro) {
+      return subUpgrade.period == KeyString.month
+          ? talentMonthlySub
+          : talentYearlySub;
+    } else {
+      return subUpgrade.period == KeyString.month
+          ? busMonthlySub
+          : busYearlySub;
+    }
+  }
 }

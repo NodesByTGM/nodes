@@ -19,6 +19,9 @@ class NodeCommunityScreen extends StatefulWidget {
 class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
   int currentTabIndex = 0;
 
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,9 +50,10 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
                     Expanded(
                       child: SubmitBtn(
                         onPressed: () {
-                          context
-                              .read<NavController>()
-                              .updatePageListStack(NodeSpacesScreen.routeName);
+                          // context
+                          //     .read<NavController>()
+                          //     .updatePageListStack(NodeSpacesScreen.routeName);
+                          showSuccess(message: "Coming Soon");
                         },
                         title: btnTxt(
                           "See spaces",

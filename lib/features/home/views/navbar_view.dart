@@ -198,7 +198,7 @@ class _NavbarViewState extends State<NavbarView> {
 }
 
 void logout(BuildContext context) async {
-  bool done = await context.read<AuthController>().serverLogout();
+  bool done = await context.read<AuthController>().serverLogout(context);
   if (done) {
     context.read<AuthController>().logout();
     // context.read<NavController>().resetValues();

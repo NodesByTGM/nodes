@@ -32,7 +32,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/projects',
+              'https://dev.api.nodesafrica.com/api/v1/projects',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -59,7 +59,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/projects',
+              'https://dev.api.nodesafrica.com/api/v1/projects',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -73,7 +73,7 @@ class _ComRepository implements ComRepository {
   }
 
   @override
-  Future<ApiResponse> createCommunityPost(dynamic payload) async {
+  Future<ApiResponse> createPost(dynamic payload) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -86,7 +86,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/community/posts/',
+              'https://dev.api.nodesafrica.com/api/v1/posts',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -100,7 +100,7 @@ class _ComRepository implements ComRepository {
   }
 
   @override
-  Future<ApiResponse> fetchAllCommunityPosts() async {
+  Future<ApiResponse> fetchAllPosts() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -113,7 +113,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/community/posts/',
+              'https://dev.api.nodesafrica.com/api/v1/posts',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -127,7 +127,7 @@ class _ComRepository implements ComRepository {
   }
 
   @override
-  Future<ApiResponse> fetchSingleCommunityPost(String id) async {
+  Future<ApiResponse> fetchSinglePost(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -140,7 +140,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/community/posts/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/posts/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -154,7 +154,7 @@ class _ComRepository implements ComRepository {
   }
 
   @override
-  Future<ApiResponse> likeSingleCommunityPost(String id) async {
+  Future<ApiResponse> likeSinglePost(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -167,7 +167,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/community/posts/like/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/posts/like/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -181,7 +181,7 @@ class _ComRepository implements ComRepository {
   }
 
   @override
-  Future<ApiResponse> unlikeSingleCommunityPost(String id) async {
+  Future<ApiResponse> unlikeSinglePost(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -194,7 +194,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/community/posts/like/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/posts/unlike/${id}',
               queryParameters: queryParameters,
               data: _data,
             )

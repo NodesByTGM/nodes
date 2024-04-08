@@ -84,7 +84,6 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                   itemCount: 10,
                   itemBuilder: (c, i) {
                     return const JobCard(
-                      isFromBusiness: true,
                       job: JobModel(),
                     );
                   },

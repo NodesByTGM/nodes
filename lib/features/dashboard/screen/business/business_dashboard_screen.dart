@@ -181,7 +181,6 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     },
                     itemBuilder: (context, index) {
                       return const JobCard(
-                        isFromBusiness: true,
                         job: JobModel(),
                       );
                     },

@@ -9,9 +9,9 @@ abstract class BaseController extends ChangeNotifier {
   bool _searching = false;
   bool _isVerifyOTP = false;
   bool _isUploadingMedia = false;
-  bool _likeUnlikecommunityPost = false;
-  bool _isFetchingCommunityPost = false;
-  bool _isFetchingSingleCommunityPost = false;
+  bool _likeUnlikePost = false;
+  bool _isFetchingPost = false;
+  bool _isFetchingSinglePost = false;
   bool _isFetchingSpaces = false;
   bool _isFetchingSingleSpace = false;
   bool _isUpdatingSingleSpace = false;
@@ -49,9 +49,9 @@ bool _isCreatingEvent = false;
   bool get searching => _searching;
   bool get verifyOTPStatus => _isVerifyOTP;
   bool get isUploadingMedia => _isUploadingMedia;
-  bool get likeUnlikecommunityPost => _likeUnlikecommunityPost;
-  bool get isFetchingCommunityPost => _isFetchingCommunityPost;
-  bool get isFetchingSingleCommunityPost => _isFetchingSingleCommunityPost;
+  bool get likeUnlikePost => _likeUnlikePost;
+  bool get isFetchingPost => _isFetchingPost;
+  bool get isFetchingSinglePost => _isFetchingSinglePost;
   bool get isFetchingSpaces => _isFetchingSpaces;
   bool get isFetchingSingleSpace => _isFetchingSingleSpace;
   bool get isUpdatingSingleSpace => _isUpdatingSingleSpace;
@@ -108,18 +108,18 @@ bool get isCreatingEvent => _isCreatingEvent;
     notifyListeners();
   }
 
-  setLikeUnlikecommunityPost(bool value) {
-    _likeUnlikecommunityPost = value;
+  setLikeUnlikePost(bool value) {
+    _likeUnlikePost = value;
     notifyListeners();
   }
 
-  setFetchCommunityPost(bool value) {
-    _isFetchingCommunityPost = value;
+  setFetchPost(bool value) {
+    _isFetchingPost = value;
     notifyListeners();
   }
 
-  setFetchSingleCommunityPost(bool value) {
-    _isFetchingSingleCommunityPost = value;
+  setFetchSinglePost(bool value) {
+    _isFetchingSinglePost = value;
     notifyListeners();
   }
 

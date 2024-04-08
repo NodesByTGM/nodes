@@ -203,7 +203,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     closeKeyPad(context);
     // navigateTo(context, NavbarView.routeName); // Uncomment for testings only
     if (formKey.currentState!.saveAndValidate()) {
-      dynamic res = await context.read<AuthController>().login(
+      bool res = await context.read<AuthController>().login(
         {
           "email": "niweb33325@nimadir.com",
           "password": "Test@1234",
@@ -211,7 +211,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
       );
       // var res = "";
 
-      if (!isObjectEmpty(res) && mounted) {
+      if (res && mounted) {
         safeNavigate(() {
           formKey.currentState!.reset();
           navigateAndClearPrev(context, NavbarView.routeName);

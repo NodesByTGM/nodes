@@ -27,19 +27,18 @@ class SavedJobs extends StatelessWidget {
                 marginBottom: 10,
               ),
             ), // Pass the shimmer here...
-            onTap: () => _reloadData(),
+            onTap: () => _reloadData(context),
             isEmpty: hasData,
           );
         } else {
-          List<JobModel> savedJobs = dashCtrl.savedJobs;
+          List<SavedJobModel> savedJobs = dashCtrl.savedJobs;
           return ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.only(top: 27),
             itemCount: savedJobs.length,
             itemBuilder: (c, i) {
-              return JobCard(
-                isSaved: true,
+              return SavedJobCard(
                 job: savedJobs[i],
               );
             },
@@ -50,7 +49,7 @@ class SavedJobs extends StatelessWidget {
     );
   }
 
-  void _reloadData() {
-    safeNavigate(() => locator.get<DashboardController>().fetchAllSavedJobs());
+  void _reloadData(BuildContext context) {
+    safeNavigate(() => locator.get<DashboardController>().fetchAllSavedJobs(context));
   }
 }

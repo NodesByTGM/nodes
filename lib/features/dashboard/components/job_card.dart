@@ -158,8 +158,8 @@ class JobCard extends StatelessWidget {
 
   saveUnsaveJob(BuildContext context, JobModel job) async {
     job.saved
-        ? await context.read<DashboardController>().unSaveJob(job.id)
-        : await context.read<DashboardController>().saveJob(job.id);
+        ? await context.read<DashboardController>().unSaveJob(context,job.id)
+        : await context.read<DashboardController>().saveJob(context,job.id);
   }
 
   showJobDetailsBottomSheet(BuildContext context, JobModel job) {
@@ -185,6 +185,173 @@ class JobCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
               child: JobDetails(job: job),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class SavedJobCard extends StatelessWidget {
+  const SavedJobCard({
+    super.key,
+    required this.job,
+  });
+
+  final SavedJobModel job;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(width: 1, color: BORDER),
+        color: WHITE,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 16.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  ImageUtils.jobDpIcon,
+                  height: 72,
+                ),
+                // SvgPicture.asset(isSaved
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    context.watch<DashboardController>().isSavingUnsavedJobs
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 10, right: 15),
+                            child: SaveIconLoader(),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              saveUnsaveJob(context, job);
+                            },
+                            child: SvgPicture.asset(job.saved
+                                ? ImageUtils.saveJobFilledIcon
+                                : ImageUtils.saveJobIcon),
+                          ),
+                  ],
+                ),
+              ],
+            ),
+            ySpace(height: 16),
+            labelText(
+              capitalize("${job.name}"),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              maxLine: 1,
+            ),
+            ySpace(height: 16),
+            subtext(
+              "${job.business?.name}",
+              fontSize: 14,
+            ),
+            ySpace(height: 16),
+            Wrap(
+              spacing: 5,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                const Icon(Icons.credit_card_sharp),
+                subtext(
+                  // "\$10-1k/hr",
+                  "${job.payRate}",
+                  fontSize: 14,
+                ),
+              ],
+            ),
+            ySpace(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Wrap(
+                  spacing: 5,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Icon(Icons.calendar_today_outlined),
+                    subtext(
+                      // "\$20 hrs/wk",
+                      "${job.workRate}",
+                      fontSize: 14,
+                    ),
+                  ],
+                ),
+                Wrap(
+                  spacing: 5,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.location_on_outlined,
+                    ),
+                    subtext(
+                      "Lagos | Nigeria",
+                      fontSize: 14,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            ySpace(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () => showJobDetailsBottomSheet(context, job),
+                  child: labelText(
+                    "View job",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: PRIMARY,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  saveUnsaveJob(BuildContext context, SavedJobModel job) async {
+    job.saved
+        ? await context.read<DashboardController>().unSaveJob(context,job.id)
+        : await context.read<DashboardController>().saveJob(context,job.id);
+  }
+
+  showJobDetailsBottomSheet(BuildContext context, SavedJobModel job) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return BottomSheetWrapper(
+              closeOnTap: true,
+              title: labelText(
+                "${job.name}",
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+              child: SavedJobDetails(job: job),
             );
           },
         );

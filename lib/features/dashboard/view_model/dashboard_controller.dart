@@ -1,10 +1,12 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
+// import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
-import 'package:nodes/core/models/page.dart';
+import 'package:nodes/core/models/custom_page.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/features/saves/models/job_model.dart';
@@ -18,12 +20,16 @@ class DashboardController extends BaseController {
   DashboardController(this._dashboardService);
 
   // Variables
-  List<JobModel> _savedJobsList = [];
+  List<SavedJobModel> _savedJobsList = [];
+  List<JobModel> _jobsList = [];
   List<EventModel> _savedEventsList = [];
+  List<EventModel> _eventsList = [];
 
   // Getters
-  List<JobModel> get savedJobs => _savedJobsList;
+  List<SavedJobModel> get savedJobs => _savedJobsList;
+  List<JobModel> get jobsList => _jobsList;
   List<EventModel> get savedEvents => _savedEventsList;
+  List<EventModel> get eventsList => _eventsList;
 
   // Setters
 
@@ -32,8 +38,13 @@ class DashboardController extends BaseController {
   //   notifyListeners();
   // }
 
-  setSavedJobs(List<JobModel> jobs) {
+  setSavedJobs(List<SavedJobModel> jobs) {
     _savedJobsList = jobs;
+    notifyListeners();
+  }
+
+  setJobsList(List<JobModel> jobs) {
+    _jobsList = jobs;
     notifyListeners();
   }
 
@@ -42,14 +53,19 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
+  setEventsList(List<EventModel> events) {
+    _eventsList = events;
+    notifyListeners();
+  }
+
   // Functions
 
   // Events
 
-  Future<bool> createEvent(dynamic payload) async {
+  Future<bool> createEvent(BuildContext ctx, dynamic payload) async {
     setCreatingEvent(true);
     try {
-      ApiResponse response = await _dashboardService.createEvent(payload);
+      ApiResponse response = await _dashboardService.createEvent(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -64,13 +80,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllEvents({
+  Future<bool> fetchAllEvents(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllEvents(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllEvents(
+      ApiResponse response = await _dashboardService.fetchAllEvents(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -78,7 +94,7 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      setEventsList(_resolvePaginatedEvents(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -88,10 +104,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchSingleEvent(dynamic payload) async {
+  Future<bool> fetchSingleEvent(BuildContext ctx, dynamic payload) async {
     setFetchingSingleEvent(true);
     try {
-      ApiResponse response = await _dashboardService.fetchSingleEvent(payload);
+      ApiResponse response = await _dashboardService.fetchSingleEvent(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -106,13 +122,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> updateSingleEvent({
+  Future<bool> updateSingleEvent(BuildContext ctx, {
     required dynamic id,
     required dynamic payload,
   }) async {
     setUpdatingEvent(true);
     try {
-      ApiResponse response = await _dashboardService.updateSingleEvent(
+      ApiResponse response = await _dashboardService.updateSingleEvent(ctx,
         id: id,
         payload: payload,
       );
@@ -130,10 +146,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> deleteSingleEvent(dynamic payload) async {
+  Future<bool> deleteSingleEvent(BuildContext ctx, dynamic payload) async {
     setDeleteEvent(true);
     try {
-      ApiResponse response = await _dashboardService.deleteSingleEvent(payload);
+      ApiResponse response = await _dashboardService.deleteSingleEvent(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -148,10 +164,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> saveEvent(dynamic payload) async {
+  Future<bool> saveEvent(BuildContext ctx, dynamic payload) async {
     setSavedUnsavedEvent(true);
     try {
-      ApiResponse response = await _dashboardService.saveEvent(payload);
+      ApiResponse response = await _dashboardService.saveEvent(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -166,10 +182,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> unSaveEvent(dynamic payload) async {
+  Future<bool> unSaveEvent(BuildContext ctx, dynamic payload) async {
     setSavedUnsavedEvent(true);
     try {
-      ApiResponse response = await _dashboardService.unSaveEvent(payload);
+      ApiResponse response = await _dashboardService.unSaveEvent(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -184,13 +200,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllSavedEvents({
+  Future<bool> fetchAllSavedEvents(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllSavedEvents(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllSavedEvents(
+      ApiResponse response = await _dashboardService.fetchAllSavedEvents(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -198,7 +214,7 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      setSavedEvents(_resolvePaginatedSavedEvents(response));
+      setSavedEvents(_resolvePaginatedEvents(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -208,13 +224,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllAllMyCreatedEvents({
+  Future<bool> fetchAllAllMyCreatedEvents(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllCreatedEvents(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllAllMyCreatedEvents(
+      ApiResponse response = await _dashboardService.fetchAllAllMyCreatedEvents(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -234,10 +250,10 @@ class DashboardController extends BaseController {
 
   // Jobs
 
-  Future<bool> createJob(dynamic payload) async {
+  Future<bool> createJob(BuildContext ctx, dynamic payload) async {
     setCreatingJob(true);
     try {
-      ApiResponse response = await _dashboardService.createJob(payload);
+      ApiResponse response = await _dashboardService.createJob(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -252,13 +268,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllJobs({
+  Future<bool> fetchAllJobs(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllJobs(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllJobs(
+      ApiResponse response = await _dashboardService.fetchAllJobs(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -266,7 +282,7 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      setJobsList(_resolvePaginatedJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -276,10 +292,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchSingleJob(dynamic payload) async {
+  Future<bool> fetchSingleJob(BuildContext ctx, dynamic payload) async {
     setFetchingSingleJob(true);
     try {
-      ApiResponse response = await _dashboardService.fetchSingleJob(payload);
+      ApiResponse response = await _dashboardService.fetchSingleJob(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -294,13 +310,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> updateSingleJob({
+  Future<bool> updateSingleJob(BuildContext ctx, {
     required dynamic id,
     required dynamic payload,
   }) async {
     setUpdatingJob(true);
     try {
-      ApiResponse response = await _dashboardService.updateSingleJob(
+      ApiResponse response = await _dashboardService.updateSingleJob(ctx,
         id: id,
         payload: payload,
       );
@@ -318,10 +334,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> deleteSingleJob(dynamic payload) async {
+  Future<bool> deleteSingleJob(BuildContext ctx, dynamic payload) async {
     setDeleteJob(true);
     try {
-      ApiResponse response = await _dashboardService.deleteSingleJob(payload);
+      ApiResponse response = await _dashboardService.deleteSingleJob(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
@@ -336,15 +352,16 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> applyForJob(dynamic payload) async {
+  Future<bool> applyForJob(BuildContext ctx, dynamic payload) async {
     setApplyingForJob(true);
     try {
-      ApiResponse response = await _dashboardService.applyForJob(payload);
+      ApiResponse response = await _dashboardService.applyForJob(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
       // TODO: Do Something here...
+      // Add the applicant to the Applied arr...
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -354,15 +371,16 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> saveJob(dynamic payload) async {
+  Future<bool> saveJob(BuildContext ctx, dynamic payload) async {
     setSavedUnsavedJob(true);
     try {
-      ApiResponse response = await _dashboardService.saveJob(payload);
+      ApiResponse response = await _dashboardService.saveJob(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
       // TODO: Do Something here...
+      // Add the applicant to the saved arr.
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -372,15 +390,16 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> unSaveJob(dynamic payload) async {
+  Future<bool> unSaveJob(BuildContext ctx, dynamic payload) async {
     setSavedUnsavedJob(true);
     try {
-      ApiResponse response = await _dashboardService.unSaveJob(payload);
+      ApiResponse response = await _dashboardService.unSaveJob(ctx,payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      // Remove the applicant from the saved arr.
+      print("George, here is the unSaveJob response: ${response.toJson()}");
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -390,13 +409,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllSavedJobs({
+  Future<bool> fetchAllSavedJobs(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllSavedJobs(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllSavedJobs(
+      ApiResponse response = await _dashboardService.fetchAllSavedJobs(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -414,13 +433,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllAppliedJobs({
+  Future<bool> fetchAllAppliedJobs(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllAppliedJobs(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllAppliedJobs(
+      ApiResponse response = await _dashboardService.fetchAllAppliedJobs(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -438,13 +457,13 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllMyCreatedJobs({
+  Future<bool> fetchAllMyCreatedJobs(BuildContext ctx, {
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchingAllCreatedJobs(true);
     try {
-      ApiResponse response = await _dashboardService.fetchAllMyCreatedJobs(
+      ApiResponse response = await _dashboardService.fetchAllMyCreatedJobs(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -463,8 +482,18 @@ class DashboardController extends BaseController {
   }
 
 // Handling Paginated Data...
-  List<JobModel> _resolvePaginatedSavedJobs(ApiResponse response) {
-    Page<JobModel> p = const Page<JobModel>()
+  List<SavedJobModel> _resolvePaginatedSavedJobs(ApiResponse response) {
+    CustomPage<SavedJobModel> p = const CustomPage<SavedJobModel>().fromJson(
+        response.result as Map<String, dynamic>, const SavedJobModel());
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<SavedJobModel>;
+    }
+    return [];
+  }
+
+  List<JobModel> _resolvePaginatedJobs(ApiResponse response) {
+    CustomPage<JobModel> p = const CustomPage<JobModel>()
         .fromJson(response.result as Map<String, dynamic>, const JobModel());
 
     if (!isObjectEmpty(p.items)) {
@@ -473,8 +502,8 @@ class DashboardController extends BaseController {
     return [];
   }
 
-  List<EventModel> _resolvePaginatedSavedEvents(ApiResponse response) {
-    Page<EventModel> p = const Page<EventModel>()
+  List<EventModel> _resolvePaginatedEvents(ApiResponse response) {
+    CustomPage<EventModel> p = const CustomPage<EventModel>()
         .fromJson(response.result as Map<String, dynamic>, const EventModel());
 
     if (!isObjectEmpty(p.items)) {

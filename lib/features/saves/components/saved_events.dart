@@ -32,7 +32,7 @@ class _SavedEventsState extends State<SavedEvents> {
                 marginBottom: 10,
               ),
             ), // Pass the shimmer here...
-            onTap: () => _reloadData(),
+            onTap: () => _reloadData(context),
             isEmpty: hasData,
           );
         } else {
@@ -43,11 +43,14 @@ class _SavedEventsState extends State<SavedEvents> {
             padding: const EdgeInsets.only(top: 27),
             itemCount: savedEvents.length,
             itemBuilder: (c, i) {
-              return EventCard(
-                hasDelete: false,
-                hasSave: true,
-                isSaved: true,
-                event: savedEvents[i],
+              return SizedBox(
+                height: 300,
+                child: EventCard(
+                  hasDelete: false,
+                  hasSave: true,
+                  isSaved: true,
+                  event: savedEvents[i],
+                ),
               );
             },
             separatorBuilder: (c, i) => ySpace(height: 14),
@@ -57,8 +60,8 @@ class _SavedEventsState extends State<SavedEvents> {
     );
   }
 
-  void _reloadData() {
+  void _reloadData(BuildContext context) {
     safeNavigate(
-        () => locator.get<DashboardController>().fetchAllSavedEvents());
+        () => locator.get<DashboardController>().fetchAllSavedEvents(context));
   }
 }

@@ -24,9 +24,9 @@ class HttpDioInterceptors extends InterceptorsWrapper {
 
       // log.info("REQUEST DATA ${options.baseUrl}");
       // log.info("REQUEST DATA ${options.uri.toString()}");
-      // log.info("REQUEST DATA ${options.path}");
+      log.info("REQUEST DATA ${options.path}");
       // log.info("REQUEST DATA ${options.headers}");
-      // log.info("REQUEST DATA ${options.data}");
+      log.info("REQUEST DATA ${options.data}");
       return handler.next(options);
     }
     log.info("REQUEST DATA ${options.path}");

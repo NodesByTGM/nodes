@@ -1,6 +1,7 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
@@ -20,37 +21,37 @@ class DashboardService {
   // Functions
 
   // Events
-  Future<ApiResponse> createEvent(dynamic payload) async {
+  Future<ApiResponse> createEvent(BuildContext ctx,dynamic payload) async {
     try {
       ApiResponse res = await dashboardRepository.createEvent(payload);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @createEvent ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllEvents({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllEvents(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllEvents ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchSingleEvent(dynamic id) async {
+  Future<ApiResponse> fetchSingleEvent(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.fetchEvent(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchSingleEvent ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> updateSingleEvent({
+  Future<ApiResponse> updateSingleEvent(BuildContext ctx,{
     required dynamic id,
     required dynamic payload,
   }) async {
@@ -59,94 +60,94 @@ class DashboardService {
       return res;
     } on DioException catch (e) {
       log.severe("Error message @updateSingleEvent ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> deleteSingleEvent(dynamic id) async {
+  Future<ApiResponse> deleteSingleEvent(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.deleteEvent(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @deleteSingleEvent ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> saveEvent(dynamic id) async {
+  Future<ApiResponse> saveEvent(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.saveEvent(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @saveEvent ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> unSaveEvent(dynamic id) async {
+  Future<ApiResponse> unSaveEvent(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.unSaveEvent(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @unSaveEvent ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllSavedEvents({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllSavedEvents(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllSavedEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @fetchAllSavedEvents ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllAllMyCreatedEvents({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllAllMyCreatedEvents(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllAllMyCreatedEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @fetchAllAllMyCreatedEvents ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
 // Jobs
-  Future<ApiResponse> createJob(dynamic payload) async {
+  Future<ApiResponse> createJob(BuildContext ctx,dynamic payload) async {
     try {
       ApiResponse res = await dashboardRepository.createJob(payload);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @createJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllJobs({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllJobs ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchSingleJob(dynamic id) async {
+  Future<ApiResponse> fetchSingleJob(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.fetchJob(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchSingleJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> updateSingleJob({
+  Future<ApiResponse> updateSingleJob(BuildContext ctx,{
     required dynamic id,
     required dynamic payload,
   }) async {
@@ -155,79 +156,79 @@ class DashboardService {
       return res;
     } on DioException catch (e) {
       log.severe("Error message @updateSingleJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> deleteSingleJob(dynamic id) async {
+  Future<ApiResponse> deleteSingleJob(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.deleteJob(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @deleteSingleJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> applyForJob(dynamic id) async {
+  Future<ApiResponse> applyForJob(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.applyForJob(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @applyForJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> saveJob(dynamic id) async {
+  Future<ApiResponse> saveJob(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.saveJob(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @saveJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> unSaveJob(dynamic id) async {
+  Future<ApiResponse> unSaveJob(BuildContext ctx,dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.unSaveJob(id);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @unSaveJob ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllSavedJobs({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllSavedJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllSavedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllSavedJobs ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllAppliedJobs({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllAppliedJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllAppliedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @fetchAllAppliedJobs ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> fetchAllMyCreatedJobs({required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllMyCreatedJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllMyCreatedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @fetchAllMyCreatedJobs ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 }

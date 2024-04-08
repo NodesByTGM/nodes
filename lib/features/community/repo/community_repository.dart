@@ -14,11 +14,10 @@ class ComApis {
   static const projectApi = "$baseApi/projects";
 
   // Community
-  static const communityApi = "$baseApi/community";
-  static const communityPost = "$communityApi/posts/";
-  static const singleCommunityPost = "$communityApi/posts/{id}";
-  static const singleCommunityPostLike = "$communityApi/posts/like/{id}";
-  static const singleCommunityPostUnlike = "$communityApi/posts/unlike/{id}";
+  static const postApi = "$baseApi/posts";
+  static const singlePost = "$postApi/{id}";
+  static const singlePostLike = "$postApi/like/{id}";
+  static const singlePostUnlike = "$postApi/unlike/{id}";
 }
 
 @RestApi()
@@ -31,26 +30,26 @@ abstract class ComRepository {
   @GET(ComApis.projectApi)
   Future<ApiResponse> fetchProject();
 
-  @POST(ComApis.communityPost)
-  Future<ApiResponse> createCommunityPost(
+  @POST(ComApis.postApi)
+  Future<ApiResponse> createPost(
     @Body() payload,
   );
 
-  @GET(ComApis.communityPost)
-  Future<ApiResponse> fetchAllCommunityPosts();
+  @GET(ComApis.postApi)
+  Future<ApiResponse> fetchAllPosts();
 
-  @GET(ComApis.singleCommunityPost)
-  Future<ApiResponse> fetchSingleCommunityPost(
+  @GET(ComApis.singlePost)
+  Future<ApiResponse> fetchSinglePost(
     @Path('id') String id,
   );
 
-  @POST(ComApis.singleCommunityPostLike)
-  Future<ApiResponse> likeSingleCommunityPost(
+  @POST(ComApis.singlePostLike)
+  Future<ApiResponse> likeSinglePost(
     @Path('id') String id,
   );
 
-  @POST(ComApis.singleCommunityPostLike)
-  Future<ApiResponse> unlikeSingleCommunityPost(
+  @POST(ComApis.singlePostUnlike)
+  Future<ApiResponse> unlikeSinglePost(
     @Path('id') String id,
   );
 }

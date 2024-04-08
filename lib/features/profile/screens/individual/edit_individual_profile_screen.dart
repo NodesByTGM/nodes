@@ -1,11 +1,18 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter_textfield_autocomplete/flutter_textfield_autocomplete.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/country_state_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/profile/components/expanable_profile_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class EditIndividualProfileScreen extends StatefulWidget {
   const EditIndividualProfileScreen({super.key});
@@ -21,6 +28,8 @@ class _EditIndividualProfileScreenState
   late AuthController authCtrl;
   late UserModel user;
   final formKey = GlobalKey<FormBuilderState>();
+  List<String>? locationList = const [];
+  GlobalKey<TextFieldAutoCompleteState<String>> autoCompleteKey = GlobalKey();
   final TextEditingController firstNameCtrl = TextEditingController();
   final TextEditingController lastNameCtrl = TextEditingController();
   final TextEditingController usernameCtrl = TextEditingController();
@@ -31,6 +40,7 @@ class _EditIndividualProfileScreenState
   final TextEditingController linkedinCtrl = TextEditingController();
   final TextEditingController instagramCtrl = TextEditingController();
   final TextEditingController xCtrl = TextEditingController();
+  File? profilePicture;
   final formValues = {};
   bool isProfileInfo = true;
   bool isIntroduce = false;
@@ -45,6 +55,7 @@ class _EditIndividualProfileScreenState
     user = authCtrl.currentUser;
     super.initState();
     loadProfile();
+    loadStates();
   }
 
   loadProfile() {
@@ -61,6 +72,15 @@ class _EditIndividualProfileScreenState
     xCtrl.text = "${user.twitter}";
     enableSpaces = user.spaces ?? false;
     enableComments = user.comments ?? false;
+  }
+
+  loadStates() {
+    for (CountryStateModel element in authCtrl.countryStatesList) {
+      locationList = [
+        ...(locationList as List<String>),
+        ...(element.states as List<String>)
+      ];
+    }
   }
 
   @override
@@ -110,21 +130,43 @@ class _EditIndividualProfileScreenState
                         children: [
                           Row(
                             children: [
-                              cachedNetworkImage(
-                                imgUrl:
-                                    "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-                                size: 100,
-                              ),
-                              xSpace(width: 16),
-                              GestureDetector(
-                                onTap: () {},
-                                child: labelText(
-                                  "Replace",
-                                  color: PRIMARY,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                              if (!isObjectEmpty(profilePicture)) ...[
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: BORDER.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: isObjectEmpty(profilePicture)
+                                        ? Container()
+                                        : Image.file(
+                                            profilePicture as File,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
                                 ),
-                              ),
+                              ],
+                              if (isObjectEmpty(profilePicture)) ...[
+                                cachedNetworkImage(
+                                  imgUrl: "${user.avatar?.url}",
+                                  size: 100,
+                                ),
+                              ],
+                              xSpace(width: 16),
+                              authCtrl.isUploadingMedia
+                                  ? const Loader()
+                                  : GestureDetector(
+                                      onTap: uploadImage,
+                                      child: labelText(
+                                        "Replace",
+                                        color: PRIMARY,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                             ],
                           ),
                           ySpace(height: 32),
@@ -195,21 +237,77 @@ class _EditIndividualProfileScreenState
                           FormUtils.formSpacer(),
                           FormWithLabel(
                             label: "Location",
-                            form: FormBuilderTextField(
-                              name: "location",
+                            // form: FormBuilderTextField(
+                            //   name: "location",
+                            //   decoration: FormUtils.formDecoration(
+                            //     hintText: "Enter you city",
+                            //   ),
+                            //   keyboardType: TextInputType.text,
+                            //   style: FORM_STYLE,
+                            //   controller: locationCtrl,
+                            //   onSaved: (value) =>
+                            //       formValues['location'] = trimValue(value),
+                            //   validator: FormBuilderValidators.compose([
+                            //     FormBuilderValidators.required(context,
+                            //         errorText: Constants.emptyFieldError),
+                            //   ]),
+                            //   onChanged: (val) {},
+                            // ),
+                            form: TextFieldAutoComplete(
                               decoration: FormUtils.formDecoration(
-                                hintText: "Enter you city",
+                                hintText: "Location - search by state",
                               ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
+                              clearOnSubmit: false,
                               controller: locationCtrl,
-                              onSaved: (value) =>
-                                  formValues['location'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
+                              itemSubmitted: (String? item) {
+                                locationCtrl.text = item ?? '';
+                              },
+                              suggestionsAmount: 1000,
+                              key: autoCompleteKey,
+                              suggestions: locationList ?? [''],
+                              itemBuilder: (context, String item) {
+                                bool isSelected = item.toLowerCase() ==
+                                    locationCtrl.text.toLowerCase();
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 0.5, color: BORDER)),
+                                    color: WHITE,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 15,
+                                      horizontal: 12,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                            child: subtext(
+                                          item,
+                                          color: const Color(0xFF757575),
+                                        )),
+                                        if (isSelected)
+                                          const Icon(
+                                            Icons.check_circle_outline,
+                                            color: PRIMARY,
+                                            size: 15,
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemSorter: (String a, String b) {
+                                return a.compareTo(b);
+                              },
+                              itemFilter: (String item, query) {
+                                return item
+                                    .toLowerCase()
+                                    .contains(query.toLowerCase());
+                              },
                             ),
                           ),
                           ySpace(height: 40),
@@ -686,7 +784,23 @@ class _EditIndividualProfileScreenState
    */
 
   void updateUserProfile(UserModel user) async {
-    bool done = await authCtrl.updateProfile(user.toJson());
+    await authCtrl.updateProfile(context,user.toJson());
+  }
+
+  void uploadImage() async {
+    File? _ = await selectImageFromGallery();
+    if (_ != null) {
+      profilePicture = _;
+      setState(() {});
+    }
+    String imageByteString =
+        await convertFileToString("${profilePicture?.path}");
+    // print("George, here's the imageByte: $imageByteString");
+
+    MediaUploadModel? imageUrl = await authCtrl.mediaUpload(imageByteString);
+    if (!isObjectEmpty(imageUrl)) {
+      updateUserProfile(user.copyWith(avatar: imageUrl));
+    }
   }
 
   @override

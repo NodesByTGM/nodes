@@ -18,9 +18,9 @@ class CustomPaystackWebview extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-            // leading: SizedBox.shrink(),
-            ),
+        // appBar: AppBar(
+        //     // leading: SizedBox.shrink(),
+        //     ),
         body: Padding(
           padding: const EdgeInsets.only(top: 55),
           child: WebView(
@@ -29,7 +29,6 @@ class CustomPaystackWebview extends StatelessWidget {
             userAgent: 'Flutter;Webview',
             navigationDelegate: (navigation) {
               //Listen for callback URL
-              print("George here is the navigation url: ${navigation.url}");
               // Callback from using Card
               if (navigation.url == paystackCardCallbackUrl) {
                 Navigator.of(context).pop(true); //close webview

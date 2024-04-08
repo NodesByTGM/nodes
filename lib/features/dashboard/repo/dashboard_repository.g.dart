@@ -32,7 +32,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/projects',
+              'https://dev.api.nodesafrica.com/api/v1/projects',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -59,7 +59,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/projects',
+              'https://dev.api.nodesafrica.com/api/v1/projects',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -86,7 +86,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events',
+              'https://dev.api.nodesafrica.com/api/v1/events',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -119,7 +119,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events',
+              'https://dev.api.nodesafrica.com/api/v1/events',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -146,7 +146,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/events/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -176,7 +176,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/events/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -203,7 +203,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/events/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -230,7 +230,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/save/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/events/save/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -257,7 +257,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/unsave/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/events/unsave/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -290,7 +290,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/saved/',
+              'https://dev.api.nodesafrica.com/api/v1/events/saved/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -323,7 +323,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/events/mine',
+              'https://dev.api.nodesafrica.com/api/v1/events/mine',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -350,7 +350,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs',
+              'https://dev.api.nodesafrica.com/api/v1/jobs',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -383,7 +383,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs',
+              'https://dev.api.nodesafrica.com/api/v1/jobs',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -410,7 +410,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -440,7 +440,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -467,7 +467,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -494,7 +494,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/apply/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/apply/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -521,7 +521,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/save/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/save/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -548,7 +548,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/unsave/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/unsave/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -581,7 +581,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/saved',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/saved',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -614,7 +614,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/applied',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/applied',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -647,7 +647,7 @@ class _DashboardRepository implements DashboardRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/jobs/mine',
+              'https://dev.api.nodesafrica.com/api/v1/jobs/mine',
               queryParameters: queryParameters,
               data: _data,
             )

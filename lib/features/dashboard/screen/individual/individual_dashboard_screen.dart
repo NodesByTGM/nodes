@@ -3,14 +3,12 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
-import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
-import 'package:nodes/features/saves/models/event_model.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
@@ -27,14 +25,13 @@ class IndividualDashboardScreen extends StatefulWidget {
 class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   late NavController navCtrl;
   late AuthController authCtrl;
+  late DashboardController dashCtrl;
   late UserModel user;
-  int currentJobsIndex = 0;
+  int currentEventIndex = 0;
   int currentTrendingIndex = 0;
   int currentSpaceIndex = 0;
-  int jobsLength = 5;
-  int trendingLength = 5;
   int spaceLength = 5;
-  final jobsCardCtrl = PageController(viewportFraction: 1);
+  final eventsCardCtrl = PageController(viewportFraction: 1);
   final trendingCardCtrl = PageController(viewportFraction: 1);
   final spaceCardCtrl = PageController(viewportFraction: 1);
 
@@ -42,13 +39,21 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   void initState() {
     navCtrl = locator.get<NavController>();
     authCtrl = locator.get<AuthController>();
+    dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     super.initState();
+    fetchJobs();
+  }
+
+  fetchJobs() {
+    safeNavigate(() => dashCtrl.fetchAllJobs(context));
+    safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }
 
   @override
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
+    dashCtrl = context.watch<DashboardController>();
     return SingleChildScrollView(
       child: Column(
         // Can't use ListView here, as it rebuilds the Widget that handles the Future.builder
@@ -79,35 +84,36 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           ),
           ySpace(height: 24),
           SizedBox(
-            height: 368,
+            // height: 368,
+            height: 200,
             child: PageView.builder(
-              itemCount: jobsLength,
-              controller: jobsCardCtrl,
+              itemCount: dashCtrl.eventsList.length,
+              controller: eventsCardCtrl,
               onPageChanged: (val) {
-                currentJobsIndex = val;
+                currentEventIndex = val;
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return const EventCard(
+                return EventCard(
                   hasDelete: false,
-                  hasSave: true,
-                  event: EventModel(),
+                  hasSave: false,
+                  event: dashCtrl.eventsList[index],
                 );
               },
             ),
           ),
-          ySpace(height: 40),
+          ySpace(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(jobsLength, (index) {
+                  ...List.generate(dashCtrl.eventsList.length, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
-                        isActive: currentJobsIndex == index,
+                        isActive: currentEventIndex == index,
                       ),
                     );
                   })
@@ -120,9 +126,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: jobsLength,
-                        currentIndex: currentJobsIndex,
-                        ctrl: jobsCardCtrl,
+                        totoalLength: dashCtrl.eventsList.length,
+                        currentIndex: currentEventIndex,
+                        ctrl: eventsCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -134,9 +140,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: jobsLength,
-                        currentIndex: currentJobsIndex,
-                        ctrl: jobsCardCtrl,
+                        totoalLength: dashCtrl.eventsList.length,
+                        currentIndex: currentEventIndex,
+                        ctrl: eventsCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -245,7 +251,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: trendingLength,
+              itemCount: dashCtrl.jobsList.length,
               controller: trendingCardCtrl,
               onPageChanged: (val) {
                 currentTrendingIndex = val;
@@ -253,7 +259,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               },
               itemBuilder: (context, index) {
                 return JobCard(
-                  job: JobModel(),
+                  job: dashCtrl.jobsList[index],
                 );
               },
             ),
@@ -265,7 +271,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(trendingLength, (index) {
+                  ...List.generate(dashCtrl.jobsList.length, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
@@ -282,7 +288,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: trendingLength,
+                        totoalLength: dashCtrl.jobsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCardCtrl,
                       );
@@ -296,7 +302,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: trendingLength,
+                        totoalLength: dashCtrl.jobsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCardCtrl,
                       );
@@ -347,9 +353,10 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      navCtrl.updatePageListStack(
-                        NodeSpacesScreen.routeName,
-                      );
+                      // navCtrl.updatePageListStack(
+                      //   NodeSpacesScreen.routeName,
+                      // );
+                      showSuccess(message: "Coming Soon");
                     },
                     child: subtext(
                       "See more",

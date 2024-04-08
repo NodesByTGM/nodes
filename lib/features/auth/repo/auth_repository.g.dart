@@ -32,7 +32,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/login',
+              'https://dev.api.nodesafrica.com/api/v1/auth/login',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -59,7 +59,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/register',
+              'https://dev.api.nodesafrica.com/api/v1/auth/register',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -86,7 +86,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/refresh-token',
+              'https://dev.api.nodesafrica.com/api/v1/auth/refresh-token',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -113,7 +113,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/send-otp',
+              'https://dev.api.nodesafrica.com/api/v1/auth/send-otp',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -140,7 +140,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/verify-email',
+              'https://dev.api.nodesafrica.com/api/v1/auth/verify-email',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -167,7 +167,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/verify-otp',
+              'https://dev.api.nodesafrica.com/api/v1/auth/verify-otp',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -194,7 +194,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/auth/forgot-password',
+              'https://dev.api.nodesafrica.com/api/v1/auth/forgot-password',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -225,7 +225,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/reset-password/${accountId}/${token}',
+              'https://dev.api.nodesafrica.com/api/v1/reset-password/${accountId}/${token}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -252,7 +252,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/change-password',
+              'https://dev.api.nodesafrica.com/api/v1/change-password',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -279,7 +279,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/logout',
+              'https://dev.api.nodesafrica.com/api/v1/logout',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -306,7 +306,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/onboarding',
+              'https://dev.api.nodesafrica.com/api/v1/onboarding',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -333,7 +333,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/onboarding/talent',
+              'https://dev.api.nodesafrica.com/api/v1/onboarding/talent',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -360,7 +360,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/onboarding/business',
+              'https://dev.api.nodesafrica.com/api/v1/onboarding/business',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -387,7 +387,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/users/profile',
+              'https://dev.api.nodesafrica.com/api/v1/users/profile',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -414,7 +414,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/users/profile',
+              'https://dev.api.nodesafrica.com/api/v1/users/profile',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -441,7 +441,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/upgrades/talent',
+              'https://dev.api.nodesafrica.com/api/v1/upgrades/talent',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -468,7 +468,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/upgrades/business',
+              'https://dev.api.nodesafrica.com/api/v1/upgrades/business',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -495,7 +495,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/uploads/media',
+              'https://dev.api.nodesafrica.com/api/v1/uploads/media',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -522,7 +522,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/uploads/media/delete/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/uploads/media/delete/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -550,7 +550,34 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/transactions/subscription/initiate',
+              'https://dev.api.nodesafrica.com/api/v1/transactions/subscription/initiate',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ApiResponse> verifyAndUpgradeSubscription(String ref) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'reference': ref};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'https://dev.api.nodesafrica.com/api/v1/transactions/verify/internal',
               queryParameters: queryParameters,
               data: _data,
             )

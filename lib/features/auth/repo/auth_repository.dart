@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:nodes/config/env.config.dart';
 import 'package:nodes/core/models/api_response.dart';
@@ -43,7 +41,10 @@ class AuthApis {
   static const deleteMediaApi = "$mediaUploadsApi/delete/{id}";
 
   // Paystack
-  static const paystackInitialize = "$baseApi/transactions/subscription/initiate";
+  static const paystackInitialize =
+      "$baseApi/transactions/subscription/initiate";
+  static const verifyAndUpgradeSubscription =
+      "$baseApi/transactions/verify/internal";
 }
 
 @RestApi()
@@ -114,7 +115,6 @@ abstract class AuthRepository {
 
   @POST(AuthApis.mediaUploadsApi)
   Future<ApiResponse> mediaUpload(
-   
     @Body() payload,
   );
 
@@ -127,5 +127,9 @@ abstract class AuthRepository {
   Future<ApiResponse> getPaystackAuthUrl(
     @Body() CustomPaystackModel payload,
   );
-}
 
+  @GET(AuthApis.verifyAndUpgradeSubscription)
+  Future<ApiResponse> verifyAndUpgradeSubscription(
+    @Query('reference') String ref,
+  );
+}

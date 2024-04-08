@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
+import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
@@ -41,10 +42,10 @@ class SpaceController extends BaseController {
   // }
 
   // Functions
-  Future<bool> createSpace(dynamic _details) async {
+  Future<bool> createSpace(BuildContext ctx,dynamic _details) async {
     setBusy(true);
     try {
-      ApiResponse response = await _spaceService.createSpace(_details);
+      ApiResponse response = await _spaceService.createSpace(ctx,_details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -59,13 +60,13 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllSpaces({
+  Future<bool> fetchAllSpaces(BuildContext ctx,{
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchSpace(true);
     try {
-      ApiResponse response = await _spaceService.fetchAllSpaces(
+      ApiResponse response = await _spaceService.fetchAllSpaces(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -83,13 +84,13 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> fetchAllMySpaces({
+  Future<bool> fetchAllMySpaces(BuildContext ctx,{
     int page = 1,
     int pageSize = 1000,
   }) async {
     setFetchSpace(true);
     try {
-      ApiResponse response = await _spaceService.fetchAllMySpaces(
+      ApiResponse response = await _spaceService.fetchAllMySpaces(ctx,
         page: page,
         pageSize: pageSize,
       );
@@ -107,10 +108,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> fetchSingleSpace(dynamic details) async {
+  Future<bool> fetchSingleSpace(BuildContext ctx,dynamic details) async {
     setFetchSingleSpace(true);
     try {
-      ApiResponse response = await _spaceService.fetchSingleSpace(details);
+      ApiResponse response = await _spaceService.fetchSingleSpace(ctx,details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -125,10 +126,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> updateSingleSpace({required dynamic id, required dynamic details}) async {
+  Future<bool> updateSingleSpace(BuildContext ctx,{required dynamic id, required dynamic details}) async {
     setUpdatingSingleSpace(true);
     try {
-      ApiResponse response = await _spaceService.updateSingleSpace(id: id, payload: details,);
+      ApiResponse response = await _spaceService.updateSingleSpace(ctx,id: id, payload: details,);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -143,10 +144,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> joinSpace(dynamic details) async {
+  Future<bool> joinSpace(BuildContext ctx,dynamic details) async {
     setJoinSpace(true);
     try {
-      ApiResponse response = await _spaceService.joinSpace(details);
+      ApiResponse response = await _spaceService.joinSpace(ctx,details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -161,10 +162,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> leaveSpace(dynamic details) async {
+  Future<bool> leaveSpace(BuildContext ctx,dynamic details) async {
     setLeaveSpace(true);
     try {
-      ApiResponse response = await _spaceService.leaveSpace(details);
+      ApiResponse response = await _spaceService.leaveSpace(ctx,details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -179,10 +180,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> addMemberToSpace(dynamic details) async {
+  Future<bool> addMemberToSpace(BuildContext ctx,dynamic details) async {
     setAddSpaceMember(true);
     try {
-      ApiResponse response = await _spaceService.addMemberToSpace(details);
+      ApiResponse response = await _spaceService.addMemberToSpace(ctx,details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -197,10 +198,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> removeMemberFromSpace(dynamic details) async {
+  Future<bool> removeMemberFromSpace(BuildContext ctx,dynamic details) async {
     setRemoveSpaceMember(true);
     try {
-      ApiResponse response = await _spaceService.removeMemberFromSpace(details);
+      ApiResponse response = await _spaceService.removeMemberFromSpace(ctx,details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -215,10 +216,10 @@ class SpaceController extends BaseController {
     }
   }
 
-  Future<bool> makeSpaceAdmin(dynamic details) async {
+  Future<bool> makeSpaceAdmin(BuildContext ctx,dynamic details) async {
     setMakeSpaceAdmin(true);
     try {
-      ApiResponse response = await _spaceService.makeSpaceAdmin(details);
+      ApiResponse response = await _spaceService.makeSpaceAdmin(ctx,details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;

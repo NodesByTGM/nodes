@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/utils.dart';
 import 'package:nodes/core/models/api_response.dart';
 
@@ -13,6 +15,14 @@ class NetworkException implements Exception {
 
   static ApiResponse errorHandler(DioException e, {BuildContext? context}) {
     if (!isObjectEmpty(e.response)) {
+      if (e.response?.statusCode == 401) {
+        // UnAuthorized
+        // Call the refreshToken function from your auth provider and handle it accordingly
+        context?.read<AuthController>().refreshToken();
+        ApiResponse response = ApiResponse.fromJson(e.response?.data)
+            .copyWith(message: "Retrying Request...");
+        return response;
+      }
       if (DioExceptionType.badResponse == e.type &&
           e.response?.data is Map<String, dynamic>) {
         ApiResponse response = ApiResponse.fromJson(e.response?.data);

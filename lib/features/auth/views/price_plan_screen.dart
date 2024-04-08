@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/talent_auth/components/price_plan_card.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
@@ -123,11 +124,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                 fontWeight: FontWeight.w500,
               ),
               priceDescription: "Free/forever",
-              features: const [
-                "Community Engagement",
-                "Networking Opportunities",
-                "Stay Informed on Creative Trends",
-              ],
+              features: Constants.standardFeatures,
               // onTap: pay,
               onTap: submit,
               btnText: "Continue for free",
@@ -156,13 +153,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
               ),
               // priceDescription: "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
               priceDescription: "Get one month free if you subscribe now",
-              features: const [
-                "Enhanced Visibility",
-                "Access to Premium Jobs",
-                "Expanded Project Showcase",
-                "Advanced Analytics and Insights",
-                "Access to GridTools Discovery Pack (Free)",
-              ],
+              features: Constants.proFeatures,
               onTap: () => _paystackPayment(
                   planIndex == 0 ? talentMonthlySub : talentYearlySub),
 
@@ -192,13 +183,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
               ),
               priceDescription:
                   "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
-              features: const [
-                "Premium Talent Pool Access",
-                "Featured Job Listings",
-                "Analytics and Performance Metrics",
-                "Promotion and Marketing Opportunities",
-                "Access to GridTools Discovery Pack (Free)",
-              ],
+              features: Constants.businessFeatures,
               onTap: () => _paystackPayment(
                   planIndex == 0 ? busMonthlySub : busYearlySub),
               btnText: "Subscribe now",
@@ -255,21 +240,33 @@ class _PricePlanScreen extends State<PricePlanScreen> {
   }
 
   _paystackPayment(String type) async {
-    // var ref = "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
-    var ref = "t5o5vnfu13";
+    var ref =
+        "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
+    // var ref = "t5o5vnfu13";
 
     try {
       // Make the call to the API, get the auth token.
-      if (1 < 2) {
+      CustomPaystackResModel? paystackRes = await _authCtrl.getPaystackAuthUrl(
+        context,
+        CustomPaystackModel(
+          reference: ref,
+          callback_url: tGMWebsite,
+          // SubscriptionPlanKeys.business
+          planKey: busYearlySub,
+          metadata: const PaystackMetadataModel(
+              cancel_action: paystackCancelActionUrl),
+        ),
+      );
+      print("George....we here now ${paystackRes?.toJson()}");
+      if (!isObjectEmpty(paystackRes) && mounted) {
         bool res = await Navigator.of(context).push<dynamic>(
           MaterialPageRoute<void>(
             builder: (BuildContext context) => CustomPaystackWebview(
-              authUrl: "https://checkout.paystack.com/1ppg9rs3n0yx9dc",
+              authUrl: "${paystackRes?.authorization_url}",
               ref: ref,
             ),
           ),
         );
-        // if (!isObjectEmpty(res) && mounted) {
         if (!res && mounted) {
           // Call the verification ENDPOINT...
         }

@@ -14,7 +14,9 @@ import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
+import 'package:nodes/features/auth/models/refresh_token_model.dart';
 import 'package:nodes/features/auth/models/register_model.dart';
+import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -37,6 +39,7 @@ class AuthController extends BaseController {
   double _passwordStrength = 0.0;
   IndividualTalentOnboardingModel _individualTalentData =
       const IndividualTalentOnboardingModel();
+  SubscriptionUpgrade _subUpgrade = SubscriptionUpgrade();
 
   List<CountryStateModel> _countryStatesList =
       const CountryStateModel().fromList(countryStatesData);
@@ -45,9 +48,11 @@ class AuthController extends BaseController {
 
   UserModel get currentUser => _currentUser;
   Future<CurrentSession?> get currentSession async {
-    var currentUser =
+    var _currentSession =
         await _storageService.getSecureJson(KeyString.currentSession);
-    return (currentUser != null) ? CurrentSession.fromJson(currentUser!) : null;
+    return (_currentSession != null)
+        ? CurrentSession.fromJson(_currentSession!)
+        : null;
   }
 
   String get currentScreen =>
@@ -61,7 +66,7 @@ class AuthController extends BaseController {
       _individualTalentData;
 
   List<CountryStateModel> get countryStatesList => _countryStatesList;
-
+  SubscriptionUpgrade get subUpgrade => _subUpgrade;
   // Setters
 
   setTStepper(int val) {
@@ -84,8 +89,8 @@ class AuthController extends BaseController {
     _saveSession(json);
   }
 
-  setPasswordStrength(double val) {
-    _passwordStrength += val;
+  setSubUpgrade(SubscriptionUpgrade sub) {
+    _subUpgrade = sub;
     notifyListeners();
   }
 
@@ -110,7 +115,6 @@ class AuthController extends BaseController {
 
   Future<void> _saveSession(Map<String, dynamic> session) async {
     var _session = CurrentSession.fromJson(session);
-    print("George this is the saved sesseion: ${_session.toJson()}");
     await saveCurrentSession(_session);
   }
 
@@ -133,6 +137,37 @@ class AuthController extends BaseController {
           refreshToken: _.refreshToken,
           user: _.user,
         )
+        .toJson());
+  }
+
+  Future<void> _customUserSessionUpdate(ApiResponse res) async {
+    UserModel user = UserModel.fromJson(res.result as Map<String, dynamic>);
+    print("George this is the user after subscription: ${user.toJson()}");
+    CurrentSession? cS = await currentSession;
+    if (isObjectEmpty(cS)) {
+      // Meaning user is only signing in
+      cS = const CurrentSession();
+    }
+    await _saveSession(cS!
+        .copyWith(
+          user: user,
+        )
+        .toJson());
+  }
+
+  Future<void> _customRefreshTokenSessionUpdate(ApiResponse res) async {
+    RefreshTokenModel tokenData =
+        RefreshTokenModel.fromJson(res.result as Map<String, dynamic>);
+
+    CurrentSession? cS = await currentSession;
+    if (isObjectEmpty(cS)) {
+      // Meaning user is only signing in
+      cS = const CurrentSession();
+    }
+    await _saveSession(cS!
+        .copyWith(
+            accessToken: tokenData.accessToken,
+            refreshToken: tokenData.refreshToken)
         .toJson());
   }
 
@@ -174,7 +209,6 @@ class AuthController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      print("George here is the register user message: ${response.toJson()}");
       // save the users data to localStorage
       await _authCustomSaveSession(response);
       return true;
@@ -189,14 +223,18 @@ class AuthController extends BaseController {
   Future<bool> refreshToken() async {
     setBusy(true);
     try {
-      var refreshToken = ''; // from session
-      ApiResponse response = await _authService.refreshToken(refreshToken);
+      // var refreshToken = (await currentSession)?.refreshToken; // from session
+      var refreshToken = (await currentSession)!; // from session
+
+      ApiResponse response =
+          await _authService.refreshToken(refreshToken.refreshToken);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      // remove accessToken from session first...
+      await _customRefreshTokenSessionUpdate(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -311,10 +349,10 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> changePassword(dynamic payload) async {
+  Future<bool> changePassword(BuildContext ctx, dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.changePassword(payload);
+      ApiResponse response = await _authService.changePassword(ctx, payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
@@ -330,10 +368,10 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> serverLogout() async {
+  Future<bool> serverLogout(BuildContext ctx) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.logout();
+      ApiResponse response = await _authService.logout(ctx);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
@@ -406,10 +444,10 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> fetchProfile() async {
+  Future<bool> fetchProfile(BuildContext ctx) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.fetchProfile();
+      ApiResponse response = await _authService.fetchProfile(ctx);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
@@ -425,17 +463,17 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> updateProfile(dynamic payload) async {
+  Future<bool> updateProfile(BuildContext ctx, dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.updateProfile(payload);
+      ApiResponse response = await _authService.updateProfile(ctx, payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
       showSuccess(message: response.message);
-      await _authCustomSaveSession(response);
+      await _customUserSessionUpdate(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -445,10 +483,11 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> talentAccountUpgrade(dynamic payload) async {
+  Future<bool> talentAccountUpgrade(BuildContext ctx, dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.talentAccountUpgrade(payload);
+      ApiResponse response =
+          await _authService.talentAccountUpgrade(ctx, payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
@@ -464,10 +503,11 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> businessAccountUpgrade(dynamic payload) async {
+  Future<bool> businessAccountUpgrade(BuildContext ctx, dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.businessAccountUpgrade(payload);
+      ApiResponse response =
+          await _authService.businessAccountUpgrade(ctx, payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
@@ -492,7 +532,6 @@ class AuthController extends BaseController {
   //       showError(message: response.message);
   //       return null;
   //     }
-  //     print("George here is the file response: ${response.toJson()}");
   //     MediaUploadModel data =
   //         MediaUploadModel.fromJson(response.result as Map<String, dynamic>);
   //     return data.url;
@@ -504,7 +543,7 @@ class AuthController extends BaseController {
   //   }
   // }
 
-  Future<String?> mediaUpload(dynamic file) async {
+  Future<MediaUploadModel?> mediaUpload(dynamic file) async {
     setUploadingMedia(true);
     try {
       ApiResponse response = await _authService.mediaUpload({
@@ -515,10 +554,9 @@ class AuthController extends BaseController {
         showError(message: response.message);
         return null;
       }
-      print("George here is the file response: ${response.toJson()}");
       MediaUploadModel data =
           MediaUploadModel.fromJson(response.result as Map<String, dynamic>);
-      return data.url;
+      return data;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return null;
@@ -547,11 +585,13 @@ class AuthController extends BaseController {
   }
 
   Future<CustomPaystackResModel?> getPaystackAuthUrl(
+    BuildContext ctx,
     CustomPaystackModel payload,
   ) async {
     setBusy(true);
     try {
       ApiResponse response = await _authService.getPaystackAuthUrl(
+        ctx,
         payload,
       );
 
@@ -564,6 +604,30 @@ class AuthController extends BaseController {
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return null;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<bool> verifyAndUpgradeSubscription(
+    dynamic payload,
+  ) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.verifyAndUpgradeSubscription(
+        payload,
+      );
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      showSuccess(message: response.message);
+      await _customUserSessionUpdate(response);
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
     } finally {
       setBusy(false);
     }

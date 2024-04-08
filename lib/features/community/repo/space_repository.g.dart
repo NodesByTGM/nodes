@@ -32,7 +32,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces',
+              'https://dev.api.nodesafrica.com/api/v1/spaces',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -65,7 +65,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -98,7 +98,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/mine/',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/mine/',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -128,7 +128,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -155,7 +155,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -182,7 +182,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/join/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/join/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -209,7 +209,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/leave/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/leave/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -236,7 +236,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/add-member/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/add-member/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -263,7 +263,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/remove-member/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/remove-member/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -290,7 +290,7 @@ class _SpaceRepository implements SpaceRepository {
     )
             .compose(
               _dio.options,
-              'https://nodes-server-v1.onrender.com/api/v1/spaces/make-admin/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/spaces/make-admin/${id}',
               queryParameters: queryParameters,
               data: _data,
             )

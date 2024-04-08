@@ -14,8 +14,8 @@ class JobModel extends BaseData {
     final String? workRate;
     final List<String>? skills;
     final int? jobType;
-    final List<ApplicantModel>? applicants;
-    final List<ApplicantModel>? saves;
+    final List<String>? applicants;
+    final List<String>? saves;
     final BusinessAccountModel? business;
     final DateTime? createdAt;
     final DateTime? updatedAt;
@@ -49,8 +49,8 @@ class JobModel extends BaseData {
         String? workRate,
         List<String>? skills,
         int? jobType,
-        List<ApplicantModel>? applicants,
-        List<ApplicantModel>? saves,
+        List<String>? applicants,
+        List<String>? saves,
         BusinessAccountModel? business,
         DateTime? createdAt,
         DateTime? updatedAt,
@@ -87,6 +87,109 @@ class JobModel extends BaseData {
       return [];
     } else {
       return items.map((e) => JobModel.fromJson(e)).toList();
+    }
+  }
+
+  @override
+  List<Object?> get props => [
+        name,
+        description,
+        experience,
+        payRate,
+        workRate,
+        skills,
+        jobType,
+        business,
+        createdAt,
+        updatedAt,
+        id,
+        applied,
+        saved,
+      ];
+}
+
+@JsonSerializable(explicitToJson: true)
+class SavedJobModel extends BaseData {
+     final String? name;
+    final String? description;
+    final String? experience;
+    final String? payRate;
+    final String? workRate;
+    final List<String>? skills;
+    final int? jobType;
+    final List<ApplicantModel>? applicants;
+    final List<ApplicantModel>? saves;
+    final BusinessAccountModel? business;
+    final DateTime? createdAt;
+    final DateTime? updatedAt;
+    final bool applied;
+    final bool saved;
+    final String? id;
+
+   const SavedJobModel({
+        this.name,
+        this.description,
+        this.experience,
+        this.payRate,
+        this.workRate,
+        this.skills,
+        this.jobType,
+        this.applicants,
+        this.saves,
+        this.business,
+        this.createdAt,
+        this.updatedAt,
+        this.applied= false,
+        this.saved = false,
+        this.id,
+    });
+
+    SavedJobModel copyWith({
+        String? name,
+        String? description,
+        String? experience,
+        String? payRate,
+        String? workRate,
+        List<String>? skills,
+        int? jobType,
+        List<ApplicantModel>? applicants,
+        List<ApplicantModel>? saves,
+        BusinessAccountModel? business,
+        DateTime? createdAt,
+        DateTime? updatedAt,
+        bool? applied,
+        bool? saved,
+        String? id,
+    }) => 
+        SavedJobModel(
+            name: name ?? this.name,
+            description: description ?? this.description,
+            experience: experience ?? this.experience,
+            payRate: payRate ?? this.payRate,
+            workRate: workRate ?? this.workRate,
+            skills: skills ?? this.skills,
+            jobType: jobType ?? this.jobType,
+            applicants: applicants ?? this.applicants,
+            saves: saves ?? this.saves,
+            business: business ?? this.business,
+            createdAt: createdAt ?? this.createdAt,
+            updatedAt: updatedAt ?? this.updatedAt,
+            applied: applied ?? this.applied,
+            saved: saved ?? this.saved,
+            id: id ?? this.id,
+        );
+
+  factory SavedJobModel.fromJson(Map<String, dynamic> json) =>
+      _$SavedJobModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SavedJobModelToJson(this);
+
+  @override
+  List<SavedJobModel> fromList(List<dynamic> items) {
+    if (items.isEmpty) {
+      return [];
+    } else {
+      return items.map((e) => SavedJobModel.fromJson(e)).toList();
     }
   }
 

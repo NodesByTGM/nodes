@@ -3,9 +3,10 @@
 library regenified;
 
 const isDev = true;
-const API_ENDPOINT = isDev
-    ? "https://nodes-server-v1.onrender.com/api/v1"
-    : "https://nodes-api.thegridmanagement.com/v1";
+const API_ENDPOINT =
+    isDev
+        ? "https://dev.api.nodesafrica.com/api/v1"
+        : "https://dev.nodesafrica.com/api/v1";
 
 // const PAYSTACK_PRO_PLAN_SK = "PLN_e11atwl7oyvnajq";
 // const PAYSTACK_PRO_ANNUAL_PLAN_SK = "PLN_3f6iseacm5i9fum";

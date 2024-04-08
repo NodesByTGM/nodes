@@ -1,8 +1,9 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
@@ -43,7 +44,9 @@ class AuthService {
 
   Future<ApiResponse> refreshToken(payload) async {
     try {
-      ApiResponse res = await authRepository.refreshToken(payload);
+      ApiResponse res = await authRepository.refreshToken({
+        "refreshToken": payload,
+      });
       return res;
     } on DioException catch (e) {
       log.severe("Error message @refreshToken ::===> ${e.response?.data}");
@@ -105,23 +108,23 @@ class AuthService {
     }
   }
 
-  Future<ApiResponse> changePassword(payload) async {
+  Future<ApiResponse> changePassword(BuildContext ctx, payload) async {
     try {
       ApiResponse res = await authRepository.changePassword(payload);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @changePassword ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> logout() async {
+  Future<ApiResponse> logout(BuildContext ctx) async {
     try {
       ApiResponse res = await authRepository.logout();
       return res;
     } on DioException catch (e) {
       log.severe("Error message @logout ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
@@ -157,45 +160,45 @@ class AuthService {
     }
   }
 
-  Future<ApiResponse> fetchProfile() async {
+  Future<ApiResponse> fetchProfile(BuildContext ctx) async {
     try {
       ApiResponse res = await authRepository.fetchProfile();
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchProfile ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> updateProfile(payload) async {
+  Future<ApiResponse> updateProfile(BuildContext ctx, payload) async {
     try {
       ApiResponse res = await authRepository.updateProfile(payload);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @updateProfile ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> talentAccountUpgrade(payload) async {
+  Future<ApiResponse> talentAccountUpgrade(BuildContext ctx, payload) async {
     try {
       ApiResponse res = await authRepository.talentAccountUpgrade(payload);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @talentAccountUpgrade ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
-  Future<ApiResponse> businessAccountUpgrade(payload) async {
+  Future<ApiResponse> businessAccountUpgrade(BuildContext ctx, payload) async {
     try {
       ApiResponse res = await authRepository.businessAccountUpgrade(payload);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @businessAccountUpgrade ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
@@ -229,13 +232,26 @@ class AuthService {
     }
   }
 
-  Future<ApiResponse> getPaystackAuthUrl(CustomPaystackModel payload) async {
+  Future<ApiResponse> getPaystackAuthUrl(
+      BuildContext ctx, CustomPaystackModel payload) async {
     try {
       ApiResponse res = await authRepository.getPaystackAuthUrl(payload);
       return res;
     } on DioException catch (e) {
       log.severe(
           "Error message @getPaystackAuthUrl ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> verifyAndUpgradeSubscription(dynamic payload) async {
+    try {
+      ApiResponse res =
+          await authRepository.verifyAndUpgradeSubscription(payload);
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @verifyAndUpgradeSubscription ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
