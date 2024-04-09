@@ -1,12 +1,20 @@
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_textfield_autocomplete/flutter_textfield_autocomplete.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/country_state_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/expanable_profile_cards.dart';
-import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/add_project_form.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class EditTalentProfileScreen extends StatefulWidget {
   const EditTalentProfileScreen({super.key});
@@ -19,6 +27,11 @@ class EditTalentProfileScreen extends StatefulWidget {
 
 class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   final formKey = GlobalKey<FormBuilderState>();
+  late AuthController authCtrl;
+  late DashboardController dashCtrl;
+  late UserModel user;
+  List<String>? locationList = const [];
+  GlobalKey<TextFieldAutoCompleteState<String>> autoCompleteKey = GlobalKey();
   final TextEditingController firstNameCtrl = TextEditingController();
   final TextEditingController lastNameCtrl = TextEditingController();
   final TextEditingController usernameCtrl = TextEditingController();
@@ -31,9 +44,9 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   final TextEditingController linkedinCtrl = TextEditingController();
   final TextEditingController instagramCtrl = TextEditingController();
   final TextEditingController xCtrl = TextEditingController();
-  final TextEditingController descCtrl = TextEditingController();
-  final TextEditingController projectUrlCtrl = TextEditingController();
+
   final formValues = {};
+  File? profilePicture;
   bool isProfileInfo = true;
   bool isIntroduce = false;
   bool isAddProject = false;
@@ -42,22 +55,49 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   bool enableSpaces = true;
   bool enableComments = true;
 
-  List<TextEditingController> dynamicNameCollaboratorsCtrl = [
-    TextEditingController(),
-  ];
-  List<TextEditingController> dynamicRoleCollaboratorsCtrl = [
-    TextEditingController(),
-  ];
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    dashCtrl = locator.get<DashboardController>();
+    user = authCtrl.currentUser;
+    super.initState();
+    loadProfile();
+    loadStates();
+  }
 
-  List<XFile> projectImageFileList = [];
-  XFile? logoImage;
-  XFile? thumbnailImageFile;
-  bool isLoadingThumbnail = false;
-  bool isLoadingLogo = false;
-  bool isLoadingImage = false;
+  loadProfile() {
+    firstNameCtrl.text = "${user.name?.split(' ').first}";
+    lastNameCtrl.text = "${user.name?.split(' ').last}";
+    usernameCtrl.text = "${user.username}";
+    locationCtrl.text = "${user.location}";
+    heightCtrl.text = "${user.height}";
+    ageCtrl.text = "${user.age}";
+    headlineCtrl.text = "${user.headline}";
+    bioCtrl.text = "${user.bio}";
+
+    websiteCtrl.text = "${user.website}";
+    linkedinCtrl.text = "${user.linkedIn}";
+    instagramCtrl.text = "${user.instagram}";
+    xCtrl.text = "${user.twitter}";
+
+    enableSpaces = user.spaces ?? false;
+    enableComments = user.comments ?? false;
+  }
+
+  loadStates() {
+    for (CountryStateModel element in authCtrl.countryStatesList) {
+      locationList = [
+        ...(locationList as List<String>),
+        ...(element.states as List<String>)
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // authCtrl = context.watch<AuthController>();
+    // user = authCtrl.currentUser;
+    dashCtrl = context.watch<DashboardController>();
     return Container(
       decoration: const BoxDecoration(
         color: PROFILEBG,
@@ -100,70 +140,47 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (1 < 2) ...[
-                            FormWithLabel(
-                              label: "Logo",
-                              form: GestureDetector(
-                                onTap: () {
-                                  multipleImagePicker(
-                                    isLogo: true,
-                                  );
-                                },
-                                child: Stack(
-                                  children: [
-                                    if (isObjectEmpty(logoImage)) ...[
-                                      CustomDottedBorder(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(28.0),
-                                          child: Center(
-                                            child: subtext(
-                                              "Click to browse your files\nRecommended image size: 280 x 160px",
-                                              fontSize: 14,
-                                              color: GRAY,
-                                              fontWeight: FontWeight.w400,
-                                              textAlign: TextAlign.center,
-                                              height: 1.5,
-                                            ),
+                          Row(
+                            children: [
+                              if (!isObjectEmpty(profilePicture)) ...[
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: BORDER.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: isObjectEmpty(profilePicture)
+                                        ? Container()
+                                        : Image.file(
+                                            profilePicture as File,
+                                            fit: BoxFit.cover,
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                    if (!isObjectEmpty(logoImage)) ...[
-                                      Row(
-                                        children: [
-                                          cachedNetworkImage(
-                                            imgUrl:
-                                                "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-                                            size: 100,
-                                          ),
-                                          xSpace(width: 16),
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: labelText(
-                                              "Replace",
-                                              color: PRIMARY,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-
-                                    /// Loading Dialog on Empty Box
-                                    if (isLoadingLogo) ...[
-                                      Positioned(
-                                        top: 90,
-                                        left: screenWidth(context) * .42,
-                                        child: const CircularProgressIndicator
-                                            .adaptive(),
-                                      ),
-                                    ],
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              ],
+                              if (isObjectEmpty(profilePicture)) ...[
+                                cachedNetworkImage(
+                                  imgUrl: "${user.avatar?.url}",
+                                  size: 100,
+                                ),
+                              ],
+                              xSpace(width: 16),
+                              authCtrl.isUploadingMedia
+                                  ? const Loader()
+                                  : GestureDetector(
+                                      onTap: uploadImage,
+                                      child: labelText(
+                                        "Replace",
+                                        color: PRIMARY,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                            ],
+                          ),
                           ySpace(height: 32),
                           FormWithLabel(
                             label: "First name",
@@ -210,6 +227,10 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                               name: "username",
                               decoration: FormUtils.formDecoration(
                                 hintText: "",
+                                prefix: labelText(
+                                  '@ ',
+                                  color: GRAY,
+                                ),
                               ),
                               keyboardType: TextInputType.text,
                               style: FORM_STYLE,
@@ -227,21 +248,61 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           FormUtils.formSpacer(),
                           FormWithLabel(
                             label: "Location",
-                            form: FormBuilderTextField(
-                              name: "location",
+                            form: TextFieldAutoComplete(
                               decoration: FormUtils.formDecoration(
-                                hintText: "Enter your city",
+                                hintText: "Location - search by state",
                               ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
+                              clearOnSubmit: false,
                               controller: locationCtrl,
-                              onSaved: (value) =>
-                                  formValues['location'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
+                              itemSubmitted: (String? item) {
+                                locationCtrl.text = item ?? '';
+                              },
+                              suggestionsAmount: 1000,
+                              key: autoCompleteKey,
+                              suggestions: locationList ?? [''],
+                              itemBuilder: (context, String item) {
+                                bool isSelected = item.toLowerCase() ==
+                                    locationCtrl.text.toLowerCase();
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 0.5, color: BORDER)),
+                                    color: WHITE,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 15,
+                                      horizontal: 12,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                            child: subtext(
+                                          item,
+                                          color: const Color(0xFF757575),
+                                        )),
+                                        if (isSelected)
+                                          const Icon(
+                                            Icons.check_circle_outline,
+                                            color: PRIMARY,
+                                            size: 15,
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemSorter: (String a, String b) {
+                                return a.compareTo(b);
+                              },
+                              itemFilter: (String item, query) {
+                                return item
+                                    .toLowerCase()
+                                    .contains(query.toLowerCase());
+                              },
                             ),
                           ),
                           FormUtils.formSpacer(),
@@ -257,8 +318,10 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     style: FORM_STYLE,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
                                     controller: heightCtrl,
-                                    readOnly: true,
                                     onSaved: (value) =>
                                         formValues['height'] = trimValue(value),
                                     onChanged: (val) {},
@@ -276,8 +339,11 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     style: FORM_STYLE,
-                                    controller: ageCtrl,
                                     readOnly: true,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    controller: ageCtrl,
                                     onSaved: (value) =>
                                         formValues['height'] = trimValue(value),
                                     onChanged: (val) {},
@@ -288,7 +354,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
-                            onPressed: _submit,
+                            onPressed: () => _submit(0),
                             title: btnTxt("Save and Continue", WHITE),
                           ),
                           ySpace(height: 20),
@@ -350,7 +416,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
-                            onPressed: _submit,
+                            onPressed: () => _submit(1),
                             title: btnTxt("Save and Continue", WHITE),
                           ),
                           ySpace(height: 20),
@@ -365,373 +431,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ySpace(height: 16),
-                          FormWithLabel(
-                            label: "Project name *",
-                            form: FormBuilderTextField(
-                              name: "projectName",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "Ex: Actress, Actor, Director",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Description *",
-                            form: FormBuilderTextField(
-                              name: "desc",
-                              decoration: FormUtils.formDecoration(
-                                hintText:
-                                    "Add a short bio to showcase your best self",
-                              ),
-                              keyboardType: TextInputType.multiline,
-                              style: FORM_STYLE,
-                              controller: descCtrl,
-                              maxLength: 2000,
-                              maxLines: 5,
-                              onSaved: (value) =>
-                                  formValues['description'] = trimValue(value),
-                              validator: FormBuilderValidators.compose(
-                                [
-                                  FormBuilderValidators.required(context,
-                                      errorText: Constants.emptyFieldError),
-                                ],
-                              ),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Project URL *",
-                            form: FormBuilderTextField(
-                              name: "projectUrl",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "Ex: Actress, Actor, Director",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: projectUrlCtrl,
-                              onSaved: (value) =>
-                                  formValues['projectUrl'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          labelText(
-                            "Add collaborators",
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          ySpace(height: 10),
-                          subtext(
-                            "You can add cast members...etc here",
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          ySpace(height: 24),
-                          ListView.separated(
-                            itemCount: dynamicNameCollaboratorsCtrl.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (c, i) {
-                              String index = "${i + 1}";
-                              return Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        width: 0.7,
-                                        color: BORDER,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: labelText(
-                                        index,
-                                        color: BORDER,
-                                      ),
-                                    ),
-                                  ),
-                                  xSpace(width: 10),
-                                  Expanded(
-                                    child: DoubleFormWithLabel(
-                                      firstForm: FormBuilderTextField(
-                                        name: "collaboratorName$i",
-                                        decoration: FormUtils.formDecoration(
-                                          hintText: "Name",
-                                          isTransparentBorder: true,
-                                          verticalPadding: 10,
-                                        ),
-                                        keyboardType: TextInputType.text,
-                                        style: FORM_STYLE,
-                                        cursorColor: BLACK,
-                                        controller:
-                                            dynamicNameCollaboratorsCtrl[i],
-                                        onSaved: (value) => formValues['name'] =
-                                            trimValue(value),
-                                        onChanged: (val) {},
-                                      ),
-                                      lastForm: FormBuilderTextField(
-                                        name: "collaboratorRole$i",
-                                        decoration: FormUtils.formDecoration(
-                                          hintText: "role",
-                                          isTransparentBorder: true,
-                                          verticalPadding: 10,
-                                        ),
-                                        keyboardType: TextInputType.text,
-                                        style: FORM_STYLE,
-                                        cursorColor: BLACK,
-                                        controller:
-                                            dynamicRoleCollaboratorsCtrl[i],
-                                        onSaved: (value) => formValues['role'] =
-                                            trimValue(value),
-                                        onChanged: (val) {},
-                                      ),
-                                    ),
-                                  ),
-                                  xSpace(width: 10),
-                                  if (i != 0) ...[
-                                    GestureDetector(
-                                      onTap: () => deleteCollaborator(i),
-                                      child: const Icon(
-                                        // Icons.remove_circle,
-                                        Icons.delete_forever,
-                                        color: RED,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              );
-                            },
-                            separatorBuilder: (c, i) => ySpace(height: 24),
-                          ),
-                          ySpace(height: 12),
-                          GestureDetector(
-                            onTap: () => addCollaborator(),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.add_circle,
-                                  color: PRIMARY,
-                                  size: 30,
-                                ),
-                                xSpace(width: 10),
-                                labelText(
-                                  "Add another collaborator",
-                                  color: PRIMARY,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ],
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Project thumbnail",
-                            form: GestureDetector(
-                              onTap: () {
-                                multipleImagePicker(
-                                  isThumbnail: true,
-                                );
-                              },
-                              child: Stack(
-                                children: [
-                                  if (isObjectEmpty(thumbnailImageFile)) ...[
-                                    CustomDottedBorder(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(28.0),
-                                        child: Center(
-                                          child: subtext(
-                                            "Click to browse your files\nRecommended image size: 280 x 160px",
-                                            fontSize: 14,
-                                            color: GRAY,
-                                            fontWeight: FontWeight.w400,
-                                            textAlign: TextAlign.center,
-                                            height: 1.5,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  if (!isObjectEmpty(thumbnailImageFile)) ...[
-                                    Container(
-                                      height: 130,
-                                      width: screenWidth(context),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(1),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.file(
-                                          File(thumbnailImageFile!.path),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  // Denoting Users can re-upload a new image...
-                                  if (!isObjectEmpty(thumbnailImageFile)) ...[
-                                    Positioned(
-                                      top: 40,
-                                      left: screenWidth(context) * .4,
-                                      child: const Icon(
-                                        Icons.add_circle,
-                                        color: BORDER,
-                                        size: 50,
-                                      ),
-                                    ),
-                                  ],
-
-                                  /// Loading Dialog on Empty Box
-                                  if (isLoadingThumbnail) ...[
-                                    Positioned(
-                                      top: 90,
-                                      left: screenWidth(context) * .42,
-                                      child: const CircularProgressIndicator
-                                          .adaptive(),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Project images",
-                            form: !isObjectEmpty(projectImageFileList)
-                                ? SizedBox(
-                                    height: 150,
-                                    child: Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            multipleImagePicker();
-                                          },
-                                          child: Container(
-                                            height: 180,
-                                            width: 100,
-                                            padding:
-                                                const EdgeInsets.only(right: 5),
-                                            child: CustomDottedBorder(
-                                              child: Center(
-                                                /// Loading Dialog on alreay selected boxes
-                                                child: isLoadingImage
-                                                    ? const CircularProgressIndicator
-                                                        .adaptive()
-                                                    : const Icon(
-                                                        Icons.add,
-                                                      ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: ListView.separated(
-                                            itemCount:
-                                                projectImageFileList.length,
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (c, i) {
-                                              File img = File(
-                                                  projectImageFileList[i].path);
-                                              return Stack(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 180,
-                                                    width: 100,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      child: Image.file(
-                                                        img,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    right: 5,
-                                                    top: 10,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          projectImageFileList
-                                                              .removeWhere(
-                                                                  (element) =>
-                                                                      element ==
-                                                                      projectImageFileList[
-                                                                          i]);
-                                                        });
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.delete_outline,
-                                                        color: RED,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                            separatorBuilder: (c, i) =>
-                                                xSpace(width: 8),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : GestureDetector(
-                                    onTap: () {
-                                      multipleImagePicker();
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        CustomDottedBorder(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(28.0),
-                                            child: Center(
-                                              child: subtext(
-                                                "Click to browse your files\nRecommended image size: 280 x 160px",
-                                                fontSize: 14,
-                                                color: GRAY,
-                                                fontWeight: FontWeight.w400,
-                                                textAlign: TextAlign.center,
-                                                height: 1.5,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-
-                                        /// Loading Dialog on Empty Box
-                                        if (isLoadingImage) ...[
-                                          Positioned(
-                                            top: 90,
-                                            left: screenWidth(context) * .42,
-                                            child:
-                                                const CircularProgressIndicator
-                                                    .adaptive(),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                          ),
-                          ySpace(height: 40),
-                          SubmitBtn(
-                            onPressed: _submit,
-                            title: btnTxt("Save and Continue", WHITE),
-                          ),
+                          const AddProjectForm(),
                           ySpace(height: 20),
                         ],
                       ),
@@ -828,7 +528,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           ),
                           ySpace(height: 40),
                           SubmitBtn(
-                            onPressed: _submit,
+                            onPressed: () => _submit(2),
                             title: btnTxt("Save and Continue", WHITE),
                           ),
                           ySpace(height: 20),
@@ -866,6 +566,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                                 onChanged: (val) {
                                   setState(() {
                                     enableSpaces = !enableSpaces;
+                                    _submit(3);
                                   });
                                 },
                               ),
@@ -873,6 +574,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                             onTap: () {
                               setState(() {
                                 enableSpaces = !enableSpaces;
+                                _submit(3);
                               });
                             },
                           ),
@@ -900,6 +602,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                                 onChanged: (val) {
                                   setState(() {
                                     enableComments = !enableComments;
+                                    _submit(4);
                                   });
                                 },
                               ),
@@ -907,6 +610,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                             onTap: () {
                               setState(() {
                                 enableComments = !enableComments;
+                                _submit(4);
                               });
                             },
                           ),
@@ -924,81 +628,122 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
     );
   }
 
-  void addCollaborator() {
-    for (var element in dynamicNameCollaboratorsCtrl) {
-      if (isObjectEmpty(element.text)) {
-        showText(message: "Oops!!! Please fill the empty name.");
-        return;
-      }
-    }
-    for (var element in dynamicRoleCollaboratorsCtrl) {
-      if (isObjectEmpty(element.text)) {
-        showText(message: "Oops!!! Please fill the empty role.");
-        return;
-      }
-    }
-    dynamicNameCollaboratorsCtrl.add(TextEditingController());
-    dynamicRoleCollaboratorsCtrl.add(TextEditingController());
-    setState(() {});
-  }
-
-  void deleteCollaborator(int index) {
-    dynamicNameCollaboratorsCtrl.removeAt(index);
-    dynamicRoleCollaboratorsCtrl.removeAt(index);
-    setState(() {});
-  }
-
-  multipleImagePicker({
-    bool isThumbnail = false,
-    bool isLogo = false,
-  }) async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
-    if (isThumbnail) {
-      awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        thumbnailImageFile = selectedImage;
-      }
-    } else if (isLogo) {
-      awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        logoImage = selectedImage;
-      }
-    } else {
-      awaitingImageLoad(false);
-      final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-      awaitingImageLoad(false);
-      if (selectedImages.isNotEmpty) {
-        projectImageFileList.addAll(selectedImages);
-      }
-    }
-    setState(() {});
-  }
-
-  awaitingImageLoad(bool isThumbnail) {
-    switch (isThumbnail) {
-      case true:
-        setState(() {
-          isLoadingThumbnail = !isLoadingThumbnail;
-          isLoadingLogo = !isLoadingLogo; // just putting it here
-        });
-        break;
-      default:
-        setState(() {
-          isLoadingImage = !isLoadingImage;
-        });
-    }
-  }
-
-  void _submit() async {
+  void _submit(int index) {
     closeKeyPad(context);
+    switch (index) {
+      case 0:
+        // Update the personal info
+        // Check if any madatory field is empty...
+        if (isObjectEmpty(firstNameCtrl.text) ||
+            isObjectEmpty(lastNameCtrl.text) ||
+            isObjectEmpty(locationCtrl.text)) {
+          showText(message: "Oops!! Please complete Personal Info section");
+          return;
+        }
+        updateUserProfile(user.copyWith(
+          name: "${firstNameCtrl.text} ${lastNameCtrl.text}",
+          location: locationCtrl.text,
+          height: heightCtrl.text,
+        ));
+        return;
+      case 1:
+        // Update the introduction
+        // Check if any madatory field is empty...
+        if (isObjectEmpty(headlineCtrl.text) || isObjectEmpty(bioCtrl.text)) {
+          showText(message: "Oops!! Please complete Introduction section");
+          return;
+        }
+        updateUserProfile(user.copyWith(
+          headline: headlineCtrl.text,
+          bio: bioCtrl.text,
+        ));
+        return;
+      case 2:
+        // Update the online profiles
+        // Check if at least one field is provided...
+        bool hasLinkedIn = isObjectEmpty(linkedinCtrl.text);
+        bool hasTwitter = isObjectEmpty(xCtrl.text);
+        bool hasInstagram = isObjectEmpty(instagramCtrl.text);
+        //
+        bool isValidLinkedIn = validateSocialMediaField(
+          type: SocialMediaTypes.Linkedin,
+          value: linkedinCtrl.text,
+        );
+        bool isValidTwitter = validateSocialMediaField(
+          type: SocialMediaTypes.Twitter,
+          value: xCtrl.text,
+        );
+        bool isValidInstagram = validateSocialMediaField(
+          type: SocialMediaTypes.Instagram,
+          value: instagramCtrl.text,
+        );
+        if (hasLinkedIn && hasInstagram && hasTwitter) {
+          showText(message: "Please provide atleast ONE social media account");
+          return;
+        }
+        if (!hasLinkedIn && !isValidLinkedIn) {
+          // User entered linkedIn, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid LinkedIn URL");
+          return;
+        } else if (!hasInstagram && !isValidInstagram) {
+          // User entered instagram, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid Instagram URL");
+          return;
+        } else if (!hasTwitter && !isValidTwitter) {
+          // User entered twitter, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid X  URL");
+          return;
+        }
+        updateUserProfile(user.copyWith(
+          website: websiteCtrl.text,
+          linkedIn: linkedinCtrl.text,
+          instagram: instagramCtrl.text,
+          twitter: xCtrl.text,
+        ));
+        return;
+      case 3:
+        // Update the Toggle Spaces
+        // Check if at least one field is provided...
+
+        updateUserProfile(user.copyWith(
+          spaces: enableSpaces,
+          comments: enableComments,
+        ));
+        return;
+      case 4:
+        // Update the Toggle Comments
+        // Check if at least one field is provided...
+
+        updateUserProfile(user.copyWith(
+          spaces: enableSpaces,
+          comments: enableComments,
+        ));
+        return;
+      default:
+    }
     if (formKey.currentState!.saveAndValidate()) {}
-    formKey.currentState!.reset();
+    // formKey.currentState!.reset();
+  }
+
+  void updateUserProfile(UserModel user) async {
+    await authCtrl.updateProfile(context, user.toJson());
+  }
+
+  void uploadImage() async {
+    File? _ = await selectImageFromGallery();
+    if (_ != null) {
+      profilePicture = _;
+      setState(() {});
+    }
+    String imageByteString =
+        await convertFileToString("${profilePicture?.path}");
+    // print("George, here's the imageByte: $imageByteString");
+
+// Remember to delete the old image with the ID before uploading a new one...
+    MediaUploadModel? imageUrl = await authCtrl.mediaUpload(imageByteString);
+    if (!isObjectEmpty(imageUrl)) {
+      updateUserProfile(user.copyWith(avatar: imageUrl));
+    }
   }
 
   @override
@@ -1015,14 +760,6 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
     linkedinCtrl.dispose();
     instagramCtrl.dispose();
     xCtrl.dispose();
-    descCtrl.dispose();
-    projectUrlCtrl.dispose();
-    for (var element in dynamicNameCollaboratorsCtrl) {
-      element.dispose();
-    }
-    for (var element in dynamicRoleCollaboratorsCtrl) {
-      element.dispose();
-    }
     super.dispose();
   }
 }

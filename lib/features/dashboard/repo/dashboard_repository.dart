@@ -12,6 +12,7 @@ class DashboardApis {
 
     // Projects
   static const projectApi = "$baseApi/projects";
+  static const myProjects = "$projectApi/mine";
 
   // Events
   static const events = "$baseApi/events";
@@ -44,7 +45,16 @@ abstract class DashboardRepository {
   Future<ApiResponse> createProject(@Body() payload);
 
   @GET(DashboardApis.projectApi)
-  Future<ApiResponse> fetchProject();
+  Future<ApiResponse> fetchAllProjects(
+    @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
+
+  @GET(DashboardApis.myProjects)
+  Future<ApiResponse> fetchMyProjects(
+    @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 
 // Events
   @POST(DashboardApis.events)

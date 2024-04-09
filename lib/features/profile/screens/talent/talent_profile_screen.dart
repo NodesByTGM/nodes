@@ -1,4 +1,8 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/interactions_tab.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/profile/components/projects_tab.dart';
@@ -17,9 +21,24 @@ class TalentProfileScreen extends StatefulWidget {
 class _TalentProfileScreenState extends State<TalentProfileScreen> {
   int currentIndex = 0;
   bool isRegistered = true;
+  late UserModel user;
+  late AuthController authCtrl;
+  late DashboardController dashCtrl;
+
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    dashCtrl = locator.get<DashboardController>();
+    user = authCtrl.currentUser;
+    safeNavigate(
+        () => context.read<DashboardController>().fetchMyProjects(context));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
+    dashCtrl = context.watch<DashboardController>();
     return ListView(
       children: [
         Container(
@@ -32,12 +51,11 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
               ListTile(
                 contentPadding: const EdgeInsets.all(0),
                 leading: cachedNetworkImage(
-                  imgUrl:
-                      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                  imgUrl: "${user.avatar?.url}",
                   size: 100,
                 ),
                 title: labelText(
-                  "Jane Doe",
+                  "${user.name}",
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
@@ -47,7 +65,7 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                   children: [
                     ySpace(height: 2),
                     labelText(
-                      "@JD",
+                      "@${user.username}",
                       fontSize: 14,
                       color: GRAY,
                       fontWeight: FontWeight.w500,
@@ -62,7 +80,7 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                           color: GRAY,
                         ),
                         subtext(
-                          "68cm",
+                          "${!isObjectEmpty(user.height) ? user.height : '**'}cm",
                         ),
                         subtext(
                           "|",
@@ -73,7 +91,7 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                           color: GRAY,
                         ),
                         subtext(
-                          "23 years",
+                          "${!isObjectEmpty(user.age) ? user.age : '**'} years",
                         ),
                       ],
                     ),
@@ -82,59 +100,59 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
               ),
               ySpace(height: 24),
               CustomDottedBorder(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    labelText(
-                      "Your headline and bio goes here",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    ySpace(height: 10),
-                    subtext(
-                      "Share more about yourself and what you hope to accomplish",
-                      fontSize: 14,
-                      // fontWeight: FontWeight.w400,
-                    ),
-                  ],
+                child: SizedBox(
+                  width: screenWidth(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      labelText(
+                        !isObjectEmpty(user.headline)
+                            ? "${user.headline}"
+                            : "Your headline and bio goes here",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      ySpace(height: 10),
+                      subtext(
+                        !isObjectEmpty(user.bio)
+                            ? "${user.bio}"
+                            : "Share more about yourself and what you hope to accomplish",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               ySpace(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        ImageUtils.mapLocationIcon,
-                        color: GRAY,
-                      ),
-                      xSpace(width: 5),
-                      subtext(
-                        "Location",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: GRAY,
-                      ),
-                    ],
+                  Expanded(
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageUtils.mapLocationIcon,
+                          color: GRAY,
+                        ),
+                        xSpace(width: 5),
+                        subtext(
+                          !isObjectEmpty(user.location)
+                              ? "${user.location}"
+                              : "Location",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: GRAY,
+                        ),
+                      ],
+                    ),
                   ),
                   xSpace(width: 10),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        ImageUtils.chainLinkIcon,
-                        color: GRAY,
-                      ),
-                      xSpace(width: 5),
-                      subtext(
-                        "Websites",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: GRAY,
-                      ),
-                    ],
+                    spacing: 15,
+                    children: userSocials(user),
                   ),
                 ],
               ),
@@ -182,7 +200,8 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                     Expanded(
                       child: OutlineBtn(
                         onPressed: () async {
-                          final res = await shareDoc(context);
+                          final res = await shareDoc(context,
+                              url: "$nodeWebsite/${user.username}");
                         },
                         borderColor: PRIMARY,
                         color: WHITE,
@@ -260,6 +279,10 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
   }
 
   getTabBody() {
-    return currentIndex == 0 ? ProjectsTab() : InteractionsTab();
+    return currentIndex == 0
+        ? ProjectsTab(
+            projects: dashCtrl.myProjectList,
+          )
+        : InteractionsTab();
   }
 }

@@ -1,13 +1,25 @@
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class ProjectDetails extends StatefulWidget {
-  const ProjectDetails({super.key});
+  const ProjectDetails({super.key, required this.project});
+
+  final ProjectModel project;
 
   @override
   State<ProjectDetails> createState() => _ProjectDetailsState();
 }
 
 class _ProjectDetailsState extends State<ProjectDetails> {
+  late ProjectModel project;
+
+  @override
+  void initState() {
+    project = widget.project;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -50,34 +62,24 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: cachedNetworkImage(
-                      imgUrl:
-                          'https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg',
+                      imgUrl: '${project.thumbnail?.url}',
                     ),
                   ),
                 ),
                 ySpace(height: 16),
                 titleFn('Project name'),
                 ySpace(height: 5),
-                contentFn("Lorem ipsum"),
+                contentFn("${project.name}"),
                 ySpace(height: 24),
-                titleFn(
-                  "Description",
-                ),
+                titleFn("Description"),
                 ySpace(height: 5),
-                contentFn(
-                    "Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. "),
+                contentFn("${project.description}"),
                 ySpace(height: 24),
                 titleFn(
                   "Project URL",
                 ),
                 ySpace(height: 5),
-                contentFn("http://urlblahblahblah.com"),
-                ySpace(height: 24),
-                titleFn(
-                  "Project URL",
-                ),
-                ySpace(height: 5),
-                contentFn("http://urlblahblahblah.com"),
+                contentFn("${project.projectURL}"),
                 ySpace(height: 24),
                 titleFn(
                   "Collaborators",
@@ -86,39 +88,87 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                 //
                 // 1. Name of Collaborator...
                 //
+                ...getCollaborators(),
                 ySpace(height: 24),
                 titleFn(
                   "Project images",
                 ),
                 ySpace(height: 5),
-                SizedBox(
-                  height: 150,
-                  child: ListView.separated(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (c, i) {
-                      return SizedBox(
-                        height: 180,
-                        width: 100,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: cachedNetworkImage(
-                            imgUrl:
-                                'https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg',
+                isObjectEmpty(project.images)
+                    ? Container(
+                        child: Center(
+                          child: subtext(
+                            "No Project Images were provided.",
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      );
-                    },
-                    separatorBuilder: (c, i) => xSpace(width: 8),
-                  ),
-                ),
+                      )
+                    : SizedBox(
+                        height: 150,
+                        child: ListView.separated(
+                          itemCount: project.images!.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (c, i) {
+                            MediaUploadModel img = project.images![i];
+                            return SizedBox(
+                              height: 180,
+                              width: 100,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: cachedNetworkImage(
+                                  imgUrl: img.url,
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (c, i) => xSpace(width: 8),
+                        ),
+                      ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  getCollaborators() {
+    if (isObjectEmpty(project.collaborators)) {
+      return SizedBox(
+        child: Center(
+          child: subtext(
+            "No collaborator(s)  added yet.",
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+    List<Widget> _ = [];
+    // for (var f in (project.collaborators!)) {
+    for (var i = 0; i < (project.collaborators!).length; i++) {
+      CollaboratorModel c = project.collaborators![i];
+      _.add(
+        ListTile(
+          contentPadding: const EdgeInsets.all(0),
+          visualDensity: VisualDensity.compact,
+          leading: subtext(
+            '${i + 1}',
+          ),
+          title: labelText(
+            "${c.name}",
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+          subtitle: subtext(
+            "${c.role}",
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      );
+    }
+    return _;
   }
 
   Text contentFn(String content) {

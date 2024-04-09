@@ -1,4 +1,6 @@
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/dashboard/model/project_model.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/profile/components/projects_tab.dart';
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
@@ -176,14 +178,15 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
     );
   }
 
-
   getTabBody() {
     return currentIndex == 0
         ? ProjectsTab(
             isBusiness: true,
+            projects: context.watch<DashboardController>().myProjectList,
           )
         : ProjectsTab(
             isBusiness: true,
+            projects: context.watch<DashboardController>().myProjectList,
           );
   }
 }

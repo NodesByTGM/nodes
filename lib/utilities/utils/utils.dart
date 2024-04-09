@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:bot_toast/src/toast.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/config/dependencies.dart';
@@ -723,11 +724,24 @@ socialInteractionIconWithVal({
   );
 }
 
-Future<ShareResultStatus> shareDoc(BuildContext context) async {
+Future<ShareResultStatus> shareDoc(
+  BuildContext context, {
+  String? url,
+  String linkType = 'Profile',
+}) async {
   final box = context.findRenderObject() as RenderBox?;
 
+  var msg = '';
+  switch (linkType) {
+    case 'post':
+      msg = 'Check out this post';
+      break;
+    default:
+      msg = "Visit my profile on the nodes platform via ";
+  }
+
   final result = await Share.shareWithResult(
-    'check out this post https://example.com',
+    '$msg $url',
     sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
   );
   if (result.status == ShareResultStatus.success) {
@@ -837,5 +851,63 @@ Container analyticsCard({
 Future<String> convertFileToString(String filePath) async =>
     "data:image/png;base64,${base64Encode(await (File(filePath).readAsBytes()))}";
 
+String getShortName(String name) => name.substring(0, 2).toUpperCase();
 
-  String getShortName(String name) =>  name.substring(0, 2).toUpperCase();
+List<Widget> userSocials(UserModel user) {
+  List<Widget> iconArr = [];
+
+  if (!isObjectEmpty(user.linkedIn)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.linkedinIcon,
+      ),
+    );
+  }
+  if (!isObjectEmpty(user.instagram)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.instagramIcon,
+      ),
+    );
+  }
+  if (!isObjectEmpty(user.website)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.globeIcon,
+      ),
+    );
+  }
+  if (!isObjectEmpty(user.twitter)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.twitterIcon,
+      ),
+    );
+  }
+  return !isObjectEmpty(iconArr)
+      ? iconArr
+      : [
+          SvgPicture.asset(
+            ImageUtils.chainLinkIcon,
+            color: GRAY,
+          ),
+          xSpace(width: 5),
+          subtext(
+            "Websites",
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: GRAY,
+          ),
+        ];
+}
+
+GestureDetector iconWithLink({
+  required GestureTapCallback onTap,
+  required String icon,
+}) {
+  return GestureDetector(onTap: onTap, child: SvgPicture.asset(icon));
+}

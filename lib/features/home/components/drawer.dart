@@ -5,7 +5,6 @@ import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
-import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';

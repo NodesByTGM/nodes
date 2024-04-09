@@ -6,6 +6,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/paystack_webview.dart';
 
@@ -44,7 +45,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
       children: [
         ListView(
           shrinkWrap: true,
-          padding: const EdgeInsets.only(top: 32, bottom: 60),
+          padding: const EdgeInsets.only(top: 32, bottom: 150),
           children: [
             labelText(
               "Proceed with payment",
@@ -159,16 +160,36 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                 top: BorderSide(width: 0.7, color: BORDER),
               ),
             ),
-            child: GestureDetector(
-              onTap: () {
-                context.read<NavController>().popPageListStack();
-              },
-              child: labelText(
-                "Go Back",
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                textAlign: TextAlign.center,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<NavController>().popPageListStack();
+                    },
+                    child: labelText(
+                      "Go Back",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                xSpace(width: 20),
+                Expanded(
+                  flex: 3,
+                  child: SubmitBtn(
+                    onPressed: () {
+                      context.read<NavController>().updatePageListStack(
+                            SubscriptionScreen.routeName,
+                          );
+                    },
+                    color: BORDER,
+                    title: btnTxt('View other plans', PRIMARY),
+                  ),
+                )
+              ],
             ),
           ),
         ),

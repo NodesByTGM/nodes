@@ -14,6 +14,7 @@ const API_ENDPOINT =
 // const PAYSTACK_BUSINESS_ANNUAL_PLAN_SK = "PLN_68xympmt1h631xk";
 // const PAYSTACK_SECRET_KEY = "sk_test_933b5ba1d98700c5bd1d06f0533c8a19bfbb7dd6";
 
+const nodeWebsite = "https://dev.api.nodesafrica.com";
 const tGMWebsite = "https://thegridmanagement.com";
 const paystackCancelActionUrl = "https://www.google.com/";
 const paystackCardCallbackUrl = "https://standard.paystack.co/close";

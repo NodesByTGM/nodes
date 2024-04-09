@@ -1,3 +1,6 @@
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/features/profile/components/add_project.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/profile/components/project_details.dart';
@@ -7,31 +10,44 @@ class ProjectsTab extends StatefulWidget {
   const ProjectsTab({
     super.key,
     this.isBusiness = false,
+    required this.projects,
   });
 // use enum to detect if it's the
 // Job/Event
 // Project
 
   final bool isBusiness;
+  final List<ProjectModel> projects;
 
   @override
   State<ProjectsTab> createState() => _ProjectsTabState();
 }
 
 class _ProjectsTabState extends State<ProjectsTab> {
+  late AuthController authCtrl;
+  late List<ProjectModel> projects;
+
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    projects = widget.projects;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return 1 > 2
+    authCtrl = context.watch<AuthController>();
+    return isObjectEmpty(projects)
         ? Container(
             color: WHITE,
-            height: 200,
+            // height: 200,
             child: Center(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     ySpace(height: 20),
                     labelText(
-                      "Hi Aderinsola!",
+                      "Hi ${authCtrl.currentUser.name?.split(" ").first}!",
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
@@ -63,9 +79,10 @@ class _ProjectsTabState extends State<ProjectsTab> {
         : ProfileCard(
             child: ListView.separated(
               shrinkWrap: true,
-              itemCount: 5,
+              itemCount: projects.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (c, i) {
+                ProjectModel project = projects[i];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,19 +92,18 @@ class _ProjectsTabState extends State<ProjectsTab> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: cachedNetworkImage(
-                          imgUrl:
-                              'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+                          imgUrl: '${project.thumbnail?.url}',
                         ),
                       ),
                     ),
                     ySpace(height: 16),
                     labelText(
-                      "Name  of project",
+                      "${project.name}",
                       fontSize: 14,
                     ),
                     ySpace(height: 10),
                     subtext(
-                      "Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. Lorem ipsum dolor sit amet consectetur. Cum amet id lectus viverra faucibus. Arcu eget hendrerit ut dictumst id. ",
+                      "${project.description}",
                     ),
                     ySpace(height: 24),
                     if (widget.isBusiness) ...[
@@ -105,7 +121,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => showProjectDetailsModal(),
+                            onTap: () => showProjectDetailsModal(project),
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -156,7 +172,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
           );
   }
 
-  showProjectDetailsModal() async {
+  showProjectDetailsModal(ProjectModel project) async {
     showSimpleDialog(
       context: context,
       backgroundColor: WHITE,
@@ -164,7 +180,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
       dismissable: true,
       insetPadding: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.only(bottom: 0),
-      child: const ProjectDetails(),
+      child: ProjectDetails(project: project),
     );
   }
 

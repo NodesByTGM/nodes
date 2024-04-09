@@ -21,6 +21,36 @@ class DashboardService {
   // Functions
 
   // Events
+  Future<ApiResponse> createProject(BuildContext ctx,dynamic payload) async {
+    try {
+      ApiResponse res = await dashboardRepository.createProject(payload);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @createProject ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> fetchAllProjects(BuildContext ctx,{required int page, required int pageSize,}) async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchAllProjects(page, pageSize);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @fetchAllProjects ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> fetchMyProjects(BuildContext ctx,{required int page, required int pageSize,}) async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchMyProjects(page, pageSize);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @fetchMyProjects ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
   Future<ApiResponse> createEvent(BuildContext ctx,dynamic payload) async {
     try {
       ApiResponse res = await dashboardRepository.createEvent(payload);

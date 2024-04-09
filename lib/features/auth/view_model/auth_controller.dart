@@ -142,7 +142,6 @@ class AuthController extends BaseController {
 
   Future<void> _customUserSessionUpdate(ApiResponse res) async {
     UserModel user = UserModel.fromJson(res.result as Map<String, dynamic>);
-    print("George this is the user after subscription: ${user.toJson()}");
     CurrentSession? cS = await currentSession;
     if (isObjectEmpty(cS)) {
       // Meaning user is only signing in

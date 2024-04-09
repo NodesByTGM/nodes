@@ -46,9 +46,15 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchProject() async {
+  Future<ApiResponse> fetchAllProjects(
+    int page,
+    int pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -60,6 +66,39 @@ class _DashboardRepository implements DashboardRepository {
             .compose(
               _dio.options,
               'https://dev.api.nodesafrica.com/api/v1/projects',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ApiResponse> fetchMyProjects(
+    int page,
+    int pageSize,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'pageSize': pageSize,
+    };
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'https://dev.api.nodesafrica.com/api/v1/projects/mine',
               queryParameters: queryParameters,
               data: _data,
             )
