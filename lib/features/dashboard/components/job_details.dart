@@ -10,9 +10,11 @@ class JobDetails extends StatefulWidget {
   const JobDetails({
     super.key,
     required this.job,
+    this.isFromBusiness = true,
   });
 
   final JobModel job;
+  final bool isFromBusiness;
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
@@ -35,6 +37,7 @@ class _JobDetailsState extends State<JobDetails> {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 20),
       children: [
         ListTile(
           leading: Image.asset(
@@ -105,36 +108,38 @@ class _JobDetailsState extends State<JobDetails> {
           ),
         ),
         ySpace(height: 24),
-        Row(
-          children: [
-            dashCtrl.isSavingUnsavedJobs
-                ? const Loader()
-                : GestureDetector(
-                    onTap: () {
-                      saveJob();
-                    },
-                    child: SvgPicture.asset(job.saved
-                        ? ImageUtils.saveJobFilledIcon
-                        : ImageUtils.saveJobIcon),
-                  ),
-            xSpace(width: 16),
-            Expanded(
-              child: SubmitBtn(
-                onPressed: job.applied
-                    ? null
-                    : () {
-                        applyForJob();
+        if (!widget.isFromBusiness) ...[
+          Row(
+            children: [
+              dashCtrl.isSavingUnsavedJobs
+                  ? const Loader()
+                  : GestureDetector(
+                      onTap: () {
+                        saveJob();
                       },
-                title: btnTxt(
-                  job.applied ? "Applied" : "Apply",
-                  WHITE,
+                      child: SvgPicture.asset(job.saved
+                          ? ImageUtils.saveJobFilledIcon
+                          : ImageUtils.saveJobIcon),
+                    ),
+              xSpace(width: 16),
+              Expanded(
+                child: SubmitBtn(
+                  onPressed: job.applied
+                      ? null
+                      : () {
+                          applyForJob();
+                        },
+                  title: btnTxt(
+                    job.applied ? "Applied" : "Apply",
+                    WHITE,
+                  ),
+                  loading: dashCtrl.isApplyingForJob,
                 ),
-                loading: dashCtrl.isApplyingForJob,
               ),
-            ),
-          ],
-        ),
-        ySpace(height: 24),
+            ],
+          ),
+          ySpace(height: 24),
+        ],
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -231,11 +236,11 @@ class _JobDetailsState extends State<JobDetails> {
   }
 
   void saveJob() async {
-    await dashCtrl.saveJob(context,job.id);
+    await dashCtrl.saveJob(context, job.id);
   }
 
   void applyForJob() async {
-    await dashCtrl.applyForJob(context,job.id);
+    await dashCtrl.applyForJob(context, job.id);
   }
 }
 

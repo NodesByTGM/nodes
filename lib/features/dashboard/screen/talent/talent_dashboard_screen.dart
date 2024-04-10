@@ -10,7 +10,6 @@ import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
-import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 
@@ -27,9 +26,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   late AuthController authCtrl;
   late DashboardController dashCtrl;
   late UserModel user;
-  int jobLength = 5;
   int spaceLength = 5;
-  int trendingLength = 5;
   int currentJobsForYouIndex = 0;
   int currentSpaceIndex = 0;
   int currentTrendingIndex = 0;
@@ -68,7 +65,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
         children: [
           ySpace(height: 40),
           labelText(
-            "Hi  ${user.name?.split(' ').first}, Nice to have you here.",
+            "Hi  ${user.name?.split(' ').first}!, Nice to have you here.",
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
@@ -164,7 +161,8 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: dashCtrl.savedJobsList.length,
+              itemCount: dashCtrl.savedJobsList
+                  .length, // should be list of applied jobs, and not saved
               controller: appliedJobsCtrl,
               onPageChanged: (val) {
                 currentAppliedJobsIndex = val;
@@ -184,7 +182,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(jobLength, (index) {
+                  ...List.generate(dashCtrl.savedJobsList.length, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
@@ -201,7 +199,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: jobLength,
+                        totoalLength: dashCtrl.savedJobsList.length,
                         currentIndex: currentAppliedJobsIndex,
                         ctrl: appliedJobsCtrl,
                       );
@@ -215,7 +213,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: jobLength,
+                        totoalLength: dashCtrl.savedJobsList.length,
                         currentIndex: currentAppliedJobsIndex,
                         ctrl: appliedJobsCtrl,
                       );
@@ -271,6 +269,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               itemBuilder: (context, index) {
                 return JobCard(
                   job: dashCtrl.jobsList[index],
+                  
                 );
               },
             ),
@@ -447,7 +446,6 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           ),
           ySpace(height: 24),
           SizedBox(
-            // height: 368,
             height: 200,
             child: PageView.builder(
               itemCount: dashCtrl.eventsList.length,
@@ -472,7 +470,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(trendingLength, (index) {
+                  ...List.generate(dashCtrl.eventsList.length, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
@@ -489,7 +487,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: trendingLength,
+                        totoalLength: dashCtrl.eventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );
@@ -503,7 +501,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: trendingLength,
+                        totoalLength: dashCtrl.eventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );

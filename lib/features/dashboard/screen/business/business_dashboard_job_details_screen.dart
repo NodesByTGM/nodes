@@ -1,8 +1,10 @@
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/job_analytics.dart';
 import 'package:nodes/features/dashboard/components/job_applicants.dart';
 import 'package:nodes/features/dashboard/components/job_details.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -19,6 +21,15 @@ class BusinessJobDetailsScreen extends StatefulWidget {
 
 class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
   int currentIndex = 0;
+
+  late DashboardController dashCtrl;
+  late JobModel job;
+  @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    job = dashCtrl.currentlyViewedBusinessJob;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +83,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
                       ),
                       tabHeader(
                         isActive: currentIndex == 1,
-                        title: "Applicants (2)",
+                        title: "Applicants (${job.applicants?.length})",
                         onTap: () {
                           setState(() {
                             currentIndex = 1;
@@ -132,16 +143,16 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
   getTabBody() {
     switch (currentIndex) {
       case 0:
-        return const JobDetails(
-          job: JobModel(),
+        return JobDetails(
+          job: job,
         );
       case 1:
-        return const JobApplicants();
+        return JobApplicants(job: job);
       case 2:
-        return const JobAnalytics();
+        return  JobAnalytics(job: job);
       default:
-        return const JobDetails(
-          job: JobModel(),
+        return JobDetails(
+          job: job,
         );
     }
   }

@@ -1,13 +1,13 @@
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
-class SavedEventCard extends StatelessWidget {
-  const SavedEventCard({super.key});
+class SavedEventApplicantCard extends StatelessWidget {
+  const SavedEventApplicantCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return 1 > 2
         ? ListView(
-            children: [labelText("No Savers yet")],
+            children: [labelText("Nobody has saved this event yet")],
           )
         : ListView.separated(
             shrinkWrap: true,
@@ -46,6 +46,8 @@ class SavedEventCard extends StatelessWidget {
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
                         onTap: () {},
+                        // send them to either individual or talent profile, but restrict the edit profile access...
+                        // Simply ask backend to include the account type, so you'd know where to send this business owner to.
                         child: labelText(
                           "View profile",
                           color: PRIMARY,

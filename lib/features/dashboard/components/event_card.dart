@@ -138,11 +138,16 @@ class EventCard extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
-                      isFromBusiness
-                          ? context.read<NavController>().updatePageListStack(
-                                BusinessEventDetailsScreen.routeName,
-                              )
-                          : showEventDetailsBottomSheet(context, event);
+                      if (isFromBusiness) {
+                        context
+                            .read<DashboardController>()
+                            .setCurrentlyViewedEvent(event);
+                        context.read<NavController>().updatePageListStack(
+                              BusinessEventDetailsScreen.routeName,
+                            );
+                      } else {
+                        showEventDetailsBottomSheet(context, event);
+                      }
                     },
                     child: labelText(
                       "View details",
@@ -163,8 +168,12 @@ class EventCard extends StatelessWidget {
 
   saveUnsaveEvent(BuildContext context, EventModel event) async {
     event.saved
-        ? await context.read<DashboardController>().unSaveEvent(context,event.id)
-        : await context.read<DashboardController>().saveEvent(context,event.id);
+        ? await context
+            .read<DashboardController>()
+            .unSaveEvent(context, event.id)
+        : await context
+            .read<DashboardController>()
+            .saveEvent(context, event.id);
   }
 
   showEventDetailsBottomSheet(BuildContext context, EventModel event) {

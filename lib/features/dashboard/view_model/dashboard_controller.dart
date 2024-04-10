@@ -23,6 +23,8 @@ class DashboardController extends BaseController {
   // Variables
   List<SavedJobModel> _savedJobsList = [];
   List<JobModel> _jobsList = [];
+  EventModel _currentlyViewedBusinessEvent = const EventModel();
+  JobModel _currentlyViewedBusinessJob = const JobModel();
   List<EventModel> _savedEventsList = [];
   List<EventModel> _eventsList = [];
   List<ProjectModel> _projectList = [];
@@ -31,6 +33,8 @@ class DashboardController extends BaseController {
   // Getters
   List<SavedJobModel> get savedJobsList => _savedJobsList;
   List<JobModel> get jobsList => _jobsList;
+  JobModel get currentlyViewedBusinessJob => _currentlyViewedBusinessJob;
+  EventModel get currentlyViewedBusinessEvent => _currentlyViewedBusinessEvent;
   List<EventModel> get savedEvents => _savedEventsList;
   List<EventModel> get eventsList => _eventsList;
   List<ProjectModel> get projectList => _projectList;
@@ -53,6 +57,11 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
+  setCurrentlyViewedJob(JobModel job) {
+    _currentlyViewedBusinessJob = job;
+    notifyListeners();
+  }
+
   setSavedEvents(List<EventModel> events) {
     _savedEventsList = events;
     notifyListeners();
@@ -60,6 +69,11 @@ class DashboardController extends BaseController {
 
   setEventsList(List<EventModel> events) {
     _eventsList = events;
+    notifyListeners();
+  }
+
+  setCurrentlyViewedEvent(EventModel event) {
+    _currentlyViewedBusinessEvent = event;
     notifyListeners();
   }
 

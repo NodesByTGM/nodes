@@ -139,13 +139,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   updateAmt() {
     if (planIndex == 0) {
       setState(() {
-        proAmt = 7900;
-        businessAmt = 19800;
+        proAmt = proMonthlyAmt;
+        businessAmt = businessMonthlyAmt;
       });
     } else {
       setState(() {
-        proAmt = 89800;
-        businessAmt = 214800;
+        proAmt = proYearlyAmt;
+        businessAmt = businessyearlyAmt;
       });
     }
   }

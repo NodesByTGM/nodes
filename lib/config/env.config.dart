@@ -3,10 +3,9 @@
 library regenified;
 
 const isDev = true;
-const API_ENDPOINT =
-    isDev
-        ? "https://dev.api.nodesafrica.com/api/v1"
-        : "https://dev.nodesafrica.com/api/v1";
+const API_ENDPOINT = isDev
+    ? "https://dev.api.nodesafrica.com/api/v1"
+    : "https://dev.nodesafrica.com/api/v1";
 
 // const PAYSTACK_PRO_PLAN_SK = "PLN_e11atwl7oyvnajq";
 // const PAYSTACK_PRO_ANNUAL_PLAN_SK = "PLN_3f6iseacm5i9fum";
@@ -22,6 +21,12 @@ const busMonthlySub = "business";
 const busYearlySub = "business-annual";
 const talentMonthlySub = "pro";
 const talentYearlySub = "pro-annual";
+
+const double proMonthlyAmt = 7900;
+const double businessMonthlyAmt = 19800;
+
+const double proYearlyAmt = 89800;
+const double businessyearlyAmt = 214800;
 
 paystackCallbackUrl(ref) => "$tGMWebsite/?trxref=$ref&reference=$ref";
 

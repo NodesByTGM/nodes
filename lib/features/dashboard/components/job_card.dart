@@ -10,12 +10,10 @@ class JobCard extends StatelessWidget {
   const JobCard({
     super.key,
     this.isFromBusiness = false,
-    this.isSaved = false,
     required this.job,
   });
 
   final bool isFromBusiness;
-  final bool isSaved;
   final JobModel job;
 
   @override
@@ -133,13 +131,17 @@ class JobCard extends StatelessWidget {
                   ),
                 ],
                 GestureDetector(
-                  // onTap: () =>  showJobDetailsBottomSheet(context),
                   onTap: () {
-                    isFromBusiness
-                        ? context.read<NavController>().updatePageListStack(
-                              BusinessJobDetailsScreen.routeName,
-                            )
-                        : showJobDetailsBottomSheet(context, job);
+                    if (isFromBusiness) {
+                      context
+                          .read<DashboardController>()
+                          .setCurrentlyViewedJob(job);
+                      context.read<NavController>().updatePageListStack(
+                            BusinessJobDetailsScreen.routeName,
+                          );
+                    } else {
+                      showJobDetailsBottomSheet(context, job);
+                    }
                   },
                   child: labelText(
                     isFromBusiness ? "View details" : "View job",
@@ -158,8 +160,8 @@ class JobCard extends StatelessWidget {
 
   saveUnsaveJob(BuildContext context, JobModel job) async {
     job.saved
-        ? await context.read<DashboardController>().unSaveJob(context,job.id)
-        : await context.read<DashboardController>().saveJob(context,job.id);
+        ? await context.read<DashboardController>().unSaveJob(context, job.id)
+        : await context.read<DashboardController>().saveJob(context, job.id);
   }
 
   showJobDetailsBottomSheet(BuildContext context, JobModel job) {
@@ -184,7 +186,11 @@ class JobCard extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
-              child: JobDetails(job: job),
+              child: JobDetails(
+                job: job,
+                isFromBusiness: false,
+                // This confusion is caused by the applicant's being hidden by the BE Elijah
+              ),
             );
           },
         );
@@ -325,8 +331,8 @@ class SavedJobCard extends StatelessWidget {
 
   saveUnsaveJob(BuildContext context, SavedJobModel job) async {
     job.saved
-        ? await context.read<DashboardController>().unSaveJob(context,job.id)
-        : await context.read<DashboardController>().saveJob(context,job.id);
+        ? await context.read<DashboardController>().unSaveJob(context, job.id)
+        : await context.read<DashboardController>().saveJob(context, job.id);
   }
 
   showJobDetailsBottomSheet(BuildContext context, SavedJobModel job) {

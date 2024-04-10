@@ -1,6 +1,8 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/event_details.dart';
-import 'package:nodes/features/dashboard/components/saved_event_card.dart';
+import 'package:nodes/features/dashboard/components/saved_event_applicant_card.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -19,6 +21,15 @@ class _BusinessEventDetailsScreenState
     extends State<BusinessEventDetailsScreen> {
   int currentIndex = 0;
 
+  late DashboardController dashCtrl;
+  late EventModel event;
+  @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    event = dashCtrl.currentlyViewedBusinessEvent;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -32,7 +43,7 @@ class _BusinessEventDetailsScreenState
               child: Row(
                 children: [
                   labelText(
-                    "Name of Event",
+                    capitalize("${event.name}"),
                     maxLine: 1,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -132,14 +143,14 @@ class _BusinessEventDetailsScreenState
       case 0:
         return EventDetails(
           isFromBusiness: true,
-          event: EventModel(),
+          event: event,
         );
       case 1:
-        return const SavedEventCard();
+        return const SavedEventApplicantCard();
       default:
         return EventDetails(
           isFromBusiness: true,
-          event: EventModel(),
+          event: event,
         );
     }
   }

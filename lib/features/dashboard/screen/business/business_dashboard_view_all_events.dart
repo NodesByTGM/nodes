@@ -1,7 +1,8 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
-import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -16,8 +17,23 @@ class BusinessEventCenterScreen extends StatefulWidget {
 }
 
 class _BusinessEventCenterScreenState extends State<BusinessEventCenterScreen> {
+  late DashboardController dashCtrl;
+
+  @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    super.initState();
+    fetchJobs();
+  }
+
+  fetchJobs() {
+    // Should be fetching all my created events
+    safeNavigate(() => dashCtrl.fetchAllEvents(context));
+  }
+
   @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return Container(
       // padding: screenPadding,
       // decoration: const BoxDecoration(
@@ -68,15 +84,17 @@ class _BusinessEventCenterScreenState extends State<BusinessEventCenterScreen> {
                 content: ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 10,
+                  itemCount: dashCtrl.eventsList.length,
                   itemBuilder: (c, i) {
-                    return const EventCard(
-                      isFromBusiness: true,
-                      hasDelete: true,
-                      hasSave: false,
-                      event: EventModel(),
+                    return SizedBox(
+                      height: 280,
+                      child: EventCard(
+                        isFromBusiness: true,
+                        hasDelete: true,
+                        hasSave: false,
+                        event: dashCtrl.eventsList[i],
+                      ),
                     );
-                    // return labelText("label");
                   },
                   separatorBuilder: (c, i) => ySpace(height: 24),
                 ),

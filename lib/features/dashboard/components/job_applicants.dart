@@ -1,18 +1,24 @@
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class JobApplicants extends StatelessWidget {
-  const JobApplicants({super.key});
+  const JobApplicants({super.key, required this.job});
+
+  final JobModel job;
 
   @override
   Widget build(BuildContext context) {
-    return 1 > 2
-        ? ListView(
-            children: [labelText("No Applicants yet")],
+    return isObjectEmpty(job.applicants)
+        ? SizedBox(
+            height: 200,
+            child: Center(
+              child: labelText("No Applicants yet"),
+            ),
           )
         : ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 15,
+            itemCount: job.applicants?.length ?? 0,
             padding: const EdgeInsets.only(top: 32),
             itemBuilder: (c, i) {
               return Container(

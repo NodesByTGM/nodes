@@ -1,6 +1,8 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -16,8 +18,23 @@ class BusinessJobCenterScreen extends StatefulWidget {
 }
 
 class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
+  late DashboardController dashCtrl;
+
+  @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    super.initState();
+    fetchJobs();
+  }
+
+  fetchJobs() {
+    // Should be fetching all my created events
+    safeNavigate(() => dashCtrl.fetchAllEvents(context));
+  }
+
   @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return Container(
       // padding: screenPadding,
       // decoration: const BoxDecoration(
@@ -83,8 +100,12 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: 10,
                   itemBuilder: (c, i) {
-                    return const JobCard(
-                      job: JobModel(),
+                    // return const JobCard(
+                    //   job: JobModel(),
+                    // );
+                    return JobCard(
+                      isFromBusiness: true,
+                      job: dashCtrl.jobsList[i],
                     );
                   },
                   separatorBuilder: (c, i) => ySpace(height: 24),
