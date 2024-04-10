@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/dashboard/model/project_model.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -14,12 +19,15 @@ class AddProject extends StatefulWidget {
 }
 
 class _AddProjectState extends State<AddProject> {
+  late AuthController authCtrl;
+  late DashboardController dashCtrl;
+  late UserModel user;
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController projectNameCtrl = TextEditingController();
   final TextEditingController descCtrl = TextEditingController();
   final TextEditingController projectUrlCtrl = TextEditingController();
   final formValues = {};
-  List<TextEditingController> dynamicTitleCollaboratorsCtrl = [
+  List<TextEditingController> dynamicNameCollaboratorsCtrl = [
     TextEditingController(),
   ];
   List<TextEditingController> dynamicDescCollaboratorsCtrl = [
@@ -33,7 +41,16 @@ class _AddProjectState extends State<AddProject> {
   bool isLoadingImage = false;
 
   @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    dashCtrl = locator.get<DashboardController>();
+    user = authCtrl.currentUser;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return FormBuilder(
       key: formKey,
       child: Padding(
@@ -156,7 +173,7 @@ class _AddProjectState extends State<AddProject> {
                     ),
                     ySpace(height: 24),
                     ListView.separated(
-                      itemCount: dynamicTitleCollaboratorsCtrl.length,
+                      itemCount: dynamicNameCollaboratorsCtrl.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (c, i) {
@@ -192,7 +209,7 @@ class _AddProjectState extends State<AddProject> {
                                   keyboardType: TextInputType.text,
                                   style: FORM_STYLE,
                                   cursorColor: BLACK,
-                                  controller: dynamicTitleCollaboratorsCtrl[i],
+                                  controller: dynamicNameCollaboratorsCtrl[i],
                                   onSaved: (value) =>
                                       formValues['title'] = trimValue(value),
                                   onChanged: (val) {},
@@ -479,8 +496,11 @@ class _AddProjectState extends State<AddProject> {
                   child: SubmitBtn(
                     onPressed: _submit,
                     title: btnTxt(
-                        progressLevel == 1 ? "Add project" : "Save and Continue",
-                        WHITE),
+                      progressLevel == 1 ? "Add project" : "Save and Continue",
+                      WHITE,
+                    ),
+                    loading:
+                        dashCtrl.isUploadingMedia || dashCtrl.isCreatingEvent,
                   ),
                 ),
               ],
@@ -492,7 +512,7 @@ class _AddProjectState extends State<AddProject> {
   }
 
   void addCollaborator() {
-    for (var element in dynamicTitleCollaboratorsCtrl) {
+    for (var element in dynamicNameCollaboratorsCtrl) {
       if (!isObjectEmpty(element.text)) {
         showText(message: "Oops!!! Please fill the empty title.");
         return;
@@ -504,45 +524,28 @@ class _AddProjectState extends State<AddProject> {
         return;
       }
     }
-    dynamicTitleCollaboratorsCtrl.add(TextEditingController());
+    dynamicNameCollaboratorsCtrl.add(TextEditingController());
     dynamicDescCollaboratorsCtrl.add(TextEditingController());
     setState(() {});
   }
 
   void deleteCollaborator(int index) {
-    dynamicTitleCollaboratorsCtrl.removeAt(index);
+    dynamicNameCollaboratorsCtrl.removeAt(index);
     dynamicDescCollaboratorsCtrl.removeAt(index);
     setState(() {});
   }
 
-  void _submit() async {
-    closeKeyPad(context);
-    if (formKey.currentState!.saveAndValidate()) {}
-    if (progressLevel < 1) {
-      setState(() {
-        progressLevel += 0.5;
-      });
-    } else {
-      // Make the API call...
-      navigateBack(context);
-    }
-    // for (var element in dynamicCollaboratorsCtrl) {
-    //   print(element.text);
-    // }
-  }
-
-  // multipleImagePicker({
-  //   required List<XFile> storage,
-  //   bool isThumbnail = false,
-  // }) async {
-  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
-  //   awaitingImageLoad(isThumbnail);
-  //   final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-  //   awaitingImageLoad(isThumbnail);
-  //   if (selectedImages!.isNotEmpty) {
-  //     storage.addAll(selectedImages);
+  // void _submit() async {
+  //   closeKeyPad(context);
+  //   if (formKey.currentState!.saveAndValidate()) {}
+  //   if (progressLevel < 1) {
+  //     setState(() {
+  //       progressLevel += 0.5;
+  //     });
+  //   } else {
+  //     // Make the API call...
+  //     navigateBack(context);
   //   }
-  //   setState(() {});
   // }
 
   multipleImagePicker({
@@ -582,12 +585,77 @@ class _AddProjectState extends State<AddProject> {
     }
   }
 
+  void _submit() async {
+    // Confirm all fields are provided...
+    closeKeyPad(context);
+    if (progressLevel < 1) {
+      setState(() {
+        progressLevel += 0.5;
+      });
+      return;
+    }
+    // Upload images
+    // 1. thumbnail
+    String imageByteString =
+        await convertFileToString("${thumbnailImageFile?.path}");
+
+    MediaUploadModel? thumbnailUrl =
+        await authCtrl.mediaUpload(imageByteString);
+    List<Map<String, dynamic>> imgList = await uploadProjectImages();
+    // 2. Project images
+    if (mounted) {
+      bool done = await dashCtrl.createProject(context, {
+        "name": projectNameCtrl.text,
+        "description": descCtrl.text,
+        "projectURL": projectUrlCtrl.text,
+        "thumbnail": thumbnailUrl,
+        "images": imgList,
+        "collaborators": collateCollaboratorList(),
+      });
+
+      if (done && mounted) {
+        // Clear the input fields...
+        navigateBack(context);
+      }
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> uploadProjectImages() async {
+    List<Map<String, dynamic>> imgList = [];
+    if (isObjectEmpty(projectImageFileList)) {
+      // Alert user that it's empty
+    } else {
+      for (XFile file in projectImageFileList) {
+        String imgBS = await convertFileToString(file.path);
+
+        MediaUploadModel? url = await authCtrl.mediaUpload(imgBS);
+        if (!isObjectEmpty(url)) {
+          imgList.add(url!.toJson());
+        }
+      }
+      return imgList;
+    }
+    return imgList;
+  }
+
+  List<Map<String, dynamic>> collateCollaboratorList() {
+    List<Map<String, dynamic>> collaboratorsList = [];
+    for (var i = 0; i < dynamicNameCollaboratorsCtrl.length; i++) {
+      collaboratorsList.add(CollaboratorModel(
+        name: dynamicNameCollaboratorsCtrl[i].text,
+        // Just praying the user provide this lol 
+        role: dynamicDescCollaboratorsCtrl[i].text,
+      ).toJson());
+    }
+    return collaboratorsList;
+  }
+
   @override
   void dispose() {
     projectNameCtrl.dispose();
     descCtrl.dispose();
     projectUrlCtrl.dispose();
-     for (var element in dynamicTitleCollaboratorsCtrl) {
+    for (var element in dynamicNameCollaboratorsCtrl) {
       element.dispose();
     }
     for (var element in dynamicDescCollaboratorsCtrl) {

@@ -200,8 +200,10 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                     Expanded(
                       child: OutlineBtn(
                         onPressed: () async {
-                          final res = await shareDoc(context,
-                              url: "$nodeWebsite/${user.username}");
+                           await shareDoc(
+                            context,
+                            url: "$nodeWebsite/${user.username}",
+                          );
                         },
                         borderColor: PRIMARY,
                         color: WHITE,
@@ -271,17 +273,21 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
           },
           content: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            child: getTabBody(),
+            child: Consumer<DashboardController>(
+              builder: (c, dCtrl, _) {
+                return getTabBody(dCtrl);
+              },
+            ),
           ),
         ),
       ],
     );
   }
 
-  getTabBody() {
+  getTabBody(DashboardController dc) {
     return currentIndex == 0
         ? ProjectsTab(
-            projects: dashCtrl.myProjectList,
+            projects: dc.myProjectList,
           )
         : InteractionsTab();
   }

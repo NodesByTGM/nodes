@@ -73,6 +73,11 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
+  _updateMyProjectList(ProjectModel project) {
+    _myProjectList.add(project);
+    notifyListeners();
+  }
+
   // Functions
 
   // Events
@@ -86,7 +91,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateMyProjectList(
+        ProjectModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());

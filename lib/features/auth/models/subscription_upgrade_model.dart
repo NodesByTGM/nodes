@@ -10,6 +10,7 @@ class SubscriptionUpgrade extends Equatable {
   final double? amount;
   final String? period;
   final List<String>? features;
+  final bool isSubscribed;
 
   const SubscriptionUpgrade({
     this.type,
@@ -17,6 +18,7 @@ class SubscriptionUpgrade extends Equatable {
     this.amount,
     this.period,
     this.features,
+    this.isSubscribed = false,
   });
 
   factory SubscriptionUpgrade.fromJson(Map<String, dynamic> json) =>
@@ -31,5 +33,6 @@ class SubscriptionUpgrade extends Equatable {
         amount,
         period,
         features,
+        isSubscribed,
       ];
 }

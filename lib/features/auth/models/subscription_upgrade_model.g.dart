@@ -15,6 +15,7 @@ SubscriptionUpgrade _$SubscriptionUpgradeFromJson(Map<String, dynamic> json) =>
       features: (json['features'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      isSubscribed: json['isSubscribed'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$SubscriptionUpgradeToJson(
@@ -25,4 +26,5 @@ Map<String, dynamic> _$SubscriptionUpgradeToJson(
       'amount': instance.amount,
       'period': instance.period,
       'features': instance.features,
+      'isSubscribed': instance.isSubscribed,
     };

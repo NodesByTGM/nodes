@@ -1,7 +1,7 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
-import 'package:nodes/features/profile/components/add_project.dart';
+import 'package:nodes/features/profile/components/add_project_modal.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/profile/components/project_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';

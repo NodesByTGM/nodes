@@ -26,6 +26,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   late NavController navCtrl;
   late SubscriptionUpgrade subUpgrade;
   bool seeMore = false;
+  bool isSubscribed = false;
 
   // Send the subscription type, month or year, amount, description.
 
@@ -34,6 +35,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
     authCtrl = locator.get<AuthController>();
     navCtrl = locator.get<NavController>();
     subUpgrade = authCtrl.subUpgrade;
+    isSubscribed = subUpgrade.isSubscribed;
     super.initState();
   }
 
@@ -48,7 +50,9 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
           padding: const EdgeInsets.only(top: 32, bottom: 150),
           children: [
             labelText(
-              "Proceed with payment",
+              isSubscribed
+                  ? "Manage your subscription here"
+                  : "Proceed with payment",
               height: 2,
               fontSize: 18,
               textAlign: TextAlign.center,
@@ -136,17 +140,21 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
               ),
             ),
             ySpace(height: 40),
-            OutlineBtn(
-              onPressed: () => _paystackPayment(),
-              // to be controlled dynamically later...
-              borderColor: BORDER,
-              leftIcon: Image.asset(
-                ImageUtils.paystackIcon,
-                height: 24,
+            if (isSubscribed) ...[
+              // Billing History
+            ],
+            if (!isSubscribed) ...[
+              OutlineBtn(
+                onPressed: () => _paystackPayment(),
+                borderColor: BORDER,
+                leftIcon: Image.asset(
+                  ImageUtils.paystackIcon,
+                  height: 24,
+                ),
+                loading: authCtrl.loading,
+                child: btnTxt("Continue with Paystack"),
               ),
-              loading: authCtrl.loading,
-              child: btnTxt("Continue with Paystack"),
-            ),
+            ],
           ],
         ),
         Align(
@@ -166,11 +174,14 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: () {
-                      context.read<NavController>().popPageListStack();
+                      isSubscribed
+                          ? cancelPlan()
+                          : context.read<NavController>().popPageListStack();
                     },
                     child: labelText(
-                      "Go Back",
+                      isSubscribed ? "Cancel plan" : "Go Back",
                       fontSize: 14,
+                      color: isSubscribed ? RED : null,
                       fontWeight: FontWeight.w500,
                       textAlign: TextAlign.center,
                     ),
@@ -274,6 +285,25 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
       return subUpgrade.period == KeyString.month
           ? busMonthlySub
           : busYearlySub;
+    }
+  }
+
+  void cancelPlan() async {
+    // if (navCtrl.currentIndex == 0) {
+    final result = await showAlertDialog(
+      context,
+      body: subtext(
+          "This will cancel your subscription by the end of the current billing cycle.",
+          fontSize: 13),
+      title: "Cancel plan",
+      cancelTitle: "No, Cancel",
+      okTitle: "Yes, Delete",
+      okColor: RED,
+      cancelColor: GRAY,
+    );
+    if (DialogAction.yes == result && mounted) {
+      isSubscribed = false;
+      setState(() {});
     }
   }
 }

@@ -7,6 +7,7 @@ import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
+import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/saves/screens/saved_items_screen.dart';
 import 'package:nodes/features/settings/screens/account_settings_screen.dart';
@@ -244,7 +245,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 customDivider(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
-                if (user.type != 0) ...[
+                if (user.type == 1) ...[
                   _menuItem(
                     icon: ImageUtils.saveJobIcon,
                     title: KeyString.savesScreen,
@@ -276,12 +277,37 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   route: DrawerRouteTitle.Profile,
                   isActive: false,
                   onTap: () {
-                    closeDrawer();
-                    // Get to know who's logged in, i.e individual, Talent or Business, and direct them properly...
-                    navCtrl.resetPageListStack();
-                    context.read<AuthController>().logout();
-                    navigateAndClearAll(context, WelcomeBackScreen.routeName);
-                  },
+                    safeNavigate(() => logout(context));
+                        navCtrl.resetPageListStack();
+                        context.read<AuthController>().logout();
+                        navigateAndClearAll(
+                            context, WelcomeBackScreen.routeName);
+                  }
+                  // onTap: () async {
+                  //   closeDrawer();
+                  //   final result = await showAlertDialog(
+                  //     context,
+                  //     body: subtext("Are you sure you want to logout?",
+                  //         fontSize: 13),
+                  //     title: "Confirmation",
+                  // okColor: RED,
+                  // cancelColor: GRAY,
+                  //   );
+                  //   if (DialogAction.yes == result) {
+                  //     if (mounted) {
+                  //       safeNavigate(() => logout(context));
+                  //       navCtrl.resetPageListStack();
+                  //       context.read<AuthController>().logout();
+                  //       navigateAndClearAll(
+                  //           context, WelcomeBackScreen.routeName);
+                  //     }
+                  //   } else {
+                  //     print("I said cancel George");
+                  //     if (mounted) {
+                  //       navigateBack(context);
+                  //     }
+                  //   }
+                  // },
                 ),
               ],
             ),

@@ -270,6 +270,8 @@ Future<DialogAction> showAlertDialog(
   Widget? button,
   String? cancelTitle,
   String? okTitle,
+  Color okColor = PRIMARY,
+  Color cancelColor = GRAY,
 }) async {
   final action = await showPlatformDialog(
     context: context,
@@ -287,8 +289,8 @@ Future<DialogAction> showAlertDialog(
             title: Text(
               cancelTitle ?? Constants.cancel,
               textScaleFactor: 1.0,
-              style: const TextStyle(
-                color: PRIMARY,
+              style: TextStyle(
+                color: cancelColor,
               ),
             ),
             onPressed: () => Navigator.of(context).pop(DialogAction.cancel),
@@ -297,8 +299,8 @@ Future<DialogAction> showAlertDialog(
           title: Text(
             okTitle ?? Constants.ok,
             textScaleFactor: 1.0,
-            style: const TextStyle(
-              color: PRIMARY,
+            style: TextStyle(
+              color: okColor,
             ),
           ),
           onPressed: () => Navigator.of(context).pop(DialogAction.yes),

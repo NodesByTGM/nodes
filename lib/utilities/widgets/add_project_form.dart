@@ -41,6 +41,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
   bool isLoadingLogo = false;
 
   bool isLoadingImage = false;
+ 
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
