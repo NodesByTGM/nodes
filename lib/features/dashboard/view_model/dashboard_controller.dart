@@ -29,7 +29,7 @@ class DashboardController extends BaseController {
   List<ProjectModel> _myProjectList = [];
 
   // Getters
-  List<SavedJobModel> get savedJobs => _savedJobsList;
+  List<SavedJobModel> get savedJobsList => _savedJobsList;
   List<JobModel> get jobsList => _jobsList;
   List<EventModel> get savedEvents => _savedEventsList;
   List<EventModel> get eventsList => _eventsList;

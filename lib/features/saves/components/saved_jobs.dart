@@ -14,8 +14,8 @@ class SavedJobs extends StatelessWidget {
     return Consumer<DashboardController>(
       builder: (contex, dashCtrl, _) {
         bool isLoading = dashCtrl.isFetchingAllSavedJobs;
-        bool hasData = isObjectEmpty(dashCtrl.savedJobs);
-        if (isLoading || isObjectEmpty(dashCtrl.savedJobs)) {
+        bool hasData = isObjectEmpty(dashCtrl.savedJobsList);
+        if (isLoading || isObjectEmpty(dashCtrl.savedJobsList)) {
           return DataReload(
             maxHeight: screenHeight(context) * .19,
             isLoading: isLoading,
@@ -31,7 +31,7 @@ class SavedJobs extends StatelessWidget {
             isEmpty: hasData,
           );
         } else {
-          List<SavedJobModel> savedJobs = dashCtrl.savedJobs;
+          List<SavedJobModel> savedJobs = dashCtrl.savedJobsList;
           return ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

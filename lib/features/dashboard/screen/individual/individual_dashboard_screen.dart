@@ -46,6 +46,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   }
 
   fetchJobs() {
+    
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }

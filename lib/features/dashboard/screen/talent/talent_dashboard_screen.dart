@@ -1,13 +1,16 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
-import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
+import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 
@@ -21,27 +24,41 @@ class TalentDashboardScreen extends StatefulWidget {
 
 class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   late NavController navCtrl;
+  late AuthController authCtrl;
+  late DashboardController dashCtrl;
+  late UserModel user;
   int jobLength = 5;
   int spaceLength = 5;
   int trendingLength = 5;
-  int jobsForYouLength = 5;
-  int currentJobsIndex = 0;
+  int currentJobsForYouIndex = 0;
   int currentSpaceIndex = 0;
   int currentTrendingIndex = 0;
-  int currentJobIndex = 0;
+  int currentAppliedJobsIndex = 0;
   final trendingCtrl = PageController(viewportFraction: 1);
-  final jobsCardCtrl = PageController(viewportFraction: 1);
+  final appliedJobsCtrl = PageController(viewportFraction: 1);
   final spaceCardCtrl = PageController(viewportFraction: 1);
   final jobsForYouCtrl = PageController(viewportFraction: 1);
 
   @override
   void initState() {
     navCtrl = locator.get<NavController>();
+    authCtrl = locator.get<AuthController>();
+    dashCtrl = locator.get<DashboardController>();
+    user = authCtrl.currentUser;
     super.initState();
+    fetchJobs();
+  }
+
+  fetchJobs() {
+    safeNavigate(() => dashCtrl.fetchAllJobs(context));
+    safeNavigate(() => dashCtrl.fetchAllSavedJobs(context));
+    safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }
 
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
+    dashCtrl = context.watch<DashboardController>();
     return Container(
       decoration: const BoxDecoration(
           // gradient: profileLinearGradient,
@@ -51,7 +68,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
         children: [
           ySpace(height: 40),
           labelText(
-            "Hi, Jane Nice to have you here.",
+            "Hi  ${user.name?.split(' ').first}, Nice to have you here.",
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
@@ -86,14 +103,18 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   title: "Complete your\nprofile",
                   btnTitle: "Complete Profile",
                   icon: ImageUtils.headIcon,
-                  onTap: () {},
+                  onTap: () {
+                    navCtrl.updatePageListStack(ProfileWrapper.routeName);
+                  },
                 ),
                 ySpace(height: 24),
                 QuickSetupCard(
                   title: "Connect with\nothers",
                   btnTitle: "Discover",
                   icon: ImageUtils.thrunkIcon,
-                  onTap: () {},
+                  onTap: () {
+                    navCtrl.updatePageListStack(NodeCommunityScreen.routeName);
+                  },
                 ),
                 ySpace(height: 24),
                 QuickSetupCard(
@@ -143,14 +164,16 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: jobLength,
-              controller: jobsCardCtrl,
+              itemCount: dashCtrl.savedJobsList.length,
+              controller: appliedJobsCtrl,
               onPageChanged: (val) {
-                currentJobIndex = val;
+                currentAppliedJobsIndex = val;
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return  JobCard(job: JobModel(),);
+                return SavedJobCard(
+                  job: dashCtrl.savedJobsList[index],
+                );
               },
             ),
           ),
@@ -165,7 +188,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
-                        isActive: currentJobIndex == index,
+                        isActive: currentAppliedJobsIndex == index,
                       ),
                     );
                   })
@@ -179,8 +202,8 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                       customAnimatePageView(
                         isInc: false,
                         totoalLength: jobLength,
-                        currentIndex: currentJobIndex,
-                        ctrl: jobsCardCtrl,
+                        currentIndex: currentAppliedJobsIndex,
+                        ctrl: appliedJobsCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -193,8 +216,8 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                       customAnimatePageView(
                         isInc: true,
                         totoalLength: jobLength,
-                        currentIndex: currentJobIndex,
-                        ctrl: jobsCardCtrl,
+                        currentIndex: currentAppliedJobsIndex,
+                        ctrl: appliedJobsCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -239,14 +262,16 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: jobsForYouLength,
+              itemCount: dashCtrl.jobsList.length,
               controller: jobsForYouCtrl,
               onPageChanged: (val) {
-                currentJobsIndex = val;
+                currentJobsForYouIndex = val;
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return  JobCard(job: JobModel(),);
+                return JobCard(
+                  job: dashCtrl.jobsList[index],
+                );
               },
             ),
           ),
@@ -257,11 +282,11 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(jobsForYouLength, (index) {
+                  ...List.generate(dashCtrl.jobsList.length, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
-                        isActive: currentJobsIndex == index,
+                        isActive: currentJobsForYouIndex == index,
                       ),
                     );
                   })
@@ -274,8 +299,8 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: jobsForYouLength,
-                        currentIndex: currentJobsIndex,
+                        totoalLength: dashCtrl.jobsList.length,
+                        currentIndex: currentJobsForYouIndex,
                         ctrl: jobsForYouCtrl,
                       );
                     },
@@ -288,8 +313,8 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: jobsForYouLength,
-                        currentIndex: currentJobsIndex,
+                        totoalLength: dashCtrl.jobsList.length,
+                        currentIndex: currentJobsForYouIndex,
                         ctrl: jobsForYouCtrl,
                       );
                     },
@@ -321,9 +346,10 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      navCtrl.updatePageListStack(
-                        NodeSpacesScreen.routeName,
-                      );
+                      // navCtrl.updatePageListStack(
+                      //   NodeSpacesScreen.routeName,
+                      // );
+                      showSuccess(message: "Coming Soon");
                     },
                     child: subtext(
                       "See more",
@@ -421,19 +447,20 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           ),
           ySpace(height: 24),
           SizedBox(
-            height: 368,
+            // height: 368,
+            height: 200,
             child: PageView.builder(
-              itemCount: trendingLength,
+              itemCount: dashCtrl.eventsList.length,
               controller: trendingCtrl,
               onPageChanged: (val) {
                 currentTrendingIndex = val;
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return  EventCard(
+                return EventCard(
                   hasDelete: false,
-                  hasSave: true,
-                  event: EventModel(),
+                  hasSave: false,
+                  event: dashCtrl.eventsList[index],
                 );
               },
             ),

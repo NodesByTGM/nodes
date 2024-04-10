@@ -57,9 +57,9 @@ dependencies:
   device_preview: ^1.1.0
   sticky_headers: "^0.3.0"
   flutter_countdown_timer: ^4.1.0
-  # flutter_paystack_plus: ^1.2.0
   webview_flutter: ^3.0.4
   gallery_image_viewer: ^1.2.0
+  data_table_2: ^2.5.12
 
 dev_dependencies:
   flutter_test:

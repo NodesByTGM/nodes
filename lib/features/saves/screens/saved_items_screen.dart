@@ -71,7 +71,7 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
                         isActive: currentIndex == 0,
                         // title: "Jobs (2)",
                         title:
-                            "Jobs (${context.watch<DashboardController>().savedJobs.length})",
+                            "Jobs (${context.watch<DashboardController>().savedJobsList.length})",
                         onTap: () {
                           setState(() {
                             currentIndex = 0;

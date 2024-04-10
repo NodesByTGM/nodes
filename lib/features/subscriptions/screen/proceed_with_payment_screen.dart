@@ -6,6 +6,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/subscriptions/components/subscription_table.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/paystack_webview.dart';
@@ -142,6 +143,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
             ySpace(height: 40),
             if (isSubscribed) ...[
               // Billing History
+              SubscriptionTable()
             ],
             if (!isSubscribed) ...[
               OutlineBtn(

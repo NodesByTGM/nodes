@@ -356,6 +356,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           SubmitBtn(
                             onPressed: () => _submit(0),
                             title: btnTxt("Save and Continue", WHITE),
+                            loading: authCtrl.loading,
                           ),
                           ySpace(height: 20),
                         ],
@@ -418,6 +419,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           SubmitBtn(
                             onPressed: () => _submit(1),
                             title: btnTxt("Save and Continue", WHITE),
+                            loading: authCtrl.loading,
                           ),
                           ySpace(height: 20),
                         ],
@@ -530,6 +532,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                           SubmitBtn(
                             onPressed: () => _submit(2),
                             title: btnTxt("Save and Continue", WHITE),
+                            loading: authCtrl.loading,
                           ),
                           ySpace(height: 20),
                         ],
