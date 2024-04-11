@@ -47,7 +47,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           ? null
           : SubscriptionModel.fromJson(
               json['subscription'] as Map<String, dynamic>),
-      visible: json['visible'] as bool?,
+      visible: json['visible'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{

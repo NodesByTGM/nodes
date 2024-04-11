@@ -1,3 +1,6 @@
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -14,11 +17,31 @@ class _AccountFormState extends State<AccountForm> {
   final TextEditingController usernameCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController dobCtrl = TextEditingController();
-  bool isPublic = true; // to be gotten from the Authcontroller profile
+  DateTime? dob;
+  late bool isPublic;
   final formValues = {};
+  late AuthController authCtrl;
+  late UserModel user;
+
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    user = authCtrl.currentUser;
+    super.initState();
+    loadProfile();
+  }
+
+  loadProfile() {
+    fullnameCtrl.text = "${user.name}";
+    usernameCtrl.text = "${user.username}";
+    emailCtrl.text = "${user.email}";
+    dobCtrl.text = shortDate(user.dob ?? DateTime.now());
+    isPublic = user.visible;
+  }
 
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return FormBuilder(
       key: formKey,
       child: ListView(
@@ -51,6 +74,7 @@ class _AccountFormState extends State<AccountForm> {
               name: "username",
               decoration: FormUtils.formDecoration(
                 hintText: "Enter your username",
+                prefix: labelText("@ "),
               ),
               keyboardType: TextInputType.text,
               style: FORM_STYLE,
@@ -109,6 +133,7 @@ class _AccountFormState extends State<AccountForm> {
                 // dobCtrl.text = DateFormat('dd/MM/yyyy').format(pickedDate);
                 // dobCtrl.text = DateFormat('dd/MM').format(pickedDate);
                 dobCtrl.text = shortDate(pickedDate);
+                dob = pickedDate;
               },
               onSaved: (value) => formValues['username'] = trimValue(value),
               validator: FormBuilderValidators.compose([
@@ -187,7 +212,7 @@ class _AccountFormState extends State<AccountForm> {
             children: [
               Expanded(
                 child: SubmitBtn(
-                  onPressed: () {},
+                  onPressed: deleteAccount,
                   title: btnTxt("Delete your account", WHITE),
                   color: RED,
                   loading: false,
@@ -199,9 +224,9 @@ class _AccountFormState extends State<AccountForm> {
           ySpace(height: 40),
           customDivider(),
           SubmitBtn(
-            onPressed: () {},
+            onPressed: _submit,
             title: btnTxt("Save changes", WHITE),
-            loading: false,
+            loading: authCtrl.loading,
           ),
           ySpace(height: 10),
         ],
@@ -244,5 +269,34 @@ class _AccountFormState extends State<AccountForm> {
     dobCtrl.dispose();
 
     super.dispose();
+  }
+
+  void _submit() async {
+    await authCtrl.updateProfile(context, getRequestData.toJson());
+  }
+
+  UserModel get getRequestData => user.copyWith(
+        name: fullnameCtrl.text.trim(),
+        username: usernameCtrl.text.trim(),
+        email: emailCtrl.text.trim(),
+        dob: dob,
+        visible: isPublic,
+      );
+
+  void deleteAccount() async {
+    final result = await showAlertDialog(
+      context,
+      body: subtext(
+          "Are you sure you want to delete your account? This action is irrevocable.",
+          fontSize: 13),
+      title: "Delete Account",
+      cancelTitle: "No, Cancel",
+      okTitle: "Yes, Delete",
+      okColor: RED,
+      cancelColor: GRAY,
+    );
+    if (DialogAction.yes == result && mounted) {
+      // make the api request, delete account, call the logout function, to send them to the auth screen...
+    }
   }
 }

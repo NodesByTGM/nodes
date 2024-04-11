@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/core/models/base_data.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 
 part "community_post_model.g.dart";
 

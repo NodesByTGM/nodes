@@ -1,13 +1,10 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/job_analytics.dart';
 import 'package:nodes/features/dashboard/components/job_applicants.dart';
-import 'package:nodes/features/dashboard/components/job_details.dart';
+import 'package:nodes/features/dashboard/components/job_details_business.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class BusinessJobDetailsScreen extends StatefulWidget {
@@ -24,7 +21,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
   int currentIndex = 0;
 
   late DashboardController dashCtrl;
-  late JobModel job;
+  late BusinessJobModel job;
   @override
   void initState() {
     dashCtrl = locator.get<DashboardController>();
@@ -160,7 +157,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
   getTabBody() {
     switch (currentIndex) {
       case 0:
-        return JobDetails(
+        return BusinessJobDetails(
           job: job,
         );
       case 1:
@@ -168,7 +165,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
       case 2:
         return JobAnalytics(job: job);
       default:
-        return JobDetails(
+        return BusinessJobDetails(
           job: job,
         );
     }

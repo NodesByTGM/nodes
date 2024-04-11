@@ -6,7 +6,7 @@ import 'package:nodes/features/community/components/community_space_card_templat
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
@@ -258,7 +258,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return JobCard(
+                return StandardTalentJobCard(
                   job: dashCtrl.jobsList[index],
                 );
               },

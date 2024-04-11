@@ -11,7 +11,7 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
 import 'package:nodes/utilities/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -23,12 +23,12 @@ class DashboardController extends BaseController {
   DashboardController(this._dashboardService);
 
   // Variables
-  List<SavedJobModel> _savedJobsList = [];
-  List<JobModel> _jobsList = [];
+  List<StandardTalentJobModel> _savedJobsList = [];
+  List<StandardTalentJobModel> _jobsList = [];
   EventModel _currentlyViewedBusinessEvent = const EventModel();
-  List<SavedJobModel> _appliedJobsList = [];
-  List<SavedJobModel> _createdJobList = [];
-  JobModel _currentlyViewedBusinessJob = const JobModel();
+  List<StandardTalentJobModel> _appliedJobsList = [];
+  List<BusinessJobModel> _createdJobList = [];
+  BusinessJobModel _currentlyViewedBusinessJob = const BusinessJobModel();
   List<EventModel> _savedEventsList = [];
   List<EventModel> _eventsList = [];
   List<EventModel> _myCreatedEventsList = [];
@@ -36,11 +36,12 @@ class DashboardController extends BaseController {
   List<ProjectModel> _myProjectList = [];
 
   // Getters
-  List<SavedJobModel> get savedJobsList => _savedJobsList;
-  List<JobModel> get jobsList => _jobsList;
-  JobModel get currentlyViewedBusinessJob => _currentlyViewedBusinessJob;
-  List<SavedJobModel> get appliedJobsList => _appliedJobsList;
-  List<SavedJobModel> get createdJobList => _createdJobList;
+  List<StandardTalentJobModel> get savedJobsList => _savedJobsList;
+  List<StandardTalentJobModel> get jobsList => _jobsList;
+  BusinessJobModel get currentlyViewedBusinessJob =>
+      _currentlyViewedBusinessJob;
+  List<StandardTalentJobModel> get appliedJobsList => _appliedJobsList;
+  List<BusinessJobModel> get createdJobList => _createdJobList;
   EventModel get currentlyViewedBusinessEvent => _currentlyViewedBusinessEvent;
   List<EventModel> get savedEvents => _savedEventsList;
   List<EventModel> get eventsList => _eventsList;
@@ -56,32 +57,32 @@ class DashboardController extends BaseController {
   // }
 
 // Jobs
-  setSavedJobs(List<SavedJobModel> jobs) {
+  setSavedJobs(List<StandardTalentJobModel> jobs) {
     _savedJobsList = jobs;
     notifyListeners();
   }
 
-  setJobsList(List<JobModel> jobs) {
+  setJobsList(List<StandardTalentJobModel> jobs) {
     _jobsList = jobs;
     notifyListeners();
   }
 
-  setCurrentlyViewedJob(JobModel job) {
+  setCurrentlyViewedJob(BusinessJobModel job) {
     _currentlyViewedBusinessJob = job;
     notifyListeners();
   }
 
-  setAppliedJobList(List<SavedJobModel> job) {
+  setAppliedJobList(List<StandardTalentJobModel> job) {
     _appliedJobsList = job;
     notifyListeners();
   }
 
-  setMyCreatedJobList(List<SavedJobModel> job) {
+  setMyCreatedJobList(List<BusinessJobModel> job) {
     _createdJobList = job;
     notifyListeners();
   }
 
-  _updateSingleJob(SavedJobModel job) {
+  _updateSingleJob(BusinessJobModel job) {
     int jIndex = _createdJobList.indexWhere((e) => e.id == job.id);
     if (jIndex != -1) {
       _createdJobList[jIndex] = job;
@@ -92,25 +93,23 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
-  _updateAppliedJobsList(SavedJobModel job) {
+  _updateAppliedJobsList(StandardTalentJobModel job) {
     _appliedJobsList.add(job);
     notifyListeners();
   }
 
   _updateSavedJobsList(
     BuildContext ctx, {
-    required SavedJobModel job,
+    required StandardTalentJobModel job,
     required bool isSave,
   }) {
     if (isSave) {
-      _savedJobsList.add(job);
+      _savedJobsList.add(job.copyWith(saved: isSave));
     } else {
       int jIndex = _savedJobsList.indexWhere((jd) => jd.id == job.id);
       if (jIndex != -1) {
         // Found something...
-        // _savedJobsList.removeAt();
-        _savedJobsList[jIndex].saves?.removeWhere(
-            (savers) => savers.id == ctx.read<AuthController>().currentUser.id);
+        _savedJobsList[jIndex] = job.copyWith(saved: isSave);
       }
     }
     notifyListeners();
@@ -170,13 +169,13 @@ class DashboardController extends BaseController {
     required bool isSave,
   }) {
     if (isSave) {
-      _savedEventsList.add(event);
+      _savedEventsList.add(event.copyWith(saved: isSave));
     } else {
       int eIndex = _savedJobsList.indexWhere((e) => e.id == event.id);
       if (eIndex != -1) {
         // Found something...
-        _savedEventsList[eIndex].saves?.removeWhere(
-            (savers) => savers.id == ctx.read<AuthController>().currentUser.id);
+        // _savedEventsList[eIndex].saves?.removeWhere((savers) => savers.id == ctx.read<AuthController>().currentUser.id);
+        _savedEventsList[eIndex] = event.copyWith(saved: isSave);
       }
     }
     notifyListeners();
@@ -504,10 +503,8 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      print(
-          "George here is the response from creating a job: ${response.result}");
       _updateSingleJob(
-        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+        BusinessJobModel.fromJson(response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -534,7 +531,7 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setJobsList(_resolvePaginatedJobs(response));
+      setJobsList(_resolvePaginatedStandardTalentJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -544,7 +541,7 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<SavedJobModel?> fetchSingleJob(
+  Future<StandardTalentJobModel?> fetchSingleJob(
       BuildContext ctx, dynamic payload) async {
     setFetchingSingleJob(true);
     try {
@@ -554,7 +551,8 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return null;
       }
-      return SavedJobModel.fromJson(response.result as Map<String, dynamic>);
+      return StandardTalentJobModel.fromJson(
+          response.result as Map<String, dynamic>);
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return null;
@@ -580,7 +578,7 @@ class DashboardController extends BaseController {
         return false;
       }
       _updateSingleJob(
-        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+        BusinessJobModel.fromJson(response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -619,7 +617,8 @@ class DashboardController extends BaseController {
         return false;
       }
       _updateAppliedJobsList(
-        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+        StandardTalentJobModel.fromJson(
+            response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -641,7 +640,8 @@ class DashboardController extends BaseController {
       _updateSavedJobsList(
         ctx,
         isSave: true,
-        job: SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+        job: StandardTalentJobModel.fromJson(
+            response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -662,8 +662,9 @@ class DashboardController extends BaseController {
       }
       _updateSavedJobsList(
         ctx,
-        job: SavedJobModel.fromJson(response.result as Map<String, dynamic>),
         isSave: false,
+        job: StandardTalentJobModel.fromJson(
+            response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -690,7 +691,7 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setSavedJobs(_resolvePaginatedSavedJobs(response));
+      setSavedJobs(_resolvePaginatedStandardTalentJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -716,7 +717,7 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setAppliedJobList(_resolvePaginatedSavedJobs(response));
+      setAppliedJobList(_resolvePaginatedStandardTalentJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -742,7 +743,7 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setMyCreatedJobList(_resolvePaginatedSavedJobs(response));
+      setMyCreatedJobList(_resolvePaginatedBusinessJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -754,22 +755,26 @@ class DashboardController extends BaseController {
 
 // Handling Paginated Data...
 // Jobs
-  List<SavedJobModel> _resolvePaginatedSavedJobs(ApiResponse response) {
-    CustomPage<SavedJobModel> p = const CustomPage<SavedJobModel>().fromJson(
-        response.result as Map<String, dynamic>, const SavedJobModel());
+  List<BusinessJobModel> _resolvePaginatedBusinessJobs(ApiResponse response) {
+    CustomPage<BusinessJobModel> p = const CustomPage<BusinessJobModel>()
+        .fromJson(
+            response.result as Map<String, dynamic>, const BusinessJobModel());
 
     if (!isObjectEmpty(p.items)) {
-      return p.items as List<SavedJobModel>;
+      return p.items as List<BusinessJobModel>;
     }
     return [];
   }
 
-  List<JobModel> _resolvePaginatedJobs(ApiResponse response) {
-    CustomPage<JobModel> p = const CustomPage<JobModel>()
-        .fromJson(response.result as Map<String, dynamic>, const JobModel());
+  List<StandardTalentJobModel> _resolvePaginatedStandardTalentJobs(
+      ApiResponse response) {
+    CustomPage<StandardTalentJobModel> p =
+        const CustomPage<StandardTalentJobModel>().fromJson(
+            response.result as Map<String, dynamic>,
+            const StandardTalentJobModel());
 
     if (!isObjectEmpty(p.items)) {
-      return p.items as List<JobModel>;
+      return p.items as List<StandardTalentJobModel>;
     }
     return [];
   }

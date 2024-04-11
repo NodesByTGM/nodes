@@ -1,7 +1,7 @@
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
@@ -31,14 +31,14 @@ class SavedJobs extends StatelessWidget {
             isEmpty: hasData,
           );
         } else {
-          List<SavedJobModel> savedJobs = dashCtrl.savedJobsList;
+          List<StandardTalentJobModel> savedJobs = dashCtrl.savedJobsList;
           return ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.only(top: 27),
             itemCount: savedJobs.length,
             itemBuilder: (c, i) {
-              return SavedJobCard(
+              return StandardTalentJobCard(
                 job: savedJobs[i],
               );
             },
@@ -50,6 +50,7 @@ class SavedJobs extends StatelessWidget {
   }
 
   void _reloadData(BuildContext context) {
-    safeNavigate(() => locator.get<DashboardController>().fetchAllSavedJobs(context));
+    safeNavigate(
+        () => locator.get<DashboardController>().fetchAllSavedJobs(context));
   }
 }

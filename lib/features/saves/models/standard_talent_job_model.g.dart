@@ -1,12 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'job_model.dart';
+part of 'standard_talent_job_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
+StandardTalentJobModel _$StandardTalentJobModelFromJson(
+        Map<String, dynamic> json) =>
+    StandardTalentJobModel(
       name: json['name'] as String?,
       description: json['description'] as String?,
       experience: json['experience'] as String?,
@@ -35,7 +37,9 @@ JobModel _$JobModelFromJson(Map<String, dynamic> json) => JobModel(
       id: json['id'] as String?,
     );
 
-Map<String, dynamic> _$JobModelToJson(JobModel instance) => <String, dynamic>{
+Map<String, dynamic> _$StandardTalentJobModelToJson(
+        StandardTalentJobModel instance) =>
+    <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'experience': instance.experience,
@@ -53,8 +57,8 @@ Map<String, dynamic> _$JobModelToJson(JobModel instance) => <String, dynamic>{
       'id': instance.id,
     };
 
-SavedJobModel _$SavedJobModelFromJson(Map<String, dynamic> json) =>
-    SavedJobModel(
+BusinessJobModel _$BusinessJobModelFromJson(Map<String, dynamic> json) =>
+    BusinessJobModel(
       name: json['name'] as String?,
       description: json['description'] as String?,
       experience: json['experience'] as String?,
@@ -84,7 +88,7 @@ SavedJobModel _$SavedJobModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String?,
     );
 
-Map<String, dynamic> _$SavedJobModelToJson(SavedJobModel instance) =>
+Map<String, dynamic> _$BusinessJobModelToJson(BusinessJobModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'description': instance.description,

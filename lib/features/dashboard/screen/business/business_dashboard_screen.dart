@@ -7,7 +7,7 @@ import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/job_card_business.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_events.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -214,10 +214,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                           setState(() {});
                         },
                         itemBuilder: (context, index) {
-                          return JobCard(
+                          return BusinessJobCard(
                             // Look into this properly
-                            // job: dashCtrl.createdJobList[index],
-                            job: dashCtrl.jobsList[index],
+                            job: dashCtrl.createdJobList[index],
                           );
                         },
                       ),
@@ -326,6 +325,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                         },
                         itemBuilder: (context, index) {
                           return EventCard(
+                            isFromBusiness: true,
                             hasDelete: false,
                             hasSave: false,
                             event: dashCtrl.myCreatedEventsList[index],

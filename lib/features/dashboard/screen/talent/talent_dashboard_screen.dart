@@ -6,7 +6,7 @@ import 'package:nodes/features/community/components/community_space_card_templat
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -173,7 +173,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return SavedJobCard(
+                return StandardTalentJobCard(
                   job: dashCtrl.appliedJobsList[index],
                 );
               },
@@ -275,7 +275,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return JobCard(
+                return StandardTalentJobCard(
                   job: dashCtrl.jobsList[index],
                 );
               },

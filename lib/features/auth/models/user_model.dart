@@ -35,7 +35,7 @@ class UserModel extends Equatable {
   final String? website;
   final BusinessAccountModel? business;
   final SubscriptionModel? subscription;
-  final bool? visible;
+  final bool visible;
 
   const UserModel({
     this.id,
@@ -65,7 +65,7 @@ class UserModel extends Equatable {
     this.website,
     this.business,
     this.subscription,
-    this.visible,
+    this.visible = true,
   });
   copyWith({
     String? id,

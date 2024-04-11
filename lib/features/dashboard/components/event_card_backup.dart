@@ -5,9 +5,10 @@ import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:pinput/pinput.dart';
 
-class EventCardBakup extends StatelessWidget {
-  const EventCardBakup({
+class EventCard extends StatelessWidget {
+  const EventCard({
     super.key,
     this.isFromBusiness = false,
     this.hasDelete = false,
@@ -24,136 +25,166 @@ class EventCardBakup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(
-          image: const NetworkImage(
-              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg"),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            // Colors.black.withOpacity(0.6),
-            Colors.black.withOpacity(0.4),
-            BlendMode.multiply,
+    return Stack(
+      children: [
+        Positioned(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: cachedNetworkImage(
+                imgUrl: "${event.thumbnail?.url}",
+                size: screenWidth(context),
+              ),
+            ),
           ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // if (hasDelete || hasSave)
-            if (hasSave)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  context.watch<DashboardController>().isSavingUnsavedEvent
-                      ? const Padding(
-                          padding: EdgeInsets.only(top: 10, right: 15),
-                          child: SaveIconLoader(
-                            color: WHITE,
-                          ),
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            saveUnsaveEvent(context, event);
-                          },
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: SvgPicture.asset(
-                                event.saved
-                                    ? ImageUtils.saveJobFilledIcon
-                                    : ImageUtils.saveJobIcon,
+        Container(
+          margin: const EdgeInsets.only(right: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                // if (hasDelete || hasSave)
+                if (hasSave)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      context.watch<DashboardController>().isSavingUnsavedEvent
+                          ? const Padding(
+                              padding: EdgeInsets.only(top: 10, right: 15),
+                              child: SaveIconLoader(
                                 color: WHITE,
                               ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                saveUnsaveEvent(context, event);
+                              },
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: SvgPicture.asset(
+                                    event.saved
+                                        ? ImageUtils.saveJobFilledIcon
+                                        : ImageUtils.saveJobIcon,
+                                    color: WHITE,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                ],
-              ),
-            if (hasDelete)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: SvgPicture.asset(
-                    ImageUtils.trashOutlineIcon,
-                    color: WHITE,
-                    height: 40,
+                    ],
                   ),
-                ),
-              ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                labelText(
-                  "${event.name}",
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: WHITE,
-                  maxLine: 1,
-                ),
-                ySpace(height: 8),
-                subtext(
-                  "${shortDate(event.dateTime ?? DateTime.now())} by ${fromDatTimeToTimeOfDay(event.dateTime ?? DateTime.now())}",
-                  color: WHITE,
-                  fontSize: 14,
-                ),
-                ySpace(height: 24),
-                Wrap(
-                  spacing: 5,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      color: WHITE,
+                if (hasDelete)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        context.watch<DashboardController>().isDeletingEvent
+                            ? const Loader()
+                            : GestureDetector(
+                                onTap: () => deleteEvent(context, event),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: SvgPicture.asset(
+                                    ImageUtils.trashOutlineIcon,
+                                    color: WHITE,
+                                    height: 40,
+                                  ),
+                                ),
+                              ),
+                      ],
                     ),
+                  ),
+                Container(
+                  height: 50,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    labelText(
+                      "${event.name}",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: WHITE,
+                      maxLine: 1,
+                    ),
+                    ySpace(height: 8),
                     subtext(
-                      // "Lagos | Nigeria",
-                      "${event.location}",
-                      color: WHITE.withOpacity(0.9),
+                      "${shortDate(event.dateTime ?? DateTime.now())} by ${fromDatTimeToTimeOfDay(event.dateTime ?? DateTime.now())}",
+                      color: WHITE,
                       fontSize: 14,
+                    ),
+                    ySpace(height: 24),
+                    Wrap(
+                      spacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          color: WHITE,
+                        ),
+                        subtext(
+                          // "Lagos | Nigeria",
+                          "${event.location}",
+                          color: WHITE.withOpacity(0.9),
+                          fontSize: 14,
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                // ySpace(height: 40),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (isFromBusiness) {
+                        context
+                            .read<DashboardController>()
+                            .setCurrentlyViewedEvent(event);
+                        context.read<NavController>().updatePageListStack(
+                              BusinessEventDetailsScreen.routeName,
+                            );
+                      } else {
+                        showEventDetailsBottomSheet(context, event);
+                      }
+                    },
+                    child: labelText(
+                      "View details",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: WHITE,
+                    ),
+                  ),
+                ),
+                ySpace(height: 24),
               ],
             ),
-            // ySpace(height: 40),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  isFromBusiness
-                      ? context.read<NavController>().updatePageListStack(
-                            BusinessEventDetailsScreen.routeName,
-                          )
-                      : showEventDetailsBottomSheet(context, event);
-                },
-                child: labelText(
-                  "View details",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: WHITE,
-                ),
-              ),
-            ),
-            ySpace(height: 24),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
   saveUnsaveEvent(BuildContext context, EventModel event) async {
     event.saved
-        ? await context.read<DashboardController>().unSaveEvent(context, event.id)
-        : await context.read<DashboardController>().saveEvent(context, event.id);
+        ? await context
+            .read<DashboardController>()
+            .unSaveEvent(context, event.id)
+        : await context
+            .read<DashboardController>()
+            .saveEvent(context, event.id);
   }
 
   showEventDetailsBottomSheet(BuildContext context, EventModel event) {
@@ -184,5 +215,11 @@ class EventCardBakup extends StatelessWidget {
         );
       },
     );
+  }
+
+  deleteEvent(BuildContext context, EventModel event) async {
+    bool done = await context
+        .read<DashboardController>()
+        .deleteSingleEvent(context, event.id);
   }
 }

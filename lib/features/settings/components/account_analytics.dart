@@ -4,14 +4,10 @@ import 'package:nodes/utilities/utils/enums.dart';
 class AccountAnalytics extends StatefulWidget {
   const AccountAnalytics({
     super.key,
-    required this.accountType,
-    this.isIndividual = false,
     this.isTalent = false,
     this.isBusiness = false,
   });
 
-  final LoggedInAccountType accountType;
-  final bool isIndividual;
   final bool isTalent;
   final bool isBusiness;
 
@@ -27,33 +23,7 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 40),
       children: [
-        if (widget.accountType == LoggedInAccountType.Individual) ...[
-          Row(
-            children: [
-              Expanded(
-                child: analyticsCard(
-                  title: "No. of Clicks",
-                  value: "20",
-                ),
-              ),
-              xSpace(width: 24),
-              Expanded(
-                child: analyticsCard(
-                  title: "No. of Saves",
-                  value: "24",
-                ),
-              ),
-            ],
-          ),
-          ySpace(height: 24),
-          analyticsCard(
-            title: "No. of Applicants",
-            value: "20",
-          ),
-        ],
-        // if (widget.accountType == LoggedInAccountType.Talent) ...[
-        if (widget.accountType == LoggedInAccountType.Talent ||
-            widget.accountType == LoggedInAccountType.BusinessTalent) ...[
+        if (widget.isTalent) ...[
           Row(
             children: [
               Expanded(
@@ -72,7 +42,7 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
             ],
           ),
         ],
-        if (widget.accountType == LoggedInAccountType.Business) ...[
+        if (widget.isBusiness) ...[
           Row(
             children: [
               Expanded(

@@ -1,8 +1,7 @@
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/job_filter.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -145,7 +144,7 @@ class _TalentJobCenterScreenState extends State<TalentJobCenterScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: dashCtrl.jobsList.length,
                   itemBuilder: (c, i) {
-                    return JobCard(
+                    return StandardTalentJobCard(
                       job: dashCtrl.jobsList[i],
                     );
                   },

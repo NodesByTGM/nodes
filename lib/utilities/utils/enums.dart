@@ -31,14 +31,7 @@ enum SocialMediaTypes {
   Twitter,
   Linkedin,
 }
-
-enum LoggedInAccountType {
-  Individual,
-  Talent,
-  Business,
-  BusinessTalent,
-}
-
+ 
 enum AccountType {
   Default, //0
   Talent, // 1

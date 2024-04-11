@@ -1,3 +1,5 @@
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/settings/components/account_analytics.dart';
 import 'package:nodes/features/settings/components/account_form.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -16,13 +18,19 @@ class AccountSettingsScreen extends StatefulWidget {
 class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   int currentIndex = 0;
   // Get who is logged in.
+  late AuthController authCtrl;
+  late bool isBusiness;
 
-  LoggedInAccountType accountType = LoggedInAccountType.Individual;
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    isBusiness = authCtrl.currentUser.type == 2;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isBusiness = accountType == LoggedInAccountType.Business ||
-        accountType == LoggedInAccountType.BusinessTalent;
+    authCtrl = context.watch<AuthController>();
     return ListView(
       shrinkWrap: true,
       children: [
@@ -74,25 +82,28 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                     if (!isBusiness) ...[
                       xSpace(width: 10),
                     ],
-                    tabHeader(
-                      isActive: currentIndex == 1,
-                      title: isBusiness ? "Personal Analytics" : "Analytics",
-                      onTap: () {
-                        setState(() {
-                          currentIndex = 1;
-                        });
-                      },
-                    ),
-                    if (isBusiness) ...[
+                    if (authCtrl.currentUser.type != 0) ...[
+                      // Means can show the below data provided the logged in user ain't standard
                       tabHeader(
-                        isActive: currentIndex == 2,
-                        title: "Business Analytics",
+                        isActive: currentIndex == 1,
+                        title: isBusiness ? "Personal Analytics" : "Analytics",
                         onTap: () {
                           setState(() {
-                            currentIndex = 2;
+                            currentIndex = 1;
                           });
                         },
                       ),
+                      if (isBusiness) ...[
+                        tabHeader(
+                          isActive: currentIndex == 2,
+                          title: "Business Analytics",
+                          onTap: () {
+                            setState(() {
+                              currentIndex = 2;
+                            });
+                          },
+                        ),
+                      ],
                     ],
                   ],
                 ),
@@ -110,10 +121,13 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       case 0:
         return const AccountForm();
       case 1:
-        return AccountAnalytics(accountType: accountType);
-      case 2:
         return const AccountAnalytics(
-            accountType: LoggedInAccountType.Business);
+          isTalent: true,
+        );
+      case 2:
+        return AccountAnalytics(
+          isBusiness: isBusiness,
+        );
       default:
         return const AccountForm();
     }

@@ -1,9 +1,8 @@
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
-import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/components/job_card_business.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
@@ -98,23 +97,6 @@ class _BusinessCreatedJobCenterScreenState
                     ),
                   );
                 },
-                // content: ListView.separated(
-                //   shrinkWrap: true,
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   itemCount: dashCtrl.createdJobList.length,
-                //   itemBuilder: (c, i) {
-                //     // return const JobCard(
-                //     //   job: JobModel(),
-                //     // );
-                //     return JobCard(
-                //       isFromBusiness: true,
-                //       // job: dashCtrl.createdJobList[i],
-                //       job: dashCtrl.jobsList[i],
-                //       // Rethink this later, as when you create a job, it has the saved model...
-                //     );
-                //   },
-                //   separatorBuilder: (c, i) => ySpace(height: 24),
-                // ),
                 content: Consumer<DashboardController>(
                   builder: (contex, dashCtrl, _) {
                     bool isLoading = dashCtrl.isFetchingAllCreatedJobs;
@@ -136,19 +118,16 @@ class _BusinessCreatedJobCenterScreenState
                         isEmpty: hasData,
                       );
                     } else {
-                      // List<SavedJobModel> jobs = dashCtrl.createdJobList;
-                      List<JobModel> jobs = dashCtrl
-                          .jobsList; // Should be ceratedJobList, work on the model and revert...
+                      List<BusinessJobModel> jobs = dashCtrl.createdJobList;
                       return ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: jobs.length,
                         itemBuilder: (c, i) {
-                          return JobCard(
-                            isFromBusiness: true,
+                          return BusinessJobCard(
                             // include the has delete, so i can delete the job straightup
                             // job: dashCtrl.createdJobList[i],
-                            job: dashCtrl.jobsList[i],
+                            job: dashCtrl.createdJobList[i],
                             // Rethink this later, as when you create a job, it has the saved model...
                           );
                         },

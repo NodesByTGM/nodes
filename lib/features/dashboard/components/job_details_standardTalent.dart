@@ -1,27 +1,26 @@
+
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/dot_divider.dart';
 import 'package:nodes/utilities/widgets/tag_chip.dart';
 
-class JobDetails extends StatefulWidget {
-  const JobDetails({
+class StandardTalentJobDetails extends StatefulWidget {
+  const StandardTalentJobDetails({
     super.key,
     required this.job,
-    this.isFromBusiness = true,
   });
 
-  final JobModel job;
-  final bool isFromBusiness;
+  final StandardTalentJobModel job;
 
   @override
-  State<JobDetails> createState() => _JobDetailsState();
+  State<StandardTalentJobDetails> createState() => _StandardTalentJobDetailsState();
 }
 
-class _JobDetailsState extends State<JobDetails> {
-  late JobModel job;
+class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
+  late StandardTalentJobModel job;
   late DashboardController dashCtrl;
 
   @override
@@ -66,7 +65,6 @@ class _JobDetailsState extends State<JobDetails> {
             const CustomDot(),
             subtext(
               "${job.applicants?.length} applicants",
-              // "0 applicants",
               fontSize: 12,
               fontWeight: FontWeight.w400,
               color: BLACK.withOpacity(0.7),
@@ -108,7 +106,6 @@ class _JobDetailsState extends State<JobDetails> {
           ),
         ),
         ySpace(height: 24),
-        if (!widget.isFromBusiness) ...[
           Row(
             children: [
               dashCtrl.isSavingUnsavedJobs
@@ -139,206 +136,6 @@ class _JobDetailsState extends State<JobDetails> {
             ],
           ),
           ySpace(height: 24),
-        ],
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-          decoration: BoxDecoration(
-            color: WHITE,
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(
-              width: 0.7,
-              color: BORDER,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Wrap(
-                spacing: 5,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  SvgPicture.asset(ImageUtils.briefcaseIcon),
-                  labelText(
-                    "1 - 3 years of experience",
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
-              ),
-              ySpace(height: 19),
-              Wrap(
-                spacing: 5,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  SvgPicture.asset(ImageUtils.briefcaseIcon),
-                  labelText(
-                    "Skills",
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
-              ),
-              ySpace(height: 16),
-              Wrap(
-                children: [
-                  ...List.generate(
-                    (job.skills?.length ?? 0),
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(
-                        right: 5,
-                        bottom: 4,
-                      ),
-                      child: CustomTagChip(title: "${job.skills?[index]}"),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-        ySpace(height: 24),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-          decoration: BoxDecoration(
-            color: WHITE,
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(
-              width: 0.7,
-              color: BORDER,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              labelText(
-                "Job description",
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-              ySpace(height: 24),
-              subtext(
-                "${job.description}",
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                height: 1.5,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  void saveJob() async {
-    await dashCtrl.saveJob(context, job.id);
-  }
-
-  void applyForJob() async {
-    await dashCtrl.applyForJob(context, job.id);
-  }
-}
-
-class SavedJobDetails extends StatefulWidget {
-  const SavedJobDetails({
-    super.key,
-    required this.job,
-  });
-
-  final SavedJobModel job;
-
-  @override
-  State<SavedJobDetails> createState() => _SavedJobDetailsState();
-}
-
-class _SavedJobDetailsState extends State<SavedJobDetails> {
-  late SavedJobModel job;
-  late DashboardController dashCtrl;
-
-  @override
-  void initState() {
-    dashCtrl = locator.get<DashboardController>();
-    job = widget.job;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    dashCtrl = context.watch<DashboardController>();
-    return ListView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: WHITE,
-            border: Border.all(
-              width: 0.7,
-              color: BORDER,
-            ),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.calendar_today_outlined,
-                size: 16,
-              ),
-              xSpace(width: 5),
-              subtext(
-                // "20 hrs/wk",
-                "${job.workRate}",
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-              const CustomDot(),
-              // CustomTagChip(title: "Remote"),
-              CustomTagChip(
-                title: Constants.jobType[job.jobType as int],
-              ),
-            ],
-          ),
-        ),
-        ySpace(height: 24),
-        Row(
-          children: [
-            dashCtrl.isSavingUnsavedJobs
-                ? const Loader()
-                : GestureDetector(
-                    onTap: () {
-                      saveJob();
-                    },
-                    child: SvgPicture.asset(job.saved
-                        ? ImageUtils.saveJobFilledIcon
-                        : ImageUtils.saveJobIcon),
-                  ),
-            xSpace(width: 16),
-            Expanded(
-              child: SubmitBtn(
-                onPressed: job.applied
-                    ? null
-                    : () {
-                        applyForJob();
-                      },
-                title: btnTxt(
-                  job.applied ? "Applied" : "Apply",
-                  WHITE,
-                ),
-                loading: dashCtrl.isApplyingForJob,
-              ),
-            ),
-          ],
-        ),
-        ySpace(height: 24),
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,

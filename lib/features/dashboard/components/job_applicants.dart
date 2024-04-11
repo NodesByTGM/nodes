@@ -1,10 +1,10 @@
-import 'package:nodes/features/saves/models/job_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class JobApplicants extends StatelessWidget {
   const JobApplicants({super.key, required this.job});
 
-  final JobModel job;
+  final BusinessJobModel job;
 
   @override
   Widget build(BuildContext context) {
