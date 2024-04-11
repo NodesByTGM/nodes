@@ -18,7 +18,6 @@ class DashboardApis {
   static const events = "$baseApi/events";
   static const singleEvent = "$events/{id}";
   static const saveEvent = "$events/save/{id}";
-
   static const unSaveEvent = "$events/unsave/{id}";
   static const allSavedEvents = "$events/saved/";
   static const myCreatedEvents = "$events/mine";
@@ -27,7 +26,6 @@ class DashboardApis {
   static const jobs = "$baseApi/jobs";
   static const singleJob = "$jobs/{id}";
   static const applyForJob = "$jobs/apply/{id}";
-
   static const saveJob = "$jobs/save/{id}";
   static const unSaveJob = "$jobs/unsave/{id}";
   static const allSavedJobs = "$jobs/saved";

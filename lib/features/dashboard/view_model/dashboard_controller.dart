@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
+// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names, use_build_context_synchronously
 
 // import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,12 +7,14 @@ import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/custom_page.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
 import 'package:nodes/utilities/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class DashboardController extends BaseController {
   final log = Logger('DashboardController');
@@ -24,9 +26,12 @@ class DashboardController extends BaseController {
   List<SavedJobModel> _savedJobsList = [];
   List<JobModel> _jobsList = [];
   EventModel _currentlyViewedBusinessEvent = const EventModel();
+  List<SavedJobModel> _appliedJobsList = [];
+  List<SavedJobModel> _createdJobList = [];
   JobModel _currentlyViewedBusinessJob = const JobModel();
   List<EventModel> _savedEventsList = [];
   List<EventModel> _eventsList = [];
+  List<EventModel> _myCreatedEventsList = [];
   List<ProjectModel> _projectList = [];
   List<ProjectModel> _myProjectList = [];
 
@@ -34,9 +39,12 @@ class DashboardController extends BaseController {
   List<SavedJobModel> get savedJobsList => _savedJobsList;
   List<JobModel> get jobsList => _jobsList;
   JobModel get currentlyViewedBusinessJob => _currentlyViewedBusinessJob;
+  List<SavedJobModel> get appliedJobsList => _appliedJobsList;
+  List<SavedJobModel> get createdJobList => _createdJobList;
   EventModel get currentlyViewedBusinessEvent => _currentlyViewedBusinessEvent;
   List<EventModel> get savedEvents => _savedEventsList;
   List<EventModel> get eventsList => _eventsList;
+  List<EventModel> get myCreatedEventsList => _myCreatedEventsList;
   List<ProjectModel> get projectList => _projectList;
   List<ProjectModel> get myProjectList => _myProjectList;
 
@@ -47,6 +55,7 @@ class DashboardController extends BaseController {
   //   notifyListeners();
   // }
 
+// Jobs
   setSavedJobs(List<SavedJobModel> jobs) {
     _savedJobsList = jobs;
     notifyListeners();
@@ -62,6 +71,61 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
+  setAppliedJobList(List<SavedJobModel> job) {
+    _appliedJobsList = job;
+    notifyListeners();
+  }
+
+  setMyCreatedJobList(List<SavedJobModel> job) {
+    _createdJobList = job;
+    notifyListeners();
+  }
+
+  _updateSingleJob(SavedJobModel job) {
+    int jIndex = _createdJobList.indexWhere((e) => e.id == job.id);
+    if (jIndex != -1) {
+      _createdJobList[jIndex] = job;
+    } else {
+      // Means it should add/ i.e created a new one in the list
+      _createdJobList.add(job);
+    }
+    notifyListeners();
+  }
+
+  _updateAppliedJobsList(SavedJobModel job) {
+    _appliedJobsList.add(job);
+    notifyListeners();
+  }
+
+  _updateSavedJobsList(
+    BuildContext ctx, {
+    required SavedJobModel job,
+    required bool isSave,
+  }) {
+    if (isSave) {
+      _savedJobsList.add(job);
+    } else {
+      int jIndex = _savedJobsList.indexWhere((jd) => jd.id == job.id);
+      if (jIndex != -1) {
+        // Found something...
+        // _savedJobsList.removeAt();
+        _savedJobsList[jIndex].saves?.removeWhere(
+            (savers) => savers.id == ctx.read<AuthController>().currentUser.id);
+      }
+    }
+    notifyListeners();
+  }
+
+
+  _deleteSingleJob(SavedJobModel job) {
+    int jIndex = _createdJobList.indexWhere((e) => e.id == job.id);
+    if (jIndex != -1) {
+      _createdJobList.removeWhere((e) => e.id == job.id);
+    }
+    notifyListeners();
+  }
+
+// Events
   setSavedEvents(List<EventModel> events) {
     _savedEventsList = events;
     notifyListeners();
@@ -77,6 +141,49 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
+  setMyCreatedEventList(List<EventModel> events) {
+    _myCreatedEventsList = events;
+    notifyListeners();
+  }
+
+  _updateSingleEvent(EventModel event) {
+    int eIndex = _myCreatedEventsList.indexWhere((e) => e.id == event.id);
+    if (eIndex != -1) {
+      _myCreatedEventsList[eIndex] = event;
+    } else {
+      // Means it should add/ i.e created a new one in the list
+      _myCreatedEventsList.add(event);
+    }
+    notifyListeners();
+  }
+
+  _deleteSingleEvent(EventModel event) {
+    int eIndex = _myCreatedEventsList.indexWhere((e) => e.id == event.id);
+    if (eIndex != -1) {
+      _myCreatedEventsList.removeWhere((e) => e.id == event.id);
+    }
+    notifyListeners();
+  }
+
+  _updateSavedEventsList(
+    BuildContext ctx, {
+    required EventModel event,
+    required bool isSave,
+  }) {
+    if (isSave) {
+      _savedEventsList.add(event);
+    } else {
+      int eIndex = _savedJobsList.indexWhere((e) => e.id == event.id);
+      if (eIndex != -1) {
+        // Found something...
+        _savedEventsList[eIndex].saves?.removeWhere(
+            (savers) => savers.id == ctx.read<AuthController>().currentUser.id);
+      }
+    }
+    notifyListeners();
+  }
+
+// Projects
   setProjectList(List<ProjectModel> projects) {
     _projectList = projects;
     notifyListeners();
@@ -94,7 +201,7 @@ class DashboardController extends BaseController {
 
   // Functions
 
-  // Events
+  // Projects
 
   Future<bool> createProject(BuildContext ctx, dynamic payload) async {
     setCreatingProject(true);
@@ -169,6 +276,11 @@ class DashboardController extends BaseController {
     }
   }
 
+//
+//
+// Events
+//
+//
   Future<bool> createEvent(BuildContext ctx, dynamic payload) async {
     setCreatingEvent(true);
     try {
@@ -177,7 +289,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateSingleEvent(
+        EventModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -213,20 +327,20 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchSingleEvent(BuildContext ctx, dynamic payload) async {
+  Future<EventModel?> fetchSingleEvent(
+      BuildContext ctx, dynamic payload) async {
     setFetchingSingleEvent(true);
     try {
       ApiResponse response =
           await _dashboardService.fetchSingleEvent(ctx, payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
-        return false;
+        return null;
       }
-      // TODO: Do Something here...
-      return true;
+      return EventModel.fromJson(response.result as Map<String, dynamic>);
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
       setFetchingSingleEvent(false);
     }
@@ -248,7 +362,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateSingleEvent(
+        EventModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -267,7 +383,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _deleteSingleEvent(
+        EventModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -285,7 +403,11 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateSavedEventsList(
+        ctx,
+        isSave: true,
+        event: EventModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -303,7 +425,11 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateSavedEventsList(
+        ctx,
+        isSave: true,
+        event: EventModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -355,7 +481,7 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      setMyCreatedEventList(_resolvePaginatedEvents(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -365,7 +491,14 @@ class DashboardController extends BaseController {
     }
   }
 
-  // Jobs
+  ///
+  ///
+  ///
+  ///  JOBS SECTION
+  ///
+  ///
+  ///
+  ///
 
   Future<bool> createJob(BuildContext ctx, dynamic payload) async {
     setCreatingJob(true);
@@ -375,7 +508,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateSingleJob(
+        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -411,20 +546,20 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> fetchSingleJob(BuildContext ctx, dynamic payload) async {
+  Future<SavedJobModel?> fetchSingleJob(
+      BuildContext ctx, dynamic payload) async {
     setFetchingSingleJob(true);
     try {
       ApiResponse response =
           await _dashboardService.fetchSingleJob(ctx, payload);
       if (response.status == KeyString.failure) {
         showError(message: errorMessageObjectToString(response.message));
-        return false;
+        return null;
       }
-      // TODO: Do Something here...
-      return true;
+      return SavedJobModel.fromJson(response.result as Map<String, dynamic>);
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
       setFetchingSingleJob(false);
     }
@@ -446,7 +581,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _updateSingleJob(
+        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -465,7 +602,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      _deleteSingleJob(
+        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -483,8 +622,9 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
-      // Add the applicant to the Applied arr...
+      _updateAppliedJobsList(
+        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -502,8 +642,11 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
-      // Add the applicant to the saved arr.
+      _updateSavedJobsList(
+        ctx,
+        isSave: true,
+        job: SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -521,7 +664,11 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // Remove the applicant from the saved arr.
+      _updateSavedJobsList(
+        ctx,
+        job: SavedJobModel.fromJson(response.result as Map<String, dynamic>),
+        isSave: false,
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -573,7 +720,7 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      setAppliedJobList(_resolvePaginatedSavedJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -599,7 +746,7 @@ class DashboardController extends BaseController {
         showError(message: errorMessageObjectToString(response.message));
         return false;
       }
-      // TODO: Do Something here...
+      setMyCreatedJobList(_resolvePaginatedSavedJobs(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -610,6 +757,7 @@ class DashboardController extends BaseController {
   }
 
 // Handling Paginated Data...
+// Jobs
   List<SavedJobModel> _resolvePaginatedSavedJobs(ApiResponse response) {
     CustomPage<SavedJobModel> p = const CustomPage<SavedJobModel>().fromJson(
         response.result as Map<String, dynamic>, const SavedJobModel());
@@ -630,6 +778,7 @@ class DashboardController extends BaseController {
     return [];
   }
 
+// Events
   List<EventModel> _resolvePaginatedEvents(ApiResponse response) {
     CustomPage<EventModel> p = const CustomPage<EventModel>()
         .fromJson(response.result as Map<String, dynamic>, const EventModel());
@@ -640,6 +789,7 @@ class DashboardController extends BaseController {
     return [];
   }
 
+// Projects
   List<ProjectModel> _resolvePaginatedProjects(ApiResponse response) {
     CustomPage<ProjectModel> p = const CustomPage<ProjectModel>().fromJson(
         response.result as Map<String, dynamic>, const ProjectModel());

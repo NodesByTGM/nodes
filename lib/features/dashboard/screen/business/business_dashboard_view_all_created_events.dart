@@ -7,28 +7,28 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class BusinessEventCenterScreen extends StatefulWidget {
-  const BusinessEventCenterScreen({super.key});
-  static const String routeName = "/business_event_center_screen";
+class BusinessCreatedEventCenterScreen extends StatefulWidget {
+  const BusinessCreatedEventCenterScreen({super.key});
+  static const String routeName = "/business_created_event_center_screen";
 
   @override
-  State<BusinessEventCenterScreen> createState() =>
-      _BusinessEventCenterScreenState();
+  State<BusinessCreatedEventCenterScreen> createState() =>
+      _BusinessCreatedEventCenterScreenState();
 }
 
-class _BusinessEventCenterScreenState extends State<BusinessEventCenterScreen> {
+class _BusinessCreatedEventCenterScreenState extends State<BusinessCreatedEventCenterScreen> {
   late DashboardController dashCtrl;
 
   @override
   void initState() {
     dashCtrl = locator.get<DashboardController>();
     super.initState();
-    fetchJobs();
+    fetchMyCreatedEvents();
   }
 
-  fetchJobs() {
+  fetchMyCreatedEvents() {
     // Should be fetching all my created events
-    safeNavigate(() => dashCtrl.fetchAllEvents(context));
+    safeNavigate(() => dashCtrl.fetchAllAllMyCreatedEvents(context));
   }
 
   @override
@@ -84,7 +84,7 @@ class _BusinessEventCenterScreenState extends State<BusinessEventCenterScreen> {
                 content: ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dashCtrl.eventsList.length,
+                  itemCount: dashCtrl.myCreatedEventsList.length,
                   itemBuilder: (c, i) {
                     return SizedBox(
                       height: 280,
@@ -92,7 +92,7 @@ class _BusinessEventCenterScreenState extends State<BusinessEventCenterScreen> {
                         isFromBusiness: true,
                         hasDelete: true,
                         hasSave: false,
-                        event: dashCtrl.eventsList[i],
+                        event: dashCtrl.myCreatedEventsList[i],
                       ),
                     );
                   },

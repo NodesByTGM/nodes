@@ -10,7 +10,7 @@ import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
-import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/home/components/drawer.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
@@ -186,7 +186,7 @@ class _NavbarViewState extends State<NavbarView> {
       EditBusinessProfileScreen.routeName,
       //
       // DashboardWrapper.routeName,
-      // TalentJobCenterScreen.routeName,
+      // TalentAppliedJobCenterScreen.routeName,
       BusinessJobDetailsScreen.routeName,
       BusinessEventDetailsScreen.routeName,
       SavedItemScreen.routeName,

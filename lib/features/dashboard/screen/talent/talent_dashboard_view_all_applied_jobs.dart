@@ -9,15 +9,17 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class TalentJobCenterScreen extends StatefulWidget {
-  const TalentJobCenterScreen({super.key});
-  static const String routeName = "/job_center_screen";
+class TalentAppliedJobCenterScreen extends StatefulWidget {
+  const TalentAppliedJobCenterScreen({super.key});
+  static const String routeName = "/applied_job_center_screen";
 
   @override
-  State<TalentJobCenterScreen> createState() => _TalentJobCenterScreenState();
+  State<TalentAppliedJobCenterScreen> createState() =>
+      _TalentAppliedJobCenterScreenState();
 }
 
-class _TalentJobCenterScreenState extends State<TalentJobCenterScreen> {
+class _TalentAppliedJobCenterScreenState
+    extends State<TalentAppliedJobCenterScreen> {
   late DashboardController dashCtrl;
   late AuthController authCtrl;
 
@@ -26,12 +28,12 @@ class _TalentJobCenterScreenState extends State<TalentJobCenterScreen> {
     dashCtrl = locator.get<DashboardController>();
     authCtrl = locator.get<AuthController>();
     super.initState();
-    fetchAllJobs();
+    fetchAppliedJobs();
   }
 
-  fetchAllJobs() {
+  fetchAppliedJobs() {
     // Should be fetching all my created events
-    safeNavigate(() => dashCtrl.fetchAllJobs(context));
+    safeNavigate(() => dashCtrl.fetchAllAppliedJobs(context));
   }
 
   @override
@@ -158,10 +160,10 @@ class _TalentJobCenterScreenState extends State<TalentJobCenterScreen> {
             content: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: dashCtrl.jobsList.length,
+              itemCount: dashCtrl.appliedJobsList.length,
               itemBuilder: (c, i) {
-                return JobCard(
-                  job: dashCtrl.jobsList[i],
+                return SavedJobCard(
+                  job: dashCtrl.appliedJobsList[i],
                 );
               },
               separatorBuilder: (c, i) => ySpace(height: 24),

@@ -8,8 +8,8 @@ import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
-import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_events.dart';
-import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_events.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/subscriptions/screen/proceed_with_payment_screen.dart';
@@ -48,14 +48,14 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     super.initState();
-    fetchJobs();
+    fetchMyCreatedEventAndJobs();
   }
 
-  fetchJobs() {
+  fetchMyCreatedEventAndJobs() {
     // Should be fetching all my created jobs
-    safeNavigate(() => dashCtrl.fetchAllJobs(context));
+    safeNavigate(() => dashCtrl.fetchAllMyCreatedJobs(context));
     // Should be fetching all my created events
-    safeNavigate(() => dashCtrl.fetchAllEvents(context));
+    safeNavigate(() => dashCtrl.fetchAllAllMyCreatedEvents(context));
   }
 
   @override
@@ -186,7 +186,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                           GestureDetector(
                             onTap: () {
                               navCtrl.updatePageListStack(
-                                BusinessJobCenterScreen.routeName,
+                                BusinessCreatedJobCenterScreen.routeName,
                               );
                             },
                             child: subtext(
@@ -213,7 +213,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     SizedBox(
                       height: 320,
                       child: PageView.builder(
-                        itemCount: dashCtrl.jobsList.length,
+                        itemCount: dashCtrl.createdJobList.length,
                         controller: jobsCardCtrl,
                         onPageChanged: (val) {
                           currentJobIndex = val;
@@ -221,6 +221,8 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                         },
                         itemBuilder: (context, index) {
                           return JobCard(
+                            // Look into this properly
+                            // job: dashCtrl.createdJobList[index],
                             job: dashCtrl.jobsList[index],
                           );
                         },
@@ -296,7 +298,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                       GestureDetector(
                         onTap: () {
                           navCtrl.updatePageListStack(
-                            BusinessEventCenterScreen.routeName,
+                            BusinessCreatedEventCenterScreen.routeName,
                           );
                         },
                         child: subtext(

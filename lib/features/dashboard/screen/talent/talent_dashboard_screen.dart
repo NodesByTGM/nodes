@@ -7,6 +7,7 @@ import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
+import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
@@ -48,7 +49,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
 
   fetchJobs() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
-    safeNavigate(() => dashCtrl.fetchAllSavedJobs(context));
+    safeNavigate(() => dashCtrl.fetchAllAppliedJobs(context));
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }
 
@@ -144,7 +145,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   GestureDetector(
                     onTap: () {
                       navCtrl.updatePageListStack(
-                        TalentJobCenterScreen.routeName,
+                        TalentAppliedJobCenterScreen.routeName,
                       );
                     },
                     child: subtext(
@@ -161,8 +162,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: dashCtrl.savedJobsList
-                  .length, // should be list of applied jobs, and not saved
+              itemCount: dashCtrl.appliedJobsList.length,
               controller: appliedJobsCtrl,
               onPageChanged: (val) {
                 currentAppliedJobsIndex = val;
@@ -170,7 +170,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               },
               itemBuilder: (context, index) {
                 return SavedJobCard(
-                  job: dashCtrl.savedJobsList[index],
+                  job: dashCtrl.appliedJobsList[index],
                 );
               },
             ),
@@ -182,7 +182,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(dashCtrl.savedJobsList.length, (index) {
+                  ...List.generate(dashCtrl.appliedJobsList.length, (index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: CardDotIndicator(
@@ -199,7 +199,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.savedJobsList.length,
+                        totoalLength: dashCtrl.appliedJobsList.length,
                         currentIndex: currentAppliedJobsIndex,
                         ctrl: appliedJobsCtrl,
                       );
@@ -213,7 +213,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.savedJobsList.length,
+                        totoalLength: dashCtrl.appliedJobsList.length,
                         currentIndex: currentAppliedJobsIndex,
                         ctrl: appliedJobsCtrl,
                       );
@@ -245,7 +245,11 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      navCtrl.updatePageListStack(
+                        TalentJobCenterScreen.routeName,
+                      );
+                    },
                     child: subtext(
                       "See more",
                       fontSize: 14,
@@ -269,7 +273,6 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               itemBuilder: (context, index) {
                 return JobCard(
                   job: dashCtrl.jobsList[index],
-                  
                 );
               },
             ),

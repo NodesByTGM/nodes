@@ -3,33 +3,33 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class BusinessJobCenterScreen extends StatefulWidget {
-  const BusinessJobCenterScreen({super.key});
-  static const String routeName = "/business_job_center_screen";
+class BusinessCreatedJobCenterScreen extends StatefulWidget {
+  const BusinessCreatedJobCenterScreen({super.key});
+  static const String routeName = "/business_created_job_center_screen";
 
   @override
-  State<BusinessJobCenterScreen> createState() =>
-      _BusinessJobCenterScreenState();
+  State<BusinessCreatedJobCenterScreen> createState() =>
+      _BusinessCreatedJobCenterScreenState();
 }
 
-class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
+class _BusinessCreatedJobCenterScreenState
+    extends State<BusinessCreatedJobCenterScreen> {
   late DashboardController dashCtrl;
 
   @override
   void initState() {
     dashCtrl = locator.get<DashboardController>();
     super.initState();
-    fetchJobs();
+    fetchCreatedJobs();
   }
 
-  fetchJobs() {
+  fetchCreatedJobs() {
     // Should be fetching all my created events
-    safeNavigate(() => dashCtrl.fetchAllEvents(context));
+    safeNavigate(() => dashCtrl.fetchAllMyCreatedJobs(context));
   }
 
   @override
@@ -98,14 +98,16 @@ class _BusinessJobCenterScreenState extends State<BusinessJobCenterScreen> {
                 content: ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 10,
+                  itemCount: dashCtrl.createdJobList.length,
                   itemBuilder: (c, i) {
                     // return const JobCard(
                     //   job: JobModel(),
                     // );
                     return JobCard(
                       isFromBusiness: true,
+                      // job: dashCtrl.createdJobList[i],
                       job: dashCtrl.jobsList[i],
+                      // Rethink this later, as when you create a job, it has the saved model...
                     );
                   },
                   separatorBuilder: (c, i) => ySpace(height: 24),

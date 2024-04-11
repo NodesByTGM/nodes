@@ -6,13 +6,14 @@ import 'package:nodes/features/community/screens/space_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_event_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
-import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_events.dart';
-import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_events.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_jobs.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_single_item_details.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
@@ -36,10 +37,12 @@ const Map<String, dynamic> persistentRoutesSettings = {
     IndividualDashboardViewAllDynamicScreen.routeName,
     IndividualDashboardSingleItemDetailsScreen.routeName,
     TalentDashboardScreen.routeName,
+    TalentAppliedJobCenterScreen.routeName,
+    TalentJobCenterScreen.routeName,
     // BusinessDashboardScreen.routeName, // Until I figure out what's going on, this will be placed in the "For Business"
-    BusinessJobCenterScreen.routeName,
+    BusinessCreatedJobCenterScreen.routeName,
     BusinessJobDetailsScreen.routeName,
-    BusinessEventCenterScreen.routeName,
+    BusinessCreatedEventCenterScreen.routeName,
     BusinessEventDetailsScreen.routeName,
   ],
   // Profile Screen
@@ -48,7 +51,6 @@ const Map<String, dynamic> persistentRoutesSettings = {
     IndividualProfileScreen.routeName,
     EditIndividualProfileScreen.routeName,
     TalentProfileScreen.routeName,
-    TalentJobCenterScreen.routeName,
     EditTalentProfileScreen.routeName,
     BusinessProfileScreen.routeName,
     EditBusinessProfileScreen.routeName,
@@ -107,9 +109,11 @@ Widget getDynamicScreen(NavController m) {
 
     // Business Dashboard
     BusinessDashboardScreen.routeName => const BusinessDashboardScreen(),
-    BusinessJobCenterScreen.routeName => const BusinessJobCenterScreen(),
+    BusinessCreatedJobCenterScreen.routeName =>
+      const BusinessCreatedJobCenterScreen(),
     BusinessJobDetailsScreen.routeName => const BusinessJobDetailsScreen(),
-    BusinessEventCenterScreen.routeName => const BusinessEventCenterScreen(),
+    BusinessCreatedEventCenterScreen.routeName =>
+      const BusinessCreatedEventCenterScreen(),
     BusinessEventDetailsScreen.routeName => const BusinessEventDetailsScreen(),
 
     // Spaces and Community
@@ -123,6 +127,8 @@ Widget getDynamicScreen(NavController m) {
     EditIndividualProfileScreen.routeName =>
       const EditIndividualProfileScreen(),
     TalentProfileScreen.routeName => const TalentProfileScreen(),
+    TalentAppliedJobCenterScreen.routeName =>
+      const TalentAppliedJobCenterScreen(),
     TalentJobCenterScreen.routeName => const TalentJobCenterScreen(),
     EditTalentProfileScreen.routeName => const EditTalentProfileScreen(),
     BusinessProfileScreen.routeName => const BusinessProfileScreen(),
