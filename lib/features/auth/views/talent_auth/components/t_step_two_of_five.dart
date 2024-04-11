@@ -48,7 +48,7 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
           onSearchChanged: (text) {
             // print('Text is $text');
           },
-          items: skillsList,
+          items: Constants.skillsList,
           fieldToCheck: (c) {
             return c; // String
           },
@@ -149,12 +149,6 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
     );
   }
 
-  List<String> skillsList = const [
-    'Production assitant',
-    'Producer',
-    'Production manager',
-    'Project manager'
-  ];
 
   void _submit() async {
     closeKeyPad(context);

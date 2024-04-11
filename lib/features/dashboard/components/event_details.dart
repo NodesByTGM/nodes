@@ -54,6 +54,7 @@ class _EventDetailsState extends State<EventDetails> {
               ySpace(height: 19),
               infoItem(
                 icon: ImageUtils.clockOutlineIcon,
+                // title: fromDatTimeToTimeOfDay(event.eventTime ?? DateTime.now()),
                 title: fromDatTimeToTimeOfDay(event.dateTime ?? DateTime.now()),
               ),
               ySpace(height: 19),

@@ -35,7 +35,7 @@ class _JobFilterState extends State<JobFilter> {
           onSearchChanged: (text) {
             // print('Text is $text');
           },
-          items: skillsList,
+          items: Constants.skillsList,
           fieldToCheck: (c) {
             return c; // String
           },
@@ -231,13 +231,6 @@ class _JobFilterState extends State<JobFilter> {
       ],
     );
   }
-
-  List<String> skillsList = const [
-    'Production assitant',
-    'Producer',
-    'Production manager',
-    'Project manager'
-  ];
 
   void resetOptions() {
     for (JobFilterModel i in jobTypeOptions) {

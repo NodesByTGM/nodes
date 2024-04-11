@@ -191,6 +191,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     ),
                   ],
                 ),
+                ySpace(height: 24),
               ],
             ),
           ),

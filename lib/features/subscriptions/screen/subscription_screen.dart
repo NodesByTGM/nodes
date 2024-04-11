@@ -121,7 +121,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ),
             child: GestureDetector(
               onTap: () {
-                context.read<NavController>().popPageListStack();
+                customNavigateBack(context);
               },
               child: labelText(
                 "Go Back",

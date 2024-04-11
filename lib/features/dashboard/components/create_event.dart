@@ -1,3 +1,5 @@
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -10,6 +12,7 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   final formKey = GlobalKey<FormBuilderState>();
+  late DashboardController dashCtrl;
   final TextEditingController eventCtrl = TextEditingController();
   final TextEditingController dateCtrl = TextEditingController();
   final TextEditingController timeCtrl = TextEditingController();
@@ -20,7 +23,14 @@ class _CreateEventState extends State<CreateEvent> {
   final formValues = {};
 
   @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -207,7 +217,7 @@ class _CreateEventState extends State<CreateEvent> {
               SubmitBtn(
                 onPressed: _submit,
                 title: btnTxt("Create Event", WHITE),
-                loading: false,
+                loading: dashCtrl.isCreatingEvent,
               ),
             ],
           ),
@@ -225,7 +235,25 @@ class _CreateEventState extends State<CreateEvent> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {
-      //
+      if (isObjectEmpty(eventType)) {
+        showText(message: "Please select the payment type");
+        return;
+      }
+      bool done = await dashCtrl.createEvent(context, {
+        "name": eventCtrl.text,
+        "description": descCtrl.text,
+        "location": locationCtrl.text,
+        "dateTime": dateCtrl.text,
+        "paymentType": eventType,
+        "thumbnail": {
+          "id": "xpkbzyctjeiwvnn8hmjh",
+          "url":
+              "https://res.cloudinary.com/dwzhnrcdv/image/upload/v1712013809/xpkbzyctjeiwvnn8hmjh.png"
+        }
+      });
+      if (done && mounted) {
+        navigateBack(context);
+      }
     }
   }
 

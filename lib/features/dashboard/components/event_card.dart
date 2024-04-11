@@ -5,6 +5,7 @@ import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:pinput/pinput.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
@@ -86,13 +87,23 @@ class EventCard extends StatelessWidget {
                 if (hasDelete)
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: SvgPicture.asset(
-                        ImageUtils.trashOutlineIcon,
-                        color: WHITE,
-                        height: 40,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        context.watch<DashboardController>().isDeletingEvent
+                            ? const Loader()
+                            : GestureDetector(
+                                onTap: () => deleteEvent(context, event),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: SvgPicture.asset(
+                                    ImageUtils.trashOutlineIcon,
+                                    color: WHITE,
+                                    height: 40,
+                                  ),
+                                ),
+                              ),
+                      ],
                     ),
                   ),
                 Container(
@@ -204,5 +215,11 @@ class EventCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  deleteEvent(BuildContext context, EventModel event) async {
+    bool done = await context
+        .read<DashboardController>()
+        .deleteSingleEvent(context, event.id);
   }
 }

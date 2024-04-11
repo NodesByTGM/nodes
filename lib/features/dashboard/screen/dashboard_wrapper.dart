@@ -17,18 +17,21 @@ class DashboardWrapper extends StatelessWidget {
       // decoration: const BoxDecoration(
       //   gradient: profileLinearGradient,
       // ),
-      child: getDashboard(context),
+      child: Consumer<AuthController>(builder: (context, authCtrl, _) {
+        UserModel user = authCtrl.currentUser;
+        return getDashboard(user.type ?? 0);
+      }),
     );
   }
 
-  Widget getDashboard(BuildContext context) {
+  Widget getDashboard(int type) {
     /**
      * The business dashboard, is supposedly, meant to be at the For Business side of the app
      * If the logged in account is business, then the home should be their talent's profile...
      * Not entirely clear on how this should be anyways...
      */
-    UserModel user = context.read<AuthController>().currentUser;
-    switch (user.type) {
+
+    switch (type) {
       case 0:
         return const IndividualDashboardScreen();
       case 1:

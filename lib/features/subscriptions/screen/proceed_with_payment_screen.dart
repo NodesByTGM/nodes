@@ -176,9 +176,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: () {
-                      isSubscribed
-                          ? cancelPlan()
-                          : context.read<NavController>().popPageListStack();
+                      isSubscribed ? cancelPlan() : customNavigateBack(context);
                     },
                     child: labelText(
                       isSubscribed ? "Cancel plan" : "Go Back",

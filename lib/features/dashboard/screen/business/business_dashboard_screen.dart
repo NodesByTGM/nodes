@@ -30,16 +30,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
   late AuthController authCtrl;
   late DashboardController dashCtrl;
   late UserModel user;
-  int jobLength = 5;
-  int trendingLength = 5;
   int currentJobIndex = 0;
   int currentTrendingIndex = 0;
   final trendingCtrl = PageController(viewportFraction: 1);
   final jobsCardCtrl = PageController(viewportFraction: 1);
-
-  // dummy data
-  bool hasJobs = true;
-  bool hasEvents = true;
 
   @override
   void initState() {
@@ -200,7 +194,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     ],
                   ),
                   ySpace(height: 24),
-                  if (!hasJobs) ...[
+                  if (isObjectEmpty(dashCtrl.createdJobList)) ...[
                     EmptyStateWithTextBtn(
                       title: "Hi ${user.name?.split(' ').first}!",
                       content:
@@ -209,7 +203,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                       btnText: "Create job post",
                     ),
                   ],
-                  if (hasJobs) ...[
+                  if (!isObjectEmpty(dashCtrl.createdJobList)) ...[
                     SizedBox(
                       height: 320,
                       child: PageView.builder(
@@ -235,7 +229,8 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ...List.generate(jobLength, (index) {
+                            ...List.generate(dashCtrl.createdJobList.length,
+                                (index) {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 2),
                                 child: CardDotIndicator(
@@ -252,7 +247,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                               onTap: () {
                                 customAnimatePageView(
                                   isInc: false,
-                                  totoalLength: jobLength,
+                                  totoalLength: dashCtrl.createdJobList.length,
                                   currentIndex: currentJobIndex,
                                   ctrl: jobsCardCtrl,
                                 );
@@ -266,7 +261,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                               onTap: () {
                                 customAnimatePageView(
                                   isInc: true,
-                                  totoalLength: jobLength,
+                                  totoalLength: dashCtrl.createdJobList.length,
                                   currentIndex: currentJobIndex,
                                   ctrl: jobsCardCtrl,
                                 );
@@ -310,7 +305,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     ],
                   ),
                   ySpace(height: 24),
-                  if (!hasEvents) ...[
+                  if (isObjectEmpty(dashCtrl.myCreatedEventsList)) ...[
                     EmptyStateWithTextBtn(
                       title: "Hi ${user.name?.split(' ').first}!",
                       content:
@@ -319,11 +314,11 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                       btnText: "Create event",
                     ),
                   ],
-                  if (hasEvents) ...[
+                  if (!isObjectEmpty(dashCtrl.myCreatedEventsList)) ...[
                     SizedBox(
                       height: 200,
                       child: PageView.builder(
-                        itemCount: dashCtrl.eventsList.length,
+                        itemCount: dashCtrl.myCreatedEventsList.length,
                         controller: trendingCtrl,
                         onPageChanged: (val) {
                           currentTrendingIndex = val;
@@ -333,7 +328,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                           return EventCard(
                             hasDelete: false,
                             hasSave: false,
-                            event: dashCtrl.eventsList[index],
+                            event: dashCtrl.myCreatedEventsList[index],
                           );
                         },
                       ),
@@ -345,7 +340,8 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ...List.generate(trendingLength, (index) {
+                            ...List.generate(
+                                dashCtrl.myCreatedEventsList.length, (index) {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 2),
                                 child: CardDotIndicator(
@@ -362,7 +358,8 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                               onTap: () {
                                 customAnimatePageView(
                                   isInc: false,
-                                  totoalLength: trendingLength,
+                                  totoalLength:
+                                      dashCtrl.myCreatedEventsList.length,
                                   currentIndex: currentTrendingIndex,
                                   ctrl: trendingCtrl,
                                 );
@@ -376,7 +373,8 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                               onTap: () {
                                 customAnimatePageView(
                                   isInc: true,
-                                  totoalLength: trendingLength,
+                                  totoalLength:
+                                      dashCtrl.myCreatedEventsList.length,
                                   currentIndex: currentTrendingIndex,
                                   ctrl: trendingCtrl,
                                 );

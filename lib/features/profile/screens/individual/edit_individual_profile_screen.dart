@@ -90,480 +90,487 @@ class _EditIndividualProfileScreenState
       decoration: const BoxDecoration(
           // gradient: profileLinearGradient,
           ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ySpace(height: 40),
-          GestureDetector(
-            onTap: () {
-              context.read<NavController>().popPageListStack();
-            },
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                const Icon(
-                  Icons.keyboard_arrow_left,
-                  color: BORDER,
+      child: FormBuilder(
+        key: formKey,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(
+                  right: 3,
+                  top: 3,
+                  left: 3,
+                  bottom: 50,
                 ),
-                subtext(
-                  "Go Back",
-                  fontSize: 12,
-                ),
-              ],
-            ),
-          ),
-          ySpace(height: 20),
-          Expanded(
-            child: FormBuilder(
-              key: formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListView(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(3),
-                  children: [
-                    ExpanableProfileCard(
-                      isExpanded: isProfileInfo,
-                      title: "Personal Information",
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              if (!isObjectEmpty(profilePicture)) ...[
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: BORDER.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: isObjectEmpty(profilePicture)
-                                        ? Container()
-                                        : Image.file(
-                                            profilePicture as File,
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                children: [
+                  ySpace(height: 20),
+                  ExpanableProfileCard(
+                    isExpanded: isProfileInfo,
+                    title: "Personal Information",
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            if (!isObjectEmpty(profilePicture)) ...[
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: BORDER.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                              ],
-                              if (isObjectEmpty(profilePicture)) ...[
-                                cachedNetworkImage(
-                                  imgUrl: "${user.avatar?.url}",
-                                  size: 100,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: isObjectEmpty(profilePicture)
+                                      ? Container()
+                                      : Image.file(
+                                          profilePicture as File,
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
-                              ],
-                              xSpace(width: 16),
-                              authCtrl.isUploadingMedia
-                                  ? const Loader()
-                                  : GestureDetector(
-                                      onTap: uploadImage,
-                                      child: labelText(
-                                        "Replace",
-                                        color: PRIMARY,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
+                              ),
                             ],
-                          ),
-                          ySpace(height: 32),
-                          FormWithLabel(
-                            label: "First name",
-                            form: FormBuilderTextField(
-                              name: "fName",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "",
+                            if (isObjectEmpty(profilePicture)) ...[
+                              cachedNetworkImage(
+                                imgUrl: "${user.avatar?.url}",
+                                size: 100,
                               ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: firstNameCtrl,
-                              onSaved: (value) =>
-                                  formValues['firstName'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
+                            ],
+                            xSpace(width: 16),
+                            authCtrl.isUploadingMedia
+                                ? const Loader()
+                                : GestureDetector(
+                                    onTap: uploadImage,
+                                    child: labelText(
+                                      "Replace",
+                                      color: PRIMARY,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                        ySpace(height: 32),
+                        FormWithLabel(
+                          label: "First name",
+                          form: FormBuilderTextField(
+                            name: "fName",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "",
                             ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: firstNameCtrl,
+                            onSaved: (value) =>
+                                formValues['firstName'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
                           ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Last name",
-                            form: FormBuilderTextField(
-                              name: "lName",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "",
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "Last name",
+                          form: FormBuilderTextField(
+                            name: "lName",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "",
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: lastNameCtrl,
+                            onSaved: (value) =>
+                                formValues['lastName'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "Username",
+                          form: FormBuilderTextField(
+                            name: "username",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "",
+                              prefix: labelText(
+                                '@ ',
+                                color: GRAY,
                               ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: lastNameCtrl,
-                              onSaved: (value) =>
-                                  formValues['lastName'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
                             ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: usernameCtrl,
+                            readOnly: true,
+                            onSaved: (value) =>
+                                formValues['username'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
                           ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Username",
-                            form: FormBuilderTextField(
-                              name: "username",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "",
-                                prefix: labelText(
-                                  '@ ',
-                                  color: GRAY,
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "Location",
+                          form: TextFieldAutoComplete(
+                            decoration: FormUtils.formDecoration(
+                              hintText: "Location - search by state",
+                            ),
+                            clearOnSubmit: false,
+                            controller: locationCtrl,
+                            itemSubmitted: (String? item) {
+                              locationCtrl.text = item ?? '';
+                            },
+                            suggestionsAmount: 1000,
+                            key: autoCompleteKey,
+                            suggestions: locationList ?? [''],
+                            itemBuilder: (context, String item) {
+                              bool isSelected = item.toLowerCase() ==
+                                  locationCtrl.text.toLowerCase();
+                              return Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          width: 0.5, color: BORDER)),
+                                  color: WHITE,
                                 ),
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: usernameCtrl,
-                              readOnly: true,
-                              onSaved: (value) =>
-                                  formValues['username'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Location",
-                            form: TextFieldAutoComplete(
-                              decoration: FormUtils.formDecoration(
-                                hintText: "Location - search by state",
-                              ),
-                              clearOnSubmit: false,
-                              controller: locationCtrl,
-                              itemSubmitted: (String? item) {
-                                locationCtrl.text = item ?? '';
-                              },
-                              suggestionsAmount: 1000,
-                              key: autoCompleteKey,
-                              suggestions: locationList ?? [''],
-                              itemBuilder: (context, String item) {
-                                bool isSelected = item.toLowerCase() ==
-                                    locationCtrl.text.toLowerCase();
-                                return Container(
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            width: 0.5, color: BORDER)),
-                                    color: WHITE,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 15,
+                                    horizontal: 12,
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 15,
-                                      horizontal: 12,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                            child: subtext(
-                                          item,
-                                          color: const Color(0xFF757575),
-                                        )),
-                                        if (isSelected)
-                                          const Icon(
-                                            Icons.check_circle_outline,
-                                            color: PRIMARY,
-                                            size: 15,
-                                          )
-                                      ],
-                                    ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          child: subtext(
+                                        item,
+                                        color: const Color(0xFF757575),
+                                      )),
+                                      if (isSelected)
+                                        const Icon(
+                                          Icons.check_circle_outline,
+                                          color: PRIMARY,
+                                          size: 15,
+                                        )
+                                    ],
                                   ),
-                                );
-                              },
-                              itemSorter: (String a, String b) {
-                                return a.compareTo(b);
-                              },
-                              itemFilter: (String item, query) {
-                                return item
-                                    .toLowerCase()
-                                    .contains(query.toLowerCase());
-                              },
-                            ),
-                          ),
-                          ySpace(height: 40),
-                          SubmitBtn(
-                            onPressed: () => _submit(0),
-                            title: btnTxt("Save and Continue", WHITE),
-                            loading: authCtrl.loading,
-                          ),
-                          ySpace(height: 20),
-                        ],
-                      ),
-                    ),
-                    ySpace(height: 32),
-                    ExpanableProfileCard(
-                      isExpanded: isIntroduce,
-                      title: "Introduce yourself",
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ySpace(height: 16),
-                          FormWithLabel(
-                            label: "Headline",
-                            form: FormBuilderTextField(
-                              name: "headline",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "Ex: Actress, Actor, Director",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: headlineCtrl,
-                              maxLength: 50,
-                              onSaved: (value) =>
-                                  formValues['headline'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Your bio",
-                            form: FormBuilderTextField(
-                              name: "bio",
-                              decoration: FormUtils.formDecoration(
-                                hintText:
-                                    "Add a short bio to showcase your best self",
-                              ),
-                              keyboardType: TextInputType.multiline,
-                              style: FORM_STYLE,
-                              controller: bioCtrl,
-                              maxLength: 300,
-                              maxLines: 5,
-                              onSaved: (value) =>
-                                  formValues['bio'] = trimValue(value),
-                              validator: FormBuilderValidators.compose(
-                                [
-                                  FormBuilderValidators.required(context,
-                                      errorText: Constants.emptyFieldError),
-                                ],
-                              ),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          ySpace(height: 40),
-                          SubmitBtn(
-                            onPressed: () => _submit(1),
-                            title: btnTxt("Save and Continue", WHITE),
-                            loading: authCtrl.loading,
-                          ),
-                          ySpace(height: 20),
-                        ],
-                      ),
-                    ),
-                    ySpace(height: 32),
-                    ExpanableProfileCard(
-                      isExpanded: isOnlineProfile,
-                      title: "Online profiles",
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ySpace(height: 16),
-                          FormWithLabel(
-                            label: "Personal website",
-                            form: FormBuilderTextField(
-                              name: "website",
-                              decoration: FormUtils.formDecoration(
-                                hintText: "http://",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: websiteCtrl,
-                              onSaved: (value) =>
-                                  formValues['website'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Linkedin",
-                            form: FormBuilderTextField(
-                              name: "linkedin",
-                              decoration: FormUtils.formDecoration(
-                                hintText:
-                                    "https://www.linkedin.com/in/jane-doe/",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: linkedinCtrl,
-                              onSaved: (value) =>
-                                  formValues['linkedin'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "Instagram",
-                            form: FormBuilderTextField(
-                              name: "instagram",
-                              decoration: FormUtils.formDecoration(
-                                hintText:
-                                    "https://www.Instagram.com/in/jane-doe/",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: instagramCtrl,
-                              onSaved: (value) =>
-                                  formValues['instagram'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          FormUtils.formSpacer(),
-                          FormWithLabel(
-                            label: "X",
-                            form: FormBuilderTextField(
-                              name: "x",
-                              decoration: FormUtils.formDecoration(
-                                hintText:
-                                    "https://www.Twitter.com/in/jane-doe/",
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: FORM_STYLE,
-                              controller: xCtrl,
-                              onSaved: (value) =>
-                                  formValues['x'] = trimValue(value),
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ]),
-                              onChanged: (val) {},
-                            ),
-                          ),
-                          ySpace(height: 40),
-                          SubmitBtn(
-                            onPressed: () => _submit(2),
-                            title: btnTxt("Save and Continue", WHITE),
-                            loading: authCtrl.loading,
-                          ),
-                          ySpace(height: 20),
-                        ],
-                      ),
-                    ),
-                    ySpace(height: 32),
-                    ExpanableProfileCard(
-                      isExpanded: isInteractions,
-                      title: "Interactions",
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ySpace(height: 16),
-                          ListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: labelText(
-                                "Spaces",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
-                            ),
-                            subtitle: subtext(
-                              "Enabling this will allow all your acitivity in spaces show up on your profile",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              height: 1.5,
-                            ),
-                            trailing: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Switch(
-                                value: enableSpaces,
-                                onChanged: (val) {
-                                  setState(() {
-                                    enableSpaces = !enableSpaces;
-                                  });
-                                  if (enableSpaces) {
-                                    _submit(3);
-                                  }
-                                },
-                              ),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                enableSpaces = !enableSpaces;
-                              });
-                              if (enableSpaces) {
-                                _submit(3);
-                              }
+                                ),
+                              );
+                            },
+                            itemSorter: (String a, String b) {
+                              return a.compareTo(b);
+                            },
+                            itemFilter: (String item, query) {
+                              return item
+                                  .toLowerCase()
+                                  .contains(query.toLowerCase());
                             },
                           ),
-                          FormUtils.formSpacer(),
-                          ListTile(
-                            contentPadding: const EdgeInsets.all(0),
-                            title: Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: labelText(
-                                "Comments",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
-                            ),
-                            subtitle: subtext(
-                              "Enabling this will allow all your acitivity in spaces show up on your profile",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              height: 1.5,
-                            ),
-                            trailing: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Switch(
-                                value: enableComments,
-                                onChanged: (val) {
-                                  setState(() {
-                                    enableComments = !enableComments;
-                                  });
-                                  if (enableComments) {
-                                    _submit(4);
-                                  }
-                                },
-                              ),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                enableComments = !enableComments;
-                              });
-                              if (enableComments) {
-                                _submit(4);
-                              }
-                            },
-                          ),
-                          ySpace(height: 16),
-                        ],
-                      ),
+                        ),
+                        ySpace(height: 40),
+                        SubmitBtn(
+                          onPressed: () => _submit(0),
+                          title: btnTxt("Save and Continue", WHITE),
+                          loading: authCtrl.loading,
+                        ),
+                        ySpace(height: 20),
+                      ],
                     ),
-                  ],
+                  ),
+                  ySpace(height: 32),
+                  ExpanableProfileCard(
+                    isExpanded: isIntroduce,
+                    title: "Introduce yourself",
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ySpace(height: 16),
+                        FormWithLabel(
+                          label: "Headline",
+                          form: FormBuilderTextField(
+                            name: "headline",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "Ex: Actress, Actor, Director",
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: headlineCtrl,
+                            maxLength: 50,
+                            onSaved: (value) =>
+                                formValues['headline'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "Your bio",
+                          form: FormBuilderTextField(
+                            name: "bio",
+                            decoration: FormUtils.formDecoration(
+                              hintText:
+                                  "Add a short bio to showcase your best self",
+                            ),
+                            keyboardType: TextInputType.multiline,
+                            style: FORM_STYLE,
+                            controller: bioCtrl,
+                            maxLength: 300,
+                            maxLines: 5,
+                            onSaved: (value) =>
+                                formValues['bio'] = trimValue(value),
+                            validator: FormBuilderValidators.compose(
+                              [
+                                FormBuilderValidators.required(context,
+                                    errorText: Constants.emptyFieldError),
+                              ],
+                            ),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        ySpace(height: 40),
+                        SubmitBtn(
+                          onPressed: () => _submit(1),
+                          title: btnTxt("Save and Continue", WHITE),
+                          loading: authCtrl.loading,
+                        ),
+                        ySpace(height: 20),
+                      ],
+                    ),
+                  ),
+                  ySpace(height: 32),
+                  ExpanableProfileCard(
+                    isExpanded: isOnlineProfile,
+                    title: "Online profiles",
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ySpace(height: 16),
+                        FormWithLabel(
+                          label: "Personal website",
+                          form: FormBuilderTextField(
+                            name: "website",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "http://",
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: websiteCtrl,
+                            onSaved: (value) =>
+                                formValues['website'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "Linkedin",
+                          form: FormBuilderTextField(
+                            name: "linkedin",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "https://www.linkedin.com/in/jane-doe/",
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: linkedinCtrl,
+                            onSaved: (value) =>
+                                formValues['linkedin'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "Instagram",
+                          form: FormBuilderTextField(
+                            name: "instagram",
+                            decoration: FormUtils.formDecoration(
+                              hintText:
+                                  "https://www.Instagram.com/in/jane-doe/",
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: instagramCtrl,
+                            onSaved: (value) =>
+                                formValues['instagram'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        FormUtils.formSpacer(),
+                        FormWithLabel(
+                          label: "X",
+                          form: FormBuilderTextField(
+                            name: "x",
+                            decoration: FormUtils.formDecoration(
+                              hintText: "https://www.Twitter.com/in/jane-doe/",
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: FORM_STYLE,
+                            controller: xCtrl,
+                            onSaved: (value) =>
+                                formValues['x'] = trimValue(value),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(context,
+                                  errorText: Constants.emptyFieldError),
+                            ]),
+                            onChanged: (val) {},
+                          ),
+                        ),
+                        ySpace(height: 40),
+                        SubmitBtn(
+                          onPressed: () => _submit(2),
+                          title: btnTxt("Save and Continue", WHITE),
+                          loading: authCtrl.loading,
+                        ),
+                        ySpace(height: 20),
+                      ],
+                    ),
+                  ),
+                  ySpace(height: 32),
+                  ExpanableProfileCard(
+                    isExpanded: isInteractions,
+                    title: "Interactions",
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ySpace(height: 16),
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: labelText(
+                              "Spaces",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                          subtitle: subtext(
+                            "Enabling this will allow all your acitivity in spaces show up on your profile",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                          trailing: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Switch(
+                              value: enableSpaces,
+                              onChanged: (val) {
+                                setState(() {
+                                  enableSpaces = !enableSpaces;
+                                });
+                                if (enableSpaces) {
+                                  _submit(3);
+                                }
+                              },
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              enableSpaces = !enableSpaces;
+                            });
+                            if (enableSpaces) {
+                              _submit(3);
+                            }
+                          },
+                        ),
+                        FormUtils.formSpacer(),
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: labelText(
+                              "Comments",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                          subtitle: subtext(
+                            "Enabling this will allow all your acitivity in spaces show up on your profile",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                          trailing: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Switch(
+                              value: enableComments,
+                              onChanged: (val) {
+                                setState(() {
+                                  enableComments = !enableComments;
+                                });
+                                if (enableComments) {
+                                  _submit(4);
+                                }
+                              },
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              enableComments = !enableComments;
+                            });
+                            if (enableComments) {
+                              _submit(4);
+                            }
+                          },
+                        ),
+                        ySpace(height: 16),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: screenWidth(context),
+                padding: const EdgeInsets.only(top: 10, bottom: 30),
+                decoration: const BoxDecoration(
+                  color: WHITE,
+                  border: Border(
+                    top: BorderSide(width: 0.7, color: BORDER),
+                  ),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    customNavigateBack(context);
+                  },
+                  child: labelText(
+                    "Go Back",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -666,10 +673,10 @@ class _EditIndividualProfileScreenState
     }
     if (formKey.currentState!.saveAndValidate()) {}
     // formKey.currentState!.reset();
-  } 
+  }
 
   void updateUserProfile(UserModel user) async {
-    await authCtrl.updateProfile(context,user.toJson());
+    await authCtrl.updateProfile(context, user.toJson());
   }
 
   void uploadImage() async {

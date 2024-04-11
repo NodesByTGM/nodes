@@ -1,4 +1,7 @@
+import 'package:flutter/services.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -11,17 +14,25 @@ class CreateJobPost extends StatefulWidget {
 
 class _CreateJobPostState extends State<CreateJobPost> {
   final formKey = GlobalKey<FormBuilderState>();
+  late DashboardController dashCtrl;
   final TextEditingController jobTitleCtrl = TextEditingController();
   final TextEditingController hoursCtrl = TextEditingController();
   final TextEditingController rateCtrl = TextEditingController();
   final TextEditingController weeklyRateCtrl = TextEditingController();
   final TextEditingController locationCtrl = TextEditingController();
   final TextEditingController descCtrl = TextEditingController();
-
+  List<String> selectedSkills = [];
   final formValues = {};
 
   @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -64,6 +75,9 @@ class _CreateJobPostState extends State<CreateJobPost> {
                         keyboardType: TextInputType.number,
                         style: FORM_STYLE,
                         controller: hoursCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         onSaved: (value) =>
                             formValues['hours'] = trimValue(value),
                         validator: FormBuilderValidators.compose([
@@ -88,6 +102,9 @@ class _CreateJobPostState extends State<CreateJobPost> {
                         keyboardType: TextInputType.number,
                         style: FORM_STYLE,
                         controller: rateCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         onSaved: (value) =>
                             formValues['rate'] = trimValue(value),
                         validator: FormBuilderValidators.compose([
@@ -116,15 +133,16 @@ class _CreateJobPostState extends State<CreateJobPost> {
                         keyboardType: TextInputType.number,
                         style: FORM_STYLE,
                         controller: weeklyRateCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         onSaved: (value) =>
                             formValues['weeklyRate'] = trimValue(value),
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(context,
                               errorText: Constants.emptyFieldError),
                         ]),
-                        onChanged: (val) {
-                          // _checActiveBtnColor();
-                        },
+                        onChanged: (val) {},
                       ),
                     ),
                   ),
@@ -158,7 +176,7 @@ class _CreateJobPostState extends State<CreateJobPost> {
               FormWithLabel(
                 label: "Job Type",
                 form: FormBuilderDropdown<String>(
-                  items: ['Contract', 'Full-Time', 'Freelance']
+                  items: Constants.jobType
                       .map(
                         (e) => DropdownMenuItem<String>(
                           value: e,
@@ -173,7 +191,9 @@ class _CreateJobPostState extends State<CreateJobPost> {
                         "Select a job type e.g contract, full time, freelance",
                   ),
                   style: FORM_STYLE,
-                  onSaved: (value) => formValues['jobType'] = value,
+                  // onSaved: (value) => formValues['jobType'] = value,
+                  onSaved: (value) => formValues['jobType'] =
+                      Constants.jobType.indexWhere((jT) => jT == value),
                 ),
               ),
               FormUtils.formSpacer(),
@@ -211,7 +231,7 @@ class _CreateJobPostState extends State<CreateJobPost> {
                   onSearchChanged: (text) {
                     // print('Text is $text');
                   },
-                  items: const ['Modelling', 'Video Editing'],
+                  items: Constants.skillsList,
                   fieldToCheck: (c) {
                     return c; // String
                   },
@@ -261,7 +281,7 @@ class _CreateJobPostState extends State<CreateJobPost> {
                   onTapShowedItem: () {},
                   onPickedChange: (items) {
                     setState(() {
-                      // selectedSkills = items;
+                      selectedSkills = items;
                     });
                   },
                   onItemAdded: (item) {},
@@ -298,7 +318,7 @@ class _CreateJobPostState extends State<CreateJobPost> {
               SubmitBtn(
                 onPressed: _submit,
                 title: btnTxt("Create job posting", WHITE),
-                loading: false,
+                loading: dashCtrl.isCreatingJob,
               ),
             ],
           ),
@@ -310,7 +330,18 @@ class _CreateJobPostState extends State<CreateJobPost> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {
-      //
+      bool done = await dashCtrl.createJob(context, {
+        "name": jobTitleCtrl.text,
+        "description": descCtrl.text,
+        "experience": "1 - 3",
+        "payRate": "\$${rateCtrl.text}/hr",
+        "workRate": "\$${weeklyRateCtrl.text}/week",
+        "skills": selectedSkills,
+        "jobType": formValues['jobType'],
+      });
+      if (done && mounted) {
+        navigateBack(context);
+      }
     }
   }
 

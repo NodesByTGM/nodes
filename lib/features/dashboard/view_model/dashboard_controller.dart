@@ -116,11 +116,10 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
-
-  _deleteSingleJob(SavedJobModel job) {
-    int jIndex = _createdJobList.indexWhere((e) => e.id == job.id);
+  _deleteSingleJob(String id) {
+    int jIndex = _createdJobList.indexWhere((e) => e.id == id);
     if (jIndex != -1) {
-      _createdJobList.removeWhere((e) => e.id == job.id);
+      _createdJobList.removeWhere((e) => e.id == id);
     }
     notifyListeners();
   }
@@ -157,10 +156,10 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
-  _deleteSingleEvent(EventModel event) {
-    int eIndex = _myCreatedEventsList.indexWhere((e) => e.id == event.id);
+  _deleteSingleEvent(String id) {
+    int eIndex = _myCreatedEventsList.indexWhere((e) => e.id == id);
     if (eIndex != -1) {
-      _myCreatedEventsList.removeWhere((e) => e.id == event.id);
+      _myCreatedEventsList.removeWhere((e) => e.id == id);
     }
     notifyListeners();
   }
@@ -209,7 +208,7 @@ class DashboardController extends BaseController {
       ApiResponse response =
           await _dashboardService.createProject(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateMyProjectList(
@@ -237,7 +236,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setProjectList(_resolvePaginatedProjects(response));
@@ -263,7 +262,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setMyProjectList(_resolvePaginatedProjects(response));
@@ -286,7 +285,7 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.createEvent(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSingleEvent(
@@ -314,7 +313,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setEventsList(_resolvePaginatedEvents(response));
@@ -334,7 +333,7 @@ class DashboardController extends BaseController {
       ApiResponse response =
           await _dashboardService.fetchSingleEvent(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return null;
       }
       return EventModel.fromJson(response.result as Map<String, dynamic>);
@@ -359,7 +358,7 @@ class DashboardController extends BaseController {
         payload: payload,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSingleEvent(
@@ -374,18 +373,15 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> deleteSingleEvent(BuildContext ctx, dynamic payload) async {
+  Future<bool> deleteSingleEvent(BuildContext ctx, dynamic id) async {
     setDeleteEvent(true);
     try {
-      ApiResponse response =
-          await _dashboardService.deleteSingleEvent(ctx, payload);
+      ApiResponse response = await _dashboardService.deleteSingleEvent(ctx, id);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
-      _deleteSingleEvent(
-        EventModel.fromJson(response.result as Map<String, dynamic>),
-      );
+      _deleteSingleEvent(id);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -400,7 +396,7 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.saveEvent(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSavedEventsList(
@@ -422,7 +418,7 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.unSaveEvent(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSavedEventsList(
@@ -452,7 +448,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setSavedEvents(_resolvePaginatedEvents(response));
@@ -478,7 +474,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setMyCreatedEventList(_resolvePaginatedEvents(response));
@@ -505,9 +501,11 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.createJob(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
+      print(
+          "George here is the response from creating a job: ${response.result}");
       _updateSingleJob(
         SavedJobModel.fromJson(response.result as Map<String, dynamic>),
       );
@@ -533,7 +531,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setJobsList(_resolvePaginatedJobs(response));
@@ -553,7 +551,7 @@ class DashboardController extends BaseController {
       ApiResponse response =
           await _dashboardService.fetchSingleJob(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return null;
       }
       return SavedJobModel.fromJson(response.result as Map<String, dynamic>);
@@ -578,7 +576,7 @@ class DashboardController extends BaseController {
         payload: payload,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSingleJob(
@@ -593,18 +591,16 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> deleteSingleJob(BuildContext ctx, dynamic payload) async {
+  Future<bool> deleteSingleJob(BuildContext ctx, dynamic id) async {
     setDeleteJob(true);
     try {
-      ApiResponse response =
-          await _dashboardService.deleteSingleJob(ctx, payload);
+      ApiResponse response = await _dashboardService.deleteSingleJob(ctx, id);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
-      _deleteSingleJob(
-        SavedJobModel.fromJson(response.result as Map<String, dynamic>),
-      );
+      showSuccess(message: response.message);
+      _deleteSingleJob(id);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -619,7 +615,7 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.applyForJob(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateAppliedJobsList(
@@ -639,7 +635,7 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.saveJob(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSavedJobsList(
@@ -661,7 +657,7 @@ class DashboardController extends BaseController {
     try {
       ApiResponse response = await _dashboardService.unSaveJob(ctx, payload);
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       _updateSavedJobsList(
@@ -691,7 +687,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setSavedJobs(_resolvePaginatedSavedJobs(response));
@@ -717,7 +713,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setAppliedJobList(_resolvePaginatedSavedJobs(response));
@@ -743,7 +739,7 @@ class DashboardController extends BaseController {
         pageSize: pageSize,
       );
       if (response.status == KeyString.failure) {
-        showError(message: errorMessageObjectToString(response.message));
+        showError(message: response.message);
         return false;
       }
       setMyCreatedJobList(_resolvePaginatedSavedJobs(response));

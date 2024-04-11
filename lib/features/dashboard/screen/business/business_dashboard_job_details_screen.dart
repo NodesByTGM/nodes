@@ -7,6 +7,7 @@ import 'package:nodes/features/dashboard/components/job_details.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class BusinessJobDetailsScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
     return Stack(
       children: [
         ListView(
@@ -44,16 +46,31 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
               child: Row(
                 children: [
                   labelText(
-                    "Job title",
+                    capitalize("${job.name}"),
                     maxLine: 1,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                   const Spacer(),
-                  actionBtn(icon: ImageUtils.trashOutlineIcon, onTap: () {}),
                   actionBtn(
-                      icon: ImageUtils.editPencileOutlineIcon, onTap: () {}),
-                  actionBtn(icon: ImageUtils.shareOutlineIcon, onTap: () {}),
+                    icon: ImageUtils.trashOutlineIcon,
+                    onTap: deleteJob,
+                    loading: dashCtrl.isDeletingJob,
+                  ),
+                  actionBtn(
+                    icon: ImageUtils.editPencileOutlineIcon,
+                    onTap: () {
+                      //
+                    },
+                    loading: false,
+                  ),
+                  actionBtn(
+                    icon: ImageUtils.shareOutlineIcon,
+                    onTap: () {
+                      //
+                    },
+                    loading: false,
+                  ),
                 ],
               ),
             ),
@@ -125,7 +142,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
             ),
             child: GestureDetector(
               onTap: () {
-                context.read<NavController>().popPageListStack();
+                customNavigateBack(context);
               },
               child: labelText(
                 "Go Back",
@@ -149,7 +166,7 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
       case 1:
         return JobApplicants(job: job);
       case 2:
-        return  JobAnalytics(job: job);
+        return JobAnalytics(job: job);
       default:
         return JobDetails(
           job: job,
@@ -157,19 +174,10 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
     }
   }
 
-  Padding actionBtn({
-    required String icon,
-    required GestureTapCallback onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 7),
-      child: GestureDetector(
-        onTap: onTap,
-        child: SvgPicture.asset(
-          icon,
-          height: 30,
-        ),
-      ),
-    );
+  void deleteJob() async {
+    bool done = await dashCtrl.deleteSingleJob(context, job.id);
+    if (done && mounted) {
+      customNavigateBack(context);
+    }
   }
 }

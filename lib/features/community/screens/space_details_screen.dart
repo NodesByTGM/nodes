@@ -33,7 +33,7 @@ class _SpaceDetailsScreenState extends State<SpaceDetailsScreen> {
         ySpace(height: 40),
         GestureDetector(
           onTap: () {
-            context.read<NavController>().popPageListStack();
+            customNavigateBack(context);
           },
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,

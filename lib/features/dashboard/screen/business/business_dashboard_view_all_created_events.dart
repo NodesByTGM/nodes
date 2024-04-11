@@ -3,8 +3,11 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class BusinessCreatedEventCenterScreen extends StatefulWidget {
@@ -16,7 +19,8 @@ class BusinessCreatedEventCenterScreen extends StatefulWidget {
       _BusinessCreatedEventCenterScreenState();
 }
 
-class _BusinessCreatedEventCenterScreenState extends State<BusinessCreatedEventCenterScreen> {
+class _BusinessCreatedEventCenterScreenState
+    extends State<BusinessCreatedEventCenterScreen> {
   late DashboardController dashCtrl;
 
   @override
@@ -81,22 +85,48 @@ class _BusinessCreatedEventCenterScreenState extends State<BusinessCreatedEventC
                     ),
                   );
                 },
-                content: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dashCtrl.myCreatedEventsList.length,
-                  itemBuilder: (c, i) {
-                    return SizedBox(
-                      height: 280,
-                      child: EventCard(
-                        isFromBusiness: true,
-                        hasDelete: true,
-                        hasSave: false,
-                        event: dashCtrl.myCreatedEventsList[i],
-                      ),
-                    );
+                content: Consumer<DashboardController>(
+                  builder: (contex, dashCtrl, _) {
+                    bool isLoading = dashCtrl.isFetchingAllCreatedEvents;
+                    bool hasData = isObjectEmpty(dashCtrl.myCreatedEventsList);
+                    if (isLoading ||
+                        isObjectEmpty(dashCtrl.myCreatedEventsList)) {
+                      return DataReload(
+                        maxHeight: screenHeight(context) * .19,
+                        isLoading: isLoading,
+                        label: "Try adding new events or",
+                        loader: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: ShimmerLoader(
+                            scrollDirection: Axis.vertical,
+                            width: screenWidth(context),
+                            marginBottom: 10,
+                          ),
+                        ), // Pass the shimmer here...
+                        onTap: fetchMyCreatedEvents,
+                        isEmpty: hasData,
+                      );
+                    } else {
+                      List<EventModel> events = dashCtrl.myCreatedEventsList;
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: events.length,
+                        itemBuilder: (c, i) {
+                          return SizedBox(
+                            height: 280,
+                            child: EventCard(
+                              isFromBusiness: true,
+                              hasDelete: true,
+                              hasSave: false,
+                              event: events[i],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (c, i) => ySpace(height: 24),
+                      );
+                    }
                   },
-                  separatorBuilder: (c, i) => ySpace(height: 24),
                 ),
               ),
             ],
@@ -118,7 +148,7 @@ class _BusinessCreatedEventCenterScreenState extends State<BusinessCreatedEventC
                     flex: 1,
                     child: GestureDetector(
                       onTap: () {
-                        context.read<NavController>().popPageListStack();
+                        customNavigateBack(context);
                       },
                       child: labelText(
                         "Go Back",

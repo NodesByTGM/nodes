@@ -40,4 +40,45 @@ class Constants {
     "Featured job listings",
     "Promotion and marketing opportunities",
   ];
+
+  static const industry = [
+    "Acting",
+    "Performing",
+    "Movie Production",
+    "Directing",
+    "Fashion Design",
+    "Styling",
+    "Photography",
+    "Videography",
+    "Culinary Arts",
+    "Cooking",
+    "Modeling",
+    "Runway",
+    "Writing",
+    "Scripting",
+    "Makeup Artistry",
+    "Set Design",
+    "Art Direction",
+    "Music",
+    "Sound Production",
+  ];
+
+  static const jobRoles = [
+    "Art Curator",
+    "Architect",
+    "Graphic Designer",
+    "Fashion Designer",
+    "Film Producer",
+    "Music Producer",
+    "Actor",
+    "Actress",
+    "Content writer",
+    "Visual Artist (Painter/Sculptor)",
+    "Jjournalist",
+    "Choreographer",
+    "Chef",
+    "Interior Decorator",
+  ];
+
+  static const skillsList = [...industry, ...jobRoles];
 }

@@ -52,14 +52,17 @@ class _BusinessEventDetailsScreenState
                   actionBtn(
                     icon: ImageUtils.trashOutlineIcon,
                     onTap: () {},
+                    loading: false,
                   ),
                   actionBtn(
                     icon: ImageUtils.editPencileOutlineIcon,
                     onTap: () {},
+                    loading: false,
                   ),
                   actionBtn(
                     icon: ImageUtils.shareOutlineIcon,
                     onTap: () {},
+                    loading: false,
                   ),
                 ],
               ),
@@ -90,7 +93,7 @@ class _BusinessEventDetailsScreenState
                       xSpace(width: 30),
                       tabHeader(
                         isActive: currentIndex == 1,
-                        title: "Saves",
+                        title: "Saves (${event.saves?.length})",
                         onTap: () {
                           setState(() {
                             currentIndex = 1;
@@ -123,7 +126,7 @@ class _BusinessEventDetailsScreenState
             ),
             child: GestureDetector(
               onTap: () {
-                context.read<NavController>().popPageListStack();
+                customNavigateBack(context);
               },
               child: labelText(
                 "Go Back",
@@ -153,21 +156,5 @@ class _BusinessEventDetailsScreenState
           event: event,
         );
     }
-  }
-
-  Padding actionBtn({
-    required String icon,
-    required GestureTapCallback onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 7),
-      child: GestureDetector(
-        onTap: onTap,
-        child: SvgPicture.asset(
-          icon,
-          height: 30,
-        ),
-      ),
-    );
   }
 }

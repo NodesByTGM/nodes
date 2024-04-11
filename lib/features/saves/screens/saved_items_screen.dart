@@ -19,7 +19,8 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
 
   @override
   void initState() {
-    safeNavigate(() => context.read<DashboardController>().fetchAllSavedJobs(context));
+    safeNavigate(
+        () => context.read<DashboardController>().fetchAllSavedJobs(context));
     safeNavigate(
         () => context.read<DashboardController>().fetchAllSavedEvents(context));
     super.initState();
@@ -115,7 +116,7 @@ class _BusinessEventDetailsScreenState extends State<SavedItemScreen> {
             ),
             child: GestureDetector(
               onTap: () {
-                context.read<NavController>().popPageListStack();
+                customNavigateBack(context);
               },
               child: labelText(
                 "Go Back",

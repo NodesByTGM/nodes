@@ -46,7 +46,6 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   }
 
   fetchJobs() {
-    
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }
@@ -63,7 +62,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
         children: [
           ySpace(height: 40),
           labelText(
-            "Welcome to Nodes, ${user.name?.split(' ').first} ",
+            "Welcome to Nodes, ${user.name?.split(' ').first ?? ''} ",
             fontSize: 20,
           ),
           ySpace(height: 8),

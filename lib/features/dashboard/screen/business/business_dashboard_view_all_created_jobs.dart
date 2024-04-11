@@ -3,8 +3,11 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/job_card.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class BusinessCreatedJobCenterScreen extends StatefulWidget {
@@ -24,10 +27,10 @@ class _BusinessCreatedJobCenterScreenState
   void initState() {
     dashCtrl = locator.get<DashboardController>();
     super.initState();
-    fetchCreatedJobs();
+    fetchMyCreatedJobs();
   }
 
-  fetchCreatedJobs() {
+  fetchMyCreatedJobs() {
     // Should be fetching all my created events
     safeNavigate(() => dashCtrl.fetchAllMyCreatedJobs(context));
   }
@@ -95,22 +98,64 @@ class _BusinessCreatedJobCenterScreenState
                     ),
                   );
                 },
-                content: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dashCtrl.createdJobList.length,
-                  itemBuilder: (c, i) {
-                    // return const JobCard(
-                    //   job: JobModel(),
-                    // );
-                    return JobCard(
-                      isFromBusiness: true,
-                      // job: dashCtrl.createdJobList[i],
-                      job: dashCtrl.jobsList[i],
-                      // Rethink this later, as when you create a job, it has the saved model...
-                    );
+                // content: ListView.separated(
+                //   shrinkWrap: true,
+                //   physics: const NeverScrollableScrollPhysics(),
+                //   itemCount: dashCtrl.createdJobList.length,
+                //   itemBuilder: (c, i) {
+                //     // return const JobCard(
+                //     //   job: JobModel(),
+                //     // );
+                //     return JobCard(
+                //       isFromBusiness: true,
+                //       // job: dashCtrl.createdJobList[i],
+                //       job: dashCtrl.jobsList[i],
+                //       // Rethink this later, as when you create a job, it has the saved model...
+                //     );
+                //   },
+                //   separatorBuilder: (c, i) => ySpace(height: 24),
+                // ),
+                content: Consumer<DashboardController>(
+                  builder: (contex, dashCtrl, _) {
+                    bool isLoading = dashCtrl.isFetchingAllCreatedJobs;
+                    bool hasData = isObjectEmpty(dashCtrl.createdJobList);
+                    if (isLoading || isObjectEmpty(dashCtrl.createdJobList)) {
+                      return DataReload(
+                        maxHeight: screenHeight(context) * .19,
+                        isLoading: isLoading,
+                        label: "Try adding new jobs or",
+                        loader: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: ShimmerLoader(
+                            scrollDirection: Axis.vertical,
+                            width: screenWidth(context),
+                            marginBottom: 10,
+                          ),
+                        ), // Pass the shimmer here...
+                        onTap: fetchMyCreatedJobs,
+                        isEmpty: hasData,
+                      );
+                    } else {
+                      // List<SavedJobModel> jobs = dashCtrl.createdJobList;
+                      List<JobModel> jobs = dashCtrl
+                          .jobsList; // Should be ceratedJobList, work on the model and revert...
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: jobs.length,
+                        itemBuilder: (c, i) {
+                          return JobCard(
+                            isFromBusiness: true,
+                            // include the has delete, so i can delete the job straightup
+                            // job: dashCtrl.createdJobList[i],
+                            job: dashCtrl.jobsList[i],
+                            // Rethink this later, as when you create a job, it has the saved model...
+                          );
+                        },
+                        separatorBuilder: (c, i) => ySpace(height: 24),
+                      );
+                    }
                   },
-                  separatorBuilder: (c, i) => ySpace(height: 24),
                 ),
               ),
             ],
@@ -132,7 +177,7 @@ class _BusinessCreatedJobCenterScreenState
                     flex: 1,
                     child: GestureDetector(
                       onTap: () {
-                        context.read<NavController>().popPageListStack();
+                        customNavigateBack(context);
                       },
                       child: labelText(
                         "Go Back",

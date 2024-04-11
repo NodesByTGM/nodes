@@ -119,7 +119,11 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   title: "Find your\nnext job",
                   btnTitle: "Browse jobs",
                   icon: ImageUtils.legsIcon,
-                  onTap: () {},
+                  onTap: () {
+                    navCtrl.updatePageListStack(
+                      TalentJobCenterScreen.routeName,
+                    );
+                  },
                 ),
               ],
             ),

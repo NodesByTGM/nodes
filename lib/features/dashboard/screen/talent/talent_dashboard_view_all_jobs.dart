@@ -42,129 +42,140 @@ class _TalentJobCenterScreenState extends State<TalentJobCenterScreen> {
       // decoration: const BoxDecoration(
       //   gradient: profileLinearGradient,
       // ),
-      child: ListView(
-        shrinkWrap: true,
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Stack(
         children: [
-          ySpace(height: 40),
-          GestureDetector(
-            onTap: () {
-              context.read<NavController>().popPageListStack();
-            },
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                const Icon(
-                  Icons.keyboard_arrow_left,
-                  color: BORDER,
-                ),
-                subtext(
-                  "Go Back",
-                  fontSize: 12,
-                ),
-              ],
-            ),
-          ),
-          ySpace(height: 20),
-          labelText(
-            "Hi, ${authCtrl.currentUser.name?.split(" ").first}! Welcome to the Nodes Job center",
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-          ySpace(height: 20),
-          StickyHeaderBuilder(
-            builder: (context, stuckAmount) {
-              return Container(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 20,
-                ),
-                // color: stuckAmount <= -0.54 ? WHITE : null,
-                color: WHITE,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+          ListView(
+            shrinkWrap: true,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.only(bottom: 120),
+            children: [
+              ySpace(height: 20),
+              labelText(
+                "Hi, ${authCtrl.currentUser.name?.split(" ").first}! Welcome to the Nodes Job center",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 20),
+              StickyHeaderBuilder(
+                builder: (context, stuckAmount) {
+                  return Container(
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                      bottom: 20,
+                    ),
+                    // color: stuckAmount <= -0.54 ? WHITE : null,
+                    color: WHITE,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: FormBuilderTextField(
-                            name: "jobSearch",
-                            decoration: FormUtils.formDecoration(
-                              hintText: "Search for jobs",
-                              verticalPadding: 12,
-                              prefixIcon: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.search,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: FormBuilderTextField(
+                                name: "jobSearch",
+                                decoration: FormUtils.formDecoration(
+                                  hintText: "Search for jobs",
+                                  verticalPadding: 12,
+                                  prefixIcon: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.search,
+                                    ),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.text,
+                                style: FORM_STYLE,
+                                // controller: searchCtrl,
+
+                                onChanged: (val) {},
+                              ),
+                            ),
+                            xSpace(width: 30),
+                            // const Spacer()
+                            GestureDetector(
+                              onTap: () => showFilterBox(context),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 6),
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
+                                  left: 10,
+                                  right: 15,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WHITE,
+                                  border:
+                                      Border.all(width: 0.7, color: PRIMARY),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  spacing: 5,
+                                  children: [
+                                    Icon(
+                                      MdiIcons.filterOutline,
+                                      color: PRIMARY,
+                                    ),
+                                    labelText(
+                                      "Filter",
+                                      fontSize: 12,
+                                      color: PRIMARY,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            keyboardType: TextInputType.text,
-                            style: FORM_STYLE,
-                            // controller: searchCtrl,
-
-                            onChanged: (val) {},
-                          ),
+                          ],
                         ),
-                        xSpace(width: 30),
-                        // const Spacer()
-                        GestureDetector(
-                          onTap: () => showFilterBox(context),
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 6),
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              bottom: 10,
-                              left: 10,
-                              right: 15,
-                            ),
-                            decoration: BoxDecoration(
-                              color: WHITE,
-                              border: Border.all(width: 0.7, color: PRIMARY),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: 5,
-                              children: [
-                                Icon(
-                                  MdiIcons.filterOutline,
-                                  color: PRIMARY,
-                                ),
-                                labelText(
-                                  "Filter",
-                                  fontSize: 12,
-                                  color: PRIMARY,
-                                ),
-                              ],
-                            ),
-                          ),
+                        ySpace(height: 8),
+                        // Hide this at a certain scrool George...
+                        subtext(
+                          "You can search based on skill, roles and job type",
+                          fontSize: 14,
+                          color: GRAY,
+                          fontWeight: FontWeight.w500,
                         ),
                       ],
                     ),
-                    ySpace(height: 8),
-                    // Hide this at a certain scrool George...
-                    subtext(
-                      "You can search based on skill, roles and job type",
-                      fontSize: 14,
-                      color: GRAY,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ],
+                  );
+                },
+                content: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: dashCtrl.jobsList.length,
+                  itemBuilder: (c, i) {
+                    return JobCard(
+                      job: dashCtrl.jobsList[i],
+                    );
+                  },
+                  separatorBuilder: (c, i) => ySpace(height: 24),
                 ),
-              );
-            },
-            content: ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: dashCtrl.jobsList.length,
-              itemBuilder: (c, i) {
-                return JobCard(
-                  job: dashCtrl.jobsList[i],
-                );
-              },
-              separatorBuilder: (c, i) => ySpace(height: 24),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: screenWidth(context),
+              padding: const EdgeInsets.only(top: 10, bottom: 30),
+              decoration: const BoxDecoration(
+                color: WHITE,
+                border: Border(
+                  top: BorderSide(width: 0.7, color: BORDER),
+                ),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  customNavigateBack(context);
+                },
+                child: labelText(
+                  "Go Back",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
           ),
         ],

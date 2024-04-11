@@ -6,6 +6,16 @@ import 'package:nodes/features/saves/models/job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 
+/**
+ * 
+ * 
+ *  We will have two separate cards
+ * 1. Individual and Talent job cards, where the save button for individuals will prompt them to upgrade
+ * 2. Business job cards, which shows the applicants and details
+ * 
+ *  Same case with the job card details
+ */
+
 class JobCard extends StatelessWidget {
   const JobCard({
     super.key,

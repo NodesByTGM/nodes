@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:bot_toast/src/toast.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -103,6 +104,10 @@ navigateAndClearPrev(BuildContext context, String route, {dynamic arguments}) {
 
 navigateBack(BuildContext context) {
   Navigator.pop(context);
+}
+
+customNavigateBack(BuildContext context) {
+  context.read<NavController>().popPageListStack();
 }
 
 // Various State checkers
@@ -912,4 +917,23 @@ GestureDetector iconWithLink({
   required String icon,
 }) {
   return GestureDetector(onTap: onTap, child: SvgPicture.asset(icon));
+}
+
+Padding actionBtn({
+  required String icon,
+  required GestureTapCallback onTap,
+  required bool loading,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 7),
+    child: loading
+        ? const Loader()
+        : GestureDetector(
+            onTap: onTap,
+            child: SvgPicture.asset(
+              icon,
+              height: 30,
+            ),
+          ),
+  );
 }
