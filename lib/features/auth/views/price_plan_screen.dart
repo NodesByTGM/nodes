@@ -6,7 +6,6 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/talent_auth/components/price_plan_card.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/paystack_webview.dart';
 
 class PricePlanScreen extends StatefulWidget {
@@ -22,10 +21,6 @@ class PricePlanScreen extends StatefulWidget {
 class _PricePlanScreen extends State<PricePlanScreen> {
   late AuthController authCtrl;
   int planIndex = 0;
-  double talentProPlanAmt = 4900;
-  double talentOngoingProPlanAmt = 7900;
-  double businessPlanAmt = 19800;
-  // late final PaystackPlugin paystackPlugin;
   double proAmt = proMonthlyAmt;
   double businessAmt = businessMonthlyAmt;
 
@@ -35,7 +30,6 @@ class _PricePlanScreen extends State<PricePlanScreen> {
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
-    // paystackPlugin = locator.get<PaystackPlugin>();
     super.initState();
   }
 

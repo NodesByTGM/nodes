@@ -125,7 +125,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         FormWithLabel(
                           label: "Year of establishment",
                           form: FormBuilderTextField(
-                            name: "doe",
+                            name: "yoe",
                             decoration: FormUtils.formDecoration(
                               hintText: "",
                             ),
@@ -134,7 +134,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                             style: FORM_STYLE,
 
                             onSaved: (value) =>
-                                formValues['doe'] = trimValue(value),
+                                formValues['yoe'] = trimValue(value),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context,
                                   errorText: Constants.emptyFieldError),
@@ -185,7 +185,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         ySpace(height: 40),
                         SubmitBtn(
                           onPressed: _submit,
-                          title: btnTxt("Save and Continue", WHITE),
+                          title: btnTxt("Save", WHITE),
                         ),
                         ySpace(height: 20),
                       ],
@@ -247,7 +247,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         ySpace(height: 40),
                         SubmitBtn(
                           onPressed: _submit,
-                          title: btnTxt("Save and Continue", WHITE),
+                          title: btnTxt("Save", WHITE),
                         ),
                         ySpace(height: 20),
                       ],
@@ -721,7 +721,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         ySpace(height: 40),
                         SubmitBtn(
                           onPressed: _submit,
-                          title: btnTxt("Save and Continue", WHITE),
+                          title: btnTxt("Save", WHITE),
                         ),
                         ySpace(height: 20),
                       ],

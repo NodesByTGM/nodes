@@ -8,6 +8,7 @@ import 'package:nodes/features/dashboard/screen/business/business_dashboard_even
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_events.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_jobs.dart';
+import 'package:nodes/features/dashboard/screen/business/business_pre_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_single_item_details.dart';
@@ -66,6 +67,7 @@ const Map<String, dynamic> persistentRoutesSettings = {
 
   // Business Screen
   KeyString.forBusinessScreen: [
+    BusinessPreDashbaordScreen.routeName,
     BusinessDashboardScreen.routeName,
     BusinessCreatedJobCenterScreen.routeName,
     BusinessJobDetailsScreen.routeName,
@@ -110,6 +112,7 @@ Widget getDynamicScreen(NavController m) {
     TalentDashboardScreen.routeName => const TalentDashboardScreen(),
 
     // Business Dashboard
+    BusinessPreDashbaordScreen.routeName => const BusinessPreDashbaordScreen(),
     BusinessDashboardScreen.routeName => const BusinessDashboardScreen(),
     BusinessCreatedJobCenterScreen.routeName =>
       const BusinessCreatedJobCenterScreen(),

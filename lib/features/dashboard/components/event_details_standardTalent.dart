@@ -10,10 +10,12 @@ class StandardTalentEventDetails extends StatefulWidget {
   final StandardTalentEventModel event;
 
   @override
-  State<StandardTalentEventDetails> createState() => _StandardTalentEventDetailsState();
+  State<StandardTalentEventDetails> createState() =>
+      _StandardTalentEventDetailsState();
 }
 
-class _StandardTalentEventDetailsState extends State<StandardTalentEventDetails> {
+class _StandardTalentEventDetailsState
+    extends State<StandardTalentEventDetails> {
   late StandardTalentEventModel event;
 
   @override
@@ -102,6 +104,41 @@ class _StandardTalentEventDetailsState extends State<StandardTalentEventDetails>
             ],
           ),
         ),
+        if (!isObjectEmpty(event.thumbnail)) ...[
+          ySpace(height: 24),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              color: WHITE,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                width: 0.7,
+                color: BORDER,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                labelText(
+                  "Event Image",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                ySpace(height: 24),
+                SizedBox(
+                  height: 250,
+                  child: cachedNetworkImage(
+                    imgUrl: "${event.thumbnail?.url}",
+                    size: screenWidth(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }

@@ -9,9 +9,13 @@ import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dar
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
 class IndividualDashboardScreen extends StatefulWidget {
   const IndividualDashboardScreen({super.key});
@@ -46,8 +50,20 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   }
 
   fetchJobsEventsTrending() {
+    fetchTrending();
+    fetchAllJobs();
+    fetchAllEvents();
+  }
+
+  fetchAllJobs() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
+  }
+
+  fetchAllEvents() {
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
+  }
+
+  fetchTrending() {
     safeNavigate(() => dashCtrl.fetchTrending(context));
   }
 
@@ -74,7 +90,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           customDivider(height: 40),
           ySpace(height: 20),
           labelText(
-            "Trending",
+            "Trending Events",
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -84,24 +100,47 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
             fontSize: 14,
           ),
           ySpace(height: 24),
-          SizedBox(
-            // height: 368,
-            height: 200,
-            child: PageView.builder(
-              itemCount: dashCtrl.eventsList.length,
-              controller: eventsCardCtrl,
-              onPageChanged: (val) {
-                currentEventIndex = val;
-                setState(() {});
-              },
-              itemBuilder: (context, index) {
-                return StandardTalentEventCard(
-                  hasDelete: false,
-                  hasSave: false,
-                  event: dashCtrl.eventsList[index],
+          Consumer<DashboardController>(
+            builder: (contex, dCtrl, _) {
+              bool isLoading = dCtrl.isFetchingAllEvent;
+              bool hasData = isObjectEmpty(dCtrl.eventsList);
+              if (isLoading || isObjectEmpty(dCtrl.eventsList)) {
+                return DataReload(
+                  maxHeight: screenHeight(context) * .19,
+                  isLoading: isLoading,
+                  loader: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ShimmerLoader(
+                      scrollDirection: Axis.horizontal,
+                      width: screenWidth(context),
+                      marginBottom: 10,
+                    ),
+                  ),
+                  onTap: fetchAllJobs,
+                  isEmpty: hasData,
                 );
-              },
-            ),
+              } else {
+                List<StandardTalentEventModel> eventsList = dCtrl.eventsList;
+                return SizedBox(
+                  height: 200,
+                  child: PageView.builder(
+                    itemCount: eventsList.length,
+                    controller: eventsCardCtrl,
+                    onPageChanged: (val) {
+                      currentEventIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      return StandardTalentEventCard(
+                        hasDelete: false,
+                        hasSave: false,
+                        event: eventsList[index],
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
           ySpace(height: 20),
           Row(
@@ -249,21 +288,45 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
             ],
           ),
           ySpace(height: 24),
-          SizedBox(
-            height: 320,
-            child: PageView.builder(
-              itemCount: dashCtrl.jobsList.length,
-              controller: trendingCardCtrl,
-              onPageChanged: (val) {
-                currentTrendingIndex = val;
-                setState(() {});
-              },
-              itemBuilder: (context, index) {
-                return StandardTalentJobCard(
-                  job: dashCtrl.jobsList[index],
+          Consumer<DashboardController>(
+            builder: (contex, dCtrl, _) {
+              bool isLoading = dCtrl.isFetchingAllJob;
+              bool hasData = isObjectEmpty(dCtrl.jobsList);
+              if (isLoading || isObjectEmpty(dCtrl.jobsList)) {
+                return DataReload(
+                  maxHeight: screenHeight(context) * .19,
+                  isLoading: isLoading,
+                  loader: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ShimmerLoader(
+                      scrollDirection: Axis.horizontal,
+                      width: screenWidth(context),
+                      marginBottom: 10,
+                    ),
+                  ),
+                  onTap: fetchAllJobs,
+                  isEmpty: hasData,
                 );
-              },
-            ),
+              } else {
+                List<StandardTalentJobModel> jobsList = dCtrl.jobsList;
+                return SizedBox(
+                  height: 320,
+                  child: PageView.builder(
+                    itemCount: jobsList.length,
+                    controller: trendingCardCtrl,
+                    onPageChanged: (val) {
+                      currentTrendingIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      return StandardTalentJobCard(
+                        job: jobsList[index],
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
           ySpace(height: 24),
           Row(

@@ -99,13 +99,7 @@ class DashboardController extends BaseController {
   }
 
   _updateAppliedJobsList(StandardTalentJobModel job) {
-    print("George this is the applied Job: ${job.toJson()}");
     _appliedJobsList.add(job);
-
-    // int jIndex = _jobsList.indexWhere((j) => j.id == job.id);
-    // if (jIndex != -1) {
-    //   _jobsList[jIndex] = job;
-    // }
     _patchJobAppliedJobList(job: job, savedStatus: job.saved);
     notifyListeners();
   }
@@ -130,6 +124,7 @@ class DashboardController extends BaseController {
   //   }
   //   notifyListeners();
   // }
+  
   _updateSavedJobsList(
     BuildContext ctx, {
     required StandardTalentJobModel job,
@@ -674,7 +669,10 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<StandardTalentJobModel?> applyForJob(BuildContext ctx, dynamic payload) async {
+  Future<StandardTalentJobModel?> applyForJob(
+    BuildContext ctx,
+    dynamic payload,
+  ) async {
     setApplyingForJob(true);
     try {
       ApiResponse response = await _dashboardService.applyForJob(ctx, payload);
@@ -697,7 +695,9 @@ class DashboardController extends BaseController {
   }
 
   Future<StandardTalentJobModel?> saveJob(
-      BuildContext ctx, dynamic payload) async {
+    BuildContext ctx,
+    dynamic payload,
+  ) async {
     setSavedUnsavedJob(true);
     try {
       ApiResponse response = await _dashboardService.saveJob(ctx, payload);
@@ -723,7 +723,9 @@ class DashboardController extends BaseController {
   }
 
   Future<StandardTalentJobModel?> unSaveJob(
-      BuildContext ctx, dynamic payload) async {
+    BuildContext ctx,
+    dynamic payload,
+  ) async {
     setSavedUnsavedJob(true);
     try {
       ApiResponse response = await _dashboardService.unSaveJob(ctx, payload);

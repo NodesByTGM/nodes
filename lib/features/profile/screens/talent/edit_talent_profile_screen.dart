@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_textfield_autocomplete/flutter_textfield_autocomplete.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
@@ -304,9 +303,9 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                                   ),
                                   keyboardType: TextInputType.number,
                                   style: FORM_STYLE,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
+                                  // inputFormatters: [
+                                  //   FilteringTextInputFormatter.digitsOnly,
+                                  // ],
                                   controller: heightCtrl,
                                   onSaved: (value) =>
                                       formValues['height'] = trimValue(value),
@@ -326,9 +325,9 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                                   keyboardType: TextInputType.number,
                                   style: FORM_STYLE,
                                   readOnly: true,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
+                                  // inputFormatters: [
+                                  //   FilteringTextInputFormatter.digitsOnly,
+                                  // ],
                                   controller: ageCtrl,
                                   onSaved: (value) =>
                                       formValues['height'] = trimValue(value),
@@ -341,7 +340,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                         ySpace(height: 40),
                         SubmitBtn(
                           onPressed: () => _submit(0),
-                          title: btnTxt("Save and Continue", WHITE),
+                          title: btnTxt("Save", WHITE),
                           loading: authCtrl.loading,
                         ),
                         ySpace(height: 20),
@@ -404,7 +403,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                         ySpace(height: 40),
                         SubmitBtn(
                           onPressed: () => _submit(1),
-                          title: btnTxt("Save and Continue", WHITE),
+                          title: btnTxt("Save", WHITE),
                           loading: authCtrl.loading,
                         ),
                         ySpace(height: 20),
@@ -515,7 +514,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                         ySpace(height: 40),
                         SubmitBtn(
                           onPressed: () => _submit(2),
-                          title: btnTxt("Save and Continue", WHITE),
+                          title: btnTxt("Save", WHITE),
                           loading: authCtrl.loading,
                         ),
                         ySpace(height: 20),

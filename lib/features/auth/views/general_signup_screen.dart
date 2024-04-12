@@ -357,7 +357,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                 ySpace(height: 24),
                 SubmitBtn(
                   onPressed: _submit,
-                  title: btnTxt("Sign In", WHITE),
+                  title: btnTxt("Sign Up", WHITE),
                   loading: authCtrl.verifyOTPStatus,
                 ),
               ],

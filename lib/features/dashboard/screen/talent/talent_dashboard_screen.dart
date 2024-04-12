@@ -443,7 +443,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           ),
           ySpace(height: 72),
           labelText(
-            "Trending",
+            "Trending Events",
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
