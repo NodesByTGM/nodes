@@ -107,13 +107,15 @@ Map<String, dynamic> _$BusinessJobModelToJson(BusinessJobModel instance) =>
 ApplicantModel _$ApplicantModelFromJson(Map<String, dynamic> json) =>
     ApplicantModel(
       name: json['name'] as String?,
-      avatar: json['avatar'],
+      avatar: json['avatar'] == null
+          ? null
+          : MediaUploadModel.fromJson(json['avatar'] as Map<String, dynamic>),
       id: json['id'] as String?,
     );
 
 Map<String, dynamic> _$ApplicantModelToJson(ApplicantModel instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'avatar': instance.avatar,
+      'avatar': instance.avatar?.toJson(),
       'id': instance.id,
     };

@@ -149,7 +149,7 @@ class _BusinessEventDetailsScreenState
           event: event,
         );
       case 1:
-        return const SavedEventApplicantCard();
+        return  SavedEventApplicantCard(event: event);
       default:
         return EventDetails(
           isFromBusiness: true,

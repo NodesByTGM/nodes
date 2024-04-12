@@ -21,6 +21,7 @@ class JobApplicants extends StatelessWidget {
             itemCount: job.applicants?.length ?? 0,
             padding: const EdgeInsets.only(top: 32),
             itemBuilder: (c, i) {
+              ApplicantModel applicant = job.applicants![i];
               return Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -34,13 +35,13 @@ class JobApplicants extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      ImageUtils.jobDpIcon,
-                      height: 40,
+                    cachedNetworkImage(
+                      imgUrl: "${applicant.avatar?.url}",
+                      size: 40,
                     ),
                     ySpace(height: 10),
                     labelText(
-                      "Name of applicant",
+                      capitalize("${applicant.name}"),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),

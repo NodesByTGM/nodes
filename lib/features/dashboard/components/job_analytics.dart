@@ -98,7 +98,7 @@ class _JobAnalyticsState extends State<JobAnalytics> {
             Expanded(
               child: analyticsCard(
                 title: "No. of Saves",
-                value: "24",
+                value: "${job.saves?.length}",
               ),
             ),
           ],

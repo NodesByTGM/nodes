@@ -1,20 +1,31 @@
+import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class SavedEventApplicantCard extends StatelessWidget {
-  const SavedEventApplicantCard({super.key});
+  const SavedEventApplicantCard({
+    super.key,
+    required this.event,
+  });
+
+  final EventModel event;
 
   @override
   Widget build(BuildContext context) {
-    return 1 > 2
-        ? ListView(
-            children: [labelText("Nobody has saved this event yet")],
+    return isObjectEmpty(event.saves)
+        ? SizedBox(
+            height: 200,
+            child: Center(
+              child: labelText("Nobody has saved this event yet"),
+            ),
           )
         : ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 15,
+            itemCount: event.saves?.length ?? 0,
             padding: const EdgeInsets.only(top: 32),
             itemBuilder: (c, i) {
+              ApplicantModel saver = event.saves![i];
               return Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -28,13 +39,13 @@ class SavedEventApplicantCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      ImageUtils.jobDpIcon,
-                      height: 40,
+                    cachedNetworkImage(
+                      imgUrl: "${saver.avatar?.url}",
+                      size: 40,
                     ),
                     ySpace(height: 10),
                     labelText(
-                      "Name of user",
+                      capitalize("${saver.name}"),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),

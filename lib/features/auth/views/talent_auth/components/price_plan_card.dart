@@ -11,6 +11,7 @@ class PricePlanCard extends StatelessWidget {
     required this.features,
     required this.onTap,
     required this.btnText,
+     this.loading = false,
   });
 
   final String type;
@@ -21,6 +22,7 @@ class PricePlanCard extends StatelessWidget {
   final List<String> features;
   final GestureCancelCallback onTap;
   final String btnText;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +71,7 @@ class PricePlanCard extends StatelessWidget {
           SubmitBtn(
             onPressed: onTap,
             title: btnTxt(btnText, WHITE),
-            // rightIcon: const Icon(
-            //   Icons.arrow_forward,
-            //   color: WHITE,
-            // ),
+            loading: loading,
           ),
           ySpace(height: 24),
         ],

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/core/models/base_data.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 
 part "standard_talent_job_model.g.dart";
 
@@ -214,7 +215,7 @@ class BusinessJobModel extends BaseData {
 @JsonSerializable(explicitToJson: true)
 class ApplicantModel extends Equatable {
   final String? name;
-  final dynamic avatar;
+  final MediaUploadModel? avatar;
   final String? id;
 
   const ApplicantModel({
@@ -225,7 +226,7 @@ class ApplicantModel extends Equatable {
 
   ApplicantModel copyWith({
     String? name,
-    dynamic avatar,
+    MediaUploadModel? avatar,
     String? id,
   }) =>
       ApplicantModel(

@@ -206,12 +206,18 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     if (formKey.currentState!.saveAndValidate()) {
       bool res = await context.read<AuthController>().login(
         {
-          "email": "niweb33325@nimadir.com",
-          "password": "Test@1234",
+          // "email": "niweb33325@nimadir.com",
+          // "password": "Test@1234",
+          "email": emailCtrl.text,
+          "password": pwdCtrl.text,
         },
       );
       // var res = "";
-
+      if (!res) {
+        // Using this to mitidate the 'Retrying request' alert i'd set in my exception file...
+        showError(message: "You Provided an Invalid Credentials");
+        return;
+      }
       if (res && mounted) {
         safeNavigate(() {
           formKey.currentState!.reset();

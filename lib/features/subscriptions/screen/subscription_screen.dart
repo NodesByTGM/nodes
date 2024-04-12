@@ -20,13 +20,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   late AuthController authCtrl;
   late UserModel user;
   int planIndex = 0;
-  double proAmt = 7900;
-  double businessAmt = 19800;
+  double proAmt = proMonthlyAmt;
+  double businessAmt = businessMonthlyAmt;
   //
-  double talentProPlanAmt = 7900;
-  double talentOngoingProPlanAmt = 89800;
-  double businessPlanAmt = 19800;
-  double businessOngoingPlanAmt = 214800;
+  // double talentProPlanAmt = 7900;
+  // double talentOngoingProPlanAmt = proYearlyAmt;
+  // double businessPlanAmt = 19800;
+  // double businessOngoingPlanAmt = businessyearlyAmt;
 
   @override
   void initState() {
@@ -182,6 +182,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     // Pro or business i.e monthly sub
     // Pro-annual or business-annual i.e yearly sub
     String? currentUserSub = user.subscription?.plan;
+    if (isObjectEmpty(currentUserSub)) {
+      // This shows, user have not subscribed to anything...
+      return false;
+    }
     bool isMonthPlan = planIndex == 0;
     bool isYearPlan = planIndex == 1;
     if (isObjectEmpty(currentUserSub)) {

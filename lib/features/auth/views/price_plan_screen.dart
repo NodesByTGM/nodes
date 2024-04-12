@@ -20,23 +20,28 @@ class PricePlanScreen extends StatefulWidget {
 
 // Pass data, email etc...
 class _PricePlanScreen extends State<PricePlanScreen> {
-  late AuthController _authCtrl;
+  late AuthController authCtrl;
   int planIndex = 0;
   double talentProPlanAmt = 4900;
   double talentOngoingProPlanAmt = 7900;
   double businessPlanAmt = 19800;
   // late final PaystackPlugin paystackPlugin;
+  double proAmt = proMonthlyAmt;
+  double businessAmt = businessMonthlyAmt;
+
+  bool subingPro = false;
+  bool subingBus = false;
 
   @override
   void initState() {
-    _authCtrl = locator.get<AuthController>();
+    authCtrl = locator.get<AuthController>();
     // paystackPlugin = locator.get<PaystackPlugin>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _authCtrl = context.watch<AuthController>();
+    authCtrl = context.watch<AuthController>();
     return AppWrapper(
       isCancel: false,
       backgroundColor: PRIMARY,
@@ -49,7 +54,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
         color: WHITE,
       ),
       onTap: () {
-        _authCtrl.setTStepper(5);
+        authCtrl.setTStepper(5);
         navigateBack(context);
       },
       body: SingleChildScrollView(
@@ -97,7 +102,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                   onTap: () {
                     setState(() {
                       planIndex = 0;
-                      yearlyPlanFn();
+                      updateAmt();
                     });
                   },
                 ),
@@ -107,7 +112,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                   onTap: () {
                     setState(() {
                       planIndex = 1;
-                      yearlyPlanFn();
+                      updateAmt();
                     });
                   },
                 ),
@@ -139,7 +144,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   labelText(
-                    formatCurrencyAmount(Constants.naira, talentProPlanAmt),
+                    formatCurrencyAmount(Constants.naira, proAmt),
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
                   ),
@@ -155,9 +160,12 @@ class _PricePlanScreen extends State<PricePlanScreen> {
               priceDescription: "Get one month free if you subscribe now",
               features: Constants.proFeatures,
               onTap: () => _paystackPayment(
-                  planIndex == 0 ? talentMonthlySub : talentYearlySub),
+                planIndex == 0 ? talentMonthlySub : talentYearlySub,
+              ),
 
               btnText: "Subscribe now",
+              // loading: authCtrl.loading,
+              loading: subingPro,
             ),
             ySpace(height: 24),
             PricePlanCard(
@@ -169,7 +177,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   labelText(
-                    formatCurrencyAmount(Constants.naira, businessPlanAmt),
+                    formatCurrencyAmount(Constants.naira, businessAmt),
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
                   ),
@@ -181,12 +189,14 @@ class _PricePlanScreen extends State<PricePlanScreen> {
                   ),
                 ],
               ),
-              priceDescription:
-                  "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
+              // priceDescription:"For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
+              priceDescription: "Get one month free if you subscribe now",
               features: Constants.businessFeatures,
               onTap: () => _paystackPayment(
                   planIndex == 0 ? busMonthlySub : busYearlySub),
               btnText: "Subscribe now",
+              // loading: authCtrl.loading,
+              loading: subingBus,
             ),
             ySpace(height: 24),
           ],
@@ -220,44 +230,52 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     );
   }
 
-  yearlyPlanFn() {
+  updateAmt() {
     if (planIndex == 0) {
-      talentProPlanAmt = 4900;
-      talentOngoingProPlanAmt = 7900;
+      setState(() {
+        proAmt = proMonthlyAmt;
+        businessAmt = businessMonthlyAmt;
+      });
     } else {
-      talentProPlanAmt = 80000;
-      talentOngoingProPlanAmt = 89800;
+      setState(() {
+        proAmt = proYearlyAmt;
+        businessAmt = businessyearlyAmt;
+      });
     }
   }
 
   submit() {
-    _authCtrl.setCurrentScreen(NavbarView.routeName);
+    authCtrl.setCurrentScreen(NavbarView.routeName);
     navigateAndClearAll(context, NavbarView.routeName);
-    _authCtrl.resetBTStepper();
-    _authCtrl.dummySession({
+    authCtrl.resetBTStepper();
+    authCtrl.dummySession({
       "loggedIn": true,
     });
   }
 
-  _paystackPayment(String type) async {
+  _paystackPayment(String plan) async {
     var ref =
         "${Platform.isIOS ? "Ios" : "Android"}_${DateTime.now().microsecondsSinceEpoch}";
     // var ref = "t5o5vnfu13";
-
+    handleSpinnerLoader(plan: plan, state: true);
     try {
       // Make the call to the API, get the auth token.
-      CustomPaystackResModel? paystackRes = await _authCtrl.getPaystackAuthUrl(
+      CustomPaystackResModel? paystackRes = await authCtrl.getPaystackAuthUrl(
         context,
         CustomPaystackModel(
           reference: ref,
           callback_url: tGMWebsite,
           // SubscriptionPlanKeys.business
-          planKey: busYearlySub,
+          planKey: plan,
           metadata: const PaystackMetadataModel(
-              cancel_action: paystackCancelActionUrl),
+            cancel_action: paystackCancelActionUrl,
+          ),
         ),
       );
-      print("George....we here now ${paystackRes?.toJson()}");
+      handleSpinnerLoader(
+        plan: plan,
+        state: authCtrl.loading,
+      );
       if (!isObjectEmpty(paystackRes) && mounted) {
         bool res = await Navigator.of(context).push<dynamic>(
           MaterialPageRoute<void>(
@@ -269,6 +287,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
         );
         if (!res && mounted) {
           // Call the verification ENDPOINT...
+          _onSuccessfulPaystackPayment(ref);
         }
       }
     } catch (e) {
@@ -277,24 +296,22 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     }
   }
 
-  _onSuccessfulPaystackPayment({
-    required String ref,
-    required int totalAmt,
-    required PaymentStatus paymentStatus,
-  }) async {
-    // Make the request to load the wallet...
-    // bool _res = await _profileCtrl.addMoneyToWallet(
-    //   amount: totalAmt,
-    //   paymentStatus: paymentStatus,
-    //   paystackTransactionId: ref,
-    // );
+  handleSpinnerLoader({required String plan, bool state = false}) {
+    if (plan.contains(talentMonthlySub)) {
+      setState(() {
+        subingPro = state;
+      });
+    } else {
+      subingBus = state;
+    }
+  }
 
-    // if (_res && mounted) {
-    //   // Money was added successfully
-
-    //   showSuccess(
-    //     message: "Payment Successful",
-    //   );
-    // }
+  _onSuccessfulPaystackPayment(ref) async {
+    bool done = await authCtrl.verifyAndUpgradeSubscription(ref);
+    if (done && mounted) {
+      submit();
+    } else {
+      // Sorta send the ref to BE, so as to document and track this payment...
+    }
   }
 }

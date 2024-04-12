@@ -57,231 +57,118 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
     dashCtrl = context.watch<DashboardController>();
-    return
-        // user.type != 2
-        1 > 2
-            ? ListView(
-                shrinkWrap: true,
-                children: [
-                  ySpace(height: 80),
-                  labelText(
-                    "Hi  ${user.name?.split(' ').first}!",
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    textAlign: TextAlign.center,
-                  ),
-                  ySpace(height: 20),
-                  subtext(
-                    "Just getting started?\nWould you like to create a business account?",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    textAlign: TextAlign.center,
-                  ),
-                  ySpace(height: 40),
-                  SvgPicture.asset(ImageUtils.spaceEmptyIcon),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: SubmitBtn(
-                      onPressed: () {
-                        // Send to Subscription, proceed to sub for monthly...
-                        authCtrl.setSubUpgrade(
-                          const SubscriptionUpgrade(
-                            type: KeyString.bus,
-                            amount: businessMonthlyAmt,
-                            period: KeyString.month,
-                            features: Constants.businessFeatures,
-                            isSubscribed: false,
-                          ),
+    return user.type != 2
+        // 1 > 2
+        ? ListView(
+            shrinkWrap: true,
+            children: [
+              ySpace(height: 80),
+              labelText(
+                "Hi  ${user.name?.split(' ').first}!",
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+              ySpace(height: 20),
+              subtext(
+                "Just getting started?\nWould you like to create a business account?",
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                textAlign: TextAlign.center,
+              ),
+              ySpace(height: 40),
+              SvgPicture.asset(ImageUtils.spaceEmptyIcon),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: SubmitBtn(
+                  onPressed: () {
+                    // Send to Subscription, proceed to sub for monthly...
+                    authCtrl.setSubUpgrade(
+                      const SubscriptionUpgrade(
+                        type: KeyString.bus,
+                        amount: businessMonthlyAmt,
+                        period: KeyString.month,
+                        features: Constants.businessFeatures,
+                        isSubscribed: false,
+                      ),
+                    );
+                    context.read<NavController>().updatePageListStack(
+                          ProceedWithPayment.routeName,
                         );
-                        context.read<NavController>().updatePageListStack(
-                              ProceedWithPayment.routeName,
-                            );
-                      },
-                      title: btnTxt(
-                        "Add Business account",
-                        WHITE,
-                      ),
-                    ),
+                  },
+                  title: btnTxt(
+                    "Add Business account",
+                    WHITE,
                   ),
-                ],
-              )
-            : ListView(
-                children: [
-                  ySpace(height: 40),
-                  labelText(
-                    "Hi  ${user.name?.split(' ').first}!, Nice to have you here.",
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  customDivider(height: 40),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 26,
-                      horizontal: 16,
+                ),
+              ),
+            ],
+          )
+        : ListView(
+            children: [
+              ySpace(height: 40),
+              labelText(
+                "Hi  ${user.name?.split(' ').first}!, Nice to have you here.",
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+              customDivider(height: 40),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 26,
+                  horizontal: 16,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: PRIMARY,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    labelText(
+                      "Welcome to Nodes! ",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: WHITE,
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: PRIMARY,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        labelText(
-                          "Welcome to Nodes! ",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: WHITE,
-                        ),
-                        ySpace(height: 10),
-                        subtext(
-                          "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: WHITE,
-                        ),
-                        ySpace(height: 40),
-                        QuickSetupCard(
-                          title: "Complete your\nbusiness profile",
-                          btnTitle: "Complete Profile",
-                          icon: ImageUtils.headIcon,
-                          onTap: () {
-                            context.read<NavController>().updatePageListStack(
-                                  ProfileWrapper.routeName,
-                                );
-                          },
-                        ),
-                        ySpace(height: 24),
-                        QuickSetupCard(
-                          title: "Create a job\npost",
-                          btnTitle: "Discover",
-                          icon: ImageUtils.thrunkIcon,
-                          onTap: () => showCreateJobBottomSheet(0),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ySpace(height: 72),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      labelText(
-                        "Jobs by you",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      ySpace(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: subtext(
-                              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-                              fontSize: 14,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              navCtrl.updatePageListStack(
-                                BusinessCreatedJobCenterScreen.routeName,
-                              );
-                            },
-                            child: subtext(
-                              "See more",
-                              fontSize: 14,
-                              color: PRIMARY,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  ySpace(height: 24),
-                  if (isObjectEmpty(dashCtrl.createdJobList)) ...[
-                    EmptyStateWithTextBtn(
-                      title: "Hi ${user.name?.split(' ').first}!",
-                      content:
-                          "Nothing to see here yet,\nCreate a job post to get started.",
-                      onTap: () => showCreateJobBottomSheet(0),
-                      btnText: "Create job post",
-                    ),
-                  ],
-                  if (!isObjectEmpty(dashCtrl.createdJobList)) ...[
-                    SizedBox(
-                      height: 320,
-                      child: PageView.builder(
-                        itemCount: dashCtrl.createdJobList.length,
-                        controller: jobsCardCtrl,
-                        onPageChanged: (val) {
-                          currentJobIndex = val;
-                          setState(() {});
-                        },
-                        itemBuilder: (context, index) {
-                          return BusinessJobCard(
-                            // Look into this properly
-                            job: dashCtrl.createdJobList[index],
-                          );
-                        },
-                      ),
+                    ySpace(height: 10),
+                    subtext(
+                      "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: WHITE,
                     ),
                     ySpace(height: 40),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ...List.generate(dashCtrl.createdJobList.length,
-                                (index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 2),
-                                child: CardDotIndicator(
-                                  isActive: currentJobIndex == index,
-                                ),
-                              );
-                            })
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                customAnimatePageView(
-                                  isInc: false,
-                                  totoalLength: dashCtrl.createdJobList.length,
-                                  currentIndex: currentJobIndex,
-                                  ctrl: jobsCardCtrl,
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                ImageUtils.leftCircleDirectionIcon,
-                              ),
-                            ),
-                            xSpace(width: 24),
-                            GestureDetector(
-                              onTap: () {
-                                customAnimatePageView(
-                                  isInc: true,
-                                  totoalLength: dashCtrl.createdJobList.length,
-                                  currentIndex: currentJobIndex,
-                                  ctrl: jobsCardCtrl,
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                ImageUtils.rightCircleDirectionIcon,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    QuickSetupCard(
+                      title: "Complete your\nbusiness profile",
+                      btnTitle: "Complete Profile",
+                      icon: ImageUtils.headIcon,
+                      onTap: () {
+                        context.read<NavController>().updatePageListStack(
+                              ProfileWrapper.routeName,
+                            );
+                      },
                     ),
-                    ySpace(height: 72),
+                    ySpace(height: 24),
+                    QuickSetupCard(
+                      title: "Create a job\npost",
+                      btnTitle: "Discover",
+                      icon: ImageUtils.thrunkIcon,
+                      onTap: () => showCreateJobBottomSheet(0),
+                    ),
                   ],
+                ),
+              ),
+              ySpace(height: 72),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   labelText(
-                    "Exclusive events",
+                    "Jobs by you",
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
-                  ySpace(height: 8),
+                  ySpace(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -293,7 +180,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                       GestureDetector(
                         onTap: () {
                           navCtrl.updatePageListStack(
-                            BusinessCreatedEventCenterScreen.routeName,
+                            BusinessCreatedJobCenterScreen.routeName,
                           );
                         },
                         child: subtext(
@@ -303,91 +190,201 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                         ),
                       ),
                     ],
+                  )
+                ],
+              ),
+              ySpace(height: 24),
+              if (isObjectEmpty(dashCtrl.createdJobList)) ...[
+                EmptyStateWithTextBtn(
+                  title: "Hi ${user.name?.split(' ').first}!",
+                  content:
+                      "Nothing to see here yet,\nCreate a job post to get started.",
+                  onTap: () => showCreateJobBottomSheet(0),
+                  btnText: "Create job post",
+                ),
+              ],
+              if (!isObjectEmpty(dashCtrl.createdJobList)) ...[
+                SizedBox(
+                  height: 320,
+                  child: PageView.builder(
+                    itemCount: dashCtrl.createdJobList.length,
+                    controller: jobsCardCtrl,
+                    onPageChanged: (val) {
+                      currentJobIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      return BusinessJobCard(
+                        // Look into this properly
+                        job: dashCtrl.createdJobList[index],
+                      );
+                    },
                   ),
-                  ySpace(height: 24),
-                  if (isObjectEmpty(dashCtrl.myCreatedEventsList)) ...[
-                    EmptyStateWithTextBtn(
-                      title: "Hi ${user.name?.split(' ').first}!",
-                      content:
-                          "Nothing to see here yet,\nCreate events to get started.",
-                      onTap: () => showCreateJobBottomSheet(1),
-                      btnText: "Create event",
-                    ),
-                  ],
-                  if (!isObjectEmpty(dashCtrl.myCreatedEventsList)) ...[
-                    SizedBox(
-                      height: 200,
-                      child: PageView.builder(
-                        itemCount: dashCtrl.myCreatedEventsList.length,
-                        controller: trendingCtrl,
-                        onPageChanged: (val) {
-                          currentTrendingIndex = val;
-                          setState(() {});
-                        },
-                        itemBuilder: (context, index) {
-                          return EventCard(
-                            event: dashCtrl.myCreatedEventsList[index],
+                ),
+                ySpace(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ...List.generate(dashCtrl.createdJobList.length,
+                            (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 2),
+                            child: CardDotIndicator(
+                              isActive: currentJobIndex == index,
+                            ),
                           );
-                        },
-                      ),
+                        })
+                      ],
                     ),
-                    ySpace(height: 40),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ...List.generate(
-                                dashCtrl.myCreatedEventsList.length, (index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 2),
-                                child: CardDotIndicator(
-                                  isActive: currentTrendingIndex == index,
-                                ),
-                              );
-                            })
-                          ],
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: false,
+                              totoalLength: dashCtrl.createdJobList.length,
+                              currentIndex: currentJobIndex,
+                              ctrl: jobsCardCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.leftCircleDirectionIcon,
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                customAnimatePageView(
-                                  isInc: false,
-                                  totoalLength:
-                                      dashCtrl.myCreatedEventsList.length,
-                                  currentIndex: currentTrendingIndex,
-                                  ctrl: trendingCtrl,
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                ImageUtils.leftCircleDirectionIcon,
-                              ),
-                            ),
-                            xSpace(width: 24),
-                            GestureDetector(
-                              onTap: () {
-                                customAnimatePageView(
-                                  isInc: true,
-                                  totoalLength:
-                                      dashCtrl.myCreatedEventsList.length,
-                                  currentIndex: currentTrendingIndex,
-                                  ctrl: trendingCtrl,
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                ImageUtils.rightCircleDirectionIcon,
-                              ),
-                            ),
-                          ],
+                        xSpace(width: 24),
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: true,
+                              totoalLength: dashCtrl.createdJobList.length,
+                              currentIndex: currentJobIndex,
+                              ctrl: jobsCardCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.rightCircleDirectionIcon,
+                          ),
                         ),
                       ],
                     ),
                   ],
+                ),
+                ySpace(height: 72),
+              ],
+              labelText(
+                "Exclusive events",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updatePageListStack(
+                        BusinessCreatedEventCenterScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "See more",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
                 ],
-              );
+              ),
+              ySpace(height: 24),
+              if (isObjectEmpty(dashCtrl.myCreatedEventsList)) ...[
+                EmptyStateWithTextBtn(
+                  title: "Hi ${user.name?.split(' ').first}!",
+                  content:
+                      "Nothing to see here yet,\nCreate events to get started.",
+                  onTap: () => showCreateJobBottomSheet(1),
+                  btnText: "Create event",
+                ),
+              ],
+              if (!isObjectEmpty(dashCtrl.myCreatedEventsList)) ...[
+                SizedBox(
+                  height: 280,
+                  child: PageView.builder(
+                    itemCount: dashCtrl.myCreatedEventsList.length,
+                    controller: trendingCtrl,
+                    onPageChanged: (val) {
+                      currentTrendingIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      return EventCard(
+                        event: dashCtrl.myCreatedEventsList[index],
+                      );
+                    },
+                  ),
+                ),
+                ySpace(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ...List.generate(dashCtrl.myCreatedEventsList.length,
+                            (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 2),
+                            child: CardDotIndicator(
+                              isActive: currentTrendingIndex == index,
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: false,
+                              totoalLength: dashCtrl.myCreatedEventsList.length,
+                              currentIndex: currentTrendingIndex,
+                              ctrl: trendingCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.leftCircleDirectionIcon,
+                          ),
+                        ),
+                        xSpace(width: 24),
+                        GestureDetector(
+                          onTap: () {
+                            customAnimatePageView(
+                              isInc: true,
+                              totoalLength: dashCtrl.myCreatedEventsList.length,
+                              currentIndex: currentTrendingIndex,
+                              ctrl: trendingCtrl,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            ImageUtils.rightCircleDirectionIcon,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          );
   }
 
   customAnimatePageView({

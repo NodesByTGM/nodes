@@ -478,9 +478,8 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
     showImageViewerPager(
       context,
       multiImageProvider,
-      useSafeArea: true,
       closeButtonColor: RED,
-      backgroundColor: Colors.transparent,
+      backgroundColor: BLACK,
       onPageChanged: (page) {
         // print("page changed to $page");
       },

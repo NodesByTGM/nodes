@@ -209,7 +209,6 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
-
   // Functions
 
   // Projects
@@ -656,7 +655,8 @@ class DashboardController extends BaseController {
         ctx,
         isSave: true,
         job: StandardTalentJobModel.fromJson(
-            response.result as Map<String, dynamic>),
+          response.result as Map<String, dynamic>,
+        ),
       );
       return true;
     } on NetworkException catch (e) {
@@ -776,7 +776,8 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setTrendingList(const TrendingModel().fromList(response.result  as List<dynamic>));
+      setTrendingList(
+          const TrendingModel().fromList(response.result as List<dynamic>));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
