@@ -7,14 +7,14 @@ import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/custom_page.dart';
-import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
+import 'package:nodes/features/saves/models/trending_model.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
 import 'package:nodes/utilities/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 class DashboardController extends BaseController {
   final log = Logger('DashboardController');
@@ -23,17 +23,21 @@ class DashboardController extends BaseController {
   DashboardController(this._dashboardService);
 
   // Variables
+  // Jobs
   List<StandardTalentJobModel> _savedJobsList = [];
   List<StandardTalentJobModel> _jobsList = [];
-  EventModel _currentlyViewedBusinessEvent = const EventModel();
   List<StandardTalentJobModel> _appliedJobsList = [];
   List<BusinessJobModel> _createdJobList = [];
   BusinessJobModel _currentlyViewedBusinessJob = const BusinessJobModel();
-  List<EventModel> _savedEventsList = [];
-  List<EventModel> _eventsList = [];
+  // Events
+  EventModel _currentlyViewedBusinessEvent = const EventModel();
+  List<StandardTalentEventModel> _savedEventsList = [];
+  List<StandardTalentEventModel> _eventsList = [];
   List<EventModel> _myCreatedEventsList = [];
+  // Project
   List<ProjectModel> _projectList = [];
   List<ProjectModel> _myProjectList = [];
+  List<TrendingModel> _trendingList = [];
 
   // Getters
   List<StandardTalentJobModel> get savedJobsList => _savedJobsList;
@@ -43,11 +47,12 @@ class DashboardController extends BaseController {
   List<StandardTalentJobModel> get appliedJobsList => _appliedJobsList;
   List<BusinessJobModel> get createdJobList => _createdJobList;
   EventModel get currentlyViewedBusinessEvent => _currentlyViewedBusinessEvent;
-  List<EventModel> get savedEvents => _savedEventsList;
-  List<EventModel> get eventsList => _eventsList;
+  List<StandardTalentEventModel> get savedEvents => _savedEventsList;
+  List<StandardTalentEventModel> get eventsList => _eventsList;
   List<EventModel> get myCreatedEventsList => _myCreatedEventsList;
   List<ProjectModel> get projectList => _projectList;
   List<ProjectModel> get myProjectList => _myProjectList;
+  List<TrendingModel> get trendingList => _trendingList;
 
   // Setters
 
@@ -124,12 +129,12 @@ class DashboardController extends BaseController {
   }
 
 // Events
-  setSavedEvents(List<EventModel> events) {
+  setSavedEvents(List<StandardTalentEventModel> events) {
     _savedEventsList = events;
     notifyListeners();
   }
 
-  setEventsList(List<EventModel> events) {
+  setEventsList(List<StandardTalentEventModel> events) {
     _eventsList = events;
     notifyListeners();
   }
@@ -165,7 +170,7 @@ class DashboardController extends BaseController {
 
   _updateSavedEventsList(
     BuildContext ctx, {
-    required EventModel event,
+    required StandardTalentEventModel event,
     required bool isSave,
   }) {
     if (isSave) {
@@ -196,6 +201,14 @@ class DashboardController extends BaseController {
     _myProjectList.add(project);
     notifyListeners();
   }
+
+  // Trending
+
+  setTrendingList(List<TrendingModel> trending) {
+    _trendingList = trending;
+    notifyListeners();
+  }
+
 
   // Functions
 
@@ -315,7 +328,7 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setEventsList(_resolvePaginatedEvents(response));
+      setEventsList(_resolvePaginatedStandardTalentEvents(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -401,7 +414,8 @@ class DashboardController extends BaseController {
       _updateSavedEventsList(
         ctx,
         isSave: true,
-        event: EventModel.fromJson(response.result as Map<String, dynamic>),
+        event: StandardTalentEventModel.fromJson(
+            response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -423,7 +437,8 @@ class DashboardController extends BaseController {
       _updateSavedEventsList(
         ctx,
         isSave: true,
-        event: EventModel.fromJson(response.result as Map<String, dynamic>),
+        event: StandardTalentEventModel.fromJson(
+            response.result as Map<String, dynamic>),
       );
       return true;
     } on NetworkException catch (e) {
@@ -450,7 +465,7 @@ class DashboardController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      setSavedEvents(_resolvePaginatedEvents(response));
+      setSavedEvents(_resolvePaginatedStandardTalentEvents(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -753,6 +768,24 @@ class DashboardController extends BaseController {
     }
   }
 
+  Future<bool> fetchTrending(BuildContext ctx) async {
+    setFetchingTrending(true);
+    try {
+      ApiResponse response = await _dashboardService.fetchTrending(ctx);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      setTrendingList(const TrendingModel().fromList(response.result  as List<dynamic>));
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setFetchingTrending(false);
+    }
+  }
+
 // Handling Paginated Data...
 // Jobs
   List<BusinessJobModel> _resolvePaginatedBusinessJobs(ApiResponse response) {
@@ -786,6 +819,19 @@ class DashboardController extends BaseController {
 
     if (!isObjectEmpty(p.items)) {
       return p.items as List<EventModel>;
+    }
+    return [];
+  }
+
+  List<StandardTalentEventModel> _resolvePaginatedStandardTalentEvents(
+      ApiResponse response) {
+    CustomPage<StandardTalentEventModel> p =
+        const CustomPage<StandardTalentEventModel>().fromJson(
+            response.result as Map<String, dynamic>,
+            const StandardTalentEventModel());
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<StandardTalentEventModel>;
     }
     return [];
   }

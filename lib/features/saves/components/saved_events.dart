@@ -1,7 +1,9 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
+import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
@@ -36,7 +38,7 @@ class _SavedEventsState extends State<SavedEvents> {
             isEmpty: hasData,
           );
         } else {
-          List<EventModel> savedEvents = dashCtrl.savedEvents;
+          List<StandardTalentEventModel> savedEvents = dashCtrl.savedEvents;
           return ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -45,10 +47,9 @@ class _SavedEventsState extends State<SavedEvents> {
             itemBuilder: (c, i) {
               return SizedBox(
                 height: 300,
-                child: EventCard(
+                child: StandardTalentEventCard(
                   hasDelete: false,
                   hasSave: true,
-                  isSaved: true,
                   event: savedEvents[i],
                 ),
               );

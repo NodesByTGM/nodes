@@ -20,6 +20,7 @@ SubscriptionModel _$SubscriptionModelFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       id: json['id'] as String?,
+      tenor: json['tenor'] as String?,
     );
 
 Map<String, dynamic> _$SubscriptionModelToJson(SubscriptionModel instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$SubscriptionModelToJson(SubscriptionModel instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'id': instance.id,
+      'tenor': instance.tenor,
     };

@@ -20,7 +20,6 @@ abstract class BaseController extends ChangeNotifier {
   bool _isAdingSpace = false;
   bool _isRemovingSpaceMember = false;
   bool _isMakingSpaceAdmin = false;
-  
   bool _isFetchingAllCreatedJobs = false;
   bool _isFetchingAllAppliedJobs = false;
   bool _isFetchingAllSavedJobs = false;
@@ -43,6 +42,7 @@ abstract class BaseController extends ChangeNotifier {
   bool _isCreatingProject = false;
   bool _isFetchingAllProjects = false;
   bool _isFetchMyProjects = false;
+  bool _isFetchTrending = false;
   
 
 // Getters
@@ -61,7 +61,6 @@ abstract class BaseController extends ChangeNotifier {
   bool get isAdingSpace => _isAdingSpace;
   bool get isRemovingSpaceMember => _isRemovingSpaceMember;
   bool get isMakingSpaceAdmin => _isMakingSpaceAdmin;
-
   bool get isFetchingAllCreatedJobs => _isFetchingAllCreatedJobs;
   bool get isFetchingAllAppliedJobs => _isFetchingAllAppliedJobs;
   bool get isFetchingAllSavedJobs => _isFetchingAllSavedJobs;
@@ -84,6 +83,7 @@ abstract class BaseController extends ChangeNotifier {
   bool get isCreatingProject => _isCreatingProject;
   bool get isFetchingAllProjects => _isFetchingAllProjects;
   bool get isFetchMyProjects => _isFetchMyProjects;
+  bool get isFetchTrending => _isFetchTrending;
 
 
   // Setters
@@ -275,6 +275,11 @@ abstract class BaseController extends ChangeNotifier {
 
   setFetchingMyProjects(bool value) {
     _isFetchMyProjects = value;
+    notifyListeners();
+  }
+
+  setFetchingTrending(bool value) {
+    _isFetchTrending = value;
     notifyListeners();
   }
 }

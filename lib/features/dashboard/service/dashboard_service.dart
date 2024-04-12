@@ -261,4 +261,15 @@ class DashboardService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
+
+  Future<ApiResponse> fetchTrending(BuildContext ctx) async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchTrending();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchTrending ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
 }

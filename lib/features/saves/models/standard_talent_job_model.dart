@@ -14,8 +14,8 @@ class StandardTalentJobModel extends BaseData {
   final String? workRate;
   final List<String>? skills;
   final int? jobType;
-  final List<String>? applicants;
-  final List<String>? saves;
+  final int? applicants;
+  final int? saves;
   final BusinessAccountModel? business;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -49,8 +49,8 @@ class StandardTalentJobModel extends BaseData {
     String? workRate,
     List<String>? skills,
     int? jobType,
-    List<String>? applicants,
-    List<String>? saves,
+    int? applicants,
+    int? saves,
     BusinessAccountModel? business,
     DateTime? createdAt,
     DateTime? updatedAt,

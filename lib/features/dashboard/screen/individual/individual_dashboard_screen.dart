@@ -4,7 +4,7 @@ import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
-import 'package:nodes/features/dashboard/components/event_card.dart';
+import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
@@ -42,12 +42,13 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     super.initState();
-    fetchJobs();
+    fetchJobsEventsTrending();
   }
 
-  fetchJobs() {
+  fetchJobsEventsTrending() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
+    safeNavigate(() => dashCtrl.fetchTrending(context));
   }
 
   @override
@@ -94,7 +95,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return EventCard(
+                return StandardTalentEventCard(
                   hasDelete: false,
                   hasSave: false,
                   event: dashCtrl.eventsList[index],

@@ -5,7 +5,7 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
-import 'package:nodes/features/dashboard/components/event_card.dart';
+import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
@@ -44,13 +44,14 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     super.initState();
-    fetchJobs();
+    fetchJobsEventsTrending();
   }
 
-  fetchJobs() {
+  fetchJobsEventsTrending() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
     safeNavigate(() => dashCtrl.fetchAllAppliedJobs(context));
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
+    safeNavigate(() => dashCtrl.fetchTrending(context));
   }
 
   @override
@@ -462,7 +463,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 setState(() {});
               },
               itemBuilder: (context, index) {
-                return EventCard(
+                return StandardTalentEventCard(
                   hasDelete: false,
                   hasSave: false,
                   event: dashCtrl.eventsList[index],

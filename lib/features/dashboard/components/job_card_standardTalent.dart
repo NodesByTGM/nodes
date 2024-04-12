@@ -124,7 +124,7 @@ class StandardTalentJobCard extends StatelessWidget {
               children: [
                 if (isFromBusiness) ...[
                   subtext(
-                    "${job.applicants?.length} applicants",
+                    "${job.applicants} applicants",
                     color: PRIMARY,
                     fontSize: 14,
                   ),

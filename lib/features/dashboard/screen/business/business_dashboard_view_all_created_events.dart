@@ -1,5 +1,4 @@
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -116,9 +115,6 @@ class _BusinessCreatedEventCenterScreenState
                           return SizedBox(
                             height: 280,
                             child: EventCard(
-                              isFromBusiness: true,
-                              hasDelete: true,
-                              hasSave: false,
                               event: events[i],
                             ),
                           );

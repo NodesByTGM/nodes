@@ -42,14 +42,15 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     super.initState();
-    fetchMyCreatedEventAndJobs();
+    fetchMyCreatedEventAndJobsTrending();
   }
 
-  fetchMyCreatedEventAndJobs() {
+  fetchMyCreatedEventAndJobsTrending() {
     // Should be fetching all my created jobs
     safeNavigate(() => dashCtrl.fetchAllMyCreatedJobs(context));
     // Should be fetching all my created events
     safeNavigate(() => dashCtrl.fetchAllAllMyCreatedEvents(context));
+    safeNavigate(() => dashCtrl.fetchTrending(context));
   }
 
   @override
@@ -325,9 +326,6 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                         },
                         itemBuilder: (context, index) {
                           return EventCard(
-                            isFromBusiness: true,
-                            hasDelete: false,
-                            hasSave: false,
                             event: dashCtrl.myCreatedEventsList[index],
                           );
                         },

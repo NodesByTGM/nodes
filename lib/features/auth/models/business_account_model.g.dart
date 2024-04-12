@@ -9,6 +9,8 @@ part of 'business_account_model.dart';
 BusinessAccountModel _$BusinessAccountModelFromJson(
         Map<String, dynamic> json) =>
     BusinessAccountModel(
+      verified: json['verified'] as bool? ?? false,
+      cac: json['cac'],
       name: json['name'] as String?,
       yoe: json['yoe'] == null ? null : DateTime.parse(json['yoe'] as String),
       account: json['account'] as String?,
@@ -24,6 +26,8 @@ BusinessAccountModel _$BusinessAccountModelFromJson(
 Map<String, dynamic> _$BusinessAccountModelToJson(
         BusinessAccountModel instance) =>
     <String, dynamic>{
+      'verified': instance.verified,
+      'cac': instance.cac,
       'name': instance.name,
       'yoe': instance.yoe?.toIso8601String(),
       'account': instance.account,

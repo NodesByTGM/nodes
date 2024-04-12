@@ -17,11 +17,8 @@ StandardTalentJobModel _$StandardTalentJobModelFromJson(
       skills:
           (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
       jobType: json['jobType'] as int?,
-      applicants: (json['applicants'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      saves:
-          (json['saves'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      applicants: json['applicants'] as int?,
+      saves: json['saves'] as int?,
       business: json['business'] == null
           ? null
           : BusinessAccountModel.fromJson(

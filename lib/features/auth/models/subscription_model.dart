@@ -12,6 +12,7 @@ final String? plan;
     final DateTime? createdAt;
     final DateTime? updatedAt;
     final String? id;
+    final String? tenor;
 
 const SubscriptionModel({
         this.plan,
@@ -20,6 +21,7 @@ const SubscriptionModel({
         this.createdAt,
         this.updatedAt,
         this.id,
+        this.tenor,
     });
 
     SubscriptionModel copyWith({
@@ -29,6 +31,7 @@ const SubscriptionModel({
         DateTime? createdAt,
         DateTime? updatedAt,
         String? id,
+        String? tenor,
     }) => 
         SubscriptionModel(
             plan: plan ?? this.plan,
@@ -37,6 +40,7 @@ const SubscriptionModel({
             createdAt: createdAt ?? this.createdAt,
             updatedAt: updatedAt ?? this.updatedAt,
             id: id ?? this.id,
+            tenor: tenor ?? this.tenor,
         );
 
 
@@ -55,5 +59,6 @@ paidAt,
 createdAt,
 updatedAt,
 id,
+tenor,
   ];
 }

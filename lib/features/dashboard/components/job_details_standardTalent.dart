@@ -64,7 +64,7 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
             ),
             const CustomDot(),
             subtext(
-              "${job.applicants?.length} applicants",
+              "${job.applicants} applicants",
               fontSize: 12,
               fontWeight: FontWeight.w400,
               color: BLACK.withOpacity(0.7),

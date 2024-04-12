@@ -31,6 +31,10 @@ class DashboardApis {
   static const allSavedJobs = "$jobs/saved";
   static const allAppliedJobs = "$jobs/applied";
   static const myCreatedJobs = "$jobs/mine";
+
+  // Trending
+  static const trending = "$baseApi/trending";
+
 }
 
 @RestApi()
@@ -160,5 +164,9 @@ abstract class DashboardRepository {
   Future<ApiResponse> fetchAllMyCreatedJobs(
      @Query('page') int page,
     @Query('pageSize') int pageSize,
+  );
+
+  @GET(DashboardApis.trending)
+  Future<ApiResponse> fetchTrending(
   );
 }

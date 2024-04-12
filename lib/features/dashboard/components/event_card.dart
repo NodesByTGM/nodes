@@ -5,22 +5,13 @@ import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
-import 'package:pinput/pinput.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
     super.key,
-    this.isFromBusiness = false,
-    this.hasDelete = false,
-    this.hasSave = false,
-    this.isSaved = false,
     required this.event,
   });
 
-  final bool isFromBusiness;
-  final bool hasDelete;
-  final bool hasSave;
-  final bool isSaved;
   final EventModel event;
 
   @override
@@ -53,59 +44,27 @@ class EventCard extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // if (hasDelete || hasSave)
-                if (hasSave)
-                  Row(
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      context.watch<DashboardController>().isSavingUnsavedEvent
-                          ? const Padding(
-                              padding: EdgeInsets.only(top: 10, right: 15),
-                              child: SaveIconLoader(
-                                color: WHITE,
-                              ),
-                            )
+                      context.watch<DashboardController>().isDeletingEvent
+                          ? const Loader()
                           : GestureDetector(
-                              onTap: () {
-                                saveUnsaveEvent(context, event);
-                              },
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: SvgPicture.asset(
-                                    event.saved
-                                        ? ImageUtils.saveJobFilledIcon
-                                        : ImageUtils.saveJobIcon,
-                                    color: WHITE,
-                                  ),
+                              onTap: () => deleteEvent(context, event),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: SvgPicture.asset(
+                                  ImageUtils.trashOutlineIcon,
+                                  color: WHITE,
+                                  height: 40,
                                 ),
                               ),
                             ),
                     ],
                   ),
-                if (hasDelete)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        context.watch<DashboardController>().isDeletingEvent
-                            ? const Loader()
-                            : GestureDetector(
-                                onTap: () => deleteEvent(context, event),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: SvgPicture.asset(
-                                    ImageUtils.trashOutlineIcon,
-                                    color: WHITE,
-                                    height: 40,
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
+                ),
                 Container(
                   height: 50,
                 ),
@@ -149,16 +108,12 @@ class EventCard extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
-                      if (isFromBusiness) {
-                        context
-                            .read<DashboardController>()
-                            .setCurrentlyViewedEvent(event);
-                        context.read<NavController>().updatePageListStack(
-                              BusinessEventDetailsScreen.routeName,
-                            );
-                      } else {
-                        showEventDetailsBottomSheet(context, event);
-                      }
+                      context
+                          .read<DashboardController>()
+                          .setCurrentlyViewedEvent(event);
+                      context.read<NavController>().updatePageListStack(
+                            BusinessEventDetailsScreen.routeName,
+                          );
                     },
                     child: labelText(
                       "View details",
@@ -174,46 +129,6 @@ class EventCard extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  saveUnsaveEvent(BuildContext context, EventModel event) async {
-    event.saved
-        ? await context
-            .read<DashboardController>()
-            .unSaveEvent(context, event.id)
-        : await context
-            .read<DashboardController>()
-            .saveEvent(context, event.id);
-  }
-
-  showEventDetailsBottomSheet(BuildContext context, EventModel event) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30.0),
-        ),
-      ),
-      backgroundColor: WHITE,
-      elevation: 0.0,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return BottomSheetWrapper(
-              closeOnTap: true,
-              title: labelText(
-                "${event.name}",
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-              child: EventDetails(event: event),
-            );
-          },
-        );
-      },
     );
   }
 
