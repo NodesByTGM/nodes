@@ -1,4 +1,4 @@
-
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/job_details_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
@@ -8,15 +8,14 @@ import 'package:nodes/utilities/widgets/custom_loader.dart';
 class StandardTalentJobCard extends StatelessWidget {
   const StandardTalentJobCard({
     super.key,
-    this.isFromBusiness = false,
     required this.job,
   });
 
-  final bool isFromBusiness;
   final StandardTalentJobModel job;
 
   @override
   Widget build(BuildContext context) {
+    bool isTalent = context.read<AuthController>().currentUser.type == 1;
     return Container(
       margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
@@ -39,7 +38,6 @@ class StandardTalentJobCard extends StatelessWidget {
                   ImageUtils.jobDpIcon,
                   height: 72,
                 ),
-                // SvgPicture.asset(isSaved
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -50,7 +48,14 @@ class StandardTalentJobCard extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              saveUnsaveJob(context, job);
+                              if (isTalent) {
+                                saveUnsaveJob(context, job);
+                              } else {
+                                showText(
+                                  message:
+                                      "Oops!! You have to upgrade to PRO to have this feature.",
+                                );
+                              }
                             },
                             child: SvgPicture.asset(job.saved
                                 ? ImageUtils.saveJobFilledIcon
@@ -118,17 +123,8 @@ class StandardTalentJobCard extends StatelessWidget {
             ),
             ySpace(height: 16),
             Row(
-              mainAxisAlignment: isFromBusiness
-                  ? MainAxisAlignment.spaceBetween
-                  : MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (isFromBusiness) ...[
-                  subtext(
-                    "${job.applicants} applicants",
-                    color: PRIMARY,
-                    fontSize: 14,
-                  ),
-                ],
                 GestureDetector(
                   onTap: () => showJobDetailsBottomSheet(context, job),
                   child: labelText(
@@ -147,9 +143,11 @@ class StandardTalentJobCard extends StatelessWidget {
   }
 
   saveUnsaveJob(BuildContext context, StandardTalentJobModel job) async {
+    
     job.saved
         ? await context.read<DashboardController>().unSaveJob(context, job.id)
         : await context.read<DashboardController>().saveJob(context, job.id);
+    
   }
 
   showJobDetailsBottomSheet(BuildContext context, StandardTalentJobModel job) {

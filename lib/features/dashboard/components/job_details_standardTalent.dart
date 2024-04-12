@@ -1,5 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -16,7 +18,8 @@ class StandardTalentJobDetails extends StatefulWidget {
   final StandardTalentJobModel job;
 
   @override
-  State<StandardTalentJobDetails> createState() => _StandardTalentJobDetailsState();
+  State<StandardTalentJobDetails> createState() =>
+      _StandardTalentJobDetailsState();
 }
 
 class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
@@ -33,6 +36,8 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
   @override
   Widget build(BuildContext context) {
     dashCtrl = context.watch<DashboardController>();
+    bool isTalent = context.read<AuthController>().currentUser.type == 1;
+
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -100,42 +105,46 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
               ),
               const CustomDot(),
               CustomTagChip(
-                title: Constants.jobType[job.jobType as int],
+                title: Constants.jobType[job.jobType],
               ),
             ],
           ),
         ),
         ySpace(height: 24),
-          Row(
-            children: [
-              dashCtrl.isSavingUnsavedJobs
-                  ? const Loader()
-                  : GestureDetector(
-                      onTap: () {
-                        saveJob();
-                      },
-                      child: SvgPicture.asset(job.saved
-                          ? ImageUtils.saveJobFilledIcon
-                          : ImageUtils.saveJobIcon),
-                    ),
-              xSpace(width: 16),
-              Expanded(
-                child: SubmitBtn(
-                  onPressed: job.applied
-                      ? null
-                      : () {
-                          applyForJob();
-                        },
-                  title: btnTxt(
-                    job.applied ? "Applied" : "Apply",
-                    WHITE,
+        Row(
+          children: [
+            dashCtrl.isSavingUnsavedJobs
+                ? const Loader()
+                : GestureDetector(
+                    onTap: () {
+                      if (isTalent) {
+                        saveUnsaveJob();
+                      } else {
+                        msg();
+                      }
+                    },
+                    child: SvgPicture.asset(job.saved
+                        ? ImageUtils.saveJobFilledIcon
+                        : ImageUtils.saveJobIcon),
                   ),
-                  loading: dashCtrl.isApplyingForJob,
+            xSpace(width: 16),
+            Expanded(
+              child: SubmitBtn(
+                onPressed: job.applied
+                    ? null
+                    : isTalent
+                        ? () => applyForJob()
+                        : () => msg(),
+                title: btnTxt(
+                  job.applied ? "Applied" : "Apply",
+                  WHITE,
                 ),
+                loading: dashCtrl.isApplyingForJob,
               ),
-            ],
-          ),
-          ySpace(height: 24),
+            ),
+          ],
+        ),
+        ySpace(height: 24),
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -231,11 +240,26 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
     );
   }
 
-  void saveJob() async {
-    await dashCtrl.saveJob(context, job.id);
+  void saveUnsaveJob() async {
+    StandardTalentJobModel? newJob = job.saved
+        ? await dashCtrl.unSaveJob(context, job.id)
+        : await dashCtrl.saveJob(context, job.id);
+    if (!isObjectEmpty(newJob)) {
+      job = newJob as StandardTalentJobModel;
+    }
   }
 
   void applyForJob() async {
-    await dashCtrl.applyForJob(context, job.id);
+    StandardTalentJobModel? newJob =
+        await dashCtrl.applyForJob(context, job.id);
+    if (!isObjectEmpty(newJob)) {
+      job = newJob as StandardTalentJobModel;
+    }
+  }
+
+  void msg() {
+    showText(
+      message: "Oops!! You have to upgrade to PRO to have this feature.",
+    );
   }
 }

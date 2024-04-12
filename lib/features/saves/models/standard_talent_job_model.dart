@@ -14,7 +14,7 @@ class StandardTalentJobModel extends BaseData {
   final String? payRate;
   final String? workRate;
   final List<String>? skills;
-  final int? jobType;
+  final int jobType;
   final int? applicants;
   final int? saves;
   final BusinessAccountModel? business;
@@ -31,7 +31,7 @@ class StandardTalentJobModel extends BaseData {
     this.payRate,
     this.workRate,
     this.skills,
-    this.jobType,
+    this.jobType = 0,
     this.applicants,
     this.saves,
     this.business,

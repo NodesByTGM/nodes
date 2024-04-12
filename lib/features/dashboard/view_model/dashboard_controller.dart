@@ -99,10 +99,37 @@ class DashboardController extends BaseController {
   }
 
   _updateAppliedJobsList(StandardTalentJobModel job) {
+    print("George this is the applied Job: ${job.toJson()}");
     _appliedJobsList.add(job);
+
+    // int jIndex = _jobsList.indexWhere((j) => j.id == job.id);
+    // if (jIndex != -1) {
+    //   _jobsList[jIndex] = job;
+    // }
+    _patchJobAppliedJobList(job: job, savedStatus: job.saved);
     notifyListeners();
   }
 
+  // _updateSavedJobsList(
+  //   BuildContext ctx, {
+  //   required StandardTalentJobModel job,
+  //   required bool isSave,
+  // }) {
+  //   int jI = _jobsList.indexWhere((jd) => jd.id == job.id);
+  //   if (isSave) {
+  //     _savedJobsList.add(job.copyWith(saved: isSave));
+  //     if (jI != -1) {
+  //       _jobsList[jI] = job.copyWith(saved: isSave);
+  //     }
+  //   } else {
+  //     int jIndex = _savedJobsList.indexWhere((jd) => jd.id == job.id);
+  //     if (jIndex != -1) {
+  //       // Found something...
+  //       _savedJobsList[jIndex] = job.copyWith(saved: isSave);
+  //     }
+  //   }
+  //   notifyListeners();
+  // }
   _updateSavedJobsList(
     BuildContext ctx, {
     required StandardTalentJobModel job,
@@ -110,14 +137,38 @@ class DashboardController extends BaseController {
   }) {
     if (isSave) {
       _savedJobsList.add(job.copyWith(saved: isSave));
+      _patchJobAppliedJobList(job: job, savedStatus: isSave);
     } else {
-      int jIndex = _savedJobsList.indexWhere((jd) => jd.id == job.id);
-      if (jIndex != -1) {
+      int sJLI = _savedJobsList.indexWhere((jd) => jd.id == job.id);
+      if (sJLI != -1) {
         // Found something...
-        _savedJobsList[jIndex] = job.copyWith(saved: isSave);
+        _savedJobsList.removeAt(sJLI);
       }
+      _patchJobAppliedJobList(job: job, savedStatus: isSave);
     }
     notifyListeners();
+  }
+
+  _patchJobAppliedJobList({
+    required StandardTalentJobModel job,
+    required bool savedStatus,
+  }) {
+    int jLI = _jobsList.indexWhere((jd) => jd.id == job.id);
+    int aJLI = _appliedJobsList.indexWhere((jd) => jd.id == job.id);
+    if (jLI != -1) {
+      // Meaning, the job is in the joblist, hence we update the saved status
+      _jobsList[jLI] = job.copyWith(
+        saved: savedStatus,
+        applied: job.applied,
+      );
+    }
+    if (aJLI != -1) {
+      // Meaning, the job is in the appliedJobsList, hence we update the saved status
+      _appliedJobsList[aJLI] = job.copyWith(
+        saved: savedStatus,
+        applied: job.applied,
+      );
+    }
   }
 
   _deleteSingleJob(String id) {
@@ -414,7 +465,8 @@ class DashboardController extends BaseController {
         ctx,
         isSave: true,
         event: StandardTalentEventModel.fromJson(
-            response.result as Map<String, dynamic>),
+          response.result as Map<String, dynamic>,
+        ),
       );
       return true;
     } on NetworkException catch (e) {
@@ -622,69 +674,75 @@ class DashboardController extends BaseController {
     }
   }
 
-  Future<bool> applyForJob(BuildContext ctx, dynamic payload) async {
+  Future<StandardTalentJobModel?> applyForJob(BuildContext ctx, dynamic payload) async {
     setApplyingForJob(true);
     try {
       ApiResponse response = await _dashboardService.applyForJob(ctx, payload);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
-        return false;
+        return null;
       }
-      _updateAppliedJobsList(
-        StandardTalentJobModel.fromJson(
-            response.result as Map<String, dynamic>),
+
+      StandardTalentJobModel job = StandardTalentJobModel.fromJson(
+        response.result as Map<String, dynamic>,
       );
-      return true;
+      _updateAppliedJobsList(job);
+      return job;
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
       setApplyingForJob(false);
     }
   }
 
-  Future<bool> saveJob(BuildContext ctx, dynamic payload) async {
+  Future<StandardTalentJobModel?> saveJob(
+      BuildContext ctx, dynamic payload) async {
     setSavedUnsavedJob(true);
     try {
       ApiResponse response = await _dashboardService.saveJob(ctx, payload);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
-        return false;
+        return null;
       }
+      StandardTalentJobModel job = StandardTalentJobModel.fromJson(
+        response.result as Map<String, dynamic>,
+      );
       _updateSavedJobsList(
         ctx,
         isSave: true,
-        job: StandardTalentJobModel.fromJson(
-          response.result as Map<String, dynamic>,
-        ),
+        job: job,
       );
-      return true;
+      return job;
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
       setSavedUnsavedJob(false);
     }
   }
 
-  Future<bool> unSaveJob(BuildContext ctx, dynamic payload) async {
+  Future<StandardTalentJobModel?> unSaveJob(
+      BuildContext ctx, dynamic payload) async {
     setSavedUnsavedJob(true);
     try {
       ApiResponse response = await _dashboardService.unSaveJob(ctx, payload);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
-        return false;
+        return null;
       }
+      StandardTalentJobModel job = StandardTalentJobModel.fromJson(
+        response.result as Map<String, dynamic>,
+      );
       _updateSavedJobsList(
         ctx,
         isSave: false,
-        job: StandardTalentJobModel.fromJson(
-            response.result as Map<String, dynamic>),
+        job: job,
       );
-      return true;
+      return job;
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
       setSavedUnsavedJob(false);
     }
