@@ -1,7 +1,7 @@
 name: nodes
 description: An application for The Grid Management Company.
 publish_to: 'none' 
-version: 1.0.0+2
+version: 1.0.0+3
 
 environment:
   sdk: '>=3.1.2 <4.0.0'
@@ -34,7 +34,6 @@ dependencies:
   enum_to_string: ^2.0.1
   pinput: ^3.0.1
   flutter_svg: ^2.0.9
-
   regexed_validator: ^2.0.0+1
   camera: ^0.10.5+5
   flutter_multi_formatter: ^2.11.16
@@ -60,6 +59,8 @@ dependencies:
   webview_flutter: ^3.0.4
   gallery_image_viewer: ^1.2.0
   data_table_2: ^2.5.12
+  google_sign_in: ^6.1.4
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:

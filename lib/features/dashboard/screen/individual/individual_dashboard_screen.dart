@@ -319,9 +319,11 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                       setState(() {});
                     },
                     itemBuilder: (context, index) {
-                      return StandardTalentJobCard(
-                        job: jobsList[index],
-                      );
+                       StandardTalentJobModel job = jobsList[index];
+                    return StandardTalentJobCard(
+                      job: job,
+                      id: "${job.id}",
+                    );
                     },
                   ),
                 );

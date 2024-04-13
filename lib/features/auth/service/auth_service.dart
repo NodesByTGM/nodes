@@ -127,35 +127,25 @@ class AuthService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
+ 
 
-  Future<ApiResponse> individualOnboarding(payload) async {
+  Future<ApiResponse> onboarding(payload) async {
     try {
-      ApiResponse res = await authRepository.individualOnboarding(payload);
+      ApiResponse res = await authRepository.onboarding(payload);
       return res;
     } on DioException catch (e) {
-      log.severe(
-          "Error message @individualOnboarding ::===> ${e.response?.data}");
+      log.severe("Error message @onboarding ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
 
-  Future<ApiResponse> talentOnboarding(payload) async {
+  Future<ApiResponse> verifyBusiness(payload) async {
     try {
-      ApiResponse res = await authRepository.talentOnboarding(payload);
-      return res;
-    } on DioException catch (e) {
-      log.severe("Error message @talentOnboarding ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
-    }
-  }
-
-  Future<ApiResponse> businessOnboarding(payload) async {
-    try {
-      ApiResponse res = await authRepository.businessOnboarding(payload);
+      ApiResponse res = await authRepository.verifyBusiness(payload);
       return res;
     } on DioException catch (e) {
       log.severe(
-          "Error message @businessOnboarding ::===> ${e.response?.data}");
+          "Error message @verifyBusiness ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
@@ -179,28 +169,7 @@ class AuthService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
-
-  Future<ApiResponse> talentAccountUpgrade(BuildContext ctx, payload) async {
-    try {
-      ApiResponse res = await authRepository.talentAccountUpgrade(payload);
-      return res;
-    } on DioException catch (e) {
-      log.severe(
-          "Error message @talentAccountUpgrade ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e, context: ctx);
-    }
-  }
-
-  Future<ApiResponse> businessAccountUpgrade(BuildContext ctx, payload) async {
-    try {
-      ApiResponse res = await authRepository.businessAccountUpgrade(payload);
-      return res;
-    } on DioException catch (e) {
-      log.severe(
-          "Error message @businessAccountUpgrade ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e, context: ctx);
-    }
-  }
+ 
 
   // Future<ApiResponse> mediaUpload(File file) async {
   //   try {

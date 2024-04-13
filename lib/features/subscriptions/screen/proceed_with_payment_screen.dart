@@ -143,7 +143,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
             ySpace(height: 40),
             if (isSubscribed) ...[
               // Billing History
-              SubscriptionTable()
+              const SubscriptionTable()
             ],
             if (!isSubscribed) ...[
               OutlineBtn(
@@ -270,9 +270,12 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   _onSuccessfulPaystackPayment(ref) async {
     bool done = await authCtrl.verifyAndUpgradeSubscription(ref);
     if (done && mounted) {
-      //
+      // when successful, send user to either the talent or business dashboard page.
+      customNavigateBack(context);
+      // find out what was upgraded to, if na business, then send them to the business dashboard...
     } else {
       // Sorta send the ref to BE, so as to document and track this payment...
+      // Discuss with the BE on this sha...na money matter
     }
   }
 

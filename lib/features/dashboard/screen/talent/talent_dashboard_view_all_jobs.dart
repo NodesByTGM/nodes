@@ -4,8 +4,11 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/job_filter.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class TalentJobCenterScreen extends StatefulWidget {
@@ -139,16 +142,43 @@ class _TalentJobCenterScreenState extends State<TalentJobCenterScreen> {
                     ),
                   );
                 },
-                content: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dashCtrl.jobsList.length,
-                  itemBuilder: (c, i) {
-                    return StandardTalentJobCard(
-                      job: dashCtrl.jobsList[i],
-                    );
+                content: Consumer<DashboardController>(
+                  builder: (contex, dCtrl, _) {
+                    bool isLoading = dCtrl.isFetchingAllJob;
+                    bool hasData = isObjectEmpty(dCtrl.jobsList);
+                    if (isLoading || isObjectEmpty(dCtrl.jobsList)) {
+                      return DataReload(
+                        maxHeight: screenHeight(context) * .19,
+                        isLoading: isLoading,
+                        label: "Oops!! No listed jobs yet.",
+                        loader: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ShimmerLoader(
+                            scrollDirection: Axis.vertical,
+                            width: screenWidth(context),
+                            marginBottom: 10,
+                          ),
+                        ),
+                        onTap: fetchAllJobs,
+                        isEmpty: hasData,
+                      );
+                    } else {
+                      List<StandardTalentJobModel> jobsList = dCtrl.jobsList;
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: jobsList.length,
+                        itemBuilder: (c, i) {
+                          StandardTalentJobModel job = jobsList[i];
+                          return StandardTalentJobCard(
+                            job: job,
+                            id: "${job.id}",
+                          );
+                        },
+                        separatorBuilder: (c, i) => ySpace(height: 24),
+                      );
+                    }
                   },
-                  separatorBuilder: (c, i) => ySpace(height: 24),
                 ),
               ),
             ],

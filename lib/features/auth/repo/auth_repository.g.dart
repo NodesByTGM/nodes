@@ -293,7 +293,7 @@ class _AuthRepository implements AuthRepository {
   }
 
   @override
-  Future<ApiResponse> individualOnboarding(dynamic payload) async {
+  Future<ApiResponse> onboarding(dynamic payload) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -320,7 +320,7 @@ class _AuthRepository implements AuthRepository {
   }
 
   @override
-  Future<ApiResponse> talentOnboarding(dynamic payload) async {
+  Future<ApiResponse> verifyBusiness(dynamic payload) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -333,34 +333,7 @@ class _AuthRepository implements AuthRepository {
     )
             .compose(
               _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/onboarding/talent',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = ApiResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<ApiResponse> businessOnboarding(dynamic payload) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = payload;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/onboarding/business',
+              'https://dev.api.nodesafrica.com/api/v1/onboarding/verify-business',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -415,60 +388,6 @@ class _AuthRepository implements AuthRepository {
             .compose(
               _dio.options,
               'https://dev.api.nodesafrica.com/api/v1/users/profile',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = ApiResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<ApiResponse> talentAccountUpgrade(dynamic payload) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = payload;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/upgrades/talent',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = ApiResponse.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<ApiResponse> businessAccountUpgrade(dynamic payload) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = payload;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/upgrades/business',
               queryParameters: queryParameters,
               data: _data,
             )

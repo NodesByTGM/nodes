@@ -197,7 +197,7 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
         //     message:
         //         "Oops!! an error occured while uploading you image, try again");
         // return;
-        bool done = await _authCtrl.individualOnboarding({
+        bool done = await _authCtrl.onboarding({
           "skills": _authCtrl.individualTalentData.skills,
           "location": _authCtrl.individualTalentData.location,
           "avatar": imageUrl?.toJson(),

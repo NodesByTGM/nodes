@@ -3,6 +3,7 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:io';
 
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/config/country_states.dart';
 import 'package:nodes/core/controller/base_controller.dart';
@@ -10,6 +11,7 @@ import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
+import 'package:nodes/features/auth/models/apple_user_model.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
@@ -20,6 +22,7 @@ import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthController extends BaseController {
   final log = Logger('Authcontroller');
@@ -36,13 +39,14 @@ class AuthController extends BaseController {
   int _tStepperVal = 1;
   int _bStepperVal = 1;
   RegisterModel _registerData = const RegisterModel();
-  double _passwordStrength = 0.0;
   IndividualTalentOnboardingModel _individualTalentData =
       const IndividualTalentOnboardingModel();
-  SubscriptionUpgrade _subUpgrade = SubscriptionUpgrade();
+  SubscriptionUpgrade _subUpgrade = const SubscriptionUpgrade();
 
-  List<CountryStateModel> _countryStatesList =
+  final List<CountryStateModel>  _countryStatesList =
       const CountryStateModel().fromList(countryStatesData);
+
+  GoogleSignIn googleSignIn = GoogleSignIn();
 
   // Getters
 
@@ -61,7 +65,6 @@ class AuthController extends BaseController {
   int get tStepperVal => _tStepperVal;
   int get bStepperVal => _bStepperVal;
   RegisterModel get registerData => _registerData;
-  double get passwordStrength => _passwordStrength;
   IndividualTalentOnboardingModel get individualTalentData =>
       _individualTalentData;
 
@@ -386,16 +389,129 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> individualOnboarding(dynamic payload) async {
+  Future<GoogleSignInAccount?> signUpWithGoogle(BuildContext ctx) async {
+    setBusy(true);
+    GoogleSignInAccount? user;
+    try {
+      await googleSignIn.signOut();
+      user = await googleSignIn.signIn();
+      // ApiResponse response = await _authService.logout(ctx);
+
+      // if (response.status == KeyString.failure) {
+      //   showError(message: response.message);
+      //   return null;
+      // }
+      return user;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return null;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+// Payload would be signup query
+  // Future<UserModel?> completeOAuthSignup(
+  //     BuildContext ctx, dynamic payload) async {
+  //   setBusy(true);
+  //   try {
+  //     var firebaseToken = await _deviceToken();
+  //     ApiResponse response = await _authService.registerWithOAuth(
+  //       ctx: ctx,
+  //       payload: payload,
+  //     );
+
+  //     if (response.status == KeyString.failure) {
+  //       showError(message: response.message);
+  //       return null;
+  //     }
+  //     return UserModel.fromJson(response.result as Map<String, dynamic>);
+  //   } on NetworkException catch (e) {
+  //     showError(message: e.toString());
+  //     return null;
+  //   } finally {
+  //     setBusy(false);
+  //   }
+  // }
+
+  // Future<bool> completeOAuthSignIn(
+  //   BuildContext ctx,
+  //   dynamic payload,
+  // ) async {
+  //   setBusy(true);
+  //   try {
+  //     ApiResponse response =
+  //         await _authService.completeOAuthSignup(ctx: ctx, payload: payload);
+
+  //     if (response.status == KeyString.failure) {
+  //       showError(message: response.message);
+  //       return false;
+  //     }
+  //     return true;
+  //   } on NetworkException catch (e) {
+  //     showError(message: e.toString());
+  //     return false;
+  //   } finally {
+  //     setBusy(false);
+  //   }
+  // }
+
+  // Future<AppleUserModel?> continueWithApple(
+  //   BuildContext ctx,
+  //   dynamic payload,
+  // ) async {
+  //   setBusy(true);
+  //   AppleUserModel? appleUser;
+  //   AuthorizationCredentialAppleID? cred;
+  //   try {
+  //     cred = await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //     );
+  //     if (cred.email != null) {
+  //       // This means first time the apple auth is used on the app...
+  //       // Hit the create temp apple storage
+  //       appleUser = AppleUserModel(
+  //         email: cred.email,
+  //         fullname: "${cred.givenName} ${cred.familyName}",
+  //       );
+  //     } else if (cred.givenName != null && cred.email == null) {
+  //       // Using this to check if the user choose not to share email...
+  //       return const AppleUserModel(email: null, fullname: null);
+  //     } else {
+  //       // This means that it's not the first time the apple auth is used on the app...
+  //       // I'll need to send the identityToken to retrieve the user's details from the DB
+  //       // iin cases where it can't retrieve thh user, what happens?
+  //       AppleUserModel _res = await _authService.retrieveAppleUser(
+  //         jwtToken: cred.identityToken,
+  //       );
+  //       // To return the email, and fullname...
+  //       appleUser = AppleUserModel(
+  //         email: _res.email,
+  //         fullname: _res.fullname,
+  //       );
+  //     }
+  //     return appleUser;
+  //   } on NetworkException catch (e) {
+  //     showError(message: e.toString());
+  //     return null;
+  //   } finally {
+  //     setBusy(false);
+  //   }
+  // }
+
+  Future<bool> onboarding(dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.individualOnboarding(payload);
+      ApiResponse response = await _authService.onboarding(payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      await _customUserSessionUpdate(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -405,35 +521,16 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> talentOnboarding(dynamic payload) async {
+  Future<bool> verifyBusiness(dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.talentOnboarding(payload);
+      ApiResponse response = await _authService.verifyBusiness(payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
-      return true;
-    } on NetworkException catch (e) {
-      showError(message: e.toString());
-      return false;
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  Future<bool> businessOnboarding(dynamic payload) async {
-    setBusy(true);
-    try {
-      ApiResponse response = await _authService.businessOnboarding(payload);
-
-      if (response.status == KeyString.failure) {
-        showError(message: response.message);
-        return false;
-      }
-      // TODO: DO SOMETHING HERE
+      await _customUserSessionUpdate(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -452,7 +549,7 @@ class AuthController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
+      await _customUserSessionUpdate(response);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
@@ -482,46 +579,7 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> talentAccountUpgrade(BuildContext ctx, dynamic payload) async {
-    setBusy(true);
-    try {
-      ApiResponse response =
-          await _authService.talentAccountUpgrade(ctx, payload);
-
-      if (response.status == KeyString.failure) {
-        showError(message: response.message);
-        return false;
-      }
-      // TODO: DO SOMETHING HERE
-      return true;
-    } on NetworkException catch (e) {
-      showError(message: e.toString());
-      return false;
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  Future<bool> businessAccountUpgrade(BuildContext ctx, dynamic payload) async {
-    setBusy(true);
-    try {
-      ApiResponse response =
-          await _authService.businessAccountUpgrade(ctx, payload);
-
-      if (response.status == KeyString.failure) {
-        showError(message: response.message);
-        return false;
-      }
-      // TODO: DO SOMETHING HERE
-      return true;
-    } on NetworkException catch (e) {
-      showError(message: e.toString());
-      return false;
-    } finally {
-      setBusy(false);
-    }
-  }
-
+ 
   // Future<String?> mediaUpload(File file) async {
   //   setUploadingMedia(true);
   //   try {
@@ -573,7 +631,6 @@ class AuthController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());

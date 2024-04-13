@@ -4,8 +4,11 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/job_filter.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class TalentAppliedJobCenterScreen extends StatefulWidget {
@@ -27,10 +30,10 @@ class _TalentAppliedJobCenterScreenState
     dashCtrl = locator.get<DashboardController>();
     authCtrl = locator.get<AuthController>();
     super.initState();
-    fetchAppliedJobs();
+    fetchAllAppliedJobs();
   }
 
-  fetchAppliedJobs() {
+  fetchAllAppliedJobs() {
     // Should be fetching all my created events
     safeNavigate(() => dashCtrl.fetchAllAppliedJobs(context));
   }
@@ -141,16 +144,44 @@ class _TalentAppliedJobCenterScreenState
                     ),
                   );
                 },
-                content: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dashCtrl.appliedJobsList.length,
-                  itemBuilder: (c, i) {
-                    return StandardTalentJobCard(
-                      job: dashCtrl.appliedJobsList[i],
-                    );
+                content: Consumer<DashboardController>(
+                  builder: (contex, dCtrl, _) {
+                    bool isLoading = dCtrl.isFetchingAllAppliedJobs;
+                    bool hasData = isObjectEmpty(dCtrl.appliedJobsList);
+                    if (isLoading || isObjectEmpty(dCtrl.appliedJobsList)) {
+                      return DataReload(
+                        maxHeight: screenHeight(context) * .19,
+                        isLoading: isLoading,
+                        label: "Oops!! you haven't applied  for any jobs yet.",
+                        loader: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ShimmerLoader(
+                            scrollDirection: Axis.vertical,
+                            width: screenWidth(context),
+                            marginBottom: 10,
+                          ),
+                        ),
+                        onTap: fetchAllAppliedJobs,
+                        isEmpty: hasData,
+                      );
+                    } else {
+                      List<StandardTalentJobModel> appliedJobsList =
+                          dCtrl.appliedJobsList;
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: appliedJobsList.length,
+                        itemBuilder: (c, i) {
+                          StandardTalentJobModel job = appliedJobsList[i];
+                          return StandardTalentJobCard(
+                            job: job,
+                            id: "${job.id}",
+                          );
+                        },
+                        separatorBuilder: (c, i) => ySpace(height: 24),
+                      );
+                    }
                   },
-                  separatorBuilder: (c, i) => ySpace(height: 24),
                 ),
               ),
             ],

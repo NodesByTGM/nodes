@@ -1,6 +1,5 @@
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
-import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/home/views/welcome_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';

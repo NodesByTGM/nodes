@@ -28,7 +28,7 @@ class SavedJobs extends StatelessWidget {
               ),
             ), // Pass the shimmer here...
             onTap: () => _reloadData(context),
-            isEmpty: hasData,
+            isEmpty: hasData, 
           );
         } else {
           List<StandardTalentJobModel> savedJobs = dashCtrl.savedJobsList;
@@ -38,8 +38,10 @@ class SavedJobs extends StatelessWidget {
             padding: const EdgeInsets.only(top: 27),
             itemCount: savedJobs.length,
             itemBuilder: (c, i) {
+              StandardTalentJobModel job = savedJobs[i];
               return StandardTalentJobCard(
-                job: savedJobs[i],
+                job: job,
+                id: "${job.id}",
               );
             },
             separatorBuilder: (c, i) => ySpace(height: 14),

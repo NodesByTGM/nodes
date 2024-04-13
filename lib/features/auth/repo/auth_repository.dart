@@ -25,16 +25,11 @@ class AuthApis {
 
   // Onboarding
   static const onboardingApi = "$baseApi/onboarding";
-  static const talentOnboarding = "$onboardingApi/talent";
-  static const businessOnboarding = "$onboardingApi/business";
+  static const verifyBusiness = "$onboardingApi/verify-business";
 
   // Profile
   static const profileApi = "$baseApi/users/profile";
 
-  // Upgrades
-  static const upgradeApi = "$baseApi/upgrades";
-  static const talentAccountUpgradeApi = "$upgradeApi/talent";
-  static const businessAccountUpgradeApi = "$upgradeApi/business";
 
   // Media Uploads
   static const mediaUploadsApi = "$baseApi/uploads/media";
@@ -86,26 +81,17 @@ abstract class AuthRepository {
   Future<ApiResponse> logout();
 
   @POST(AuthApis.onboardingApi)
-  Future<ApiResponse> individualOnboarding(@Body() payload);
+  Future<ApiResponse> onboarding(@Body() payload); 
 
-  @POST(AuthApis.talentOnboarding)
-  Future<ApiResponse> talentOnboarding(@Body() payload);
-
-  @POST(AuthApis.businessOnboarding)
-  Future<ApiResponse> businessOnboarding(@Body() payload);
+  @POST(AuthApis.verifyBusiness)
+  Future<ApiResponse> verifyBusiness(@Body() payload);
 
   @GET(AuthApis.profileApi)
   Future<ApiResponse> fetchProfile();
 
   @PUT(AuthApis.profileApi)
   Future<ApiResponse> updateProfile(@Body() payload);
-
-  @POST(AuthApis.talentAccountUpgradeApi)
-  Future<ApiResponse> talentAccountUpgrade(@Body() payload);
-
-  @POST(AuthApis.businessAccountUpgradeApi)
-  Future<ApiResponse> businessAccountUpgrade(@Body() payload);
-
+ 
   // @MultiPart()
   // @POST(AuthApis.mediaUploadsApi)
   // Future<ApiResponse> mediaUpload(

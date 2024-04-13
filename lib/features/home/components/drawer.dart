@@ -229,12 +229,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             navCtrl, KeyString.upgradeToProScreen),
                         onTap: () {
                           closeDrawer();
+                          bool isSubscribedToProMonth =
+                              user.subscription?.plan?.toLowerCase() ==
+                                  talentMonthlySub;
                           context.read<AuthController>().setSubUpgrade(
-                                const SubscriptionUpgrade(
+                                SubscriptionUpgrade(
                                   type: KeyString.pro,
-                                  amount: 7900,
+                                  amount: proMonthlyAmt,
                                   period: KeyString.month,
                                   features: Constants.proFeatures,
+                                  isSubscribed: isSubscribedToProMonth,
                                 ),
                               );
                           navCtrl.updatePageListStack(

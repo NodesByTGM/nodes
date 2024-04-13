@@ -9,9 +9,11 @@ class StandardTalentJobCard extends StatelessWidget {
   const StandardTalentJobCard({
     super.key,
     required this.job,
+    required this.id,
   });
 
   final StandardTalentJobModel job;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,10 @@ class StandardTalentJobCard extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              if (isTalent) {
+                              print("George this is the job: ${job.toJson()}");
+                              print("The job is this ${job.id == id}");
+                              bool currentJob = job.id == id;
+                              if (isTalent && currentJob) {
                                 saveUnsaveJob(context, job);
                               } else {
                                 showText(
@@ -56,6 +61,14 @@ class StandardTalentJobCard extends StatelessWidget {
                                       "Oops!! You have to upgrade to PRO to have this feature.",
                                 );
                               }
+                              // if (isTalent) {
+                              //   saveUnsaveJob(context, job);
+                              // } else {
+                              //   showText(
+                              //     message:
+                              //         "Oops!! You have to upgrade to PRO to have this feature.",
+                              //   );
+                              // }
                             },
                             child: SvgPicture.asset(job.saved
                                 ? ImageUtils.saveJobFilledIcon
@@ -143,11 +156,13 @@ class StandardTalentJobCard extends StatelessWidget {
   }
 
   saveUnsaveJob(BuildContext context, StandardTalentJobModel job) async {
-    
+    // setSt4
     job.saved
         ? await context.read<DashboardController>().unSaveJob(context, job.id)
         : await context.read<DashboardController>().saveJob(context, job.id);
-    
+    // setState(() {
+    //   isSavingUnsaving = false;
+    // });
   }
 
   showJobDetailsBottomSheet(BuildContext context, StandardTalentJobModel job) {
