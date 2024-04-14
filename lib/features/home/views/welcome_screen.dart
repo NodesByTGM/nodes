@@ -1,6 +1,8 @@
-import 'package:nodes/features/auth/views/business_auth/business_auth_screen.dart';
+import 'dart:io';
+
+import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/general_signup_screen.dart';
-import 'package:nodes/features/auth/views/talent_auth/talent_auth_screen.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -14,8 +16,17 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  late AuthController authCtrl;
+
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return Scaffold(
       backgroundColor: WHITE,
       body: WillPopScope(
@@ -52,18 +63,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 ySpace(height: 40),
                 OutlineBtn(
-                  onPressed: () {},
+                  onPressed: signupWithGoogle,
                   leftIcon: SvgPicture.asset(ImageUtils.googleIcon),
                   borderColor: BLACK,
                   child: btnTxt("Sign up with Google"),
                 ),
-                ySpace(height: 8),
-                OutlineBtn(
-                  onPressed: () {},
-                  leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
-                  borderColor: BLACK,
-                  child: btnTxt("Sign up with Apple"),
-                ),
+                if (Platform.isIOS) ...[
+                  // Only show for IOS Devices
+                  ySpace(height: 8),
+                  OutlineBtn(
+                    onPressed: signupWithApple,
+                    leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
+                    borderColor: BLACK,
+                    child: btnTxt("Sign up with Apple"),
+                  ),
+                ],
                 ySpace(height: 40),
                 SvgPicture.asset(
                   ImageUtils.orText,
@@ -143,4 +157,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
     );
   }
+
+  void signupWithGoogle() async {
+    await authCtrl.signUpWithGoogle(context);
+  }
+
+  void signupWithApple() async {}
 }

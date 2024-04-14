@@ -296,8 +296,9 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
     final result = await showAlertDialog(
       context,
       body: subtext(
-          "This will cancel your subscription by the end of the current billing cycle.",
-          fontSize: 13),
+        "This will cancel your subscription by the end of the current billing cycle.",
+        fontSize: 13,
+      ),
       title: "Cancel plan",
       cancelTitle: "No, Cancel",
       okTitle: "Yes, Delete",

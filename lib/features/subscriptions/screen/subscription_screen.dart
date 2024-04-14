@@ -90,7 +90,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 isRecommended: true,
                 features: Constants.proFeatures,
                 isSubscribed: isSubscribed(isPro: true),
-                // onTap: isSubscribed(isPro: true) ? () => submit(isPro: true) : null,
                 onTap: () => submit(isPro: true),
                 btnText: btnText(isPro: true)),
             ySpace(height: 16),
@@ -102,7 +101,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               isRecommended: false,
               features: Constants.businessFeatures,
               isSubscribed: isSubscribed(isPro: false),
-              // onTap: isSubscribed(isPro: false) ? () => submit(isPro: false) : null,
               onTap: () => submit(isPro: false),
               btnText: btnText(isPro: false),
             ),
@@ -178,43 +176,54 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       isSubscribed(isPro: isPro) ? "Current Plan" : "Upgrade Plan";
 
   bool isSubscribed({required bool isPro}) {
-    // Check if the user's current subscription is
-    // Pro or business i.e monthly sub
-    // Pro-annual or business-annual i.e yearly sub
-    String? currentUserSub = user.subscription?.plan;
-    if (isObjectEmpty(currentUserSub)) {
-      // This shows, user have not subscribed to anything...
+    String? currentUserSubPlan = user.subscription?.plan;
+    String? currentUserSubTenor = user.subscription?.tenor;
+    if (isObjectEmpty(currentUserSubTenor)) {
+      // This shows, user has not subscribed to anything...
       return false;
     }
-    bool isMonthPlan = planIndex == 0;
-    bool isYearPlan = planIndex == 1;
-    if (isObjectEmpty(currentUserSub)) {
-      return true; // meaning user hasn't subscribed yet, hence the button should be active...
-    }
+    // The period selector index
+    bool isMonthPlanIndex = planIndex == 0;
+    bool isYearPlanIndex = planIndex == 1;
+
+    // Tenor and Plan gotten from logged in user
+    var userTenor = currentUserSubTenor?.toLowerCase();
+    var userPlan = currentUserSubPlan?.toLowerCase();
+
+    // Keystrings to match the tenor with
+    var monthly = KeyString.monthly.toLowerCase();
+    var annual = KeyString.annual.toLowerCase();
+
+    // Boolean values gotten from matching the tenor keystrings and the user derived tenor
+    bool isMonthlyTenor = userTenor == monthly;
+    bool isAnnualTenor = userTenor == annual;
+
+    // Boolean values gotten from matching the plan environment value and the user derived plan
+    bool isProPlan = userPlan == talentMonthlySub;
+    bool isBusinessPlan = userPlan == busMonthlySub;
+
     if (isPro) {
-      // If currentUserSub is Pro or Pro-annual, and we're in month's or year tab, then disable button.
-      if (isMonthPlan) {
-        return currentUserSub?.toLowerCase() == talentMonthlySub.toLowerCase()
-            ? true
-            : false;
-      } else if (isYearPlan) {
-        return currentUserSub?.toLowerCase() == talentYearlySub.toLowerCase()
-            ? true
-            : false;
+      // Checking for Talent/Pro Account,
+      if (isMonthPlanIndex && isMonthlyTenor && isProPlan) {
+        // The period selector must be on the MONTH, the user's tenor must be MONTHLY and must be on PRO plan
+        return true;
+      } else if (isYearPlanIndex && isAnnualTenor && isProPlan) {
+        // The period selector must be on the YEAR, the user's tenor must be ANNUAL and must be on PRO plan
+        return true;
+      } else {
+        return false;
       }
-      return false;
     } else {
-      // If currentUserSub is Business or Business-annual, and we're in month's or year tab, then disable button.
-      if (isMonthPlan) {
-        return currentUserSub?.toLowerCase() == busMonthlySub.toLowerCase()
-            ? true
-            : false;
-      } else if (isYearPlan) {
-        return currentUserSub?.toLowerCase() == busYearlySub.toLowerCase()
-            ? true
-            : false;
+      // Checking for BUSINESS Account,
+      if (isMonthPlanIndex && isMonthlyTenor && isBusinessPlan) {
+        // The period selector must be on the MONTH, the user's tenor must be MONTHLY and must be on BUSINESS plan
+        return true;
+      } else if (isYearPlanIndex && isAnnualTenor && isBusinessPlan) {
+        // The period selector must be on the YEAR, the user's tenor must be ANNUAL and must be on BUSINESS plan
+        return true;
+      } else {
+        return false;
       }
-      return false;
     }
   }
 
@@ -224,7 +233,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       SubscriptionUpgrade(
         type: isPro ? KeyString.pro : KeyString.bus,
         amount: isPro ? proAmt : businessAmt,
-        period: planIndex == 0 ? KeyString.month : KeyString.year,
+        period: planIndex == 0 ? KeyString.monthly : KeyString.annual,
         features: isPro ? Constants.proFeatures : Constants.businessFeatures,
         isSubscribed: isSubscribed(isPro: isPro),
       ),

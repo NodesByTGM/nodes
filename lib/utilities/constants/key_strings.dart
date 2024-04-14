@@ -24,5 +24,7 @@ class KeyString {
   static const pro = "Pro";
   static const bus = "Business";
   static const month = "month";
+  static const monthly = "monthly";
   static const year = "year";
+  static const annual = "annual";
 }

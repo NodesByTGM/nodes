@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "986038882610",
+    "project_id": "nodesafrica-610b6",
+    "storage_bucket": "nodesafrica-610b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986038882610:android:b56399ac4eb9262c00872b",
+        "android_client_info": {
+          "package_name": "com.thegridmanagement.nodes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986038882610-57v4iu1nlrqfgifksj1oqckbiqvq1jsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6j2mnhiGdNhhipBPCYTI8zG5p9lSgoPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986038882610-57v4iu1nlrqfgifksj1oqckbiqvq1jsc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

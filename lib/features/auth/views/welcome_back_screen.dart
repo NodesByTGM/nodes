@@ -1,3 +1,4 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
@@ -15,6 +16,7 @@ class WelcomeBackScreen extends StatefulWidget {
 }
 
 class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
+  late AuthController authCtrl;
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController pwdCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
@@ -22,7 +24,14 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
   bool isPwd = false;
 
   @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return Scaffold(
       backgroundColor: WHITE,
       body: WillPopScope(
@@ -59,17 +68,17 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 ),
                 ySpace(height: 40),
                 OutlineBtn(
-                  onPressed: () {},
+                  onPressed: signupWithGoogle,
                   leftIcon: SvgPicture.asset(ImageUtils.googleIcon),
                   borderColor: BLACK,
-                  child: btnTxt("Sign up with Google"),
+                  child: btnTxt("Sign in with Google"),
                 ),
                 ySpace(height: 8),
                 OutlineBtn(
-                  onPressed: () {},
+                  onPressed: signupWithApple,
                   leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
                   borderColor: BLACK,
-                  child: btnTxt("Sign up with Apple"),
+                  child: btnTxt("Sign in with Apple"),
                 ),
                 ySpace(height: 40),
                 SvgPicture.asset(
@@ -163,7 +172,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   //   navigateTo(context, PricePlanScreen.routeName);
                   // },
                   title: btnTxt("Sign In", WHITE),
-                  loading: context.watch<AuthController>().loading,
+                  loading: authCtrl.loading,
                 ),
                 const Spacer(),
                 Wrap(
@@ -203,8 +212,10 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     closeKeyPad(context);
     // navigateTo(context, NavbarView.routeName); // Uncomment for testings only
     if (formKey.currentState!.saveAndValidate()) {
-      bool res = await context.read<AuthController>().login(
+      bool res = await authCtrl.login(
         {
+          // "email": "napor44764@abnovel.com", // currently a business account
+          // "password": "Test@1234",
           // "email": "niweb33325@nimadir.com", // currently a talent account
           // "password": "Test@1234",
           // "email": "liniyi2985@acname.com", // currently a standard account
@@ -247,4 +258,10 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     emailCtrl.dispose();
     super.dispose();
   }
+
+  void signupWithGoogle() async {
+    await authCtrl.signUpWithGoogle(context);
+  }
+
+  void signupWithApple() async {}
 }

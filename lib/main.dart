@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,6 +18,7 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/community/view_model/space_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/firebase_options.dart';
 import 'package:nodes/utilities/constants/constant_strings.dart';
 import 'package:nodes/utilities/utils/themes.dart';
 import 'package:nodes/config/routes.dart';
@@ -29,10 +33,10 @@ Future<void> main() async {
   await LocalStorageService.initializeDb();
   setUpLocator();
   _setupLogging();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // //  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  //  // Pass all uncaught "fatal" errors from the framework to Crashlytics
   // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   // // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics

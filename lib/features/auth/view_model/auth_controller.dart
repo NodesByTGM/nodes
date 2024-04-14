@@ -43,7 +43,7 @@ class AuthController extends BaseController {
       const IndividualTalentOnboardingModel();
   SubscriptionUpgrade _subUpgrade = const SubscriptionUpgrade();
 
-  final List<CountryStateModel>  _countryStatesList =
+  final List<CountryStateModel> _countryStatesList =
       const CountryStateModel().fromList(countryStatesData);
 
   GoogleSignIn googleSignIn = GoogleSignIn();
@@ -579,7 +579,6 @@ class AuthController extends BaseController {
     }
   }
 
- 
   // Future<String?> mediaUpload(File file) async {
   //   setUploadingMedia(true);
   //   try {
