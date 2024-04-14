@@ -221,32 +221,34 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           );
                         },
                       ),
-                      _menuItem(
-                        icon: ImageUtils.upgradeToProIcon,
-                        title: KeyString.upgradeToProScreen,
-                        route: DrawerRouteTitle.UpgradeToPro,
-                        isActive: getActiveDrawer(
-                            navCtrl, KeyString.upgradeToProScreen),
-                        onTap: () {
-                          closeDrawer();
-                          bool isSubscribedToProMonth =
-                              user.subscription?.plan?.toLowerCase() ==
-                                  talentMonthlySub;
-                          context.read<AuthController>().setSubUpgrade(
-                                SubscriptionUpgrade(
-                                  type: KeyString.pro,
-                                  amount: proMonthlyAmt,
-                                  period: KeyString.month,
-                                  features: Constants.proFeatures,
-                                  isSubscribed: isSubscribedToProMonth,
-                                ),
-                              );
-                          navCtrl.updatePageListStack(
-                            ProceedWithPayment.routeName,
-                            // get the pro/talent data passed to it.. or just look for another way of passing data bro
-                          );
-                        },
-                      ),
+                      if (user.type == 0) ...[
+                        _menuItem(
+                          icon: ImageUtils.upgradeToProIcon,
+                          title: KeyString.upgradeToProScreen,
+                          route: DrawerRouteTitle.UpgradeToPro,
+                          isActive: getActiveDrawer(
+                              navCtrl, KeyString.upgradeToProScreen),
+                          onTap: () {
+                            closeDrawer();
+                            bool isSubscribedToProMonth =
+                                user.subscription?.plan?.toLowerCase() ==
+                                    talentMonthlySub;
+                            context.read<AuthController>().setSubUpgrade(
+                                  SubscriptionUpgrade(
+                                    type: KeyString.pro,
+                                    amount: proMonthlyAmt,
+                                    period: KeyString.month,
+                                    features: Constants.proFeatures,
+                                    isSubscribed: isSubscribedToProMonth,
+                                  ),
+                                );
+                            navCtrl.updatePageListStack(
+                              ProceedWithPayment.routeName,
+                              // get the pro/talent data passed to it.. or just look for another way of passing data bro
+                            );
+                          },
+                        ),
+                      ],
                       ySpace(height: 10),
                     ],
                   ),

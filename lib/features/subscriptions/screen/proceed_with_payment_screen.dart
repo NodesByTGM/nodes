@@ -46,8 +46,6 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
     navCtrl = context.watch<NavController>();
-    print("George here is the subUpgrade(): ${subUpgrade.toJson()}");
-    print("George here is the getSubscriptPlanKey(): ${getSubscriptPlanKey()}");
     return Stack(
       children: [
         ListView(
