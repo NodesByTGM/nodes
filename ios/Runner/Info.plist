@@ -65,5 +65,19 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>GIDClientID</key>
+	<!-- Copied from GoogleService-Info.plist key CLIENT_ID -->
+	<string>986038882610-gktf2ev6vl2i1ploctv0300d0g95t89n.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.986038882610-gktf2ev6vl2i1ploctv0300d0g95t89n</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
