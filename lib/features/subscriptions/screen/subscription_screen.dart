@@ -22,11 +22,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   int planIndex = 0;
   double proAmt = proMonthlyAmt;
   double businessAmt = businessMonthlyAmt;
-  //
-  // double talentProPlanAmt = 7900;
-  // double talentOngoingProPlanAmt = proYearlyAmt;
-  // double businessPlanAmt = 19800;
-  // double businessOngoingPlanAmt = businessyearlyAmt;
+  bool hasUpgradedToBusiness = false;
 
   @override
   void initState() {
@@ -38,6 +34,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   @override
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
+    hasUpgradedToBusiness =
+        (user.subscription?.plan?.toLowerCase() == busMonthlySub);
     return Stack(
       children: [
         ListView(
@@ -90,7 +88,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 isRecommended: true,
                 features: Constants.proFeatures,
                 isSubscribed: isSubscribed(isPro: true),
-                onTap: () => submit(isPro: true),
+                // onTap: () => submit(isPro: true),
+                onTap: hasUpgradedToBusiness ? null : () => submit(isPro: true),
                 btnText: btnText(isPro: true)),
             ySpace(height: 16),
             SubscriptionCard(
@@ -172,8 +171,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 
-  String btnText({required bool isPro}) =>
-      isSubscribed(isPro: isPro) ? "Current Plan" : "Upgrade Plan";
+  // String btnText({required bool isPro}) => isSubscribed(isPro: isPro) ? "Current Plan" : "Upgrade Plan";
+  String btnText({required bool isPro}) => isSubscribed(isPro: isPro)
+      ? "Current Plan"
+      : (hasUpgradedToBusiness && isPro)
+          ? "Can't Downgrade"
+          : "Upgrade Plan";
+  // Checking if the user has upgraded to BUSINESS, no need allowing them to downgrade.
+  // They can only downgrade to monthly or upgrade to annual plan for business.
 
   bool isSubscribed({required bool isPro}) {
     String? currentUserSubPlan = user.subscription?.plan;
@@ -202,7 +207,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     bool isProPlan = userPlan == talentMonthlySub;
     bool isBusinessPlan = userPlan == busMonthlySub;
 
-    if (isPro) {  
+    if (isPro) {
       // Checking for Talent/Pro Account,
       if (isMonthPlanIndex && isMonthlyTenor && isProPlan) {
         // The period selector must be on the MONTH, the user's tenor must be MONTHLY and must be on PRO plan
