@@ -5,6 +5,8 @@ enum DrawerRouteTitle {
   Home,
   Community,
   ForBusiness,
+  BusinessProfile,
+  BusinessDashboard,
   Subscription,
   UpgradeToPro,
   Trending,

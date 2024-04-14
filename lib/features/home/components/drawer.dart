@@ -6,9 +6,9 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
-import 'package:nodes/features/dashboard/screen/business/business_pre_dashboard_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
+import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/saves/screens/saved_items_screen.dart';
 import 'package:nodes/features/settings/screens/account_settings_screen.dart';
@@ -26,13 +26,26 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   bool profileStatus = true;
+  bool forBusinessStatus = false;
   bool settingsStatus = true;
+
+  @override
+  void initState() {
+    forBusinessStatus = getActiveDrawer(
+      context.read<NavController>(),
+      KeyString.forBusinessScreen,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer2<NavController, AuthController>(
       builder: (context, navCtrl, authCtrl, _) {
         UserModel user = authCtrl.currentUser;
+        bool isStandardUser = user.type! == 0;
+        bool isTalentUser = user.type! == 1;
+        bool isBusinessUser = user.type! == 2;
         return Container(
           width: screenWidth(context) - 80,
           decoration: const BoxDecoration(
@@ -159,22 +172,109 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           );
                         },
                       ),
-                      _menuItem(
-                        icon: ImageUtils.briefcaseIcon,
-                        title: KeyString.forBusinessScreen,
-                        route: DrawerRouteTitle.ForBusiness,
-                        isActive: getActiveDrawer(
-                            navCtrl, KeyString.forBusinessScreen),
-                        onTap: () {
-                          closeDrawer();
-                          user.type == 2
-                              ? navCtrl.updatePageListStack(
+                      // _menuItem(
+                      //   icon: ImageUtils.briefcaseIcon,
+                      //   title: KeyString.forBusinessScreen,
+                      //   route: DrawerRouteTitle.ForBusiness,
+                      //   isActive: getActiveDrawer(
+                      //       navCtrl, KeyString.forBusinessScreen),
+                      //   onTap: () {
+                      //     closeDrawer();
+                      //     isBusinessUser == 2
+                      //         ? navCtrl.updatePageListStack(
+                      //             BusinessDashboardScreen.routeName,
+                      //           )
+                      //         : navCtrl.updatePageListStack(
+                      //             BusinessPreDashbaordScreen.routeName,
+                      //           );
+                      //   },
+                      // ),
+                      GestureDetector(
+                        onTap: !isBusinessUser
+                            ? null
+                            : () {
+                                setState(() {
+                                  forBusinessStatus = !forBusinessStatus;
+                                });
+                              },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 12,
+                          ),
+                          margin: const EdgeInsets.only(
+                            bottom: 12,
+                            left: 12,
+                            right: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: getActiveDrawer(
+                                    navCtrl, KeyString.forBusinessScreen)
+                                ? BORDER.withOpacity(0.4)
+                                : null,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                ImageUtils.briefcaseIcon,
+                                color: BLACK.withOpacity(0.6),
+                                height: 20,
+                              ),
+                              xSpace(width: 10),
+                              Expanded(
+                                child: subtext(
+                                  KeyString.forBusinessScreen,
+                                  fontSize: 14,
+                                  color: BLACK,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              if (isBusinessUser)
+                                Icon(
+                                  forBusinessStatus
+                                      ? Icons.keyboard_arrow_up
+                                      : Icons.keyboard_arrow_down,
+                                  size: 25,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ExpandableSection(
+                        expand: forBusinessStatus,
+                        child: Column(
+                          children: [
+                            forBusinessItem(
+                              route: DrawerRouteTitle.BusinessDashboard,
+                              title: KeyString.businessDashboardScreen,
+                              isActive: getActiveDrawer(
+                                navCtrl,
+                                KeyString.businessDashboardScreen,
+                              ),
+                              onTap: () {
+                                closeDrawer();
+                                navCtrl.updatePageListStack(
                                   BusinessDashboardScreen.routeName,
-                                )
-                              : navCtrl.updatePageListStack(
-                                  BusinessPreDashbaordScreen.routeName,
                                 );
-                        },
+                              },
+                            ),
+                            forBusinessItem(
+                              route: DrawerRouteTitle.BusinessProfile,
+                              title: KeyString.businessProfileScreen,
+                              isActive: getActiveDrawer(
+                                navCtrl,
+                                KeyString.businessProfileScreen,
+                              ),
+                              onTap: () {
+                                closeDrawer();
+                                navCtrl.updatePageListStack(
+                                  BusinessProfileScreen.routeName,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       _menuItem(
                         icon: ImageUtils.cubeIcon,
@@ -189,7 +289,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           );
                         },
                       ),
-                      if (user.type != 0) ...[
+                      if (isTalentUser || isBusinessUser) ...[
                         // Where 0 is Default user
                         _menuItem(
                           icon: ImageUtils.starOutlineIcon,
@@ -221,7 +321,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           );
                         },
                       ),
-                      if (user.type == 0) ...[
+                      if (isStandardUser) ...[
                         _menuItem(
                           icon: ImageUtils.upgradeToProIcon,
                           title: KeyString.upgradeToProScreen,
@@ -256,7 +356,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 customDivider(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
-                if (user.type == 1) ...[
+                if (isTalentUser) ...[
                   _menuItem(
                     icon: ImageUtils.saveJobIcon,
                     title: KeyString.savesScreen,
@@ -324,6 +424,44 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
         );
       },
+    );
+  }
+
+  GestureDetector forBusinessItem({
+    required GestureTapCallback onTap,
+    required String title,
+    required DrawerRouteTitle route,
+    required bool isActive,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 12,
+        ),
+        margin: const EdgeInsets.only(
+          bottom: 12,
+          left: 40,
+          right: 12,
+        ),
+        decoration: BoxDecoration(
+          color: isActive ? TAG_CHIP : null,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: subtext(
+                title,
+                fontSize: 14,
+                color: BLACK,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

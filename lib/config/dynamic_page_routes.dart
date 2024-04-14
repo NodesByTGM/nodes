@@ -49,7 +49,6 @@ const Map<String, dynamic> persistentRoutesSettings = {
     EditIndividualProfileScreen.routeName,
     TalentProfileScreen.routeName,
     EditTalentProfileScreen.routeName,
-    BusinessProfileScreen.routeName,
     EditBusinessProfileScreen.routeName,
   ],
 
@@ -68,11 +67,19 @@ const Map<String, dynamic> persistentRoutesSettings = {
   // Business Screen
   KeyString.forBusinessScreen: [
     BusinessPreDashbaordScreen.routeName,
-    BusinessDashboardScreen.routeName,
     BusinessCreatedJobCenterScreen.routeName,
     BusinessJobDetailsScreen.routeName,
     BusinessCreatedEventCenterScreen.routeName,
     BusinessEventDetailsScreen.routeName,
+    BusinessDashboardScreen.routeName,
+    BusinessProfileScreen.routeName,
+  ],
+  KeyString.businessDashboardScreen: [
+    BusinessDashboardScreen.routeName,
+  ],
+
+  KeyString.businessProfileScreen: [
+    BusinessProfileScreen.routeName,
   ],
 
   // Subscription Screen
