@@ -202,7 +202,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     bool isProPlan = userPlan == talentMonthlySub;
     bool isBusinessPlan = userPlan == busMonthlySub;
 
-    if (isPro) {
+    if (isPro) {  
       // Checking for Talent/Pro Account,
       if (isMonthPlanIndex && isMonthlyTenor && isProPlan) {
         // The period selector must be on the MONTH, the user's tenor must be MONTHLY and must be on PRO plan

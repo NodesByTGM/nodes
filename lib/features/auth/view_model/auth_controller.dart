@@ -21,6 +21,7 @@ import 'package:nodes/features/auth/models/register_model.dart';
 import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
+import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -694,7 +695,7 @@ class AuthController extends BaseController {
     _storageService.deleteSecure(KeyString.currentSession);
     _storageService.deleteSecure(KeyString.token);
     _currentUser = const UserModel();
-
+    setCurrentScreen(WelcomeBackScreen.routeName);
     notifyListeners();
   }
 }
