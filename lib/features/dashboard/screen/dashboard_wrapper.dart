@@ -34,9 +34,11 @@ class DashboardWrapper extends StatelessWidget {
       case 0:
         return const IndividualDashboardScreen();
       case 1:
-        return const TalentDashboardScreen();
       case 2:
-        return const BusinessDashboardScreen();
+        return const TalentDashboardScreen();
+      // case 2:
+      // We want to still retain the Talent dashboard of the business account
+      //   return const BusinessDashboardScreen();
       default:
         return const IndividualDashboardScreen();
     }

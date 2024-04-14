@@ -25,9 +25,11 @@ class ProfileWrapper extends StatelessWidget {
       case 0:
         return const IndividualProfileScreen();
       case 1:
-        return const TalentProfileScreen();
       case 2:
-        return const BusinessProfileScreen();
+        return const TalentProfileScreen();
+      // case 2:
+      // We still wanna retain the Talent profile of the business account...
+      //   return const BusinessProfileScreen();
       default:
         return const IndividualProfileScreen();
     }

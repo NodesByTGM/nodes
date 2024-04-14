@@ -6,6 +6,8 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/paystack_auth_url_model.dart';
 import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
 import 'package:nodes/features/subscriptions/components/subscription_table.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -44,6 +46,8 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
     navCtrl = context.watch<NavController>();
+    print("George here is the subUpgrade(): ${subUpgrade.toJson()}");
+    print("George here is the getSubscriptPlanKey(): ${getSubscriptPlanKey()}");
     return Stack(
       children: [
         ListView(
@@ -273,6 +277,11 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
       // when successful, send user to either the talent or business dashboard page.
       customNavigateBack(context);
       // find out what was upgraded to, if na business, then send them to the business dashboard...
+      if (subUpgrade.type == KeyString.pro) {
+        navCtrl.updatePageListStack(DashboardWrapper.routeName);
+      } else {
+        navCtrl.updatePageListStack(BusinessDashboardScreen.routeName);
+      }
     } else {
       // Sorta send the ref to BE, so as to document and track this payment...
       // Discuss with the BE on this sha...na money matter
@@ -281,11 +290,11 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
 
   getSubscriptPlanKey() {
     if (subUpgrade.type == KeyString.pro) {
-      return subUpgrade.period == KeyString.month
+      return subUpgrade.period == KeyString.monthly
           ? talentMonthlySub
           : talentYearlySub;
     } else {
-      return subUpgrade.period == KeyString.month
+      return subUpgrade.period == KeyString.monthly
           ? busMonthlySub
           : busYearlySub;
     }

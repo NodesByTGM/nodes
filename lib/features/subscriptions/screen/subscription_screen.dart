@@ -175,7 +175,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   String btnText({required bool isPro}) => isSubscribed(isPro: isPro)
       ? "Current Plan"
       : (hasUpgradedToBusiness && isPro)
-          ? "Can't Downgrade"
+          ? "Not Available"
           : "Upgrade Plan";
   // Checking if the user has upgraded to BUSINESS, no need allowing them to downgrade.
   // They can only downgrade to monthly or upgrade to annual plan for business.
