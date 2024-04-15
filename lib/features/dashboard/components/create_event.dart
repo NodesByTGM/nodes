@@ -1,10 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class CreateEvent extends StatefulWidget {
-  const CreateEvent({super.key});
+  const CreateEvent({
+    super.key,
+    this.event,
+  });
+
+  final EventModel? event;
 
   @override
   State<CreateEvent> createState() => _CreateEventState();
@@ -21,11 +29,25 @@ class _CreateEventState extends State<CreateEvent> {
   final TextEditingController descCtrl = TextEditingController();
   String eventType = '';
   final formValues = {};
+  late EventModel? event;
 
   @override
   void initState() {
     dashCtrl = locator.get<DashboardController>();
+    event = widget.event;
     super.initState();
+    loadEventData();
+  }
+
+  loadEventData() {
+    if (!isObjectEmpty(event)) {
+      eventCtrl.text = "${event?.name}";
+      dateCtrl.text = shortDate(event?.dateTime ?? DateTime.now());
+      timeCtrl.text = fromDatTimeToTimeOfDay(event?.dateTime ?? DateTime.now());
+      locationCtrl.text = "${event?.location}";
+      descCtrl.text = "${event?.description}";
+      eventType = "${event?.paymentType}";
+    }
   }
 
   @override
@@ -216,8 +238,10 @@ class _CreateEventState extends State<CreateEvent> {
               //
               SubmitBtn(
                 onPressed: _submit,
-                title: btnTxt("Create Event", WHITE),
-                loading: dashCtrl.isCreatingEvent,
+                title: btnTxt(
+                    isObjectEmpty(event) ? "Create Event" : "Update Event",
+                    WHITE),
+                loading: dashCtrl.isCreatingEvent || dashCtrl.isUpdatingEvent,
               ),
             ],
           ),
@@ -239,18 +263,31 @@ class _CreateEventState extends State<CreateEvent> {
         showText(message: "Please select the payment type");
         return;
       }
-      bool done = await dashCtrl.createEvent(context, {
-        "name": eventCtrl.text,
-        "description": descCtrl.text,
-        "location": locationCtrl.text,
-        "dateTime": dateCtrl.text,
-        "paymentType": eventType,
-        "thumbnail": {
-          "id": "xpkbzyctjeiwvnn8hmjh",
-          "url":
-              "https://res.cloudinary.com/dwzhnrcdv/image/upload/v1712013809/xpkbzyctjeiwvnn8hmjh.png"
-        }
-      });
+      bool done = isObjectEmpty(event)
+          ? await dashCtrl.createEvent(context, {
+              "name": eventCtrl.text,
+              "description": descCtrl.text,
+              "location": locationCtrl.text,
+              "dateTime": dateCtrl.text,
+              "paymentType": eventType,
+              "thumbnail": {
+                "id": "xpkbzyctjeiwvnn8hmjh",
+                "url":
+                    "https://res.cloudinary.com/dwzhnrcdv/image/upload/v1712013809/xpkbzyctjeiwvnn8hmjh.png"
+              }
+            })
+          : await dashCtrl.updateSingleEvent(context, id: event?.id, payload: {
+              "name": eventCtrl.text,
+              "description": descCtrl.text,
+              "location": locationCtrl.text,
+              "dateTime": dateCtrl.text,
+              "paymentType": eventType,
+              "thumbnail": {
+                "id": "xpkbzyctjeiwvnn8hmjh",
+                "url":
+                    "https://res.cloudinary.com/dwzhnrcdv/image/upload/v1712013809/xpkbzyctjeiwvnn8hmjh.png"
+              }
+            });
       if (done && mounted) {
         navigateBack(context);
       }

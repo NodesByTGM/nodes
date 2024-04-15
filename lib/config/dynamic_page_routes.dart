@@ -75,6 +75,7 @@ const Map<String, dynamic> persistentRoutesSettings = {
     BusinessProfileScreen.routeName,
   ],
   KeyString.businessDashboardScreen: [
+    BusinessEventDetailsScreen.routeName,
     BusinessDashboardScreen.routeName,
   ],
 

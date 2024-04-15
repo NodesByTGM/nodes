@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -111,13 +113,20 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (c, i) {
                             MediaUploadModel img = project.images![i];
-                            return SizedBox(
-                              height: 180,
-                              width: 100,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: cachedNetworkImage(
-                                  imgUrl: img.url,
+                            return GestureDetector(
+                              onTap: () => imagePreviewer(
+                                context,
+                                images: project.images!,
+                                index: i,
+                              ),
+                              child: SizedBox(
+                                height: 180,
+                                width: 100,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: cachedNetworkImage(
+                                    imgUrl: img.url,
+                                  ),
                                 ),
                               ),
                             );
@@ -186,4 +195,5 @@ class _ProjectDetailsState extends State<ProjectDetails> {
       fontWeight: FontWeight.w400,
     );
   }
+
 }

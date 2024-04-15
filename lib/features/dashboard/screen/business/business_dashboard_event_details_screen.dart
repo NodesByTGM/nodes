@@ -1,5 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/components/saved_event_applicant_card.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -32,6 +34,8 @@ class _BusinessEventDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    dashCtrl = context.watch<DashboardController>();
+    event = dashCtrl.currentlyViewedBusinessEvent;
     return Stack(
       children: [
         ListView(
@@ -51,17 +55,23 @@ class _BusinessEventDetailsScreenState
                   const Spacer(),
                   actionBtn(
                     icon: ImageUtils.trashOutlineIcon,
-                    onTap: () {},
-                    loading: false,
+                    onTap: () => deleteEvent(context, event),
+                    loading:
+                        context.watch<DashboardController>().isDeletingEvent,
                   ),
                   actionBtn(
                     icon: ImageUtils.editPencileOutlineIcon,
-                    onTap: () {},
+                    onTap: showEditEventBottomSheet,
                     loading: false,
                   ),
                   actionBtn(
                     icon: ImageUtils.shareOutlineIcon,
-                    onTap: () {},
+                    onTap: () async {
+                      await shareDoc(
+                        context,
+                        url: "$nodeWebsite/${event.name}",
+                      );
+                    },
                     loading: false,
                   ),
                 ],
@@ -145,16 +155,68 @@ class _BusinessEventDetailsScreenState
     switch (currentIndex) {
       case 0:
         return EventDetails(
-          isFromBusiness: true,
           event: event,
         );
       case 1:
-        return  SavedEventApplicantCard(event: event);
+        return SavedEventApplicantCard(event: event);
       default:
         return EventDetails(
-          isFromBusiness: true,
           event: event,
         );
     }
+  }
+
+  deleteEvent(BuildContext context, EventModel event) async {
+    final result = await showAlertDialog(
+      context,
+      body: subtext(
+        "Are you sure you want to delete this Job posting?",
+        fontSize: 13,
+      ),
+      title: "Delete Job",
+      cancelTitle: "No, Cancel",
+      okTitle: "Yes, Delete",
+      okColor: RED,
+      cancelColor: GRAY,
+    );
+    if (DialogAction.yes == result) {
+      // make the api request, delete account, call the logout function, to send them to the auth screen...
+      bool done = await context
+          .read<DashboardController>()
+          .deleteSingleEvent(context, event.id);
+
+      if (done && mounted) {
+        customNavigateBack(context);
+      }
+    }
+  }
+
+  showEditEventBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return BottomSheetWrapper(
+          closeOnTap: true,
+          title: labelText(
+            "Edit Event",
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          // pass the event
+          child: CreateEvent(
+            event: event,
+          ),
+        );
+      },
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
@@ -10,7 +11,7 @@ import 'package:nodes/features/dashboard/components/job_card_business.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_events.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/profile/screens/profile_wrapper.dart';
+import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 
@@ -96,17 +97,23 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                 icon: ImageUtils.headIcon,
                 onTap: () {
                   context.read<NavController>().updatePageListStack(
-                        ProfileWrapper.routeName,
+                        BusinessProfileScreen.routeName,
                       );
                 },
               ),
               ySpace(height: 24),
               QuickSetupCard(
-                title: "Create a job\npost",
-                btnTitle: "Discover",
-                icon: ImageUtils.thrunkIcon,
-                onTap: () => showCreateJobBottomSheet(0),
-              ),
+                  title: "Create a job\npost",
+                  btnTitle: "Create",
+                  icon: ImageUtils.thrunkIcon,
+                  onTap: () {
+                    if (isBusinessProfileComplete(
+                        user.business as BusinessAccountModel)) {
+                      showCreateJobBottomSheet(0);
+                    } else {
+                      cantCreateMsg();
+                    }
+                  }),
             ],
           ),
         ),
@@ -130,9 +137,15 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    navCtrl.updatePageListStack(
-                      BusinessCreatedJobCenterScreen.routeName,
-                    );
+                    if (isObjectEmpty(dashCtrl.createdJobList)) {
+                      showText(
+                          message:
+                              "Oops!! you currently don't have any job created yet.");
+                    } else {
+                      navCtrl.updatePageListStack(
+                        BusinessCreatedJobCenterScreen.routeName,
+                      );
+                    }
                   },
                   child: subtext(
                     "See more",
@@ -149,8 +162,15 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           EmptyStateWithTextBtn(
             title: "Hi ${user.name?.split(' ').first}!",
             content:
-                "Nothing to see here yet,\nCreate a job post to get started.",
-            onTap: () => showCreateJobBottomSheet(0),
+                "Nothing to see here yet,\nCreate a Job post to get started.",
+            onTap: () {
+              if (isBusinessProfileComplete(
+                  user.business as BusinessAccountModel)) {
+                showCreateJobBottomSheet(0);
+              } else {
+                cantCreateMsg();
+              }
+            },
             btnText: "Create job post",
           ),
         ],
@@ -241,9 +261,15 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             ),
             GestureDetector(
               onTap: () {
-                navCtrl.updatePageListStack(
-                  BusinessCreatedEventCenterScreen.routeName,
-                );
+                if (isObjectEmpty(dashCtrl.myCreatedEventsList)) {
+                  showText(
+                      message:
+                          "Oops!! you currently don't have any Event created yet.");
+                } else {
+                  navCtrl.updatePageListStack(
+                    BusinessCreatedEventCenterScreen.routeName,
+                  );
+                }
               },
               child: subtext(
                 "See more",
@@ -258,7 +284,14 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           EmptyStateWithTextBtn(
             title: "Hi ${user.name?.split(' ').first}!",
             content: "Nothing to see here yet,\nCreate events to get started.",
-            onTap: () => showCreateJobBottomSheet(1),
+            onTap: () {
+              if (isBusinessProfileComplete(
+                  user.business as BusinessAccountModel)) {
+                showCreateJobBottomSheet(1);
+              } else {
+                cantCreateMsg();
+              }
+            },
             btnText: "Create event",
           ),
         ],
@@ -382,6 +415,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
         );
       },
     );
+  }
+
+  void cantCreateMsg() {
+    showText(message: "Oops!! You have to complete your profile first.");
   }
 }
 

@@ -272,4 +272,15 @@ class DashboardService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
+
+  Future<ApiResponse> fetchMovieShows(BuildContext ctx) async {
+    try {
+      ApiResponse res = await dashboardRepository.fetchMovieShows();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchMovieShows ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
 }

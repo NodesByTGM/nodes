@@ -10,7 +10,7 @@ part 'dashboard_repository.g.dart';
 class DashboardApis {
   static const baseApi = API_ENDPOINT;
 
-    // Projects
+  // Projects
   static const projectApi = "$baseApi/projects";
   static const myProjects = "$projectApi/mine";
 
@@ -35,6 +35,8 @@ class DashboardApis {
   // Trending
   static const trending = "$baseApi/trending";
 
+  // Trending
+  static const movieShows = "$baseApi/movies-and-shows";
 }
 
 @RestApi()
@@ -96,13 +98,13 @@ abstract class DashboardRepository {
 
   @GET(DashboardApis.allSavedEvents)
   Future<ApiResponse> fetchAllSavedEvents(
-     @Query('page') int page,
+    @Query('page') int page,
     @Query('pageSize') int pageSize,
   );
 
   @GET(DashboardApis.myCreatedEvents)
   Future<ApiResponse> fetchAllAllMyCreatedEvents(
-     @Query('page') int page,
+    @Query('page') int page,
     @Query('pageSize') int pageSize,
   );
 
@@ -150,23 +152,25 @@ abstract class DashboardRepository {
 
   @GET(DashboardApis.allSavedJobs)
   Future<ApiResponse> fetchAllSavedJobs(
-     @Query('page') int page,
+    @Query('page') int page,
     @Query('pageSize') int pageSize,
   );
 
   @GET(DashboardApis.allAppliedJobs)
   Future<ApiResponse> fetchAllAppliedJobs(
-     @Query('page') int page,
+    @Query('page') int page,
     @Query('pageSize') int pageSize,
   );
 
   @GET(DashboardApis.myCreatedJobs)
   Future<ApiResponse> fetchAllMyCreatedJobs(
-     @Query('page') int page,
+    @Query('page') int page,
     @Query('pageSize') int pageSize,
   );
 
   @GET(DashboardApis.trending)
-  Future<ApiResponse> fetchTrending(
-  );
+  Future<ApiResponse> fetchTrending();
+
+  @GET(DashboardApis.movieShows)
+  Future<ApiResponse> fetchMovieShows();
 }

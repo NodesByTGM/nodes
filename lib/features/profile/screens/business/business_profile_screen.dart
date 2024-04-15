@@ -1,5 +1,7 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/dashboard/model/project_model.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/profile/components/projects_tab.dart';
@@ -18,9 +20,19 @@ class BusinessProfileScreen extends StatefulWidget {
 class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   int currentIndex = 0;
   bool isRegistered = true;
+  late AuthController authCtrl;
+  late BusinessAccountModel business;
+
+  @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    business = authCtrl.currentUser.business as BusinessAccountModel;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
     return ListView(
       children: [
         Container(
@@ -33,12 +45,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
               ListTile(
                 contentPadding: const EdgeInsets.all(0),
                 leading: cachedNetworkImage(
-                  imgUrl:
-                      "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
+                  imgUrl: "",
                   size: 100,
                 ),
                 title: labelText(
-                  "Name of company",
+                  "Name of Business",
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
@@ -48,7 +59,8 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                   children: [
                     ySpace(height: 2),
                     subtext(
-                      "Year of establishment",
+                      // shortDate(user.business?.yoe ?? DateTime.now()),
+                      shortDate(DateTime.now()),
                       color: GRAY,
                     ),
                     ySpace(height: 5),
@@ -97,7 +109,13 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                     Expanded(
                       child: OutlineBtn(
                         onPressed: () async {
-                          final res = await shareDoc(context);
+                          if (isBusinessProfileComplete(business)) {
+                            final res = await shareDoc(context);
+                          } else {
+                            showText(
+                                message:
+                                    "Please update your profile to proceed.");
+                          }
                         },
                         borderColor: PRIMARY,
                         color: WHITE,

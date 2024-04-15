@@ -461,31 +461,4 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
     msgCtrl.dispose();
     super.dispose();
   }
-
-  imagePreviewer(
-    context, {
-    required List<MediaUploadModel> images,
-    required int index,
-  }) {
-    List<ImageProvider> _arr = [];
-    for (var i in images) {
-      if (!isObjectEmpty(i.url)) {
-        _arr.add(CachedNetworkImageProvider(i.url));
-      }
-    }
-    MultiImageProvider multiImageProvider = MultiImageProvider(_arr);
-
-    showImageViewerPager(
-      context,
-      multiImageProvider,
-      closeButtonColor: RED,
-      backgroundColor: BLACK,
-      onPageChanged: (page) {
-        // print("page changed to $page");
-      },
-      onViewerDismissed: (page) {
-        // print("dismissed while on page $page");
-      },
-    );
-  }
 }

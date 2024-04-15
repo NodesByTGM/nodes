@@ -28,7 +28,6 @@ class IndividualProfileScreen extends StatelessWidget {
                 ListTile(
                   contentPadding: const EdgeInsets.all(0),
                   leading: cachedNetworkImage(
-                    // image here...
                     imgUrl: "${user.avatar?.url}",
                     size: 100,
                   ),

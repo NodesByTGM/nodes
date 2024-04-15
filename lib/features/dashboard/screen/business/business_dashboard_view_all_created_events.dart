@@ -158,7 +158,7 @@ class _BusinessCreatedEventCenterScreenState
                   Expanded(
                     flex: 2,
                     child: SubmitBtn(
-                      onPressed: showCreateJobBottomSheet,
+                      onPressed: showCreateEventBottomSheet,
                       title: btnTxt(
                         "Create an event",
                         WHITE,
@@ -174,7 +174,7 @@ class _BusinessCreatedEventCenterScreenState
     );
   }
 
-  showCreateJobBottomSheet() {
+  showCreateEventBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

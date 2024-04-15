@@ -7,12 +7,13 @@ import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/custom_page.dart';
+import 'package:nodes/features/dashboard/model/movie_show_model.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
+import 'package:nodes/features/dashboard/model/trending_model.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
-import 'package:nodes/features/saves/models/trending_model.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
 import 'package:nodes/utilities/utils/utils.dart';
 
@@ -38,6 +39,7 @@ class DashboardController extends BaseController {
   List<ProjectModel> _projectList = [];
   List<ProjectModel> _myProjectList = [];
   List<TrendingModel> _trendingList = [];
+  List<MovieShowModel> _movieShowList = [];
 
   // Getters
   List<StandardTalentJobModel> get savedJobsList => _savedJobsList;
@@ -53,6 +55,7 @@ class DashboardController extends BaseController {
   List<ProjectModel> get projectList => _projectList;
   List<ProjectModel> get myProjectList => _myProjectList;
   List<TrendingModel> get trendingList => _trendingList;
+  List<MovieShowModel> get movieShowList => _movieShowList;
 
   // Setters
 
@@ -124,7 +127,7 @@ class DashboardController extends BaseController {
   //   }
   //   notifyListeners();
   // }
-  
+
   _updateSavedJobsList(
     BuildContext ctx, {
     required StandardTalentJobModel job,
@@ -203,6 +206,7 @@ class DashboardController extends BaseController {
       // Means it should add/ i.e created a new one in the list
       _myCreatedEventsList.add(event);
     }
+    _currentlyViewedBusinessEvent = event; // This will update the data
     notifyListeners();
   }
 
@@ -249,9 +253,15 @@ class DashboardController extends BaseController {
   }
 
   // Trending
-
   setTrendingList(List<TrendingModel> trending) {
     _trendingList = trending;
+    notifyListeners();
+  }
+
+  // MovieShows
+
+  setMovieShowList(List<MovieShowModel> data) {
+    _movieShowList = data;
     notifyListeners();
   }
 
@@ -828,6 +838,7 @@ class DashboardController extends BaseController {
     }
   }
 
+// Trending
   Future<bool> fetchTrending(BuildContext ctx) async {
     setFetchingTrending(true);
     try {
@@ -837,13 +848,33 @@ class DashboardController extends BaseController {
         return false;
       }
       setTrendingList(
-          const TrendingModel().fromList(response.result as List<dynamic>));
+        const TrendingModel().fromList(response.result as List<dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return false;
     } finally {
       setFetchingTrending(false);
+    }
+  }
+
+// Movie Shows
+  Future<bool> fetchMovieShows(BuildContext ctx) async {
+    setFetchingMovieShows(true);
+    try {
+      ApiResponse response = await _dashboardService.fetchMovieShows(ctx);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      setMovieShowList(_resolvePaginatedMovieShows(response));
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setFetchingMovieShows(false);
     }
   }
 
@@ -904,6 +935,17 @@ class DashboardController extends BaseController {
 
     if (!isObjectEmpty(p.items)) {
       return p.items as List<ProjectModel>;
+    }
+    return [];
+  }
+
+// MovieShow
+  List<MovieShowModel> _resolvePaginatedMovieShows(ApiResponse response) {
+    CustomPage<MovieShowModel> p = const CustomPage<MovieShowModel>().fromJson(
+        response.result as Map<String, dynamic>, const MovieShowModel());
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<MovieShowModel>;
     }
     return [];
   }

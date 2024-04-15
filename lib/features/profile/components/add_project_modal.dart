@@ -589,9 +589,25 @@ class _AddProjectState extends State<AddProject> {
     // Confirm all fields are provided...
     closeKeyPad(context);
     if (progressLevel < 1) {
+      // Check if the form is complete...
+      if (isObjectEmpty(projectNameCtrl.text) ||
+          isObjectEmpty(descCtrl.text) ||
+          isObjectEmpty(projectUrlCtrl.text)) {
+        showText(message: "Please complete this section");
+        return;
+      }
       setState(() {
         progressLevel += 0.5;
       });
+      return;
+    }
+
+    if (isObjectEmpty(thumbnailImageFile)) {
+      showText(message: "Thumbnail can't be empty");
+      return;
+    }
+    if (isObjectEmpty(projectImageFileList)) {
+      showText(message: "Project Images can't be empty");
       return;
     }
     // Upload images
@@ -664,6 +680,3 @@ class _AddProjectState extends State<AddProject> {
     super.dispose();
   }
 }
-
-// List<XFile> projectImageFileList = [];
-// XFile? thumbnailImageFile;

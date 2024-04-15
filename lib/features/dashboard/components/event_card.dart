@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_event_details_screen.dart';
@@ -133,8 +135,23 @@ class EventCard extends StatelessWidget {
   }
 
   deleteEvent(BuildContext context, EventModel event) async {
-    bool done = await context
-        .read<DashboardController>()
-        .deleteSingleEvent(context, event.id);
+    final result = await showAlertDialog(
+      context,
+      body: subtext(
+        "Are you sure you want to delete this Job posting?",
+        fontSize: 13,
+      ),
+      title: "Delete Job",
+      cancelTitle: "No, Cancel",
+      okTitle: "Yes, Delete",
+      okColor: RED,
+      cancelColor: GRAY,
+    );
+    if (DialogAction.yes == result) {
+      // make the api request, delete account, call the logout function, to send them to the auth screen...
+      await context
+          .read<DashboardController>()
+          .deleteSingleEvent(context, event.id);
+    }
   }
 }

@@ -14,7 +14,7 @@ class KeyString {
   static const profileScreen = "Profile";
   static const communityScreen = "Community";
   static const forBusinessScreen = "For Business";
-  static const businessDashboardScreen = "Dashboard";
+  static const businessDashboardScreen = "Business Dashboard";
   // static const businessProfileScreen ="Profíle"; // Remove the í at your own risk lol
   static const businessProfileScreen = "Business Profile";
   static const subscriptionScreen = "Subscriptions";

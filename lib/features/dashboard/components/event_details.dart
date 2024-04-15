@@ -3,12 +3,10 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class EventDetails extends StatefulWidget {
   const EventDetails({
-    super.key,
-    this.isFromBusiness = false,
+    super.key, 
     required this.event,
   });
-
-  final bool isFromBusiness;
+ 
   final EventModel event;
 
   @override

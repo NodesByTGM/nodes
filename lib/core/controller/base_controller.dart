@@ -43,6 +43,7 @@ abstract class BaseController extends ChangeNotifier {
   bool _isFetchingAllProjects = false;
   bool _isFetchMyProjects = false;
   bool _isFetchTrending = false;
+  bool _isFetchMovieShows = false;
   
 
 // Getters
@@ -84,6 +85,7 @@ abstract class BaseController extends ChangeNotifier {
   bool get isFetchingAllProjects => _isFetchingAllProjects;
   bool get isFetchMyProjects => _isFetchMyProjects;
   bool get isFetchTrending => _isFetchTrending;
+  bool get isFetchMovieShows => _isFetchMovieShows;
 
 
   // Setters
@@ -280,6 +282,11 @@ abstract class BaseController extends ChangeNotifier {
 
   setFetchingTrending(bool value) {
     _isFetchTrending = value;
+    notifyListeners();
+  }
+
+  setFetchingMovieShows(bool value) {
+    _isFetchMovieShows = value;
     notifyListeners();
   }
 }

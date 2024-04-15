@@ -1,4 +1,3 @@
-
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -49,7 +48,10 @@ class BusinessJobCard extends StatelessWidget {
             ),
             ySpace(height: 16),
             subtext(
-              "${job.business?.name}",
+              /** 
+               * George, work on this...
+               */
+              "${job.business?.name ?? 'Business Name'}",
               fontSize: 14,
             ),
             ySpace(height: 16),
@@ -96,22 +98,21 @@ class BusinessJobCard extends StatelessWidget {
             ),
             ySpace(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween
-                 ,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                  subtext(
-                    "${job.applicants?.length} applicants",
-                    color: PRIMARY,
-                    fontSize: 14,
-                  ),
+                subtext(
+                  "${job.applicants?.length} applicants",
+                  color: PRIMARY,
+                  fontSize: 14,
+                ),
                 GestureDetector(
                   onTap: () {
                     context
-                          .read<DashboardController>()
-                          .setCurrentlyViewedJob(job);
-                      context.read<NavController>().updatePageListStack(
-                            BusinessJobDetailsScreen.routeName,
-                          );
+                        .read<DashboardController>()
+                        .setCurrentlyViewedJob(job);
+                    context.read<NavController>().updatePageListStack(
+                          BusinessJobDetailsScreen.routeName,
+                        );
                   },
                   child: labelText(
                     "View details",
@@ -127,5 +128,4 @@ class BusinessJobCard extends StatelessWidget {
       ),
     );
   }
-  }
-
+}

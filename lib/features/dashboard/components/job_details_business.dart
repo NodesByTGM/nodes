@@ -42,7 +42,11 @@ class _BusinessJobDetailsState extends State<BusinessJobDetails> {
             height: 44,
           ),
           title: labelText(
-            "${job.business?.name}",
+            /**
+             * 
+            //  Work on this George
+             */
+            "${job.business?.name ?? "Business name"}",
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
@@ -98,7 +102,11 @@ class _BusinessJobDetailsState extends State<BusinessJobDetails> {
               ),
               const CustomDot(),
               CustomTagChip(
-                title: Constants.jobType[job.jobType as int],
+                /**
+             * 
+            //  Work on this George
+             */
+                title: Constants.jobType[job.jobType ?? 1],
               ),
             ],
           ),

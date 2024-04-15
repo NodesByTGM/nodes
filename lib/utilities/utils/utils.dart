@@ -8,11 +8,14 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bot_toast/src/toast.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -143,7 +146,7 @@ String? trimValue(String? val) {
 }
 
 String capitalize(String s) {
-  List<String> names = s.split(' ');
+  List<String> names = s.trim().split(' ');
   if (names.isNotEmpty) {
     return names
         .map((e) => e[0].toUpperCase() + e.substring(1).toLowerCase())
@@ -935,5 +938,40 @@ Padding actionBtn({
               height: 30,
             ),
           ),
+  );
+}
+
+bool isBusinessProfileComplete(BusinessAccountModel business) {
+  return false;
+}
+
+bool isTalentProfileComplete(UserModel talent) {
+  return false;
+}
+
+imagePreviewer(
+  context, {
+  required List<MediaUploadModel> images,
+  required int index,
+}) {
+  List<ImageProvider> _arr = [];
+  for (var i in images) {
+    if (!isObjectEmpty(i.url)) {
+      _arr.add(CachedNetworkImageProvider(i.url));
+    }
+  }
+  MultiImageProvider multiImageProvider = MultiImageProvider(_arr);
+
+  showImageViewerPager(
+    context,
+    multiImageProvider,
+    closeButtonColor: RED,
+    backgroundColor: BLACK,
+    onPageChanged: (page) {
+      // print("page changed to $page");
+    },
+    onViewerDismissed: (page) {
+      // print("dismissed while on page $page");
+    },
   );
 }

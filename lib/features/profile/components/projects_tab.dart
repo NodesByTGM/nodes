@@ -1,4 +1,6 @@
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/features/profile/components/add_project_modal.dart';
@@ -25,11 +27,15 @@ class ProjectsTab extends StatefulWidget {
 
 class _ProjectsTabState extends State<ProjectsTab> {
   late AuthController authCtrl;
+  late UserModel user;
+  late BusinessAccountModel business;
   late List<ProjectModel> projects;
 
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
+    user = authCtrl.currentUser;
+    business = user.business as BusinessAccountModel;
     projects = widget.projects;
     super.initState();
   }
@@ -47,7 +53,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
                   children: [
                     ySpace(height: 20),
                     labelText(
-                      "Hi ${authCtrl.currentUser.name?.split(" ").first}!",
+                      "Hi ${user.name?.split(" ").first}!",
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
@@ -62,7 +68,14 @@ class _ProjectsTabState extends State<ProjectsTab> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 48.0),
                       child: SubmitBtn(
-                        onPressed: showCreateProjectModal,
+                        // onPressed: showCreateProjectModal,
+                        onPressed: () {
+                          if (isBusinessProfileComplete(business)) {
+                            showCreateProjectModal();
+                          } else {
+                            showText(message: "Please update your profile to proceed.");
+                          }
+                        },
                         title: btnTxt(
                           "Add projects",
                           WHITE,
@@ -188,7 +201,6 @@ class _ProjectsTabState extends State<ProjectsTab> {
     showSimpleDialog(
       context: context,
       backgroundColor: Colors.white,
-      // dismissable: false,
       dismissable: true,
       insetPadding: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.only(bottom: 0),

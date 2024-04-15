@@ -6,6 +6,7 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/business/business_pre_dashboard_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
@@ -191,7 +192,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       // ),
                       GestureDetector(
                         onTap: !isBusinessUser
-                            ? null
+                            ? () => navCtrl.updatePageListStack(
+                                  BusinessPreDashbaordScreen.routeName,
+                                )
                             : () {
                                 setState(() {
                                   forBusinessStatus = !forBusinessStatus;
@@ -242,7 +245,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ),
                       ),
                       ExpandableSection(
-                        expand: forBusinessStatus,
+                        // expand: forBusinessStatus,
+                        expand: isBusinessUser && forBusinessStatus,
                         child: Column(
                           children: [
                             forBusinessItem(
