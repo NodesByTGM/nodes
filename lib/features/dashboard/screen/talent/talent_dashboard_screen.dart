@@ -118,15 +118,17 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   color: WHITE,
                 ),
                 ySpace(height: 40),
-                QuickSetupCard(
-                  title: "Complete your\nprofile",
-                  btnTitle: "Complete Profile",
-                  icon: ImageUtils.headIcon,
-                  onTap: () {
-                    navCtrl.updatePageListStack(ProfileWrapper.routeName);
-                  },
-                ),
-                ySpace(height: 24),
+                if (!isTalentProfileComplete(user)) ...[
+                  QuickSetupCard(
+                    title: "Complete your\nprofile",
+                    btnTitle: "Complete Profile",
+                    icon: ImageUtils.headIcon,
+                    onTap: () {
+                      navCtrl.updatePageListStack(ProfileWrapper.routeName);
+                    },
+                  ),
+                  ySpace(height: 24),
+                ],
                 QuickSetupCard(
                   title: "Connect with\nothers",
                   btnTitle: "Discover",

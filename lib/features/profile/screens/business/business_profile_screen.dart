@@ -1,6 +1,7 @@
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
@@ -21,13 +22,17 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   int currentIndex = 0;
   bool isRegistered = true;
   late AuthController authCtrl;
+  late UserModel user;
   late BusinessAccountModel business;
 
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
-    business = authCtrl.currentUser.business as BusinessAccountModel;
+    user = authCtrl.currentUser;
+    business = user.business as BusinessAccountModel;
     super.initState();
+    safeNavigate(
+        () => context.read<DashboardController>().fetchMyProjects(context));
   }
 
   @override
@@ -45,11 +50,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
               ListTile(
                 contentPadding: const EdgeInsets.all(0),
                 leading: cachedNetworkImage(
-                  imgUrl: "",
+                  imgUrl: "${business.logo?.url}",
                   size: 100,
                 ),
                 title: labelText(
-                  "Name of Business",
+                  capitalize("${business.name}"),
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
@@ -59,47 +64,86 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                   children: [
                     ySpace(height: 2),
                     subtext(
-                      // shortDate(user.business?.yoe ?? DateTime.now()),
-                      shortDate(DateTime.now()),
+                      shortDate(business.yoe ?? DateTime.now()),
+                      // shortDate(DateTime.now()),
                       color: GRAY,
                     ),
-                    ySpace(height: 5),
-                    Wrap(
-                      spacing: 2,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        labelText(
-                          "26",
-                          fontSize: 12,
-                        ),
-                        subtext(
-                          "Followers",
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ],
-                    ),
+                    // ySpace(height: 5),
+                    // Wrap(
+                    //   spacing: 2,
+                    //   crossAxisAlignment: WrapCrossAlignment.center,
+                    //   children: [
+                    //     labelText(
+                    //       "26",
+                    //       fontSize: 12,
+                    //     ),
+                    //     subtext(
+                    //       "Followers",
+                    //       fontSize: 12,
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
               ySpace(height: 24),
               CustomDottedBorder(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    labelText(
-                      "Your headline and bio goes here",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    ySpace(height: 10),
-                    subtext(
-                      "Share more about yourself and what you hope to accomplish",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
+                child: SizedBox(
+                  width: screenWidth(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      labelText(
+                        !isObjectEmpty(business.headline)
+                            ? "${business.headline}"
+                            : "Your headline and bio goes here",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      ySpace(height: 10),
+                      subtext(
+                        !isObjectEmpty(business.bio)
+                            ? "${business.bio}"
+                            : "Share more about yourself and what you hope to accomplish",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+              ySpace(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImageUtils.mapLocationIcon,
+                          color: GRAY,
+                        ),
+                        xSpace(width: 5),
+                        subtext(
+                          !isObjectEmpty(business.location)
+                              ? "${business.location}"
+                              : "Location",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: GRAY,
+                        ),
+                      ],
+                    ),
+                  ),
+                  xSpace(width: 10),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 15,
+                    children: userBusinessSocials(business),
+                  ),
+                ],
               ),
               ySpace(height: 24),
               if (isRegistered) ...[
@@ -110,11 +154,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                       child: OutlineBtn(
                         onPressed: () async {
                           if (isBusinessProfileComplete(business)) {
-                            final res = await shareDoc(context);
+                            await shareDoc(context);
                           } else {
                             showText(
-                                message:
-                                    "Please update your profile to proceed.");
+                              message: "Please update your profile to proceed.",
+                            );
                           }
                         },
                         borderColor: PRIMARY,
@@ -132,7 +176,8 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                         height: 48,
                         onPressed: () {
                           context.read<NavController>().updatePageListStack(
-                              EditBusinessProfileScreen.routeName);
+                                EditBusinessProfileScreen.routeName,
+                              );
                         },
                         title: btnTxt(
                           "Edit Your Profile",
@@ -188,7 +233,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
           },
           content: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            child: getTabBody(),
+            child: Consumer<DashboardController>(
+              builder: (c, dCtrl, _) {
+                return getTabBody(dCtrl);
+              },
+            ),
           ),
         ),
         //
@@ -196,15 +245,15 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
     );
   }
 
-  getTabBody() {
+  getTabBody(DashboardController dc) {
     return currentIndex == 0
         ? ProjectsTab(
             isBusiness: true,
-            projects: context.watch<DashboardController>().myProjectList,
+            projects: dc.myProjectList,
           )
         : ProjectsTab(
             isBusiness: true,
-            projects: context.watch<DashboardController>().myProjectList,
+            projects: dc.myProjectList,
           );
   }
 }

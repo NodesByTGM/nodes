@@ -2,11 +2,16 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/profile/components/expanable_profile_cards.dart';
-import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
+import 'package:nodes/utilities/widgets/add_project_form.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class EditBusinessProfileScreen extends StatefulWidget {
   const EditBusinessProfileScreen({super.key});
@@ -18,9 +23,13 @@ class EditBusinessProfileScreen extends StatefulWidget {
 }
 
 class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
+  late AuthController authCtrl;
+  late UserModel user;
+  late BusinessAccountModel businessAccount;
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController businessNameCtrl = TextEditingController();
-  final TextEditingController usernameCtrl = TextEditingController();
+  final TextEditingController yoeCtrl = TextEditingController();
+  // final TextEditingController usernameCtrl = TextEditingController();
   final TextEditingController locationCtrl = TextEditingController();
   final TextEditingController headlineCtrl = TextEditingController();
   final TextEditingController bioCtrl = TextEditingController();
@@ -28,22 +37,13 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
   final TextEditingController linkedinCtrl = TextEditingController();
   final TextEditingController instagramCtrl = TextEditingController();
   final TextEditingController xCtrl = TextEditingController();
-  final TextEditingController descCtrl = TextEditingController();
-  final TextEditingController projectUrlCtrl = TextEditingController();
   final formValues = {};
+  File? profilePicture;
   bool isProfileInfo = true;
   bool isIntroduce = false;
   bool isAddProject = false;
   bool isOnlineProfile = false;
-  bool isInteractions = false;
-  bool enableSpaces = true;
-  bool enableComments = true;
-  List<TextEditingController> dynamicNameCollaboratorsCtrl = [
-    TextEditingController(),
-  ];
-  List<TextEditingController> dynamicRoleCollaboratorsCtrl = [
-    TextEditingController(),
-  ];
+  DateTime? yoe;
 
   List<XFile> projectImageFileList = [];
   XFile? thumbnailImageFile;
@@ -53,7 +53,33 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
   bool isLoadingImage = false;
 
   @override
+  void initState() {
+    authCtrl = locator.get<AuthController>();
+    user = authCtrl.currentUser;
+    businessAccount = user.business as BusinessAccountModel;
+    super.initState();
+    loadProfile();
+  }
+
+  loadProfile() {
+    businessNameCtrl.text = businessAccount.name ?? "";
+    // usernameCtrl.text = businessAccount.username ?? ";
+    locationCtrl.text = businessAccount.location ?? "";
+    headlineCtrl.text = businessAccount.headline ?? "";
+    bioCtrl.text = businessAccount.bio ?? "";
+    yoeCtrl.text = isObjectEmpty(businessAccount.yoe)
+        ? ''
+        : shortDate(businessAccount.yoe as DateTime);
+    websiteCtrl.text = businessAccount.website ?? "";
+    linkedinCtrl.text = businessAccount.linkedIn ?? "";
+    instagramCtrl.text = businessAccount.instagram ?? "";
+    xCtrl.text = businessAccount.twitter ?? "";
+  }
+
+  @override
   Widget build(BuildContext context) {
+    authCtrl = context.watch<AuthController>();
+    businessAccount = authCtrl.currentUser.business as BusinessAccountModel;
     return Container(
       decoration: const BoxDecoration(
         color: PROFILEBG,
@@ -84,21 +110,43 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                       children: [
                         Row(
                           children: [
-                            cachedNetworkImage(
-                              imgUrl:
-                                  "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg",
-                              size: 100,
-                            ),
-                            xSpace(width: 16),
-                            GestureDetector(
-                              onTap: () {},
-                              child: labelText(
-                                "Replace Logo",
-                                color: PRIMARY,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                            if (!isObjectEmpty(profilePicture)) ...[
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: BORDER.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: isObjectEmpty(profilePicture)
+                                      ? Container()
+                                      : Image.file(
+                                          profilePicture as File,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
                               ),
-                            ),
+                            ],
+                            if (isObjectEmpty(profilePicture)) ...[
+                              cachedNetworkImage(
+                                imgUrl: "${businessAccount.logo?.url}",
+                                size: 100,
+                              ),
+                            ],
+                            xSpace(width: 16),
+                            authCtrl.isUploadingMedia
+                                ? const Loader()
+                                : GestureDetector(
+                                    onTap: uploadImage,
+                                    child: labelText(
+                                      "Replace",
+                                      color: PRIMARY,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                           ],
                         ),
                         ySpace(height: 32),
@@ -127,42 +175,55 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                           form: FormBuilderTextField(
                             name: "yoe",
                             decoration: FormUtils.formDecoration(
-                              hintText: "",
+                              hintText: "DD/MM/YY",
+                              suffixIcon: const Icon(Icons.date_range_outlined),
                             ),
                             // keyboardType: TextInputType.text,
                             readOnly: true,
                             style: FORM_STYLE,
-
+                            controller: yoeCtrl,
                             onSaved: (value) =>
                                 formValues['yoe'] = trimValue(value),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context,
                                   errorText: Constants.emptyFieldError),
                             ]),
-                            onChanged: (val) {},
-                          ),
-                        ),
-                        FormWithLabel(
-                          label: "Username",
-                          form: FormBuilderTextField(
-                            name: "username",
-                            decoration: FormUtils.formDecoration(
-                              hintText: "",
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: FORM_STYLE,
-                            controller: usernameCtrl,
-                            readOnly: true,
-                            onSaved: (value) =>
-                                formValues['username'] = trimValue(value),
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context,
-                                  errorText: Constants.emptyFieldError),
-                            ]),
-                            onChanged: (val) {},
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                lastDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                initialDate: DateTime.now(),
+                              );
+                              if (pickedDate == null) return;
+                              yoeCtrl.text = shortDate(pickedDate);
+                              yoe = pickedDate;
+                              setState(() {});
+                            },
                           ),
                         ),
                         FormUtils.formSpacer(),
+                        // FormWithLabel(
+                        //   label: "Username",
+                        //   form: FormBuilderTextField(
+                        //     name: "username",
+                        //     decoration: FormUtils.formDecoration(
+                        //       hintText: "",
+                        //     ),
+                        //     keyboardType: TextInputType.text,
+                        //     style: FORM_STYLE,
+                        //     controller: usernameCtrl,
+                        //     readOnly: true,
+                        //     onSaved: (value) =>
+                        //         formValues['username'] = trimValue(value),
+                        //     validator: FormBuilderValidators.compose([
+                        //       FormBuilderValidators.required(context,
+                        //           errorText: Constants.emptyFieldError),
+                        //     ]),
+                        //     onChanged: (val) {},
+                        //   ),
+                        // ),
+                        // FormUtils.formSpacer(),
                         FormWithLabel(
                           label: "Location",
                           form: FormBuilderTextField(
@@ -184,8 +245,9 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         ),
                         ySpace(height: 40),
                         SubmitBtn(
-                          onPressed: _submit,
+                          onPressed: () => _submit(0),
                           title: btnTxt("Save", WHITE),
+                          loading: authCtrl.loading,
                         ),
                         ySpace(height: 20),
                       ],
@@ -246,8 +308,9 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         ),
                         ySpace(height: 40),
                         SubmitBtn(
-                          onPressed: _submit,
+                          onPressed: () => _submit(1),
                           title: btnTxt("Save", WHITE),
+                          loading: authCtrl.loading,
                         ),
                         ySpace(height: 20),
                       ],
@@ -257,376 +320,14 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                   ExpanableProfileCard(
                     isExpanded: isAddProject,
                     title: "Add a project",
+                    canOpen: isBusinessProfileComplete(businessAccount),
+                    errorText: 'Please complete your Personal Info section',
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ySpace(height: 16),
-                        FormWithLabel(
-                          label: "Project name *",
-                          form: FormBuilderTextField(
-                            name: "projectName",
-                            decoration: FormUtils.formDecoration(
-                              hintText: "Ex: Actress, Actor, Director",
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: FORM_STYLE,
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context,
-                                  errorText: Constants.emptyFieldError),
-                            ]),
-                            onChanged: (val) {},
-                          ),
-                        ),
-                        FormUtils.formSpacer(),
-                        FormWithLabel(
-                          label: "Description *",
-                          form: FormBuilderTextField(
-                            name: "desc",
-                            decoration: FormUtils.formDecoration(
-                              hintText:
-                                  "Add a short bio to showcase your best self",
-                            ),
-                            keyboardType: TextInputType.multiline,
-                            style: FORM_STYLE,
-                            controller: descCtrl,
-                            maxLength: 2000,
-                            maxLines: 5,
-                            onSaved: (value) =>
-                                formValues['description'] = trimValue(value),
-                            validator: FormBuilderValidators.compose(
-                              [
-                                FormBuilderValidators.required(context,
-                                    errorText: Constants.emptyFieldError),
-                              ],
-                            ),
-                            onChanged: (val) {},
-                          ),
-                        ),
-                        FormUtils.formSpacer(),
-                        FormWithLabel(
-                          label: "Project URL *",
-                          form: FormBuilderTextField(
-                            name: "projectUrl",
-                            decoration: FormUtils.formDecoration(
-                              hintText: "Ex: Actress, Actor, Director",
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: FORM_STYLE,
-                            controller: projectUrlCtrl,
-                            onSaved: (value) =>
-                                formValues['projectUrl'] = trimValue(value),
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context,
-                                  errorText: Constants.emptyFieldError),
-                            ]),
-                            onChanged: (val) {},
-                          ),
-                        ),
-                        FormUtils.formSpacer(),
-                        labelText(
-                          "Add collaborators",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        ySpace(height: 10),
-                        subtext(
-                          "You can add cast members...etc here",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        ySpace(height: 24),
-                        ListView.separated(
-                          itemCount: dynamicNameCollaboratorsCtrl.length,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (c, i) {
-                            String index = "${i + 1}";
-                            return Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      width: 0.7,
-                                      color: BORDER,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: labelText(
-                                      index,
-                                      color: BORDER,
-                                    ),
-                                  ),
-                                ),
-                                xSpace(width: 10),
-                                Expanded(
-                                  child: DoubleFormWithLabel(
-                                    firstForm: FormBuilderTextField(
-                                      name: "collaboratorName$i",
-                                      decoration: FormUtils.formDecoration(
-                                        hintText: "Name",
-                                        isTransparentBorder: true,
-                                        verticalPadding: 10,
-                                      ),
-                                      keyboardType: TextInputType.text,
-                                      style: FORM_STYLE,
-                                      cursorColor: BLACK,
-                                      controller:
-                                          dynamicNameCollaboratorsCtrl[i],
-                                      onSaved: (value) =>
-                                          formValues['name'] = trimValue(value),
-                                      onChanged: (val) {},
-                                    ),
-                                    lastForm: FormBuilderTextField(
-                                      name: "collaboratorRole$i",
-                                      decoration: FormUtils.formDecoration(
-                                        hintText: "role",
-                                        isTransparentBorder: true,
-                                        verticalPadding: 10,
-                                      ),
-                                      keyboardType: TextInputType.text,
-                                      style: FORM_STYLE,
-                                      cursorColor: BLACK,
-                                      controller:
-                                          dynamicRoleCollaboratorsCtrl[i],
-                                      onSaved: (value) =>
-                                          formValues['role'] = trimValue(value),
-                                      onChanged: (val) {},
-                                    ),
-                                  ),
-                                ),
-                                xSpace(width: 10),
-                                if (i != 0) ...[
-                                  GestureDetector(
-                                    onTap: () => deleteCollaborator(i),
-                                    child: const Icon(
-                                      // Icons.remove_circle,
-                                      Icons.delete_forever,
-                                      color: RED,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            );
-                          },
-                          separatorBuilder: (c, i) => ySpace(height: 24),
-                        ),
-                        ySpace(height: 12),
-                        GestureDetector(
-                          onTap: () => addCollaborator(),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.add_circle,
-                                color: PRIMARY,
-                                size: 30,
-                              ),
-                              xSpace(width: 10),
-                              labelText(
-                                "Add another collaborator",
-                                color: PRIMARY,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ],
-                          ),
-                        ),
-                        FormUtils.formSpacer(),
-                        FormWithLabel(
-                          label: "Project thumbnail",
-                          form: GestureDetector(
-                            onTap: () {
-                              multipleImagePicker(
-                                isThumbnail: true,
-                              );
-                            },
-                            child: Stack(
-                              children: [
-                                if (isObjectEmpty(thumbnailImageFile)) ...[
-                                  CustomDottedBorder(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(28.0),
-                                      child: Center(
-                                        child: subtext(
-                                          "Click to browse your files\nRecommended image size: 280 x 160px",
-                                          fontSize: 14,
-                                          color: GRAY,
-                                          fontWeight: FontWeight.w400,
-                                          textAlign: TextAlign.center,
-                                          height: 1.5,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                if (!isObjectEmpty(thumbnailImageFile)) ...[
-                                  Container(
-                                    height: 130,
-                                    width: screenWidth(context),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(1),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.file(
-                                        File(thumbnailImageFile!.path),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                // Denoting Users can re-upload a new image...
-                                if (!isObjectEmpty(thumbnailImageFile)) ...[
-                                  Positioned(
-                                    top: 40,
-                                    left: screenWidth(context) * .4,
-                                    child: const Icon(
-                                      Icons.add_circle,
-                                      color: BORDER,
-                                      size: 50,
-                                    ),
-                                  ),
-                                ],
-
-                                /// Loading Dialog on Empty Box
-                                if (isLoadingThumbnail) ...[
-                                  Positioned(
-                                    top: 90,
-                                    left: screenWidth(context) * .42,
-                                    child: const CircularProgressIndicator
-                                        .adaptive(),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                        FormUtils.formSpacer(),
-                        FormWithLabel(
-                          label: "Project images",
-                          form: !isObjectEmpty(projectImageFileList)
-                              ? SizedBox(
-                                  height: 150,
-                                  child: Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          multipleImagePicker();
-                                        },
-                                        child: Container(
-                                          height: 180,
-                                          width: 100,
-                                          padding:
-                                              const EdgeInsets.only(right: 5),
-                                          child: CustomDottedBorder(
-                                            child: Center(
-                                              /// Loading Dialog on alreay selected boxes
-                                              child: isLoadingImage
-                                                  ? const CircularProgressIndicator
-                                                      .adaptive()
-                                                  : const Icon(
-                                                      Icons.add,
-                                                    ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: ListView.separated(
-                                          itemCount:
-                                              projectImageFileList.length,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (c, i) {
-                                            File img = File(
-                                                projectImageFileList[i].path);
-                                            return Stack(
-                                              children: [
-                                                SizedBox(
-                                                  height: 180,
-                                                  width: 100,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    child: Image.file(
-                                                      img,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                  right: 5,
-                                                  top: 10,
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        projectImageFileList
-                                                            .removeWhere(
-                                                                (element) =>
-                                                                    element ==
-                                                                    projectImageFileList[
-                                                                        i]);
-                                                      });
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.delete_outline,
-                                                      color: RED,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                          separatorBuilder: (c, i) =>
-                                              xSpace(width: 8),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    multipleImagePicker();
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      CustomDottedBorder(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(28.0),
-                                          child: Center(
-                                            child: subtext(
-                                              "Click to browse your files\nRecommended image size: 280 x 160px",
-                                              fontSize: 14,
-                                              color: GRAY,
-                                              fontWeight: FontWeight.w400,
-                                              textAlign: TextAlign.center,
-                                              height: 1.5,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-
-                                      /// Loading Dialog on Empty Box
-                                      if (isLoadingImage) ...[
-                                        Positioned(
-                                          top: 90,
-                                          left: screenWidth(context) * .42,
-                                          child: const CircularProgressIndicator
-                                              .adaptive(),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                        ),
-                        ySpace(height: 40),
-                        SubmitBtn(
-                          onPressed: _submit,
-                          title: btnTxt("Save an Continue", WHITE),
-                        ),
+                        const AddProjectForm(),
+                        ySpace(height: 20),
                       ],
                     ),
                   ),
@@ -720,92 +421,15 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                         ),
                         ySpace(height: 40),
                         SubmitBtn(
-                          onPressed: _submit,
+                          onPressed: () => _submit(2),
                           title: btnTxt("Save", WHITE),
+                          loading: authCtrl.loading,
                         ),
                         ySpace(height: 20),
                       ],
                     ),
                   ),
                   ySpace(height: 32),
-                  ExpanableProfileCard(
-                    isExpanded: isInteractions,
-                    title: "Interactions",
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ySpace(height: 16),
-                        ListTile(
-                          contentPadding: const EdgeInsets.all(0),
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: labelText(
-                              "Spaces",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                          ),
-                          subtitle: subtext(
-                            "Enabling this will allow all your acitivity in spaces show up on your profile",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            height: 1.5,
-                          ),
-                          trailing: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Switch(
-                              value: enableSpaces,
-                              onChanged: (val) {
-                                setState(() {
-                                  enableSpaces = !enableSpaces;
-                                });
-                              },
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              enableSpaces = !enableSpaces;
-                            });
-                          },
-                        ),
-                        FormUtils.formSpacer(),
-                        ListTile(
-                          contentPadding: const EdgeInsets.all(0),
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: labelText(
-                              "Comments",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                          ),
-                          subtitle: subtext(
-                            "Enabling this will allow all your acitivity in spaces show up on your profile",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            height: 1.5,
-                          ),
-                          trailing: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Switch(
-                              value: enableComments,
-                              onChanged: (val) {
-                                setState(() {
-                                  enableComments = !enableComments;
-                                });
-                              },
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              enableComments = !enableComments;
-                            });
-                          },
-                        ),
-                        ySpace(height: 16),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -839,86 +463,122 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
     );
   }
 
-  void addCollaborator() {
-    for (var element in dynamicNameCollaboratorsCtrl) {
-      if (isObjectEmpty(element.text)) {
-        showText(message: "Oops!!! Please fill the empty name.");
-        return;
-      }
+  void uploadImage() async {
+    File? _ = await selectImageFromGallery();
+    if (_ != null) {
+      profilePicture = _;
+      setState(() {});
     }
-    for (var element in dynamicRoleCollaboratorsCtrl) {
-      if (isObjectEmpty(element.text)) {
-        showText(message: "Oops!!! Please fill the empty role.");
-        return;
-      }
-    }
-    dynamicNameCollaboratorsCtrl.add(TextEditingController());
-    dynamicRoleCollaboratorsCtrl.add(TextEditingController());
-    setState(() {});
-  }
+    String imageByteString =
+        await convertFileToString("${profilePicture?.path}");
+    // print("George, here's the imageByte: $imageByteString");
 
-  void deleteCollaborator(int index) {
-    dynamicNameCollaboratorsCtrl.removeAt(index);
-    dynamicRoleCollaboratorsCtrl.removeAt(index);
-    setState(() {});
-  }
-
-  multipleImagePicker({
-    bool isThumbnail = false,
-    bool isLogo = false,
-  }) async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
-    if (isThumbnail) {
-      awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        thumbnailImageFile = selectedImage;
-      }
-    } else if (isLogo) {
-      awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        logoImage = selectedImage;
-      }
-    } else {
-      awaitingImageLoad(false);
-      final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-      awaitingImageLoad(false);
-      if (selectedImages.isNotEmpty) {
-        projectImageFileList.addAll(selectedImages);
-      }
-    }
-    setState(() {});
-  }
-
-  awaitingImageLoad(bool isThumbnail) {
-    switch (isThumbnail) {
-      case true:
-        setState(() {
-          isLoadingThumbnail = !isLoadingThumbnail;
-        });
-        break;
-      default:
-        setState(() {
-          isLoadingImage = !isLoadingImage;
-        });
+// Remember to delete the old image with the ID before uploading a new one...
+    MediaUploadModel? imageUrl = await authCtrl.mediaUpload(imageByteString);
+    if (!isObjectEmpty(imageUrl)) {
+      updateUserBusinessProfile(
+        businessAccount.copyWith(logo: imageUrl),
+      );
     }
   }
 
-  void _submit() async {
+  void updateUserBusinessProfile(BusinessAccountModel business) async {
+    print(
+        "Hi George, here is the updated user data with business: ${business?.toJson()}");
+    await authCtrl.updateBusinessProfile(context, business.toJson());
+  }
+
+  void _submit(int index) {
     closeKeyPad(context);
+    switch (index) {
+      case 0:
+        // Update the personal info
+        // Check if any madatory field is empty...
+        if (isObjectEmpty(businessNameCtrl.text) ||
+            isObjectEmpty(yoe) ||
+            isObjectEmpty(locationCtrl.text)) {
+          showText(message: "Oops!! Please complete Personal Info section");
+          return;
+        }
+        updateUserBusinessProfile(
+          businessAccount.copyWith(
+            name: businessNameCtrl.text,
+            yoe: yoe,
+            location: locationCtrl.text,
+          ),
+        );
+        return;
+      case 1:
+        // Update the introduction
+        // Check if any madatory field is empty...
+        if (isObjectEmpty(headlineCtrl.text) || isObjectEmpty(bioCtrl.text)) {
+          showText(message: "Oops!! Please complete Introduction section");
+          return;
+        }
+        updateUserBusinessProfile(
+          businessAccount.copyWith(
+            headline: headlineCtrl.text,
+            bio: bioCtrl.text,
+          ),
+        );
+        return;
+      case 2:
+        // Update the online profiles
+        // Check if at least one field is provided...
+        bool hasLinkedIn = isObjectEmpty(linkedinCtrl.text);
+        bool hasTwitter = isObjectEmpty(xCtrl.text);
+        bool hasInstagram = isObjectEmpty(instagramCtrl.text);
+        //
+        bool isValidLinkedIn = validateSocialMediaField(
+          type: SocialMediaTypes.Linkedin,
+          value: linkedinCtrl.text,
+        );
+        bool isValidTwitter = validateSocialMediaField(
+          type: SocialMediaTypes.Twitter,
+          value: xCtrl.text,
+        );
+        bool isValidInstagram = validateSocialMediaField(
+          type: SocialMediaTypes.Instagram,
+          value: instagramCtrl.text,
+        );
+        if (hasLinkedIn && hasInstagram && hasTwitter) {
+          showText(message: "Please provide atleast ONE social media account");
+          return;
+        }
+        if (!hasLinkedIn && !isValidLinkedIn) {
+          // User entered linkedIn, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid LinkedIn URL");
+          return;
+        } else if (!hasInstagram && !isValidInstagram) {
+          // User entered instagram, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid Instagram URL");
+          return;
+        } else if (!hasTwitter && !isValidTwitter) {
+          // User entered twitter, but it's not a valid url
+          showError(message: "Oops!!! This is not a valid X  URL");
+          return;
+        }
+        updateUserBusinessProfile(
+          businessAccount.copyWith(
+            website: websiteCtrl.text,
+            linkedIn: linkedinCtrl.text,
+            instagram: instagramCtrl.text,
+            twitter: xCtrl.text,
+          ),
+        );
+        return;
+
+      default:
+    }
     if (formKey.currentState!.saveAndValidate()) {}
-    formKey.currentState!.reset();
+    // formKey.currentState!.reset();
   }
 
   @override
   void dispose() {
     businessNameCtrl.dispose();
-    usernameCtrl.dispose();
+    yoeCtrl.dispose();
+    // usernameCtrl.dispose();
     locationCtrl.dispose();
     headlineCtrl.dispose();
     bioCtrl.dispose();
@@ -926,14 +586,6 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
     linkedinCtrl.dispose();
     instagramCtrl.dispose();
     xCtrl.dispose();
-    descCtrl.dispose();
-    projectUrlCtrl.dispose();
-    for (var element in dynamicNameCollaboratorsCtrl) {
-      element.dispose();
-    }
-    for (var element in dynamicRoleCollaboratorsCtrl) {
-      element.dispose();
-    }
     super.dispose();
   }
 }

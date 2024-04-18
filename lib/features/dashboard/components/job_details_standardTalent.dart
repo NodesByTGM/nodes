@@ -49,7 +49,8 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
             height: 44,
           ),
           title: labelText(
-            "${job.business?.name}",
+            // "${job.business?.name}",
+            capitalize("${job.business?.name}"),
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),

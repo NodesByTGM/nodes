@@ -97,7 +97,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
             keyboardType: TextInputType.multiline,
             style: FORM_STYLE,
             controller: projectDescCtrl,
-            maxLength: 2000,
+            maxLength: 300,
             maxLines: 5,
             onSaved: (value) => formValues['description'] = trimValue(value),
             validator: FormBuilderValidators.compose(

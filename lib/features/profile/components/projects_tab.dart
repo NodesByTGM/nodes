@@ -70,10 +70,14 @@ class _ProjectsTabState extends State<ProjectsTab> {
                       child: SubmitBtn(
                         // onPressed: showCreateProjectModal,
                         onPressed: () {
-                          if (isBusinessProfileComplete(business)) {
+                          if (widget.isBusiness
+                              ? isBusinessProfileComplete(business)
+                              : isTalentProfileComplete(user)) {
                             showCreateProjectModal();
                           } else {
-                            showText(message: "Please update your profile to proceed.");
+                            showText(
+                                message:
+                                    "Please update your profile to proceed.");
                           }
                         },
                         title: btnTxt(

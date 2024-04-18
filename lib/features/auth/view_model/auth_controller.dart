@@ -580,6 +580,26 @@ class AuthController extends BaseController {
     }
   }
 
+  Future<bool> updateBusinessProfile(BuildContext ctx, dynamic payload) async {
+    setBusy(true);
+    try {
+      ApiResponse response = await _authService.updateBusinessProfile(ctx, payload);
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      showSuccess(message: response.message);
+      await _customUserSessionUpdate(response);
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
   // Future<String?> mediaUpload(File file) async {
   //   setUploadingMedia(true);
   //   try {

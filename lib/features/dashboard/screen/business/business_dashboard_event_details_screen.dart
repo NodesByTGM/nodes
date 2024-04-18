@@ -62,7 +62,8 @@ class _BusinessEventDetailsScreenState
                   actionBtn(
                     icon: ImageUtils.editPencileOutlineIcon,
                     onTap: showEditEventBottomSheet,
-                    loading: false,
+                    loading:
+                        context.watch<DashboardController>().isUpdatingEvent,
                   ),
                   actionBtn(
                     icon: ImageUtils.shareOutlineIcon,
@@ -170,10 +171,10 @@ class _BusinessEventDetailsScreenState
     final result = await showAlertDialog(
       context,
       body: subtext(
-        "Are you sure you want to delete this Job posting?",
+        "Are you sure you want to delete this Event posting?",
         fontSize: 13,
       ),
-      title: "Delete Job",
+      title: "Delete Event",
       cancelTitle: "No, Cancel",
       okTitle: "Yes, Delete",
       okColor: RED,

@@ -146,6 +146,7 @@ String? trimValue(String? val) {
 }
 
 String capitalize(String s) {
+  if (s.isEmpty) return '';
   List<String> names = s.trim().split(' ');
   if (names.isNotEmpty) {
     return names
@@ -915,6 +916,58 @@ List<Widget> userSocials(UserModel user) {
         ];
 }
 
+List<Widget> userBusinessSocials(BusinessAccountModel business) {
+  List<Widget> iconArr = [];
+
+  if (!isObjectEmpty(business.linkedIn)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.linkedinIcon,
+      ),
+    );
+  }
+  if (!isObjectEmpty(business.instagram)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.instagramIcon,
+      ),
+    );
+  }
+  if (!isObjectEmpty(business.website)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.globeIcon,
+      ),
+    );
+  }
+  if (!isObjectEmpty(business.twitter)) {
+    iconArr.add(
+      iconWithLink(
+        onTap: () {},
+        icon: ImageUtils.twitterIcon,
+      ),
+    );
+  }
+  return !isObjectEmpty(iconArr)
+      ? iconArr
+      : [
+          SvgPicture.asset(
+            ImageUtils.chainLinkIcon,
+            color: GRAY,
+          ),
+          xSpace(width: 5),
+          subtext(
+            "Websites",
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: GRAY,
+          ),
+        ];
+}
+
 GestureDetector iconWithLink({
   required GestureTapCallback onTap,
   required String icon,
@@ -941,11 +994,32 @@ Padding actionBtn({
   );
 }
 
-bool isBusinessProfileComplete(BusinessAccountModel business) {
+bool isBusinessProfileComplete(BusinessAccountModel b) {
+  // check if the following fields are available
+  // Logo, Name, YOE, Location, Headline and Bio, for now sha...
+  bool hasLogo = !isObjectEmpty(b.logo?.url);
+  bool hasName = !isObjectEmpty(b.name);
+  bool hasYoe = !isObjectEmpty(b.yoe);
+  bool hasLocation = !isObjectEmpty(b.location);
+  // bool hasHeadline = !isObjectEmpty(b.headline);
+  // bool hasBio = !isObjectEmpty(b.bio);
+  // if (hasLogo && hasName && hasYoe && hasLocation && hasHeadline && hasBio) {
+  if (hasName && hasYoe && hasLocation) {
+    return true;
+  }
   return false;
 }
 
-bool isTalentProfileComplete(UserModel talent) {
+bool isTalentProfileComplete(UserModel t) {
+  bool hasAvatar = !isObjectEmpty(t.avatar?.url);
+  bool hasName = !isObjectEmpty(t.name);
+  bool hasDob = !isObjectEmpty(t.dob);
+  bool hasLocation = !isObjectEmpty(t.location);
+  bool hasHeadline = !isObjectEmpty(t.headline);
+  bool hasBio = !isObjectEmpty(t.bio);
+  if (hasAvatar && hasName && hasDob && hasLocation && hasHeadline && hasBio) {
+    return true;
+  }
   return false;
 }
 

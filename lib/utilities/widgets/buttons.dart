@@ -52,7 +52,7 @@ class SubmitBtn extends StatelessWidget {
                 ElevatedButton(
                   onPressed: isEnabled ? onPressed : null,
                   style: ElevatedButton.styleFrom(
-                    primary: color ?? PRIMARY,
+                    primary: color ?? BLACK,
                     padding: const EdgeInsets.all(14.0),
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(

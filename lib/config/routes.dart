@@ -14,6 +14,9 @@ import 'package:nodes/features/auth/views/talent_auth/talent_signup_screen.dart'
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/home/views/home_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
+import 'package:nodes/features/messages/screen/message_screen.dart';
+import 'package:nodes/features/messages/screen/single_message_details.dart';
+import 'package:nodes/features/notification/screen/notification_screen.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -90,6 +93,25 @@ class Routes {
         const page = NavbarView();
         return MaterialPageRoute(
           builder: (_) => page,
+        );
+
+      case NotificationScreen.routeName:
+        const page = NotificationScreen();
+        return MaterialPageRoute(
+          builder: (_) => page,
+        );
+
+      case MessageScreen.routeName:
+        const page = MessageScreen();
+        return MaterialPageRoute(
+          builder: (_) => page,
+        );
+
+      case SingleMessageDetails.routeName:
+        const page = SingleMessageDetails();
+        return MaterialPageRoute(
+          builder: (_) => page,
+          fullscreenDialog: true,
         );
 
       // case CreateEditVerificationScreen.routeName:

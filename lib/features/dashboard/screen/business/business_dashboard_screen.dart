@@ -29,6 +29,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
   late AuthController authCtrl;
   late DashboardController dashCtrl;
   late UserModel user;
+  late BusinessAccountModel businessAccount;
   int currentJobIndex = 0;
   int currentTrendingIndex = 0;
   final trendingCtrl = PageController(viewportFraction: 1);
@@ -40,6 +41,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     authCtrl = locator.get<AuthController>();
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
+    businessAccount = user.business as BusinessAccountModel;
     super.initState();
     fetchMyCreatedEventAndJobsTrending();
   }
@@ -56,11 +58,13 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
     dashCtrl = context.watch<DashboardController>();
+    user = authCtrl.currentUser;
+    businessAccount = user.business as BusinessAccountModel;
     return ListView(
       children: [
         ySpace(height: 40),
         labelText(
-          "Hi  ${user.name?.split(' ').first}!, Nice to have you here.",
+          "Hi  ${businessAccount.name?.split(' ').first}!, Nice to have you here.",
           fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
@@ -91,17 +95,19 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                 color: WHITE,
               ),
               ySpace(height: 40),
-              QuickSetupCard(
-                title: "Complete your\nbusiness profile",
-                btnTitle: "Complete Profile",
-                icon: ImageUtils.headIcon,
-                onTap: () {
-                  context.read<NavController>().updatePageListStack(
-                        BusinessProfileScreen.routeName,
-                      );
-                },
-              ),
-              ySpace(height: 24),
+              if (!isBusinessProfileComplete(businessAccount)) ...[
+                QuickSetupCard(
+                  title: "Complete your\nbusiness profile",
+                  btnTitle: "Complete Profile",
+                  icon: ImageUtils.headIcon,
+                  onTap: () {
+                    context.read<NavController>().updatePageListStack(
+                          BusinessProfileScreen.routeName,
+                        );
+                  },
+                ),
+                ySpace(height: 24),
+              ],
               QuickSetupCard(
                   title: "Create a job\npost",
                   btnTitle: "Create",

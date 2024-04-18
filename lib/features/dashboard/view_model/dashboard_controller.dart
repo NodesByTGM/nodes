@@ -98,6 +98,7 @@ class DashboardController extends BaseController {
       // Means it should add/ i.e created a new one in the list
       _createdJobList.add(job);
     }
+    _currentlyViewedBusinessJob = job;
     notifyListeners();
   }
 

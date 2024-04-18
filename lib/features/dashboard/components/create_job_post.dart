@@ -1,12 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/services.dart';
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class CreateJobPost extends StatefulWidget {
-  const CreateJobPost({super.key});
+  const CreateJobPost({
+    super.key,
+    this.job,
+  });
+
+  final BusinessJobModel? job;
 
   @override
   State<CreateJobPost> createState() => _CreateJobPostState();
@@ -22,12 +30,28 @@ class _CreateJobPostState extends State<CreateJobPost> {
   final TextEditingController locationCtrl = TextEditingController();
   final TextEditingController descCtrl = TextEditingController();
   List<String> selectedSkills = [];
+  List<String>? initialPickedItems = [];
   final formValues = {};
+  late BusinessJobModel? job;
 
   @override
   void initState() {
     dashCtrl = locator.get<DashboardController>();
+    job = widget.job;
     super.initState();
+    loadEventData();
+  }
+
+  loadEventData() {
+    if (!isObjectEmpty(job)) {
+      jobTitleCtrl.text = "${job?.name}";
+      // hoursCtrl.text = "${job?.payRate}";
+      rateCtrl.text = "${job?.workRate}";
+      weeklyRateCtrl.text = "${job?.workRate}";
+      // locationCtrl.text = "${job?.location}";
+      descCtrl.text = "${job?.description}";
+      initialPickedItems = job?.skills ?? [];
+    }
   }
 
   @override
@@ -223,6 +247,7 @@ class _CreateJobPostState extends State<CreateJobPost> {
               FormWithLabel(
                 label: "Skills required",
                 form: MultipleSearchSelection<String>(
+                  initialPickedItems: initialPickedItems,
                   searchField: TextField(
                     decoration: FormUtils.formDecoration(
                       hintText: "Add up to 3 skills",
@@ -317,8 +342,10 @@ class _CreateJobPostState extends State<CreateJobPost> {
               //
               SubmitBtn(
                 onPressed: _submit,
-                title: btnTxt("Create job posting", WHITE),
-                loading: dashCtrl.isCreatingJob,
+                title: btnTxt(
+                    isObjectEmpty(job) ? "Create job posting" : "Update Job",
+                    WHITE),
+                loading: dashCtrl.isCreatingJob || dashCtrl.isUpdatingJob,
               ),
             ],
           ),
@@ -330,15 +357,25 @@ class _CreateJobPostState extends State<CreateJobPost> {
   void _submit() async {
     closeKeyPad(context);
     if (formKey.currentState!.saveAndValidate()) {
-      bool done = await dashCtrl.createJob(context, {
-        "name": jobTitleCtrl.text,
-        "description": descCtrl.text,
-        "experience": "1 - 3",
-        "payRate": "\$${rateCtrl.text}/hr",
-        "workRate": "\$${weeklyRateCtrl.text}/week",
-        "skills": selectedSkills,
-        "jobType": formValues['jobType'],
-      });
+      bool done = isObjectEmpty(job)
+          ? await dashCtrl.createJob(context, {
+              "name": jobTitleCtrl.text,
+              "description": descCtrl.text,
+              "experience": "1 - 3",
+              "payRate": "\$${rateCtrl.text}/hr",
+              "workRate": "\$${weeklyRateCtrl.text}/wk",
+              "skills": selectedSkills,
+              "jobType": formValues['jobType'],
+            })
+          : await dashCtrl.updateSingleJob(context, id: job?.id, payload: {
+              "name": jobTitleCtrl.text,
+              "description": descCtrl.text,
+              "experience": "1 - 3",
+              "payRate": "${rateCtrl.text}/hr",
+              "workRate": "${weeklyRateCtrl.text}/wk",
+              "skills": selectedSkills,
+              "jobType": formValues['jobType'],
+            });
       if (done && mounted) {
         navigateBack(context);
       }

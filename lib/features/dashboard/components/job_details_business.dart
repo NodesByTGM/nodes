@@ -31,6 +31,7 @@ class _BusinessJobDetailsState extends State<BusinessJobDetails> {
   @override
   Widget build(BuildContext context) {
     dashCtrl = context.watch<DashboardController>();
+    job = dashCtrl.currentlyViewedBusinessJob;
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -46,7 +47,8 @@ class _BusinessJobDetailsState extends State<BusinessJobDetails> {
              * 
             //  Work on this George
              */
-            "${job.business?.name ?? "Business name"}",
+            // "${job.business?.name ?? "Business name"}",
+            capitalize("${job.business?.name}"),
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),

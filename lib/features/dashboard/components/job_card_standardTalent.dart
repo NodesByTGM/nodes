@@ -50,8 +50,6 @@ class StandardTalentJobCard extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              print("George this is the job: ${job.toJson()}");
-                              print("The job is this ${job.id == id}");
                               bool currentJob = job.id == id;
                               if (isTalent && currentJob) {
                                 saveUnsaveJob(context, job);
@@ -87,7 +85,8 @@ class StandardTalentJobCard extends StatelessWidget {
             ),
             ySpace(height: 16),
             subtext(
-              "${job.business?.name}",
+              // "${job.business?.name}",
+              capitalize("${job.business?.name}"),
               fontSize: 14,
             ),
             ySpace(height: 16),

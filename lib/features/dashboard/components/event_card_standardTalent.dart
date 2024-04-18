@@ -1,7 +1,5 @@
-import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/components/event_details_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
@@ -29,6 +27,7 @@ class StandardTalentEventCard extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
+              // Add an overlay on this image please...
               child: cachedNetworkImage(
                 imgUrl: "${event.thumbnail?.url}",
                 size: screenWidth(context),

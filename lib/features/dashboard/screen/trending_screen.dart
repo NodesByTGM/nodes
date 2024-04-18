@@ -2,7 +2,6 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
@@ -17,27 +16,24 @@ import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
-class IndividualDashboardScreen extends StatefulWidget {
-  const IndividualDashboardScreen({super.key});
-  static const String routeName = "/individual_dashboard_screen";
+class TrendingDashboardScreen extends StatefulWidget {
+  const TrendingDashboardScreen({super.key});
+  static const String routeName = "/trending_dashboard_screen";
 
   @override
-  State<IndividualDashboardScreen> createState() =>
-      _IndividualDashboardScreenState();
+  State<TrendingDashboardScreen> createState() =>
+      _TrendingDashboardScreenState();
 }
 
-class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
+class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
   late NavController navCtrl;
   late AuthController authCtrl;
   late DashboardController dashCtrl;
   late UserModel user;
   int currentEventIndex = 0;
-  int currentTrendingIndex = 0;
-  int currentSpaceIndex = 0;
-  int spaceLength = 5;
+  int currentTrendingIndex = 0; 
   final eventsCardCtrl = PageController(viewportFraction: 1);
-  final trendingCardCtrl = PageController(viewportFraction: 1);
-  final spaceCardCtrl = PageController(viewportFraction: 1);
+  final trendingCardCtrl = PageController(viewportFraction: 1); 
 
   @override
   void initState() {
@@ -382,123 +378,6 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
             ],
           ),
           ySpace(height: 40),
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     labelText(
-          //       "Spaces you might like",
-          //       fontSize: 16,
-          //       fontWeight: FontWeight.w500,
-          //     ),
-          //     ySpace(height: 10),
-          //     Row(
-          //       children: [
-          //         Expanded(
-          //           child: subtext(
-          //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         GestureDetector(
-          //           onTap: () {
-          //             // navCtrl.updatePageListStack(
-          //             //   NodeSpacesScreen.routeName,
-          //             // );
-          //             showSuccess(message: "Coming Soon");
-          //           },
-          //           child: subtext(
-          //             "See more",
-          //             fontSize: 14,
-          //             color: PRIMARY,
-          //           ),
-          //         ),
-          //       ],
-          //     )
-          //   ],
-          // ),
-          // ySpace(height: 20),
-          // SizedBox(
-          //   height: 320,
-          //   child: PageView.builder(
-          //     itemCount: spaceLength,
-          //     controller: spaceCardCtrl,
-          //     onPageChanged: (val) {
-          //       currentSpaceIndex = val;
-          //       setState(() {});
-          //     },
-          //     itemBuilder: (context, index) {
-          //       return CommunitySpaceCardTemplate(
-          //         imgUrl:
-          //             "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-          //         title: "Lorem ipsum dolor sit amet, con...",
-          //         height: 300,
-          //         marginRight: 0,
-          //         onTap: () {},
-          //       );
-          //     },
-          //   ),
-          // ),
-          // ySpace(height: 24),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.end,
-          //       children: [
-          //         ...List.generate(spaceLength, (index) {
-          //           return Padding(
-          //             padding: const EdgeInsets.only(right: 2),
-          //             child: CardDotIndicator(
-          //               isActive: currentSpaceIndex == index,
-          //             ),
-          //           );
-          //         })
-          //       ],
-          //     ),
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         GestureDetector(
-          //           onTap: () {
-          //             customAnimatePageView(
-          //               isInc: false,
-          //               totoalLength: spaceLength,
-          //               currentIndex: currentSpaceIndex,
-          //               ctrl: spaceCardCtrl,
-          //             );
-          //           },
-          //           child: SvgPicture.asset(
-          //             ImageUtils.leftCircleDirectionIcon,
-          //           ),
-          //         ),
-          //         xSpace(width: 24),
-          //         GestureDetector(
-          //           onTap: () {
-          //             customAnimatePageView(
-          //               isInc: true,
-          //               totoalLength: spaceLength,
-          //               currentIndex: currentSpaceIndex,
-          //               ctrl: spaceCardCtrl,
-          //             );
-          //           },
-          //           child: SvgPicture.asset(
-          //             ImageUtils.rightCircleDirectionIcon,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
-          // ySpace(height: 40),
-          // Subsection(
-          //   leftSection: "Collaboration Spotlights",
-          //   rightSection: "View all",
-          //   onTap: () {},
-          // ),
-          // const HorizontalSlidingCards(
-          //   dataSource: HorizontalSlidingCardDataSource.CollaborationSpotlights,
-          // ),
-          // ySpace(height: 40),
           Subsection(
             leftSection: "Birthdays",
             rightSection: "View all",

@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_textfield_autocomplete/flutter_textfield_autocomplete.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/components/expanable_profile_cards.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
@@ -27,7 +25,6 @@ class EditTalentProfileScreen extends StatefulWidget {
 class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   final formKey = GlobalKey<FormBuilderState>();
   late AuthController authCtrl;
-  late DashboardController dashCtrl;
   late UserModel user;
   List<String>? locationList = const [];
   GlobalKey<TextFieldAutoCompleteState<String>> autoCompleteKey = GlobalKey();
@@ -57,7 +54,6 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
-    dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     super.initState();
     loadProfile();
@@ -94,9 +90,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // authCtrl = context.watch<AuthController>();
-    // user = authCtrl.currentUser;
-    dashCtrl = context.watch<DashboardController>();
+    authCtrl = context.watch<AuthController>();
     return Container(
       decoration: const BoxDecoration(
         color: PROFILEBG,
@@ -414,6 +408,8 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                   ExpanableProfileCard(
                     isExpanded: isAddProject,
                     title: "Add a project",
+                    canOpen: isTalentProfileComplete(user),
+                    errorText: 'Please complete your Personal Info section',
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

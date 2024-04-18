@@ -169,6 +169,16 @@ class AuthService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
+
+  Future<ApiResponse> updateBusinessProfile(BuildContext ctx, payload) async {
+    try {
+      ApiResponse res = await authRepository.updateBusinessProfile(payload);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @updateBusinessProfile ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
  
 
   // Future<ApiResponse> mediaUpload(File file) async {

@@ -7,6 +7,7 @@ import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_pre_dashboard_screen.dart';
+import 'package:nodes/features/dashboard/screen/trending_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
@@ -300,15 +301,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           title: KeyString.trendingScreen,
                           route: DrawerRouteTitle
                               .Trending, // Send to individual dashboard... or reproduce it...
-                          // isActive: getActiveDrawer(
-                          //     navCtrl, KeyString.trendingScreen),
-                          isActive: false,
+                          isActive: getActiveDrawer(
+                              navCtrl, KeyString.trendingScreen),
+                          // isActive: false,
                           onTap: () {
                             closeDrawer();
-                            navCtrl.resetPageListStack();
-                            // navCtrl.updatePageListStack(
-                            //   UpgradeToProScreen.routeName,
-                            // );
+                            navCtrl.updatePageListStack(
+                              TrendingDashboardScreen.routeName,
+                            );
                           },
                         ),
                       ],

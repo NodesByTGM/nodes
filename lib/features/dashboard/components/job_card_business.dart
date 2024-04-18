@@ -51,7 +51,8 @@ class BusinessJobCard extends StatelessWidget {
               /** 
                * George, work on this...
                */
-              "${job.business?.name ?? 'Business Name'}",
+              // "${job.business?.name ?? 'Business Name'}",
+              capitalize("${job.business?.name}"),
               fontSize: 14,
             ),
             ySpace(height: 16),

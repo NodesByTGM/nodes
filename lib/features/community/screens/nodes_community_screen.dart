@@ -66,7 +66,7 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
                 ),
                 ySpace(height: 40),
                 FormBuilderTextField(
-                  name: "email",
+                  name: "search",
                   decoration: FormUtils.formDecoration(
                     hintText: "ex: actors",
                     prefixIcon: const Padding(

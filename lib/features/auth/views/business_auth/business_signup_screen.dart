@@ -16,7 +16,7 @@ class _BusinessSignupScreenState extends State<BusinessSignupScreen> {
   final formKey = GlobalKey<FormBuilderState>();
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController fullnameCtrl = TextEditingController();
-  final TextEditingController companyNameCtrl = TextEditingController();
+  final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController pwdCtrl = TextEditingController();
 
   final formValues = {};
@@ -116,7 +116,7 @@ class _BusinessSignupScreenState extends State<BusinessSignupScreen> {
                             ),
                             keyboardType: TextInputType.text,
                             style: FORM_STYLE,
-                            controller: companyNameCtrl,
+                            controller: nameCtrl,
                             // initialValue: "John Doe",
                             onSaved: (value) =>
                                 formValues['company_name'] = trimValue(value),
@@ -298,7 +298,7 @@ class _BusinessSignupScreenState extends State<BusinessSignupScreen> {
   @override
   void dispose() {
     fullnameCtrl.dispose();
-    companyNameCtrl.dispose();
+    nameCtrl.dispose();
     emailCtrl.dispose();
     pwdCtrl.dispose();
     super.dispose();

@@ -29,6 +29,7 @@ class AuthApis {
 
   // Profile
   static const profileApi = "$baseApi/users/profile";
+  static const businessProfile = "$baseApi/users/business-profile";
 
 
   // Media Uploads
@@ -91,6 +92,9 @@ abstract class AuthRepository {
 
   @PUT(AuthApis.profileApi)
   Future<ApiResponse> updateProfile(@Body() payload);
+
+  @PUT(AuthApis.businessProfile)
+  Future<ApiResponse> updateBusinessProfile(@Body() payload);
  
   // @MultiPart()
   // @POST(AuthApis.mediaUploadsApi)

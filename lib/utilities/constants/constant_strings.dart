@@ -18,7 +18,6 @@ class Constants {
     'Full-time',
     'Part-time',
     'Contract',
-    'Remote',
   ];
   static const standardFeatures = [
     "Access to nodes community",

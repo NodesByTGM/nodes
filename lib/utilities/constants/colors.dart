@@ -9,6 +9,7 @@ const Color WHITE = Color(0xFFFFFFFF);
 const Color BLACK = Color(0xFF000000);
 const Color ORANGE = Color(0xFFF7B307);
 const Color SECONDARY = Color(0xFFD9E41E);
+const Color CHAT_BG = Color(0xFFFEFFEA);
 const Color TAG_CHIP = Color(0xFFD6DE21);
 const Color LIGHT_SECONDARY = Color(0xFFFBFCE9);
 

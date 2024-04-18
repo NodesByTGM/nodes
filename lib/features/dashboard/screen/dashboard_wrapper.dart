@@ -1,6 +1,5 @@
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';

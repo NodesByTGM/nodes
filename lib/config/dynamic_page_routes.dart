@@ -16,6 +16,7 @@ import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
+import 'package:nodes/features/dashboard/screen/trending_screen.dart';
 import 'package:nodes/features/grid_tools/screens/grid_tools_screen.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
@@ -49,7 +50,6 @@ const Map<String, dynamic> persistentRoutesSettings = {
     EditIndividualProfileScreen.routeName,
     TalentProfileScreen.routeName,
     EditTalentProfileScreen.routeName,
-    EditBusinessProfileScreen.routeName,
   ],
 
   // Community Screen
@@ -73,6 +73,7 @@ const Map<String, dynamic> persistentRoutesSettings = {
     BusinessEventDetailsScreen.routeName,
     BusinessDashboardScreen.routeName,
     BusinessProfileScreen.routeName,
+    EditBusinessProfileScreen.routeName,
   ],
   KeyString.businessDashboardScreen: [
     BusinessEventDetailsScreen.routeName,
@@ -81,6 +82,7 @@ const Map<String, dynamic> persistentRoutesSettings = {
 
   KeyString.businessProfileScreen: [
     BusinessProfileScreen.routeName,
+    EditBusinessProfileScreen.routeName,
   ],
 
   // Subscription Screen
@@ -95,9 +97,15 @@ const Map<String, dynamic> persistentRoutesSettings = {
   ],
   // UpgradeToPro Screen
   KeyString.upgradeToProScreen: [],
+
   // Saved Items Screen
   KeyString.savesScreen: [
     SavedItemScreen.routeName,
+  ],
+
+  // Trending Screen
+  KeyString.trendingScreen: [
+    TrendingDashboardScreen.routeName,
   ],
 };
 
@@ -163,6 +171,9 @@ Widget getDynamicScreen(NavController m) {
 
     // Saved Items
     SavedItemScreen.routeName => const SavedItemScreen(),
+
+    // Talent Screen
+    TrendingDashboardScreen.routeName => const TrendingDashboardScreen(),
 
     // Serves as default value
     _ => const IndividualDashboardScreen()

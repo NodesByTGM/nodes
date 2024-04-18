@@ -9,11 +9,10 @@ import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_event_details_screen.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_job_details_screen.dart';
-import 'package:nodes/features/dashboard/screen/business/business_dashboard_screen.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
-import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_screen.dart';
-import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
 import 'package:nodes/features/home/components/drawer.dart';
+import 'package:nodes/features/messages/screen/message_screen.dart';
+import 'package:nodes/features/notification/screen/notification_screen.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/individual/edit_individual_profile_screen.dart';
@@ -22,7 +21,6 @@ import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/profile/screens/talent/edit_talent_profile_screen.dart';
 import 'package:nodes/features/profile/screens/talent/talent_profile_screen.dart';
 import 'package:nodes/features/saves/screens/saved_items_screen.dart';
-import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class NavbarView extends StatefulWidget {
@@ -121,7 +119,9 @@ class _NavbarViewState extends State<NavbarView> {
         actions: isRegistered
             ? [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    navigateTo(context, NotificationScreen.routeName);
+                  },
                   child: SvgPicture.asset(
                     ImageUtils.bellIcon,
                     height: 32,
@@ -129,7 +129,9 @@ class _NavbarViewState extends State<NavbarView> {
                 ),
                 xSpace(width: 24),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    navigateTo(context, MessageScreen.routeName);
+                  },
                   child: SvgPicture.asset(
                     ImageUtils.envelopeIcon,
                     height: 32,

@@ -8,10 +8,16 @@ class ExpanableProfileCard extends StatefulWidget {
     required this.isExpanded,
     required this.child,
     required this.title,
+    this.errorText,
+    this.canOpen = true,
   });
   final bool isExpanded;
   final Widget child;
   final String title;
+
+  //
+  final String? errorText;
+  final bool canOpen;
 
   @override
   State<ExpanableProfileCard> createState() => _ExpanableProfileCardState();
@@ -43,9 +49,13 @@ class _ExpanableProfileCardState extends State<ExpanableProfileCard> {
               isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
             ),
             onTap: () {
-              setState(() {
-                isExpanded = !isExpanded;
-              });
+              if (widget.canOpen) {
+                setState(() {
+                  isExpanded = !isExpanded;
+                });
+              } else {
+                showText(message: widget.errorText ?? '');
+              }
             },
           ),
           Padding(

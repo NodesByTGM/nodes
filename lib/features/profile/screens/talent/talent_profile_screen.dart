@@ -200,10 +200,16 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                     Expanded(
                       child: OutlineBtn(
                         onPressed: () async {
-                           await shareDoc(
-                            context,
-                            url: "$nodeWebsite/${user.username}",
-                          );
+                          if (isTalentProfileComplete(user)) {
+                            await shareDoc(
+                              context,
+                              url: "$nodeWebsite/${user.username}",
+                            );
+                          } else {
+                            showText(
+                              message: "Please update your profile to proceed.",
+                            );
+                          }
                         },
                         borderColor: PRIMARY,
                         color: WHITE,
