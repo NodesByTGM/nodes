@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter_textfield_autocomplete/flutter_textfield_autocomplete.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
@@ -102,7 +100,7 @@ class _EditIndividualProfileScreenState
                   right: 3,
                   top: 3,
                   left: 3,
-                  bottom: 50,
+                  bottom: 80,
                 ),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
@@ -264,7 +262,7 @@ class _EditIndividualProfileScreenState
                                           Icons.check_circle_outline,
                                           color: PRIMARY,
                                           size: 15,
-                                        )
+                                        ),
                                     ],
                                   ),
                                 ),

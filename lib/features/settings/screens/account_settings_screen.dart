@@ -3,7 +3,6 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/settings/components/account_analytics.dart';
 import 'package:nodes/features/settings/components/account_form.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/enums.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class AccountSettingsScreen extends StatefulWidget {

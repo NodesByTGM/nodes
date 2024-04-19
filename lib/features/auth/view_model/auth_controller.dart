@@ -307,14 +307,16 @@ class AuthController extends BaseController {
   Future<bool> forgotPassword(String email) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.forgotPassword(email);
+      ApiResponse response = await _authService.forgotPassword(
+        {
+          "email": email,
+        },
+      );
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: DO SOMETHING HERE
-      // Password reset link sent successfully
       showText(message: response.message);
       return true;
     } on NetworkException catch (e) {
@@ -583,7 +585,8 @@ class AuthController extends BaseController {
   Future<bool> updateBusinessProfile(BuildContext ctx, dynamic payload) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.updateBusinessProfile(ctx, payload);
+      ApiResponse response =
+          await _authService.updateBusinessProfile(ctx, payload);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);

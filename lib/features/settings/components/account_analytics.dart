@@ -1,5 +1,4 @@
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/enums.dart';
 
 class AccountAnalytics extends StatefulWidget {
   const AccountAnalytics({
@@ -66,14 +65,7 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
             value: "20",
           ),
         ],
-        ySpace(height: 40),
-        customDivider(),
-        SubmitBtn(
-          onPressed: () {},
-          title: btnTxt("Save changes", WHITE),
-          loading: false,
-        ),
-        ySpace(height: 10),
+        ySpace(height: 50),
       ],
     );
   }

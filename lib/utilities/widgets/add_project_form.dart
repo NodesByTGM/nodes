@@ -425,6 +425,12 @@ class _AddProjectFormState extends State<AddProjectForm> {
   }
 
   void addCollaborator() {
+    if(dynamicNameCollaboratorsCtrl.length == 10){
+      // Check, if na Talent, na 6 projects, with 8 collabs, and 4 project images
+      //if na business, na 10 projects and collabos, and 6 project images
+       showText(message: "Oops!!! You have reached the max project collaborators");
+        return;
+    }
     for (var element in dynamicNameCollaboratorsCtrl) {
       if (isObjectEmpty(element.text)) {
         showText(message: "Oops!!! Please fill the empty name.");

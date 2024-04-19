@@ -1001,10 +1001,10 @@ bool isBusinessProfileComplete(BusinessAccountModel b) {
   bool hasName = !isObjectEmpty(b.name);
   bool hasYoe = !isObjectEmpty(b.yoe);
   bool hasLocation = !isObjectEmpty(b.location);
-  // bool hasHeadline = !isObjectEmpty(b.headline);
-  // bool hasBio = !isObjectEmpty(b.bio);
-  // if (hasLogo && hasName && hasYoe && hasLocation && hasHeadline && hasBio) {
-  if (hasName && hasYoe && hasLocation) {
+  bool hasHeadline = !isObjectEmpty(b.headline);
+  bool hasBio = !isObjectEmpty(b.bio);
+  if (hasLogo && hasName && hasYoe && hasLocation && hasHeadline && hasBio) {
+  // if (hasName && hasYoe && hasLocation) {
     return true;
   }
   return false;

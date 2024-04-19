@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
@@ -74,12 +76,14 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   child: btnTxt("Sign in with Google"),
                 ),
                 ySpace(height: 8),
-                OutlineBtn(
-                  onPressed: signupWithApple,
-                  leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
-                  borderColor: BLACK,
-                  child: btnTxt("Sign in with Apple"),
-                ),
+                if (Platform.isIOS) ...[
+                  OutlineBtn(
+                    onPressed: signupWithApple,
+                    leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
+                    borderColor: BLACK,
+                    child: btnTxt("Sign in with Apple"),
+                  ),
+                ],
                 ySpace(height: 40),
                 SvgPicture.asset(
                   ImageUtils.orSignInWIthEmailText,

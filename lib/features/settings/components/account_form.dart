@@ -186,6 +186,7 @@ class _AccountFormState extends State<AccountForm> {
           Row(
             children: [
               Expanded(
+                flex: 2,
                 child: SubmitBtn(
                   onPressed: () {},
                   title: btnTxt("Reset your password", WHITE),
@@ -211,6 +212,7 @@ class _AccountFormState extends State<AccountForm> {
           Row(
             children: [
               Expanded(
+                flex: 2,
                 child: SubmitBtn(
                   onPressed: deleteAccount,
                   title: btnTxt("Delete your account", WHITE),

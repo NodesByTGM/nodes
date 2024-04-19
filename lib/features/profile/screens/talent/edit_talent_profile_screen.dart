@@ -66,7 +66,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
     usernameCtrl.text = "${user.username}";
     locationCtrl.text = "${user.location}";
     heightCtrl.text = "${user.height}";
-    ageCtrl.text = "${user.age}";
+    ageCtrl.text = "${DateTime.now().year - (user.dob?.year as int)}";
     headlineCtrl.text = "${user.headline}";
     bioCtrl.text = "${user.bio}";
 
@@ -107,7 +107,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                   right: 3,
                   top: 3,
                   left: 3,
-                  bottom: 50,
+                  bottom: 80,
                 ),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,

@@ -96,7 +96,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                   right: 3,
                   top: 3,
                   left: 3,
-                  bottom: 50,
+                  bottom: 80,
                 ),
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
@@ -483,8 +483,6 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
   }
 
   void updateUserBusinessProfile(BusinessAccountModel business) async {
-    print(
-        "Hi George, here is the updated user data with business: ${business?.toJson()}");
     await authCtrl.updateBusinessProfile(context, business.toJson());
   }
 

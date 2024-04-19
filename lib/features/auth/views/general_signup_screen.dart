@@ -36,13 +36,22 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
   int? selectedMonth;
   int? selectedYear;
   String? passwordValue;
-
   double pwdStrengthVal = 0;
+  bool isPwdFocus = false;
+
+  final pwdFocus = FocusNode();
 
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
+    pwdFocus.addListener(_onFocusChange);
+
     super.initState();
+  }
+
+  void _onFocusChange() {
+    isPwdFocus = pwdFocus.hasFocus;
+    setState(() {});
   }
 
   @override
@@ -219,6 +228,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                     inputFormatters: [
                       FilteringTextInputFormatter.deny(RegExp(r'\s')),
                     ],
+                    focusNode: pwdFocus,
                     keyboardType: TextInputType.text,
                     style: FORM_STYLE,
                     controller: pwdCtrl,
@@ -260,6 +270,19 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                     )
                   ],
                 ),
+                if (isPwdFocus) ...[
+                  ySpace(height: 5),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      subtext(". 8 characters"),
+                      subtext(". atleast one Caps letter"),
+                      subtext(". atleast one small letter"),
+                      subtext(". atleast one number"),
+                      subtext(". atleast one special character"),
+                    ],
+                  ),
+                ],
                 FormUtils.formSpacer(),
                 FormWithLabel(
                   label: "Confirm Password",
@@ -437,6 +460,8 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
     emailCtrl.dispose();
     pwdCtrl.dispose();
     confirmPwdCtrl.dispose();
+    pwdFocus.dispose();
+    pwdFocus.removeListener(_onFocusChange);
     super.dispose();
   }
 
