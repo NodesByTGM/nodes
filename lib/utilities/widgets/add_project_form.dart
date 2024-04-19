@@ -12,7 +12,9 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class AddProjectForm extends StatefulWidget {
-  const AddProjectForm({super.key});
+  const AddProjectForm({super.key, required this.isBusiness,});
+
+  final bool isBusiness;
 
   @override
   State<AddProjectForm> createState() => _AddProjectFormState();
@@ -39,7 +41,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
   XFile? thumbnailImageFile;
   bool isLoadingThumbnail = false;
   bool isLoadingLogo = false;
-
+late int maxProjectImages;
   bool isLoadingImage = false;
  
   @override
@@ -47,6 +49,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
     authCtrl = locator.get<AuthController>();
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
+    maxProjectImages = widget.isBusiness ? 6 : 4;
     resetForm();
     super.initState();
   }
@@ -390,7 +393,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
                           padding: const EdgeInsets.all(28.0),
                           child: Center(
                             child: subtext(
-                              "Click to browse your files\nRecommended image size: 280 x 160px",
+                              "Click to browse your files\nRecommended $maxProjectImages images, size: 280 x 160px",
                               fontSize: 14,
                               color: GRAY,
                               fontWeight: FontWeight.w400,
@@ -425,11 +428,12 @@ class _AddProjectFormState extends State<AddProjectForm> {
   }
 
   void addCollaborator() {
-    if(dynamicNameCollaboratorsCtrl.length == 10){
-      // Check, if na Talent, na 6 projects, with 8 collabs, and 4 project images
-      //if na business, na 10 projects and collabos, and 6 project images
-       showText(message: "Oops!!! You have reached the max project collaborators");
-        return;
+    int maxColabs = widget.isBusiness ? 10 : 8;
+    if (dynamicNameCollaboratorsCtrl.length == maxColabs) {
+      showText(
+        message: "Oops!!! You have reached the max project collaborators",
+      );
+      return;
     }
     for (var element in dynamicNameCollaboratorsCtrl) {
       if (isObjectEmpty(element.text)) {
@@ -477,7 +481,9 @@ class _AddProjectFormState extends State<AddProjectForm> {
       }
     } else {
       awaitingImageLoad(false);
-      final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+      // final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+      final List<XFile> selectedImages =
+          (await imagePicker.pickMultiImage()).take(maxProjectImages).toList();
       awaitingImageLoad(false);
       if (selectedImages.isNotEmpty) {
         projectImageFileList.addAll(selectedImages);

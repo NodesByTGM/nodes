@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
@@ -126,7 +125,6 @@ class AuthService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
- 
 
   Future<ApiResponse> onboarding(payload) async {
     try {
@@ -143,8 +141,7 @@ class AuthService {
       ApiResponse res = await authRepository.verifyBusiness(payload);
       return res;
     } on DioException catch (e) {
-      log.severe(
-          "Error message @verifyBusiness ::===> ${e.response?.data}");
+      log.severe("Error message @verifyBusiness ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e);
     }
   }
@@ -174,11 +171,11 @@ class AuthService {
       ApiResponse res = await authRepository.updateBusinessProfile(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @updateBusinessProfile ::===> ${e.response?.data}");
+      log.severe(
+          "Error message @updateBusinessProfile ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
- 
 
   // Future<ApiResponse> mediaUpload(File file) async {
   //   try {

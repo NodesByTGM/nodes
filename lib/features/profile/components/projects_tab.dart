@@ -208,7 +208,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
       dismissable: true,
       insetPadding: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.only(bottom: 0),
-      child: const AddProject(),
+      child:  AddProject(isBusiness: widget.isBusiness),
     );
   }
 }

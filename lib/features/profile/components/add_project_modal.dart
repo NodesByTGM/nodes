@@ -12,7 +12,12 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class AddProject extends StatefulWidget {
-  const AddProject({super.key});
+  const AddProject({
+    super.key,
+    required this.isBusiness,
+  });
+
+  final bool isBusiness;
 
   @override
   State<AddProject> createState() => _AddProjectState();
@@ -30,7 +35,7 @@ class _AddProjectState extends State<AddProject> {
   List<TextEditingController> dynamicNameCollaboratorsCtrl = [
     TextEditingController(),
   ];
-  List<TextEditingController> dynamicDescCollaboratorsCtrl = [
+  List<TextEditingController> dynamicRoleCollaboratorsCtrl = [
     TextEditingController(),
   ];
   double progressLevel = 0.5;
@@ -39,12 +44,14 @@ class _AddProjectState extends State<AddProject> {
   XFile? thumbnailImageFile;
   bool isLoadingThumbnail = false;
   bool isLoadingImage = false;
+  late int maxProjectImages;
 
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
+    maxProjectImages = widget.isBusiness ? 6 : 4;
     super.initState();
   }
 
@@ -224,7 +231,7 @@ class _AddProjectState extends State<AddProject> {
                                   keyboardType: TextInputType.text,
                                   style: FORM_STYLE,
                                   cursorColor: BLACK,
-                                  controller: dynamicDescCollaboratorsCtrl[i],
+                                  controller: dynamicRoleCollaboratorsCtrl[i],
                                   onSaved: (value) =>
                                       formValues['desc'] = trimValue(value),
                                   onChanged: (val) {},
@@ -439,7 +446,7 @@ class _AddProjectState extends State<AddProject> {
                                       padding: const EdgeInsets.all(28.0),
                                       child: Center(
                                         child: subtext(
-                                          "Click to browse your files\nRecommended image size: 280 x 160px",
+                                          "Click to browse your files\nRecommended $maxProjectImages images, size: 280 x 160px",
                                           fontSize: 14,
                                           color: GRAY,
                                           fontWeight: FontWeight.w400,
@@ -512,26 +519,34 @@ class _AddProjectState extends State<AddProject> {
   }
 
   void addCollaborator() {
+    formKey.currentState!.save();
+    int maxColabs = widget.isBusiness ? 10 : 8;
+    if (dynamicNameCollaboratorsCtrl.length == maxColabs) {
+      showText(
+        message: "Oops!!! You have reached the max project collaborators",
+      );
+      return;
+    }
     for (var element in dynamicNameCollaboratorsCtrl) {
-      if (!isObjectEmpty(element.text)) {
-        showText(message: "Oops!!! Please fill the empty title.");
+      if (isObjectEmpty(element.text)) {
+        showText(message: "Oops!!! Please fill the empty name.");
         return;
       }
     }
-    for (var element in dynamicDescCollaboratorsCtrl) {
+    for (var element in dynamicRoleCollaboratorsCtrl) {
       if (isObjectEmpty(element.text)) {
-        showText(message: "Oops!!! Please fill the empty description.");
+        showText(message: "Oops!!! Please fill the empty role.");
         return;
       }
     }
     dynamicNameCollaboratorsCtrl.add(TextEditingController());
-    dynamicDescCollaboratorsCtrl.add(TextEditingController());
+    dynamicRoleCollaboratorsCtrl.add(TextEditingController());
     setState(() {});
   }
 
   void deleteCollaborator(int index) {
     dynamicNameCollaboratorsCtrl.removeAt(index);
-    dynamicDescCollaboratorsCtrl.removeAt(index);
+    dynamicRoleCollaboratorsCtrl.removeAt(index);
     setState(() {});
   }
 
@@ -552,6 +567,7 @@ class _AddProjectState extends State<AddProject> {
     bool isThumbnail = false,
   }) async {
     final ImagePicker imagePicker = locator.get<ImagePicker>();
+
     if (isThumbnail) {
       awaitingImageLoad(true);
       final XFile? selectedImage =
@@ -562,7 +578,9 @@ class _AddProjectState extends State<AddProject> {
       }
     } else {
       awaitingImageLoad(false);
-      final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+      // final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+      final List<XFile> selectedImages =
+          (await imagePicker.pickMultiImage()).take(maxProjectImages).toList();
       awaitingImageLoad(false);
       if (selectedImages.isNotEmpty) {
         projectImageFileList.addAll(selectedImages);
@@ -660,7 +678,7 @@ class _AddProjectState extends State<AddProject> {
       collaboratorsList.add(CollaboratorModel(
         name: dynamicNameCollaboratorsCtrl[i].text,
         // Just praying the user provide this lol 
-        role: dynamicDescCollaboratorsCtrl[i].text,
+        role: dynamicRoleCollaboratorsCtrl[i].text,
       ).toJson());
     }
     return collaboratorsList;
@@ -674,7 +692,7 @@ class _AddProjectState extends State<AddProject> {
     for (var element in dynamicNameCollaboratorsCtrl) {
       element.dispose();
     }
-    for (var element in dynamicDescCollaboratorsCtrl) {
+    for (var element in dynamicRoleCollaboratorsCtrl) {
       element.dispose();
     }
     super.dispose();

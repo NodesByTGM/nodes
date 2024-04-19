@@ -414,7 +414,7 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ySpace(height: 16),
-                        const AddProjectForm(),
+                        const AddProjectForm(isBusiness: false),
                         ySpace(height: 20),
                       ],
                     ),
@@ -745,6 +745,9 @@ class _EditTalentProfileScreenState extends State<EditTalentProfileScreen> {
     // print("George, here's the imageByte: $imageByteString");
 
 // Remember to delete the old image with the ID before uploading a new one...
+     if (!isObjectEmpty(user.avatar?.id)) {
+      await authCtrl.deleteMedia("${user.avatar?.id}");
+    }
     MediaUploadModel? imageUrl = await authCtrl.mediaUpload(imageByteString);
     if (!isObjectEmpty(imageUrl)) {
       updateUserProfile(user.copyWith(avatar: imageUrl));

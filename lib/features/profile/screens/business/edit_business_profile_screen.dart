@@ -326,7 +326,7 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ySpace(height: 16),
-                        const AddProjectForm(),
+                        const AddProjectForm(isBusiness: true),
                         ySpace(height: 20),
                       ],
                     ),
@@ -474,6 +474,9 @@ class _EditBusinessProfileScreenState extends State<EditBusinessProfileScreen> {
     // print("George, here's the imageByte: $imageByteString");
 
 // Remember to delete the old image with the ID before uploading a new one...
+    if (!isObjectEmpty(businessAccount.logo?.id)) {
+      await authCtrl.deleteMedia("${businessAccount.logo?.id}");
+    }
     MediaUploadModel? imageUrl = await authCtrl.mediaUpload(imageByteString);
     if (!isObjectEmpty(imageUrl)) {
       updateUserBusinessProfile(
