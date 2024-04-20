@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';

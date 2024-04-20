@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -97,7 +95,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                 ),
                 ySpace(height: 5),
                 isObjectEmpty(project.images)
-                    ? Container(
+                    ? SizedBox(
                         child: Center(
                           child: subtext(
                             "No Project Images were provided.",

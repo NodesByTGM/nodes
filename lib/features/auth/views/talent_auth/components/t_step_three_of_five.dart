@@ -139,8 +139,12 @@ class _TStepThreeOfFiveState extends State<TStepThreeOfFive> {
     // if this is not mandatory, then pass null to the location below...
     _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
       location: isObjectEmpty(locationCtrl.text) ? null : getStateCountry(),
-      // location: getStateCountry(),
     ));
+
+     _authCtrl.onboarding({
+      "location": isObjectEmpty(locationCtrl.text) ? null : getStateCountry(),
+      "step": 3, // Means STEP 3, has been completed,
+    });
     _authCtrl.setTStepper(4);
   }
 

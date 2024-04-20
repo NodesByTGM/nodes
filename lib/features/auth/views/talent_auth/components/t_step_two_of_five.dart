@@ -1,6 +1,5 @@
 import 'package:multiple_search_selection/multiple_search_selection.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -159,6 +158,10 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
     _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
       skills: selectedSkills,
     ));
+     _authCtrl.onboarding({
+           "skills": selectedSkills,
+          "step": 2, // Means STEP 2, has been completed,
+        });
     _authCtrl.setTStepper(3);
   }
 }

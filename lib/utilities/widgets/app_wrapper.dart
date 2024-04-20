@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class AppWrapper extends StatelessWidget {

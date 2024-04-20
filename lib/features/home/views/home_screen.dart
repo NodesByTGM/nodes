@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/models/current_session.dart';
-import 'package:nodes/core/services/push_notifications.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';

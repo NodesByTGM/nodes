@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/job_details_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';

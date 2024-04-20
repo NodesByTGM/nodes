@@ -40,7 +40,7 @@ class _TalentStepperWrapperScreen extends State<TalentStepperWrapperScreen> {
         width: 36,
       ),
       onTap: () {
-        _authCtrl.setTStepper(1);
+        _authCtrl.setTStepper(0);
         navigateBack(context);
       },
       body: Column(

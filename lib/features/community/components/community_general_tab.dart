@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
@@ -8,7 +6,6 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
-import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 
 class CommunityGeneralTab extends StatefulWidget {
   const CommunityGeneralTab({super.key});
@@ -402,7 +399,7 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
                 title: 'Share',
                 icon: Icons.ios_share_rounded,
                 onTap: () async {
-                  final res = await shareDoc(context);
+                  await shareDoc(context);
                 },
               ),
             ],

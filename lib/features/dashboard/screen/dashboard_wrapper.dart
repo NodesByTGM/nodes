@@ -17,7 +17,7 @@ class DashboardWrapper extends StatelessWidget {
       // ),
       child: Consumer<AuthController>(builder: (context, authCtrl, _) {
         UserModel user = authCtrl.currentUser;
-        return getDashboard(user.type ?? 0);
+        return getDashboard(user.type);
       }),
     );
   }

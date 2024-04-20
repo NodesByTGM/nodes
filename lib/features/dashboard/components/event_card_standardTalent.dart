@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, deprecated_member_use
+
 import 'package:nodes/features/dashboard/components/event_details_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
@@ -203,7 +205,7 @@ class StandardTalentEventCard extends StatelessWidget {
   }
 
   deleteEvent(BuildContext context, StandardTalentEventModel event) async {
-    bool done = await context
+    await context
         .read<DashboardController>()
         .deleteSingleEvent(context, event.id);
   }

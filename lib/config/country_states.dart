@@ -2691,7 +2691,7 @@ const  countryStatesData = [
       "Maseru District",
       "Mohales Hoek District",
       "Mokhotlong District",
-      "Qacha\s Nek District",
+      "Qacha's Nek District",
       "Quthing District",
       "Thaba-Tseka District",
     ]

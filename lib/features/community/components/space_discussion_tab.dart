@@ -1,4 +1,3 @@
-import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
@@ -12,7 +11,7 @@ class SpaceDiscussionTab extends StatefulWidget {
 class _SpaceDiscussionTabState extends State<SpaceDiscussionTab> {
   TextEditingController msgCtrl = TextEditingController();
   bool commentIsExpanded = false;
-  var _ = 158.0;
+  // var _ = 158.0;
   @override
   void initState() {
     super.initState();

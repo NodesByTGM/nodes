@@ -22,7 +22,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       verified: json['verified'] as bool?,
-      type: json['type'] as int?,
+      type: json['type'] as int? ?? 0,
       age: json['age'] as String?,
       bio: json['bio'] as String?,
       comments: json['comments'] as bool?,
@@ -36,7 +36,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       skills:
           (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
       spaces: json['spaces'] as bool?,
-      step: json['step'] as int?,
+      step: json['step'] as int? ?? 0,
       twitter: json['twitter'] as String?,
       website: json['website'] as String?,
       business: json['business'] == null

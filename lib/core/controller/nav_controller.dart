@@ -3,7 +3,6 @@
 import 'package:nodes/config/dynamic_page_routes.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/features/dashboard/screen/dashboard_wrapper.dart';
-import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_screen.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 
 class NavController extends BaseController {

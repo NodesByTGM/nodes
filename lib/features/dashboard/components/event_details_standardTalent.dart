@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 

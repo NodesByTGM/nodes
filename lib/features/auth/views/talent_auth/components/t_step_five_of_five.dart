@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
@@ -122,7 +119,7 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
                 child: SubmitBtn(
                   onPressed: _submit,
                   title: btnTxt(Constants.continueText, WHITE),
-                  loading: _authCtrl.isUploadingMedia,
+                  loading: _authCtrl.isUploadingMedia || _authCtrl.loading,
                 ),
               ),
             ],
@@ -187,16 +184,15 @@ class _TStepFiveOfFiveState extends State<TStepFiveOfFive> {
       String imageByte = await convertFileToString(
           "${_authCtrl.individualTalentData.avatarFilePath}");
 
-      // String? imageUrl = await _authCtrl.mediaUpload(
-      //   File("${_authCtrl.individualTalentData.avatarFilePath}"),
-      // );
+      // Check if we'd uploaded the image successfully before
+      MediaUploadModel? uploadedProfileImage =
+          _authCtrl.individualTalentData.avatar;
 
-      MediaUploadModel? imageUrl = await _authCtrl.mediaUpload(imageByte);
+      MediaUploadModel? imageUrl =
+          uploadedProfileImage ?? await _authCtrl.mediaUpload(imageByte);
+
+      // PS: I still repeated all this, just incase anyone was missed...
       if (!isObjectEmpty(imageUrl)) {
-        // showError(
-        //     message:
-        //         "Oops!! an error occured while uploading you image, try again");
-        // return;
         bool done = await _authCtrl.onboarding({
           "skills": _authCtrl.individualTalentData.skills,
           "location": _authCtrl.individualTalentData.location,

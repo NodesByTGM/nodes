@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
@@ -295,6 +297,6 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
         ? ProjectsTab(
             projects: dc.myProjectList,
           )
-        : InteractionsTab();
+        :const InteractionsTab();
   }
 }

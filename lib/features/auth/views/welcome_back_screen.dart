@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
+import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/home/views/welcome_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -216,13 +219,15 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     closeKeyPad(context);
     // navigateTo(context, NavbarView.routeName); // Uncomment for testings only
     if (formKey.currentState!.saveAndValidate()) {
-      bool res = await authCtrl.login(
+      UserModel? user = await authCtrl.login(
         {
           // "email": "napor44764@abnovel.com", lopodaf334@kravify.com  // currently a business account
           // "password": "Test@1234",
           // "email": "niweb33325@nimadir.com", // currently a talent account
           // "password": "Test@1234",
           // "email": "liniyi2985@acname.com", // currently a standard account
+          // "password": "Test@1234",
+          // "email": "petowo6181@abnovel.com", // currently a standard account
           // "password": "Test@1234",
           "email": emailCtrl.text,
           "password": pwdCtrl.text,
@@ -234,23 +239,23 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
       //   showError(message: "You Provided an Invalid Credentials");
       //   return;
       // }
-      if (res && mounted) {
+      if (!isObjectEmpty(user) && mounted) {
         safeNavigate(() {
           formKey.currentState!.reset();
-          navigateAndClearPrev(context, NavbarView.routeName);
-          // if (response!.route == VerifyAccount.route) {
-          //   navigateAndClearPrev(
-          //     context,
-          //     VerifyAccount.route,
-          //     arguments: VerifyData(
-          //       email: _request.email,
-          //       nextRoute: NavbarView.routeName,
-          //     ),
-          //   );
-          //   return;
-          // }
-          // navigateAndClearPrev(context, response.route);
-          // context.read<AuthController>().resetVisibility();
+          context.read<NavController>().resetPageListStack();
+          // Check where and if the user has an incomplete onboarding process
+          if (user?.step == 5) {
+            // Meaning, user completed the onboarding process...
+            navigateAndClearPrev(context, NavbarView.routeName);
+          } else {
+            // User needs to be redirected to the next onboarding section after his current state..
+            authCtrl.setTStepper(
+              user?.step == 0 ? user!.step : (user!.step + 1),
+            );
+            showText(message: "Please complete your On-boarding process");
+            navigateTo(context, TalentStepperWrapperScreen.routeName);
+            // This means, advance a bit than the user's current step if they'd passed the initial step (being 0)
+          }
         });
       }
     }

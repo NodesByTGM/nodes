@@ -1,7 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:io';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
@@ -11,7 +10,6 @@ import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
-import 'package:nodes/features/auth/models/apple_user_model.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
@@ -23,7 +21,6 @@ import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthController extends BaseController {
   final log = Logger('Authcontroller');
@@ -180,21 +177,21 @@ class AuthController extends BaseController {
     return "";
   }
 
-  Future<bool> login(_details) async {
+  Future<UserModel?> login(_details) async {
     setBusy(true);
     try {
       ApiResponse response = await _authService.login(_details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
-        return false;
+        return null;
       }
       showSuccess(message: response.message); // For login o
       await _authCustomSaveSession(response);
       // setCurrentScreen(NavbarView.routeName);
-      return true;
+      return CurrentSession.fromJson(response.result as Map<String, dynamic>).user;
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
       setBusy(false);
     }
@@ -207,7 +204,6 @@ class AuthController extends BaseController {
     setBusy(true);
     try {
       ApiResponse response = await _authService.register(payload);
-
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
@@ -227,10 +223,9 @@ class AuthController extends BaseController {
     setBusy(true);
     try {
       // var refreshToken = (await currentSession)?.refreshToken; // from session
-      var refreshToken = (await currentSession)!; // from session
+      var refreshToken = (await currentSession)?.refreshToken; // from session
 
-      ApiResponse response =
-          await _authService.refreshToken(refreshToken.refreshToken);
+      ApiResponse response = await _authService.refreshToken(refreshToken);
 
       if (response.status == KeyString.failure) {
         showError(message: response.message);

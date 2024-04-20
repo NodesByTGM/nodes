@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, file_names
 
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';

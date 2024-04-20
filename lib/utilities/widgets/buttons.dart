@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 
@@ -130,13 +132,13 @@ class FlatBtn extends StatelessWidget {
           ? const Loader()
           : TextButton(
               onPressed: onPressed,
-              child: title,
               style: TextButton.styleFrom(
                 backgroundColor: color ?? Colors.transparent,
                 shape: RoundedRectangleBorder(
                   borderRadius: radius,
                 ),
               ),
+              child: title,
             ),
     );
   }

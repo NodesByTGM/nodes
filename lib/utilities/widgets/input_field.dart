@@ -124,7 +124,7 @@ class FormLabel extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FormLabelState createState() => _FormLabelState();
+  State<FormLabel> createState() => _FormLabelState();
 }
 
 class _FormLabelState extends State<FormLabel> {

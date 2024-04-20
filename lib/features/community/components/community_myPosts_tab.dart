@@ -1,3 +1,7 @@
+
+
+// ignore_for_file: no_leading_underscores_for_local_identifiers, file_names
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:nodes/config/dependencies.dart';
@@ -19,7 +23,7 @@ class CommunityMyPostTab extends StatefulWidget {
 class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
   TextEditingController msgCtrl = TextEditingController();
   bool commentIsExpanded = false;
-  var _ = 158.0;
+  // var _ = 158.0;
   late ComController comCtrl;
   late AuthController authCtrl;
   @override
@@ -357,7 +361,7 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
                 title: 'Share',
                 icon: Icons.ios_share_rounded,
                 onTap: () async {
-                  final res = await shareDoc(context);
+                  await shareDoc(context);
                 },
               ),
             ],

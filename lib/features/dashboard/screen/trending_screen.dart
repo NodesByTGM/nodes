@@ -12,7 +12,6 @@ import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/features/subscriptions/screen/proceed_with_payment_screen.dart';
-import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
@@ -208,7 +207,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
             dataSource: HorizontalSlidingCardDataSource.TopMovies,
           ),
           ySpace(height: 40),
-          if (user.type! == 1) ...[
+          if (user.type == 1) ...[
             // Meaning the User is Talent
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20),

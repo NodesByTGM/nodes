@@ -1,4 +1,3 @@
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/components/saved_events.dart';
 import 'package:nodes/features/saves/components/saved_jobs.dart';

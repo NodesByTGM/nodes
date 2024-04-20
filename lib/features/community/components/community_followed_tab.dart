@@ -10,7 +10,7 @@ class CommunityFollowedTab extends StatefulWidget {
 class _CommunityFollowedTabState extends State<CommunityFollowedTab> {
   TextEditingController msgCtrl = TextEditingController();
   bool commentIsExpanded = false;
-  var _ = 158.0;
+  // var _ = 158.0;
   @override
   void initState() {
     super.initState();

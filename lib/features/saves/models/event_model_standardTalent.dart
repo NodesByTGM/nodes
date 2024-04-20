@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/core/models/base_data.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';

@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/utils.dart';
 import 'package:nodes/core/models/api_response.dart';
 
 class NetworkException implements Exception {

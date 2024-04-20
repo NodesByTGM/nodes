@@ -1,7 +1,7 @@
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 
 part "individual_talent_onboarding_model.g.dart";
 
@@ -9,7 +9,7 @@ part "individual_talent_onboarding_model.g.dart";
 class IndividualTalentOnboardingModel extends Equatable {
   final List<String>? skills;
   final String? location;
-  final String? avatar;
+  final MediaUploadModel? avatar;
   final String? avatarFilePath;
   final String? linkedIn;
   final String? instagram;
@@ -36,7 +36,7 @@ class IndividualTalentOnboardingModel extends Equatable {
   IndividualTalentOnboardingModel copyWith({
     List<String>? skills,
     String? location,
-    String? avatar,
+    MediaUploadModel? avatar,
     String? avatarFilePath,
     String? linkedIn,
     String? instagram,

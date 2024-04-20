@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -98,6 +99,7 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
               child: SubmitBtn(
                 onPressed: _submit,
                 title: btnTxt(Constants.continueText, WHITE),
+                loading: _authCtrl.isUploadingMedia,
               ),
             ),
           ],
@@ -113,9 +115,23 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
       showText(message: "Please upload a picture to continue");
       return;
     }
-    _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
-      avatarFilePath: profilePicture?.path,
-    ));
-    _authCtrl.setTStepper(5);
+
+    String imageByte = await convertFileToString("${profilePicture?.path}");
+
+    MediaUploadModel? imageUrl = await _authCtrl.mediaUpload(imageByte);
+    if (!isObjectEmpty(imageUrl)) {
+      bool done = await _authCtrl.onboarding({
+        "avatar": imageUrl?.toJson(),
+        "step": 4, // Means STEP 4, has been completed,
+      });
+      if (done && mounted) {
+        _authCtrl
+            .setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
+          avatar: imageUrl, // Useful trick on the 5th step..
+          avatarFilePath: profilePicture?.path,
+        ));
+      }
+      _authCtrl.setTStepper(5);
+    }
   }
 }

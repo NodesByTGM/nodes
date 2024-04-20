@@ -1,4 +1,3 @@
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/components/space_about_tab.dart';
 import 'package:nodes/features/community/components/space_discussion_tab.dart';

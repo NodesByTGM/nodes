@@ -1,8 +1,7 @@
-// ignore_for_file: constant_identifier_names, implementation_imports, prefer_generic_function_type_aliases
+// ignore_for_file: constant_identifier_names, implementation_imports, prefer_generic_function_type_aliases, deprecated_member_use, no_leading_underscores_for_local_identifiers
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -756,7 +755,7 @@ Future<ShareResultStatus> shareDoc(
     sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
   );
   if (result.status == ShareResultStatus.success) {
-    print('Thank you for sharing my website!');
+    debugPrint('Thank you for sharing my website!');
   }
   return ShareResultStatus.success;
 }

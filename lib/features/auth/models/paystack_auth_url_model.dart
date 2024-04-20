@@ -2,7 +2,6 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:nodes/utilities/constants/key_strings.dart';
 
 part "paystack_auth_url_model.g.dart";
 

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:nodes/utilities/constants/colors.dart';
 import 'package:nodes/utilities/utils/texts.dart';

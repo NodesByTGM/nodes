@@ -26,7 +26,7 @@ class PinCodeView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PinCodeViewState createState() => _PinCodeViewState();
+  State<PinCodeView> createState() => _PinCodeViewState();
 }
 
 class _PinCodeViewState extends State<PinCodeView> {

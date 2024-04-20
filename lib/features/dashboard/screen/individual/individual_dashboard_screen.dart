@@ -2,7 +2,6 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';

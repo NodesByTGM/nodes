@@ -1,6 +1,5 @@
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -26,6 +25,7 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
   @override
   void initState() {
     _authCtrl = locator.get<AuthController>();
+    autoCheckPurposeArray();
     super.initState();
   }
 
@@ -113,6 +113,16 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
       status: false,
     ),
   ];
+
+  autoCheckPurposeArray() {
+    for (String p in _authCtrl.individualTalentData.onboardingPurposes ?? []) {
+      int i =
+          onboardingPurposeArray.indexWhere((element) => element.title == p);
+      if (i != -1) {
+        onboardingPurposeArray[i].status = true;
+      }
+    }
+  }
 
   void somethingElseOptionFn() {
     setState(() {
@@ -211,6 +221,12 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
       onboardingPurposes: getOnboardingPurposes(),
       otherPurpose: !isObjectEmpty(otherCtrl.text) ? otherCtrl.text : null,
     ));
+    _authCtrl.onboarding({
+      "onboardingPurpose": _authCtrl.individualTalentData.onboardingPurpose,
+      "otherPurpose": !isObjectEmpty(otherCtrl.text) ? otherCtrl.text : null,
+      "step": 1, // Means STEP 1, has been completed,
+      "onboardingPurposes": getOnboardingPurposes(),
+    });
     _authCtrl.setTStepper(2);
   }
 

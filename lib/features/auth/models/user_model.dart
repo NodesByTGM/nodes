@@ -17,7 +17,7 @@ class UserModel extends Equatable {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final bool? verified;
-  final int? type;
+  final int type;
   final String? age;
   final String? bio;
   final bool? comments;
@@ -30,7 +30,7 @@ class UserModel extends Equatable {
   final String? otherPurpose;
   final List<String>? skills;
   final bool? spaces;
-  final int? step;
+  final int step;
   final String? twitter;
   final String? website;
   final BusinessAccountModel? business;
@@ -47,7 +47,7 @@ class UserModel extends Equatable {
     this.createdAt,
     this.updatedAt,
     this.verified,
-    this.type,
+    this.type = 0,
     this.age,
     this.bio,
     this.comments,
@@ -60,7 +60,7 @@ class UserModel extends Equatable {
     this.otherPurpose,
     this.skills,
     this.spaces,
-    this.step,
+    this.step = 0,
     this.twitter,
     this.website,
     this.business,

@@ -8,8 +8,6 @@ import 'package:nodes/core/models/custom_page.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/service/community_service.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/constants/key_strings.dart';
-import 'package:nodes/utilities/utils/utils.dart';
 
 class ComController extends BaseController {
   final log = Logger('ComController');

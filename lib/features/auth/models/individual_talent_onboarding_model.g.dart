@@ -12,7 +12,9 @@ IndividualTalentOnboardingModel _$IndividualTalentOnboardingModelFromJson(
       skills:
           (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
       location: json['location'] as String?,
-      avatar: json['avatar'] as String?,
+      avatar: json['avatar'] == null
+          ? null
+          : MediaUploadModel.fromJson(json['avatar'] as Map<String, dynamic>),
       avatarFilePath: json['avatarFilePath'] as String?,
       linkedIn: json['linkedIn'] as String?,
       instagram: json['instagram'] as String?,
@@ -30,7 +32,7 @@ Map<String, dynamic> _$IndividualTalentOnboardingModelToJson(
     <String, dynamic>{
       'skills': instance.skills,
       'location': instance.location,
-      'avatar': instance.avatar,
+      'avatar': instance.avatar?.toJson(),
       'avatarFilePath': instance.avatarFilePath,
       'linkedIn': instance.linkedIn,
       'instagram': instance.instagram,

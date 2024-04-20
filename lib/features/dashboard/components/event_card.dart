@@ -1,7 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_event_details_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';

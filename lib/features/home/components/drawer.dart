@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:expandable_section/expandable_section.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
@@ -45,9 +47,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Consumer2<NavController, AuthController>(
       builder: (context, navCtrl, authCtrl, _) {
         UserModel user = authCtrl.currentUser;
-        bool isStandardUser = user.type! == 0;
-        bool isTalentUser = user.type! == 1;
-        bool isBusinessUser = user.type! == 2;
+        bool isStandardUser = user.type == 0;
+        bool isTalentUser = user.type == 1;
+        bool isBusinessUser = user.type == 2;
         return Container(
           width: screenWidth(context) - 80,
           decoration: const BoxDecoration(
@@ -102,7 +104,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     child: Row(
                       children: [
                         cachedNetworkImage(
-                          imgUrl: "${user.avatar}",
+                          imgUrl: "${user.avatar?.url}",
                           size: 30,
                           borderRadius: 100,
                         ),
@@ -393,9 +395,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     isActive: false,
                     onTap: () {
                       safeNavigate(() => logout(context));
-                      navCtrl.resetPageListStack();
                       context.read<AuthController>().logout();
-                      navigateAndClearAll(context, WelcomeBackScreen.routeName);
                     }
                     // onTap: () async {
                     //   closeDrawer();

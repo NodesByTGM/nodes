@@ -1,8 +1,6 @@
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';

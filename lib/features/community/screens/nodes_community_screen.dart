@@ -1,9 +1,7 @@
-import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_followed_tab.dart';
 import 'package:nodes/features/community/components/community_general_tab.dart';
 import 'package:nodes/features/community/components/community_myPosts_tab.dart';
 import 'package:nodes/features/community/components/create_new_space.dart';
-import 'package:nodes/features/community/screens/nodes_spaces_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';

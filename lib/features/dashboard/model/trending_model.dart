@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nodes/core/models/base_data.dart';
 
 part "trending_model.g.dart";
 
 @JsonSerializable(explicitToJson: true)
-class TrendingModel extends Equatable {
+class TrendingModel extends BaseData {
   final TrendingSourceModel? source;
   final String? author;
   final String? title;
