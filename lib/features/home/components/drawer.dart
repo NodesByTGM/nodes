@@ -195,9 +195,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       // ),
                       GestureDetector(
                         onTap: !isBusinessUser
-                            ? () => navCtrl.updatePageListStack(
+                            ? () {
+                                closeDrawer();
+                                navCtrl.updatePageListStack(
                                   BusinessPreDashbaordScreen.routeName,
-                                )
+                                );
+                              }
                             : () {
                                 setState(() {
                                   forBusinessStatus = !forBusinessStatus;
