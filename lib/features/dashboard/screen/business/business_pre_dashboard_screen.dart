@@ -123,49 +123,7 @@ class _BusinessPreDashbaordScreenState
           ],
         ),
       ),
-      // child: Container(
-      //   height: 200,
-      //   child: Column(
-      //     mainAxisSize: MainAxisSize.min,
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     children: [
-      //       labelText("Hi <insert user firstname>!"),
-      //       labelText(
-      //           "To add a business a account, you will need to upgrade your current plan to the business plan"),
-      //       Row(
-      //         children: [
-      //           Expanded(
-      //             child: OutlineBtn(
-      //               onPressed: () {
-      //                 navigateBack(context);
-      //               },
-      //               child: btnTxt("Cancel"),
-      //             ),
-      //           ),
-      //           xSpace(width: 10),
-      //           SubmitBtn(
-      //             onPressed: () {
-      //               // Send to Subscription, proceed to sub for monthly...
-      //               authCtrl.setSubUpgrade(
-      //                 const SubscriptionUpgrade(
-      //                   type: KeyString.bus,
-      //                   amount: businessMonthlyAmt,
-      //                   period: KeyString.month,
-      //                   features: Constants.businessFeatures,
-      //                   isSubscribed: false,
-      //                 ),
-      //               );
-      //               context.read<NavController>().updatePageListStack(
-      //                     ProceedWithPayment.routeName,
-      //                   );
-      //             },
-      //             title: btnTxt("Upgrade Plan"),
-      //           ),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      
     );
   }
 }

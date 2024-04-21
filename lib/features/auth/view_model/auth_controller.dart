@@ -188,7 +188,8 @@ class AuthController extends BaseController {
       showSuccess(message: response.message); // For login o
       await _authCustomSaveSession(response);
       // setCurrentScreen(NavbarView.routeName);
-      return CurrentSession.fromJson(response.result as Map<String, dynamic>).user;
+      return CurrentSession.fromJson(response.result as Map<String, dynamic>)
+          .user;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return null;
@@ -529,6 +530,7 @@ class AuthController extends BaseController {
         return false;
       }
       await _customUserSessionUpdate(response);
+      showSuccess(message: response.message);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());

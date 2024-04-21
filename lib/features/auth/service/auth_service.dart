@@ -141,7 +141,8 @@ class AuthService {
       ApiResponse res = await authRepository.verifyBusiness(payload);
       return res;
     } on DioException catch (e) {
-      log.severe("Error message @verifyBusiness ::===> ${e.response?.data}");
+      // log.severe("Error message @verifyBusiness ::===> ${e.response?.data}");
+      log.severe("Error message @verifyBusiness ::===> ${e.response}");
       return NetworkException.errorHandler(e);
     }
   }

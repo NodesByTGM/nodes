@@ -997,13 +997,20 @@ bool isBusinessProfileComplete(BusinessAccountModel b) {
   // check if the following fields are available
   // Logo, Name, YOE, Location, Headline and Bio, for now sha...
   bool hasLogo = !isObjectEmpty(b.logo?.url);
+  bool hasCac = !isObjectEmpty(b.cac?.url);
   bool hasName = !isObjectEmpty(b.name);
   bool hasYoe = !isObjectEmpty(b.yoe);
   bool hasLocation = !isObjectEmpty(b.location);
   bool hasHeadline = !isObjectEmpty(b.headline);
   bool hasBio = !isObjectEmpty(b.bio);
-  if (hasLogo && hasName && hasYoe && hasLocation && hasHeadline && hasBio) {
-  // if (hasName && hasYoe && hasLocation) {
+  if (hasCac &&
+      hasLogo &&
+      hasName &&
+      hasYoe &&
+      hasLocation &&
+      hasHeadline &&
+      hasBio) {
+    // if (hasName && hasYoe && hasLocation) {
     return true;
   }
   return false;

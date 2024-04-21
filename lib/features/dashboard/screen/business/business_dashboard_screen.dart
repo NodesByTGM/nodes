@@ -3,6 +3,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/dashboard/components/business_verification_form.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
@@ -44,6 +45,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     businessAccount = user.business as BusinessAccountModel;
     super.initState();
     fetchMyCreatedEventAndJobsTrending();
+    if (mounted) {
+      showBusinessAccountVerificationModal();
+    }
   }
 
   fetchMyCreatedEventAndJobsTrending() {
@@ -110,7 +114,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
               ],
               QuickSetupCard(
                   title: "Create a job\npost",
-                  btnTitle: "Create",
+                  btnTitle: "Create Job",
                   icon: ImageUtils.thrunkIcon,
                   onTap: () {
                     if (isBusinessProfileComplete(
@@ -425,6 +429,21 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
 
   void cantCreateMsg() {
     showText(message: "Oops!! You have to complete your profile first.");
+  }
+
+  showBusinessAccountVerificationModal() async {
+    await Future.delayed(const Duration(seconds: 1), () {
+      if (!isBusinessProfileComplete(businessAccount)) {
+        showSimpleDialog(
+          context: context,
+          backgroundColor: Colors.white,
+          dismissable: false,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.only(bottom: 0),
+          child: const BusinessVerificationForm(),
+        );
+      }
+    });
   }
 }
 
