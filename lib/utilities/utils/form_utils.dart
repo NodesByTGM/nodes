@@ -40,11 +40,11 @@ class FormUtils {
       suffixIcon: suffixIcon,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
         borderSide: BorderSide(color: BORDER, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
         borderSide: BorderSide(
           color: isTransparentBorder ? Colors.transparent : BORDER,
           width: 1,
@@ -54,7 +54,7 @@ class FormUtils {
         borderSide: BorderSide(color: Colors.red, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
         borderSide: BorderSide(
           color: isTransparentBorder ? Colors.transparent : PRIMARY,
           width: 1,
@@ -135,7 +135,7 @@ class SocialsFormWithLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           width: 1,
           color: BORDER,
@@ -177,7 +177,7 @@ class DoubleFormWithLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           width: 1,
           color: BORDER,

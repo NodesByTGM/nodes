@@ -180,10 +180,10 @@ class _BusinessJobDetailsScreenState extends State<BusinessJobDetailsScreen> {
     final result = await showAlertDialog(
       context,
       body: subtext(
-        "Are you sure you want to delete this Job posting?",
+        "You are about to permanently  delete `${job.name}` Do you want to proceed?",
         fontSize: 13,
       ),
-      title: "Delete Job",
+      title: "Delete this job post",
       cancelTitle: "No, Cancel",
       okTitle: "Yes, Delete",
       okColor: RED,

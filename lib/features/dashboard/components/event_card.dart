@@ -137,10 +137,10 @@ class EventCard extends StatelessWidget {
     final result = await showAlertDialog(
       context,
       body: subtext(
-        "Are you sure you want to delete this Event posting?",
+        "You are about to permanently  delete `${event.name}` Do you want to proceed?",
         fontSize: 13,
       ),
-      title: "Delete Event",
+      title: "Delete this event",
       cancelTitle: "No, Cancel",
       okTitle: "Yes, Delete",
       okColor: RED,

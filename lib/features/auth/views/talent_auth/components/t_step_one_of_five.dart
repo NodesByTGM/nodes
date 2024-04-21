@@ -157,7 +157,7 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
               value: value,
               visualDensity: VisualDensity.compact,
               onChanged: (val) => onTap(),
-              activeColor: PRIMARY,
+              activeColor: BLACK,
             ),
             title: subtext(title),
             onTap: onTap,
