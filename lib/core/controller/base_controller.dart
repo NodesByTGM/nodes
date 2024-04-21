@@ -11,6 +11,7 @@ abstract class BaseController extends ChangeNotifier {
   bool _isUploadingMedia = false;
   bool _likeUnlikePost = false;
   bool _isFetchingPost = false;
+  bool _isCreatingPost = false;
   bool _isFetchingSinglePost = false;
   bool _isFetchingSpaces = false;
   bool _isFetchingSingleSpace = false;
@@ -53,6 +54,7 @@ abstract class BaseController extends ChangeNotifier {
   bool get isUploadingMedia => _isUploadingMedia;
   bool get likeUnlikePost => _likeUnlikePost;
   bool get isFetchingPost => _isFetchingPost;
+  bool get isCreatingPost => _isCreatingPost;
   bool get isFetchingSinglePost => _isFetchingSinglePost;
   bool get isFetchingSpaces => _isFetchingSpaces;
   bool get isFetchingSingleSpace => _isFetchingSingleSpace;
@@ -114,6 +116,11 @@ abstract class BaseController extends ChangeNotifier {
 
   setLikeUnlikePost(bool value) {
     _likeUnlikePost = value;
+    notifyListeners();
+  }
+
+  setCreatingPost(bool value) {
+    _isCreatingPost = value;
     notifyListeners();
   }
 

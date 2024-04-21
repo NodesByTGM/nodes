@@ -7,11 +7,13 @@ class QuickSetupCard extends StatelessWidget {
     required this.title,
     required this.btnTitle,
     required this.onTap,
+     this.borderColor = const Color(0xFF000000),
   });
 
   final String icon;
   final String title;
   final String btnTitle;
+  final Color borderColor;
   final GestureTapCallback onTap;
 
   @override
@@ -24,6 +26,7 @@ class QuickSetupCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 0.7, color: borderColor),
         color: WHITE,
         image: const DecorationImage(
           image: AssetImage(ImageUtils.dottedBgOverlay),

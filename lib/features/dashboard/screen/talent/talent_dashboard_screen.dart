@@ -99,7 +99,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: PRIMARY,
+              color: TAG_CHIP,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,14 +108,12 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   "Welcome to Nodes! ",
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: WHITE,
                 ),
                 ySpace(height: 10),
                 subtext(
                   "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
                   fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: WHITE,
+                  fontWeight: FontWeight.w500,
                 ),
                 ySpace(height: 40),
                 if (!isTalentProfileComplete(user)) ...[
@@ -123,6 +121,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     title: "Complete your\nprofile",
                     btnTitle: "Complete Profile",
                     icon: ImageUtils.headIcon,
+                    borderColor: TAG_CHIP,
                     onTap: () {
                       navCtrl.updatePageListStack(ProfileWrapper.routeName);
                     },
@@ -133,6 +132,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   title: "Connect with\nothers",
                   btnTitle: "Discover",
                   icon: ImageUtils.thrunkIcon,
+                  borderColor: TAG_CHIP,
                   onTap: () {
                     navCtrl.updatePageListStack(NodeCommunityScreen.routeName);
                   },
@@ -142,6 +142,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   title: "Find your\nnext job",
                   btnTitle: "Browse jobs",
                   icon: ImageUtils.legsIcon,
+                  borderColor: TAG_CHIP,
                   onTap: () {
                     navCtrl.updatePageListStack(
                       TalentJobCenterScreen.routeName,

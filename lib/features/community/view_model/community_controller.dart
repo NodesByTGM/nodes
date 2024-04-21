@@ -6,6 +6,7 @@ import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/custom_page.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
+import 'package:nodes/features/community/models/create_post_model.dart';
 import 'package:nodes/features/community/service/community_service.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -20,11 +21,13 @@ class ComController extends BaseController {
   dynamic _currentlyViewedSpace = "";
   bool _dummyIsCreatedSpace = false;
   List<PostModel> _postList = [];
+  List<CreatePostModel> _draftPostList = [];
 
   // Getters
   get currentlyViewedSpace => _currentlyViewedSpace;
   bool get dummyIsCreatedSpace => _dummyIsCreatedSpace;
   List<PostModel> get PostList => _postList;
+  List<CreatePostModel> get draftPostList => _draftPostList;
 
   // Setters
 
@@ -40,6 +43,11 @@ class ComController extends BaseController {
 
   setPosts(List<PostModel> list) {
     _postList = list;
+    notifyListeners();
+  }
+
+  setDraftPost(CreatePostModel post) {
+    _draftPostList.insert(0, post);
     notifyListeners();
   }
 
@@ -60,21 +68,27 @@ class ComController extends BaseController {
   // }
 
   // Functions
-  Future<bool> createPost(BuildContext ctx, dynamic _details) async {
-    setBusy(true);
+  Future<bool> createPost(BuildContext ctx, CreatePostModel details) async {
+    setCreatingPost(true);
     try {
-      ApiResponse response = await _comService.createPost(ctx, _details);
+      ApiResponse response =
+          await _comService.createPost(ctx, details.toJson());
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      // TODO: Do Something here...
+      _postList.insert(
+        0,
+        PostModel.fromJson(response.result as Map<String, dynamic>),
+      );
       return true;
     } on NetworkException catch (e) {
+      // If an error occurs, send the data to draft folder...
+      setDraftPost(details);
       showError(message: e.toString());
       return false;
     } finally {
-      setBusy(false);
+      setCreatingPost(false);
     }
   }
 
@@ -98,10 +112,10 @@ class ComController extends BaseController {
     }
   }
 
-  Future<bool> fetchSinglePost(BuildContext ctx, dynamic _details) async {
+  Future<bool> fetchSinglePost(BuildContext ctx, dynamic details) async {
     setFetchSinglePost(true);
     try {
-      ApiResponse response = await _comService.fetchSinglePost(ctx, _details);
+      ApiResponse response = await _comService.fetchSinglePost(ctx, details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;

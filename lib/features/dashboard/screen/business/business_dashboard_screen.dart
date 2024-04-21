@@ -42,7 +42,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     authCtrl = locator.get<AuthController>();
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
-    businessAccount = user.business as BusinessAccountModel;
+    businessAccount = user.business ?? const BusinessAccountModel();
     super.initState();
     fetchMyCreatedEventAndJobsTrending();
     if (mounted) {
@@ -63,7 +63,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     authCtrl = context.watch<AuthController>();
     dashCtrl = context.watch<DashboardController>();
     user = authCtrl.currentUser;
-    businessAccount = user.business as BusinessAccountModel;
+    businessAccount = user.business ?? const BusinessAccountModel();
     return ListView(
       children: [
         ySpace(height: 40),
@@ -80,7 +80,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: PRIMARY,
+            color: TAG_CHIP,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,14 +89,12 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                 "Welcome to Nodes! ",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: WHITE,
               ),
               ySpace(height: 10),
               subtext(
                 "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
                 fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: WHITE,
+                fontWeight: FontWeight.w500,
               ),
               ySpace(height: 40),
               if (!isBusinessProfileComplete(businessAccount)) ...[
@@ -104,6 +102,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   title: "Complete your\nbusiness profile",
                   btnTitle: "Complete Profile",
                   icon: ImageUtils.headIcon,
+                  borderColor: TAG_CHIP,
                   onTap: () {
                     context.read<NavController>().updatePageListStack(
                           BusinessProfileScreen.routeName,
@@ -116,9 +115,11 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   title: "Create a job\npost",
                   btnTitle: "Create Job",
                   icon: ImageUtils.thrunkIcon,
+                  borderColor: TAG_CHIP,
                   onTap: () {
-                    if (isBusinessProfileComplete(
-                        user.business as BusinessAccountModel)) {
+                    BusinessAccountModel business =
+                        user.business ?? const BusinessAccountModel();
+                    if (isBusinessProfileComplete(business)) {
                       showCreateJobBottomSheet(0);
                     } else {
                       cantCreateMsg();
@@ -174,8 +175,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             content:
                 "Nothing to see here yet,\nCreate a Job post to get started.",
             onTap: () {
-              if (isBusinessProfileComplete(
-                  user.business as BusinessAccountModel)) {
+              BusinessAccountModel business =
+                  user.business ?? const BusinessAccountModel();
+              if (isBusinessProfileComplete(business)) {
                 showCreateJobBottomSheet(0);
               } else {
                 cantCreateMsg();
@@ -295,8 +297,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             title: "Hi ${user.name?.split(' ').first}!",
             content: "Nothing to see here yet,\nCreate events to get started.",
             onTap: () {
-              if (isBusinessProfileComplete(
-                  user.business as BusinessAccountModel)) {
+              BusinessAccountModel business =
+                  user.business ?? const BusinessAccountModel();
+              if (isBusinessProfileComplete(business)) {
                 showCreateJobBottomSheet(1);
               } else {
                 cantCreateMsg();

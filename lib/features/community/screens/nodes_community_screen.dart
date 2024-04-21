@@ -1,6 +1,6 @@
-import 'package:nodes/features/community/components/community_followed_tab.dart';
-import 'package:nodes/features/community/components/community_general_tab.dart';
-import 'package:nodes/features/community/components/community_myPosts_tab.dart';
+import 'package:nodes/features/community/components/community_connections_tab.dart';
+import 'package:nodes/features/community/components/community_discover_tab.dart';
+import 'package:nodes/features/community/components/community_tab.dart';
 import 'package:nodes/features/community/components/create_new_space.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -17,14 +17,12 @@ class NodeCommunityScreen extends StatefulWidget {
 class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
   int currentTabIndex = 0;
 
-
-  
-
   @override
   Widget build(BuildContext context) {
     return Container(
       color: PROFILEBG,
       child: ListView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         children: [
           Container(
             padding: screenPadding,
@@ -42,26 +40,25 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
                 subtext(
                   "We believe in the power of every individual's creative spark. ",
                 ),
-                ySpace(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SubmitBtn(
-                        onPressed: () {
-                          // context
-                          //     .read<NavController>()
-                          //     .updatePageListStack(NodeSpacesScreen.routeName);
-                          showSuccess(message: "Coming Soon");
-                        },
-                        title: btnTxt(
-                          "See spaces",
-                          WHITE,
-                        ),
-                      ),
-                    ),
-                    const Spacer()
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: SubmitBtn(
+                //         onPressed: () {
+                //           // context
+                //           //     .read<NavController>()
+                //           //     .updatePageListStack(NodeSpacesScreen.routeName);
+                //           showSuccess(message: "Coming Soon");
+                //         },
+                //         title: btnTxt(
+                //           "See spaces",
+                //           WHITE,
+                //         ),
+                //       ),
+                //     ),
+                //     const Spacer()
+                //   ],
+                // ),
                 ySpace(height: 40),
                 FormBuilderTextField(
                   name: "search",
@@ -98,7 +95,7 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
                 children: [
                   tabHeader(
                     isActive: currentTabIndex == 0,
-                    title: "General",
+                    title: "Discover",
                     onTap: () {
                       setState(() {
                         currentTabIndex = 0;
@@ -108,7 +105,7 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
                   xSpace(width: 10),
                   tabHeader(
                     isActive: currentTabIndex == 1,
-                    title: "Followed",
+                    title: "Connections",
                     onTap: () {
                       setState(() {
                         currentTabIndex = 1;
@@ -118,7 +115,7 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
                   xSpace(width: 10),
                   tabHeader(
                     isActive: currentTabIndex == 2,
-                    title: "My posts",
+                    title: "Community",
                     onTap: () {
                       setState(() {
                         currentTabIndex = 2;
@@ -138,13 +135,13 @@ class _NodeCommunityScreenState extends State<NodeCommunityScreen> {
   getTabBody() {
     switch (currentTabIndex) {
       case 0:
-        return const CommunityGeneralTab();
+        return const CommunityDiscoverTab();
       case 1:
-        return const CommunityFollowedTab();
+        return const CommunityConnectionsTab();
       case 2:
-        return const CommunityMyPostTab();
+        return const CommunityTab();
       default:
-        return const CommunityGeneralTab();
+        return const CommunityDiscoverTab();
     }
   }
 

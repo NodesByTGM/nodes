@@ -1,5 +1,3 @@
-
-
 // ignore_for_file: no_leading_underscores_for_local_identifiers, file_names
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,20 +5,22 @@ import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/components/write_a_post_form.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
-class CommunityMyPostTab extends StatefulWidget {
-  const CommunityMyPostTab({super.key});
+class CommunityTab extends StatefulWidget {
+  const CommunityTab({super.key});
 
   @override
-  State<CommunityMyPostTab> createState() => _CommunityMyPostTabState();
+  State<CommunityTab> createState() => _CommunityTabState();
 }
 
-class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
+class _CommunityTabState extends State<CommunityTab> {
   TextEditingController msgCtrl = TextEditingController();
   bool commentIsExpanded = false;
   // var _ = 158.0;
@@ -36,7 +36,8 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
 
   @override
   Widget build(BuildContext context) {
-    return 1 > 2
+    comCtrl = context.watch<ComController>();
+    return isObjectEmpty(comCtrl.PostList)
         ? Container(
             margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
             decoration: BoxDecoration(
@@ -77,6 +78,65 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
               physics: const NeverScrollableScrollPhysics(),
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    bottom: 10,
+                    left: 16,
+                    right: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.7, color: BORDER),
+                    borderRadius: BorderRadius.circular(8),
+                    color: WHITE,
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(
+                          1,
+                          2,
+                        ),
+                        blurRadius: 2,
+                        color: BORDER,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: PRIMARY,
+                            child: labelText(
+                              getShortName("${authCtrl.currentUser.name}"),
+                              color: WHITE,
+                            ),
+                          ),
+                          xSpace(width: 10),
+                          Expanded(
+                            child: FormBuilderTextField(
+                              name: "comment",
+                              decoration: FormUtils.formDecoration(
+                                hintText: "Ask for help from the community...",
+                                isTransparentBorder: true,
+                                verticalPadding: 10,
+                              ),
+                              readOnly: true,
+                              onTap: showPostInCommunity,
+                              style: FORM_STYLE,
+                              cursorColor: BLACK,
+                              controller: msgCtrl,
+                              onChanged: (val) {},
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                ySpace(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -407,7 +467,6 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
     );
   }
 
-
   likeUnlikeFn({
     required bool likedPost,
     required PostModel post,
@@ -423,30 +482,33 @@ class _CommunityMyPostTabState extends State<CommunityMyPostTab> {
     super.dispose();
   }
 
-  imagePreviewer(
-    context, {
-    required List<MediaUploadModel> images,
-    required int index,
-  }) {
-    List<ImageProvider> _arr = [];
-    for (var i in images) {
-      if (!isObjectEmpty(i.url)) {
-        _arr.add(CachedNetworkImageProvider(i.url));
-      }
-    }
-    MultiImageProvider multiImageProvider = MultiImageProvider(_arr);
 
-    showImageViewerPager(
-      context,
-      multiImageProvider,
-      useSafeArea: true,
-      closeButtonColor: RED,
-      backgroundColor: Colors.transparent,
-      onPageChanged: (page) {
-        // print("page changed to $page");
-      },
-      onViewerDismissed: (page) {
-        // print("dismissed while on page $page");
+  showPostInCommunity() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return BottomSheetWrapper(
+              closeOnTap: true,
+              title: labelText(
+                "Ask the members a question",
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+              child: const WritePostForm(),
+            );
+          },
+        );
       },
     );
   }

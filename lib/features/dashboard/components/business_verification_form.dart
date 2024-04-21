@@ -371,8 +371,7 @@ class _BusinessVerificationFormState extends State<BusinessVerificationForm> {
           await convertFileToString("${cacThumbnailImageFile?.path}");
       MediaUploadModel? cacImageUrl =
           await authCtrl.mediaUpload(imageByteString);
-      if (!isObjectEmpty(cacImageUrl)) {
-        // if (1 < 2) {
+      if (!isObjectEmpty(cacImageUrl)) { 
         // update profile with the data
         // Won't be needing this, since the verify endpoint should be returning the updated business data...
         // But will be leaving it because of the linkedIn,

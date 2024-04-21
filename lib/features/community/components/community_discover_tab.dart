@@ -1,23 +1,27 @@
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/components/community_filter_modal.dart';
+import 'package:nodes/features/community/components/people_brand_card.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
-import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
-class CommunityGeneralTab extends StatefulWidget {
-  const CommunityGeneralTab({super.key});
+class CommunityDiscoverTab extends StatefulWidget {
+  const CommunityDiscoverTab({super.key});
 
   @override
-  State<CommunityGeneralTab> createState() => _CommunityGeneralTabState();
+  State<CommunityDiscoverTab> createState() => _CommunityDiscoverTabState();
 }
 
-class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
+class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
   TextEditingController msgCtrl = TextEditingController();
   late ComController comCtrl;
   late AuthController authCtrl;
+  bool isBrand = false;
+
   @override
   initState() {
     comCtrl = locator.get<ComController>();
@@ -37,147 +41,92 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
         physics: const NeverScrollableScrollPhysics(),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         children: [
-          Container(
-            // height: 128,
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 10,
-              left: 16,
-              right: 16,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(width: 0.7, color: BORDER),
-              borderRadius: BorderRadius.circular(8),
-              color: WHITE,
-              boxShadow: const [
-                BoxShadow(
-                  offset: Offset(
-                    1,
-                    2,
-                  ),
-                  blurRadius: 2,
-                  color: BORDER,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: PRIMARY,
-                      child: labelText(
-                        getShortName("${authCtrl.currentUser.name}"),
-                        color: WHITE,
-                      ),
+                GestureDetector(
+                  onTap: showOptionModal,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 15,
                     ),
-                    xSpace(width: 10),
-                    Expanded(
-                      child: FormBuilderTextField(
-                        name: "comment",
-                        decoration: FormUtils.formDecoration(
-                          hintText: "Ask for help from the community...",
-                          isTransparentBorder: true,
-                          verticalPadding: 10,
-                        ),
-                        readOnly: true,
-                        onTap: () {
-                          // open the chat box
-                        },
-                        style: FORM_STYLE,
-                        cursorColor: BLACK,
-                        controller: msgCtrl,
-                        onChanged: (val) {},
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 0.7,
+                        color: BORDER,
                       ),
+                      borderRadius: BorderRadius.circular(8),
+                      color: WHITE,
                     ),
-                  ],
+                    child: Wrap(
+                      spacing: 10,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Icon(MdiIcons.filterOutline),
+                        labelText("Filter view"),
+                      ],
+                    ),
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SvgPicture.asset(ImageUtils.attachmentIcon),
-                    xSpace(width: 16),
-                    SvgPicture.asset(ImageUtils.galleryIcon),
-                    xSpace(width: 16),
-                    SizedBox(
-                      width: 100,
-                      child: SubmitBtn(
-                        onPressed: () {},
-                        title: btnTxt("Post", WHITE),
-                        height: 48,
-                      ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.7,
+                      color: BORDER,
                     ),
-                    // Form
-                  ],
+                    borderRadius: BorderRadius.circular(8),
+                    color: WHITE,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isBrand = false;
+                          });
+                        },
+                        child: labelText("People"),
+                      ),
+                      Container(
+                        width: 36,
+                        height: 30,
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Switch(
+                            value: isBrand,
+                            inactiveTrackColor: TAG_CHIP,
+                            activeTrackColor: TAG_CHIP,
+                            inactiveThumbColor: WHITE,
+                            onChanged: (bool value1) {
+                              setState(() {
+                                isBrand = !isBrand;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isBrand = true;
+                          });
+                        },
+                        child: labelText("Brands"),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          ySpace(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.only(
-                  top: 4,
-                  bottom: 4,
-                  left: 10,
-                  right: 2,
-                ),
-                decoration: BoxDecoration(
-                  color: WHITE,
-                  border: Border.all(width: 0.7, color: BORDER),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 5,
-                  children: [
-                    labelText(
-                      "Sort by:",
-                      color: GRAY,
-                      fontSize: 12,
-                    ),
-                    PopupMenuButton<String>(
-                      onSelected: (value) {},
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(
-                            value: 'Most recent',
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                subtext("Most recent"),
-                              ],
-                            ),
-                          )
-                        ];
-                      },
-                      offset: const Offset(0, 40),
-                      color: WHITE,
-                      elevation: 2,
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          labelText(
-                            "Most recent",
-                            fontSize: 12,
-                          ),
-                          const Icon(
-                            Icons.arrow_drop_down_outlined,
-                            color: BORDER,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
           ySpace(height: 20),
           Padding(
@@ -206,14 +155,15 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(top: 27),
+                    padding: const EdgeInsets.only(top: 10),
                     itemCount: posts.length,
                     itemBuilder: (c, i) {
-                      return commentCard(
-                        post: posts[i],
-                      );
+                      // return commentCard(
+                      //   post: posts[i],
+                      // );
+                      return PeopleBrandCard();
                     },
-                    separatorBuilder: (c, i) => ySpace(height: 40),
+                    separatorBuilder: (c, i) => ySpace(height: 20),
                   );
                 }
               },
@@ -451,6 +401,17 @@ class _CommunityGeneralTabState extends State<CommunityGeneralTab> {
     likedPost
         ? await comCtrl.unlikeSinglePost(context, post.copyWith(liked: false))
         : await comCtrl.likeSinglePost(context, post.copyWith(liked: true));
+  }
+
+  showOptionModal() async {
+    showSimpleDialog(
+      context: context,
+      backgroundColor: WHITE,
+      dismissable: false,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.only(bottom: 0),
+      child: const CommunityFilter(),
+    );
   }
 
   @override
