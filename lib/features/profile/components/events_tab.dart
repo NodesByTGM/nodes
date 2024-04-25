@@ -2,7 +2,9 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
+import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class EventsTab extends StatefulWidget {
@@ -66,10 +68,12 @@ class _EventsTabState extends State<EventsTab> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: events.length,
             itemBuilder: (c, i) {
+              StandardTalentEventModel e =
+                  StandardTalentEventModel.toStandardTalentEvent(events[i]);
               return SizedBox(
                 height: 280,
-                child: EventCard(
-                  event: events[i],
+                child: StandardTalentEventCard(
+                  event: e,
                 ),
               );
             },

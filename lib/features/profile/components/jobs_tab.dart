@@ -3,6 +3,7 @@ import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/job_card_business.dart';
+import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -21,7 +22,7 @@ class _JobsTabState extends State<JobsTab> {
   late AuthController authCtrl;
   late UserModel user;
   // Will be using the job model for standard and talent
-  late List<BusinessJobModel> jobs; 
+  late List<BusinessJobModel> jobs;
 
   @override
   void initState() {
@@ -67,8 +68,11 @@ class _JobsTabState extends State<JobsTab> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: jobs.length,
             itemBuilder: (c, i) {
-              return BusinessJobCard(
-                job: jobs[i],
+              StandardTalentJobModel j =
+                  StandardTalentJobModel.toStandardTalentJob(jobs[i]); 
+              return StandardTalentJobCard(
+                job: j,
+                id: "${j.id}",
               );
             },
             separatorBuilder: (c, i) => ySpace(height: 24),

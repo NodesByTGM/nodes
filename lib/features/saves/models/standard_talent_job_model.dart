@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/core/models/base_data.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/utilities/constants/exported_packages.dart';
 
 part "standard_talent_job_model.g.dart";
 
@@ -82,6 +83,25 @@ class StandardTalentJobModel extends BaseData {
 
   Map<String, dynamic> toJson() => _$StandardTalentJobModelToJson(this);
 
+  static StandardTalentJobModel toStandardTalentJob(BusinessJobModel job) =>
+      StandardTalentJobModel(
+        name: job.name,
+        description: job.description,
+        experience: job.experience,
+        payRate: job.payRate,
+        workRate: job.workRate,
+        skills: job.skills,
+        jobType: job.jobType,
+        applicants: isObjectEmpty(job.applicants) ? 0 : job.applicants?.length,
+        saves: isObjectEmpty(job.saves) ? 0 : job.saves?.length,
+        business: job.business,
+        createdAt: job.createdAt,
+        updatedAt: job.updatedAt,
+        applied: job.applied,
+        saved: job.saved,
+        id: job.id,
+      );
+
   @override
   List<StandardTalentJobModel> fromList(List<dynamic> items) {
     if (items.isEmpty) {
@@ -117,7 +137,7 @@ class BusinessJobModel extends BaseData {
   final String? payRate;
   final String? workRate;
   final List<String>? skills;
-  final int? jobType;
+  final int jobType;
   final List<ApplicantModel>? applicants;
   final List<ApplicantModel>? saves;
   final BusinessAccountModel? business;
@@ -134,7 +154,7 @@ class BusinessJobModel extends BaseData {
     this.payRate,
     this.workRate,
     this.skills,
-    this.jobType,
+    this.jobType = 0,
     this.applicants,
     this.saves,
     this.business,

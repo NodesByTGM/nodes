@@ -4,6 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/core/models/base_data.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/utilities/constants/exported_packages.dart';
 
 part "event_model_standardTalent.g.dart";
 
@@ -70,6 +72,22 @@ class StandardTalentEventModel extends BaseData {
       _$StandardTalentEventModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$StandardTalentEventModelToJson(this);
+
+  static StandardTalentEventModel toStandardTalentEvent(EventModel event) =>
+      StandardTalentEventModel(
+        name: event.name,
+        description: event.description,
+        location: event.location,
+        dateTime: event.dateTime,
+        paymentType: event.paymentType,
+        thumbnail: event.thumbnail,
+        saves: isObjectEmpty(event.saves) ? 0 : event.saves?.length,
+        business: event.business,
+        createdAt: event.createdAt,
+        updatedAt: event.updatedAt,
+        saved: event.saved,
+        id: event.id,
+      );
 
   @override
   List<StandardTalentEventModel> fromList(List<dynamic> items) {
