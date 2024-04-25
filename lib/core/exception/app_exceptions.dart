@@ -22,6 +22,13 @@ class NetworkException implements Exception {
             .copyWith(message: "Retrying Request...");
         return response;
       }
+      if (e.response?.statusCode == 422) {
+        // Refresh Token expired
+        context?.read<AuthController>().refreshToken();
+        ApiResponse response = ApiResponse.fromJson(e.response?.data)
+            .copyWith(message: "Session Expired, Please log back in");
+        return response;
+      }
       if (e.response!.statusCode! >= 500) {
         // Means it's server error, just log the user out...
         context!.read<AuthController>().logout;

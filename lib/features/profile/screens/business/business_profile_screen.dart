@@ -22,7 +22,6 @@ class BusinessProfileScreen extends StatefulWidget {
 
 class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   int currentIndex = 0;
-  bool isRegistered = true;
   late AuthController authCtrl;
   late UserModel user;
   late BusinessAccountModel business;
@@ -148,48 +147,53 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                 ],
               ),
               ySpace(height: 24),
-              if (isRegistered) ...[
-                ySpace(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlineBtn(
-                        onPressed: () async {
-                          if (isBusinessProfileComplete(business)) {
-                            await shareDoc(context);
-                          } else {
-                            showText(
-                              message: "Please update your profile to proceed.",
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlineBtn(
+                      onPressed: () async {
+                        if (isBusinessProfileComplete(business) &&
+                            isBusinessVerified(business)) {
+                          await shareDoc(context);
+                        }
+                        if (isBusinessProfileComplete(business) &&
+                            !isBusinessVerified(business)) {
+                          showText(
+                            message:
+                                "Oops!! Your account hasn't been verified yet.",
+                          );
+                        } else {
+                          showText(
+                            message: "Please update your profile to proceed.",
+                          );
+                        }
+                      },
+                      borderColor: PRIMARY,
+                      color: WHITE,
+                      height: 48,
+                      child: btnTxt(
+                        "Share Profile",
+                        PRIMARY,
+                      ),
+                    ),
+                  ),
+                  xSpace(width: 10),
+                  Expanded(
+                    child: SubmitBtn(
+                      height: 48,
+                      onPressed: () {
+                        context.read<NavController>().updatePageListStack(
+                              EditBusinessProfileScreen.routeName,
                             );
-                          }
-                        },
-                        borderColor: PRIMARY,
-                        color: WHITE,
-                        height: 48,
-                        child: btnTxt(
-                          "Share Profile",
-                          PRIMARY,
-                        ),
+                      },
+                      title: btnTxt(
+                        "Edit Your Profile",
+                        WHITE,
                       ),
                     ),
-                    xSpace(width: 10),
-                    Expanded(
-                      child: SubmitBtn(
-                        height: 48,
-                        onPressed: () {
-                          context.read<NavController>().updatePageListStack(
-                                EditBusinessProfileScreen.routeName,
-                              );
-                        },
-                        title: btnTxt(
-                          "Edit Your Profile",
-                          WHITE,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
               ySpace(height: 32),
             ],
           ),
@@ -209,20 +213,30 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                 color: WHITE,
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   tabHeader(
                     isActive: currentIndex == 0,
-                    title: "Jobs/Events",
+                    title: "Jobs",
                     onTap: () {
                       setState(() {
                         currentIndex = 0;
                       });
                     },
                   ),
-                  xSpace(width: 10),
                   tabHeader(
                     isActive: currentIndex == 1,
                     title: "Projects",
+                    onTap: () {
+                      setState(() {
+                        currentIndex = 1;
+                      });
+                    },
+                  ),
+                  tabHeader(
+                    // isActive: currentIndex == 2,
+                    isActive: currentIndex == 1,
+                    title: "Events",
                     onTap: () {
                       setState(() {
                         currentIndex = 1;

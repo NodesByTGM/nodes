@@ -48,6 +48,21 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           : SubscriptionModel.fromJson(
               json['subscription'] as Map<String, dynamic>),
       visible: json['visible'] as bool? ?? true,
+      firebaseToken: json['firebaseToken'] as String?,
+      connections: (json['connections'] as List<dynamic>?)
+          ?.map((e) => UserConnectionModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      requested: json['requested'] as bool? ?? false,
+      connected: json['connected'] as bool? ?? false,
+      projects: (json['projects'] as List<dynamic>?)
+          ?.map((e) => ProjectModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      events: (json['events'] as List<dynamic>?)
+          ?.map((e) => EventModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      jobs: (json['jobs'] as List<dynamic>?)
+          ?.map((e) => BusinessJobModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -79,4 +94,11 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'business': instance.business?.toJson(),
       'subscription': instance.subscription?.toJson(),
       'visible': instance.visible,
+      'firebaseToken': instance.firebaseToken,
+      'connections': instance.connections?.map((e) => e.toJson()).toList(),
+      'requested': instance.requested,
+      'connected': instance.connected,
+      'projects': instance.projects?.map((e) => e.toJson()).toList(),
+      'events': instance.events?.map((e) => e.toJson()).toList(),
+      'jobs': instance.jobs?.map((e) => e.toJson()).toList(),
     };

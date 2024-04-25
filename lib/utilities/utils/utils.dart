@@ -80,6 +80,20 @@ String fromDatTimeToTimeOfDay(DateTime now) {
   return timeOfDay(TimeOfDay.fromDateTime(now));
 }
 
+
+TimeOfDay _customStringToTimeOfDay(String s) => TimeOfDay(
+    hour: int.parse(s.split(":")[0]), minute: int.parse(s.split(":")[1]));
+
+TimeOfDay stringToTimeOfDay(String tod) {
+  final format = DateFormat.jm(); //"6:00 AM"
+  return TimeOfDay.fromDateTime(format.parse(tod));
+}
+
+String fromStringToTimeOfDay(String now) {
+  // return timeOfDay(stringToTimeOfDay(now));
+  return timeOfDay(_customStringToTimeOfDay(now));
+}
+
 // Routing Configs
 navigateTo(BuildContext context, String route, {dynamic arguments}) {
   Navigator.pushNamed(context, route, arguments: arguments);
@@ -450,58 +464,12 @@ showSimpleDialog({
           ),
           padding: padding ?? const EdgeInsets.all(20),
           child: child,
-          // child: SingleChildScrollView(
-          //   child: Column(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: [
-          //       // if (isCancel)
-          //       //   Row(
-          //       //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       //     children: [
-          //       //       title ?? Container(),
-          //       //       GestureDetector(
-          //       //         onTap: () => navigateBack(context),
-          //       //         child: SvgPicture.asset(
-          //       //           ImageUtils.cancel,
-          //       //           height: 32,
-          //       //           width: 32,
-          //       //         ),
-          //       //       ),
-          //       //     ],
-          //       //   ),
-          //       child,
-          //     ],
-          //   ),
-          // ),
-          // child: SingleChildScrollView(
-          //   padding: const EdgeInsets.symmetric(
-          //     horizontal: 20.0,
-          //     vertical: 36.0,
-          //   ),
-          //   child: child,
-          // ),
         ),
       );
     },
   );
 }
-
-// Future<String?> imageUploader(File imageFile) async {
-//   Cloudflare cloudflare = locator.get<Cloudflare>(); //apiUrl is optional
-//   await cloudflare.init();
-//   //From file
-//   CloudflareHTTPResponse<CloudflareImage?> responseFromFile =
-//       await cloudflare.imageAPI.upload(
-//     contentFromFile: DataTransmit<File>(
-//       data: imageFile,
-//       progressCallback: (count, total) {
-//         // print('George the Upload progress: $count/$total');
-//       },
-//     ),
-//   );
-//   return responseFromFile.body?.variants.first;
-// }
-
+ 
 typedef void IntCallBack(int val);
 
 class CustomTabBar extends StatefulWidget {
@@ -1014,6 +982,10 @@ bool isBusinessProfileComplete(BusinessAccountModel b) {
     return true;
   }
   return false;
+}
+
+bool isBusinessVerified(BusinessAccountModel b) {
+  return b.verified;
 }
 
 bool isTalentProfileComplete(UserModel t) {

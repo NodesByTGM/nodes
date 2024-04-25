@@ -1,22 +1,52 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
-import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/profile/components/interactions_tab.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
-import 'package:nodes/features/profile/screens/individual/edit_individual_profile_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class IndividualProfileScreen extends StatelessWidget {
-  const IndividualProfileScreen({super.key});
-  static const String routeName = "/individual_profile_screen";
+class IndividualGuestProfileScreen extends StatefulWidget {
+  const IndividualGuestProfileScreen({
+    super.key,
+    this.id,
+  });
+  static const String routeName = "/individual_guest_profile_screen";
+
+  final String? id;
+
+  @override
+  State<IndividualGuestProfileScreen> createState() =>
+      _IndividualGuestProfileScreenState();
+}
+
+class _IndividualGuestProfileScreenState
+    extends State<IndividualGuestProfileScreen> {
+  late ComController comCtrl;
+  UserModel? userData;
+
+  @override
+  void initState() {
+    comCtrl = locator.get<ComController>();
+    safeNavigate(() => fetchUserById());
+    super.initState();
+  }
+
+  fetchUserById() async {
+    userData = await comCtrl.fetchSingleUser(context, "${widget.id}");
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthController>(builder: (context, authCtrl, _) {
-      UserModel user = authCtrl.currentUser;
+    return Consumer<ComController>(builder: (context, cCtrl, _) {
+      if (cCtrl.isFetchingSingleGeneralUser || isObjectEmpty(userData)) {
+        // show simmer
+        return const ProfileShimmerLoader();
+      }
+      UserModel user = userData as UserModel;
       return ListView(
         children: [
           Container(
@@ -102,20 +132,6 @@ class IndividualProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                ySpace(height: 24),
-                  ySpace(height: 10),
-                  SubmitBtn(
-                    onPressed: () {
-                      context.read<NavController>().updatePageListStack(
-                          EditIndividualProfileScreen.routeName);
-                    },
-                    height: 48,
-                    title: btnTxt(
-                      "Edit Your Profile",
-                      WHITE,
-                    ),
-                  ),
-                  ySpace(height: 16),
               ],
             ),
           ),

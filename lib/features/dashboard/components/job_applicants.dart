@@ -1,3 +1,7 @@
+import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/community/models/currently_viewed_user_model.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
+import 'package:nodes/features/profile/screens/profile_guest_wrapper.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -47,12 +51,23 @@ class JobApplicants extends StatelessWidget {
                     ),
                     ySpace(height: 10),
                     subtext(
-                      "janedoe@gmail.com",
+                      "${applicant.email}",
                     ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          // First add the ID to the currentlyViewedProfile
+                          context.read<ComController>().setCurrentlyViewedUser(
+                                CurrentlyViewedUser(
+                                  id: "${applicant.id}",
+                                  type: applicant.type,
+                                ),
+                              );
+                          context.read<NavController>().updatePageListStack(
+                                ProfileGuestWrapper.routeName,
+                              );
+                        },
                         child: labelText(
                           "View profile",
                           color: PRIMARY,

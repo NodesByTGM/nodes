@@ -12,6 +12,7 @@ class ProjectsTab extends StatefulWidget {
   const ProjectsTab({
     super.key,
     this.isBusiness = false,
+    this.isGuest = false,
     required this.projects,
   });
 // use enum to detect if it's the
@@ -19,6 +20,7 @@ class ProjectsTab extends StatefulWidget {
 // Project
 
   final bool isBusiness;
+  final bool isGuest;
   final List<ProjectModel> projects;
 
   @override
@@ -59,34 +61,50 @@ class _ProjectsTabState extends State<ProjectsTab> {
                     ),
                     ySpace(height: 20),
                     subtext(
-                      "Nothing to see here yet,\nadd a project or two to get started.",
+                      !widget.isGuest
+                          ? "Nothing to see here yet,\nadd a project or two to get started."
+                          : "Nothing to see here yet.",
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       textAlign: TextAlign.center,
                     ),
                     ySpace(height: 40),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48.0),
-                      child: SubmitBtn(
-                        // onPressed: showCreateProjectModal,
-                        onPressed: () {
-                          if (widget.isBusiness
-                              ? isBusinessProfileComplete(business)
-                              : isTalentProfileComplete(user)) {
-                            showCreateProjectModal();
-                          } else {
-                            showText(
-                                message:
-                                    "Please update your profile to proceed.");
-                          }
-                        },
-                        title: btnTxt(
-                          "Add projects",
-                          WHITE,
+                    if (!widget.isGuest) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                        child: SubmitBtn(
+                          // onPressed: showCreateProjectModal,
+                          onPressed: () {
+                            if (widget.isBusiness) {
+                              if (isBusinessProfileComplete(business) &&
+                                  isBusinessVerified(business)) {
+                                showCreateProjectModal();
+                              } else if (isBusinessProfileComplete(business) &&
+                                  !isBusinessVerified(business)) {
+                                showText(
+                                  message: Constants.accountNotVerified,
+                                );
+                              } else {
+                                showText(
+                                  message: Constants.updateYourProfileToProceed,
+                                );
+                              }
+                            } else if (isTalentProfileComplete(user)) {
+                              showCreateProjectModal();
+                            } else {
+                              showText(
+                                  message:
+                                      Constants.updateYourProfileToProceed);
+                            }
+                          },
+                          title: btnTxt(
+                            "Add projects",
+                            WHITE,
+                          ),
                         ),
                       ),
-                    ),
-                    ySpace(height: 40),
+                      ySpace(height: 40),
+                    ],
                     SvgPicture.asset(ImageUtils.spaceEmptyIcon),
                   ],
                 ),
@@ -115,7 +133,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
                     ),
                     ySpace(height: 16),
                     labelText(
-                      "${project.name}",
+                      "${project.name}lol",
                       fontSize: 14,
                     ),
                     ySpace(height: 10),
@@ -123,7 +141,9 @@ class _ProjectsTabState extends State<ProjectsTab> {
                       "${project.description}",
                     ),
                     ySpace(height: 24),
-                    if (widget.isBusiness) ...[
+                    // if (widget.isBusiness ) ...[
+                    if (widget.isBusiness && !(widget.isGuest)) ...[
+                      // Meaning its a business account, and not viewing in Guest Mode.
                       GestureDetector(
                         onTap: () {},
                         child: subtext(
@@ -134,6 +154,8 @@ class _ProjectsTabState extends State<ProjectsTab> {
                       ),
                     ],
                     if (!widget.isBusiness) ...[
+                      // if (!widget.isBusiness && !(widget.isGuest)) ...[
+                      // Meaning it's NOT a business account, and also not viewing in uest Mode.
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -155,25 +177,28 @@ class _ProjectsTabState extends State<ProjectsTab> {
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: RED,
+                          if (!(widget.isGuest)) ...[
+                            // Meaning it's not being viewed in Guest Mode
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 1,
+                                    color: RED,
+                                  ),
                                 ),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Icon(
-                                  Icons.delete_outline,
-                                  color: RED,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.delete_outline,
+                                    color: RED,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ],
                       )
                     ],
@@ -208,7 +233,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
       dismissable: true,
       insetPadding: const EdgeInsets.symmetric(horizontal: 10),
       padding: const EdgeInsets.only(bottom: 0),
-      child:  AddProject(isBusiness: widget.isBusiness),
+      child: AddProject(isBusiness: widget.isBusiness),
     );
   }
 }

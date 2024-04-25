@@ -7,7 +7,7 @@ part "business_account_model.g.dart";
 @JsonSerializable(explicitToJson: true)
 class BusinessAccountModel extends Equatable {
   final bool verified;
-  final dynamic cac;
+  final MediaUploadModel? cac;
   final DateTime? yoe;
   final String? account;
   final DateTime? createdAt;
@@ -50,7 +50,7 @@ class BusinessAccountModel extends Equatable {
 
   BusinessAccountModel copyWith({
     bool? verified,
-    dynamic cac,
+    MediaUploadModel? cac,
     DateTime? yoe,
     String? account,
     DateTime? createdAt,

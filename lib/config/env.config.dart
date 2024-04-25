@@ -30,5 +30,9 @@ const double businessyearlyAmt = 214800;
 
 paystackCallbackUrl(ref) => "$tGMWebsite/?trxref=$ref&reference=$ref";
 
+const standardTopic = "nodes.standard";
+const proTopic = "nodes.pro";
+const businessTopic = "nodes.business";
+
 
 // sk_test_812646584458dfec2bf133db969dd587e34f6ebb

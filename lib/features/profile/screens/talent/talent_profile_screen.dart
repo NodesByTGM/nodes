@@ -22,7 +22,6 @@ class TalentProfileScreen extends StatefulWidget {
 
 class _TalentProfileScreenState extends State<TalentProfileScreen> {
   int currentIndex = 0;
-  bool isRegistered = true;
   late UserModel user;
   late AuthController authCtrl;
   late DashboardController dashCtrl;
@@ -195,50 +194,48 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                 ],
               ),
               ySpace(height: 24),
-              if (isRegistered) ...[
-                ySpace(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlineBtn(
-                        onPressed: () async {
-                          if (isTalentProfileComplete(user)) {
-                            await shareDoc(
-                              context,
-                              url: "$nodeWebsite/${user.username}",
-                            );
-                          } else {
-                            showText(
-                              message: "Please update your profile to proceed.",
-                            );
-                          }
-                        },
-                        borderColor: PRIMARY,
-                        color: WHITE,
-                        height: 48,
-                        child: btnTxt(
-                          "Share Profile",
-                          PRIMARY,
-                        ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlineBtn(
+                      onPressed: () async {
+                        if (isTalentProfileComplete(user)) {
+                          await shareDoc(
+                            context,
+                            url: "$nodeWebsite/${user.username}",
+                          );
+                        } else {
+                          showText(
+                            message: "Please update your profile to proceed.",
+                          );
+                        }
+                      },
+                      borderColor: PRIMARY,
+                      color: WHITE,
+                      height: 48,
+                      child: btnTxt(
+                        "Share Profile",
+                        PRIMARY,
                       ),
                     ),
-                    xSpace(width: 10),
-                    Expanded(
-                      child: SubmitBtn(
-                        height: 48,
-                        onPressed: () {
-                          context.read<NavController>().updatePageListStack(
-                              EditTalentProfileScreen.routeName);
-                        },
-                        title: btnTxt(
-                          "Edit Your Profile",
-                          WHITE,
-                        ),
+                  ),
+                  xSpace(width: 10),
+                  Expanded(
+                    child: SubmitBtn(
+                      height: 48,
+                      onPressed: () {
+                        context.read<NavController>().updatePageListStack(
+                            EditTalentProfileScreen.routeName);
+                      },
+                      title: btnTxt(
+                        "Edit Your Profile",
+                        WHITE,
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
               ySpace(height: 32),
             ],
           ),
@@ -297,6 +294,6 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
         ? ProjectsTab(
             projects: dc.myProjectList,
           )
-        :const InteractionsTab();
+        : const InteractionsTab();
   }
 }

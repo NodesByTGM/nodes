@@ -10,7 +10,9 @@ BusinessAccountModel _$BusinessAccountModelFromJson(
         Map<String, dynamic> json) =>
     BusinessAccountModel(
       verified: json['verified'] as bool? ?? false,
-      cac: json['cac'],
+      cac: json['cac'] == null
+          ? null
+          : MediaUploadModel.fromJson(json['cac'] as Map<String, dynamic>),
       yoe: json['yoe'] == null ? null : DateTime.parse(json['yoe'] as String),
       account: json['account'] as String?,
       createdAt: json['createdAt'] == null
@@ -40,7 +42,7 @@ Map<String, dynamic> _$BusinessAccountModelToJson(
         BusinessAccountModel instance) =>
     <String, dynamic>{
       'verified': instance.verified,
-      'cac': instance.cac,
+      'cac': instance.cac?.toJson(),
       'yoe': instance.yoe?.toIso8601String(),
       'account': instance.account,
       'createdAt': instance.createdAt?.toIso8601String(),

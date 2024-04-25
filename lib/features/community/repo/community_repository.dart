@@ -18,6 +18,11 @@ class ComApis {
   static const singlePost = "$postApi/{id}";
   static const singlePostLike = "$postApi/like/{id}";
   static const singlePostUnlike = "$postApi/unlike/{id}";
+
+
+  // General Users
+  static const usersApi = "$baseApi/users";
+  static const singleUsers = "$usersApi/{id}";
 }
 
 @RestApi()
@@ -50,6 +55,16 @@ abstract class ComRepository {
 
   @POST(ComApis.singlePostUnlike)
   Future<ApiResponse> unlikeSinglePost(
+    @Path('id') String id,
+  );
+
+
+
+  @GET(ComApis.usersApi)
+  Future<ApiResponse> fetchAllUsers();
+
+  @GET(ComApis.singleUsers)
+  Future<ApiResponse> fetchSingleUser(
     @Path('id') String id,
   );
 }

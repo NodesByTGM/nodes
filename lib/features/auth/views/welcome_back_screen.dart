@@ -240,6 +240,8 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
       //   return;
       // }
       if (!isObjectEmpty(user) && mounted) {
+        // This will auto load the firebaseToken for me from the controller...
+        authCtrl.updateProfile(context, user?.toJson());
         safeNavigate(() {
           formKey.currentState!.reset();
           context.read<NavController>().resetPageListStack();

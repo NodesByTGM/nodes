@@ -13,6 +13,8 @@ class Constants {
   static const confirmPassword = "Confirm Password";
   static const passwordMatchError = "Password does not match!";
   static const naira = "₦";
+  static const accountNotVerified = "Oops!! Your account hasn't been verified yet.";
+  static const updateYourProfileToProceed = "Please update your profile to proceed.";
 
   static const jobType = [
     'Full-time',

@@ -40,6 +40,7 @@ class DashboardController extends BaseController {
   List<ProjectModel> _myProjectList = [];
   List<TrendingModel> _trendingList = [];
   List<MovieShowModel> _movieShowList = [];
+  
 
   // Getters
   List<StandardTalentJobModel> get savedJobsList => _savedJobsList;
@@ -56,7 +57,7 @@ class DashboardController extends BaseController {
   List<ProjectModel> get myProjectList => _myProjectList;
   List<TrendingModel> get trendingList => _trendingList;
   List<MovieShowModel> get movieShowList => _movieShowList;
-
+  
   // Setters
 
   // setCurrentlyViewedSpaceVal(dynamic val) {
@@ -879,6 +880,7 @@ class DashboardController extends BaseController {
     }
   }
 
+
 // Handling Paginated Data...
 // Jobs
   List<BusinessJobModel> _resolvePaginatedBusinessJobs(ApiResponse response) {
@@ -950,4 +952,5 @@ class DashboardController extends BaseController {
     }
     return [];
   }
+
 }

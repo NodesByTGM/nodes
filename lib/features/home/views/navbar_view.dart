@@ -17,6 +17,7 @@ import 'package:nodes/features/profile/screens/business/business_profile_screen.
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/individual/edit_individual_profile_screen.dart';
 import 'package:nodes/features/profile/screens/individual/individual_profile_screen.dart';
+import 'package:nodes/features/profile/screens/profile_guest_wrapper.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/profile/screens/talent/edit_talent_profile_screen.dart';
 import 'package:nodes/features/profile/screens/talent/talent_profile_screen.dart';
@@ -182,6 +183,7 @@ class _NavbarViewState extends State<NavbarView> {
       NodeSpacesScreen.routeName,
       NodeCommunityScreen.routeName,
       ProfileWrapper.routeName,
+      ProfileGuestWrapper.routeName,
       IndividualProfileScreen.routeName,
       EditIndividualProfileScreen.routeName,
       TalentProfileScreen.routeName,

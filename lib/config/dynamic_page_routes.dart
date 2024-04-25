@@ -22,7 +22,11 @@ import 'package:nodes/features/profile/screens/business/business_profile_screen.
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
 import 'package:nodes/features/profile/screens/individual/edit_individual_profile_screen.dart';
 import 'package:nodes/features/profile/screens/individual/individual_profile_screen.dart';
+import 'package:nodes/features/profile/screens/profile_guest_wrapper.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
+import 'package:nodes/features/profile/screens/profiles_seen_as_guest/business_guest_profile.dart';
+import 'package:nodes/features/profile/screens/profiles_seen_as_guest/individual_guest_profile.dart';
+import 'package:nodes/features/profile/screens/profiles_seen_as_guest/talent_guest_profile.dart';
 import 'package:nodes/features/profile/screens/talent/edit_talent_profile_screen.dart';
 import 'package:nodes/features/profile/screens/talent/talent_profile_screen.dart';
 import 'package:nodes/features/saves/screens/saved_items_screen.dart';
@@ -50,6 +54,11 @@ const Map<String, dynamic> persistentRoutesSettings = {
     EditIndividualProfileScreen.routeName,
     TalentProfileScreen.routeName,
     EditTalentProfileScreen.routeName,
+    // Guest Mode
+    ProfileGuestWrapper.routeName,
+    IndividualGuestProfileScreen.routeName,
+    TalentGuestProfileScreen.routeName,
+    BusinessGuestProfileScreen.routeName,
   ],
 
   // Community Screen
@@ -154,6 +163,12 @@ Widget getDynamicScreen(NavController m) {
     EditTalentProfileScreen.routeName => const EditTalentProfileScreen(),
     BusinessProfileScreen.routeName => const BusinessProfileScreen(),
     EditBusinessProfileScreen.routeName => const EditBusinessProfileScreen(),
+    // >> Guest Mode
+    ProfileGuestWrapper.routeName => const ProfileGuestWrapper(),
+    IndividualGuestProfileScreen.routeName =>
+      const IndividualGuestProfileScreen(),
+    TalentGuestProfileScreen.routeName => const TalentGuestProfileScreen(),
+    BusinessGuestProfileScreen.routeName => const BusinessGuestProfileScreen(),
 
     // Account Settings
     AccountSettingsScreen.routeName => const AccountSettingsScreen(),

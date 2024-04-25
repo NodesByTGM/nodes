@@ -4,6 +4,7 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/community_filter_modal.dart';
 import 'package:nodes/features/community/components/people_brand_card.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
+import 'package:nodes/features/community/models/general_user_model.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
@@ -133,9 +134,9 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
             padding: const EdgeInsets.all(8.0),
             child: Consumer<ComController>(
               builder: (contex, comCtrl, _) {
-                bool isLoading = comCtrl.isFetchingPost;
-                bool hasData = isObjectEmpty(comCtrl.PostList);
-                if (isLoading || isObjectEmpty(comCtrl.PostList)) {
+                bool isLoading = comCtrl.isFetchingGeneralUsers;
+                bool hasData = isObjectEmpty(comCtrl.generalUsers);
+                if (isLoading || isObjectEmpty(comCtrl.generalUsers)) {
                   return DataReload(
                     maxHeight: screenHeight(context) * .19,
                     isLoading: isLoading,
@@ -151,17 +152,20 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
                     isEmpty: hasData,
                   );
                 } else {
-                  List<PostModel> posts = comCtrl.PostList;
+                  List<GeneralUserModel> genUsers = comCtrl.generalUsers;
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.only(top: 10),
-                    itemCount: posts.length,
+                    itemCount: genUsers.length,
                     itemBuilder: (c, i) {
                       // return commentCard(
                       //   post: posts[i],
                       // );
-                      return PeopleBrandCard();
+                      return PeopleBrandCard(
+                        isConnected: false,
+                        genUser: genUsers[i],
+                      );
                     },
                     separatorBuilder: (c, i) => ySpace(height: 20),
                   );
@@ -176,7 +180,7 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
   }
 
   void _reloadData() {
-    safeNavigate(() => comCtrl.fetchAllPosts(context));
+    safeNavigate(() => comCtrl.fetchAllUsers(context));
   }
 
   Container commentCard({required PostModel post}) {

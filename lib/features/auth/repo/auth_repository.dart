@@ -28,8 +28,9 @@ class AuthApis {
   static const verifyBusiness = "$onboardingApi/verify-business";
 
   // Profile
-  static const profileApi = "$baseApi/users/profile";
-  static const businessProfile = "$baseApi/users/business-profile";
+  static const usersApi = "$baseApi/users";
+  static const profileApi = "$usersApi/profile";
+  static const businessProfile = "$usersApi/business-profile";
 
 
   // Media Uploads
@@ -78,7 +79,7 @@ abstract class AuthRepository {
   @POST(AuthApis.changePassword)
   Future<ApiResponse> changePassword(@Body() payload);
 
-  @POST(AuthApis.logout)
+  @GET(AuthApis.logout)
   Future<ApiResponse> logout();
 
   @POST(AuthApis.onboardingApi)
@@ -86,6 +87,7 @@ abstract class AuthRepository {
 
   @POST(AuthApis.verifyBusiness)
   Future<ApiResponse> verifyBusiness(@Body() payload);
+
 
   @GET(AuthApis.profileApi)
   Future<ApiResponse> fetchProfile();

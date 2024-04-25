@@ -1,11 +1,16 @@
 // ignore_for_file: library_prefixes
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/core/services/local_storage.dart';
+import 'package:nodes/core/services/push_notifications.dart';
 import 'package:nodes/features/auth/repo/auth_repository.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
@@ -35,7 +40,31 @@ void setUpLocator() {
   locator.registerSingleton<HttpDioInterceptors>(HttpDioInterceptors());
 
   locator.registerSingleton<Dio>(Dio());
+  locator.registerSingleton<FlutterLocalNotificationsPlugin>(
+      FlutterLocalNotificationsPlugin());
+  if (Platform.isAndroid) {
+    locator.registerSingleton<AndroidNotificationChannel>(
+        const AndroidNotificationChannel(
+            'high_importance_channel', // id
+            'High Importance Notifications', // title
+            description:
+                'This channel is used for important notifications.', // description
+            importance: Importance.max,
+            enableLights: true,
+            enableVibration: true,
+            showBadge: true,
+            playSound: true));
+  }
+  locator.registerSingleton<PushNotification>(
+    PushNotification(locator.get<FlutterLocalNotificationsPlugin>()),
+  );
 
+  locator.registerSingleton<GoogleSignIn>(GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  ));
   //repository
   locator.registerSingleton<AuthRepository>(
     AuthRepository(

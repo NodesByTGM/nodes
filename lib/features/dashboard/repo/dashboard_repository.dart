@@ -37,6 +37,7 @@ class DashboardApis {
 
   // Trending
   static const movieShows = "$baseApi/movies-and-shows";
+
 }
 
 @RestApi()
@@ -173,4 +174,5 @@ abstract class DashboardRepository {
 
   @GET(DashboardApis.movieShows)
   Future<ApiResponse> fetchMovieShows();
+
 }

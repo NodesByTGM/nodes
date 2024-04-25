@@ -3,6 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/subscription_model.dart';
+import 'package:nodes/features/auth/models/user_connection_model.dart';
+import 'package:nodes/features/dashboard/model/project_model.dart';
+import 'package:nodes/features/saves/models/event_model.dart';
+import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 
 part 'user_model.g.dart';
 
@@ -36,6 +40,15 @@ class UserModel extends Equatable {
   final BusinessAccountModel? business;
   final SubscriptionModel? subscription;
   final bool visible;
+  final String? firebaseToken;
+
+  final List<UserConnectionModel>? connections;
+  final bool requested;
+  final bool connected;
+  final List<ProjectModel>? projects;
+  final List<EventModel>?  events;
+  final List<BusinessJobModel>? jobs;
+
 
   const UserModel({
     this.id,
@@ -66,6 +79,13 @@ class UserModel extends Equatable {
     this.business,
     this.subscription,
     this.visible = true,
+    this.firebaseToken,
+    this.connections,
+    this.requested = false,
+    this.connected = false,
+    this.projects,
+    this.events,
+    this.jobs,
   });
   copyWith({
     String? id,
@@ -96,6 +116,13 @@ class UserModel extends Equatable {
     BusinessAccountModel? business,
     SubscriptionModel? subscription,
     bool? visible,
+    String? firebaseToken,
+    List<UserConnectionModel>? connections,
+    bool? requested,
+    bool? connected,
+    List<ProjectModel>? projects,
+    List<EventModel>? events,
+    List<BusinessJobModel>? jobs,
   }) =>
       UserModel(
         id: id ?? this.id,
@@ -126,6 +153,13 @@ class UserModel extends Equatable {
         business: business ?? this.business,
         subscription: subscription ?? this.subscription,
         visible: visible ?? this.visible,
+        firebaseToken: firebaseToken ?? this.firebaseToken,
+       connections: connections ?? this.connections,
+       requested: requested ?? this.requested,
+       connected: connected ?? this.connected,
+       projects: projects ?? this.projects,
+       events: events ?? this.events,
+       jobs: jobs ?? this.jobs,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -163,6 +197,13 @@ class UserModel extends Equatable {
         business,
         subscription,
         visible,
+        firebaseToken,
+        connections,
+        requested,
+        connected,
+        projects,
+        events,
+        jobs,
       ];
 
   // List<UserModel> fromList(List items) {

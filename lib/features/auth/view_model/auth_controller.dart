@@ -1,15 +1,18 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
+// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names, use_build_context_synchronously
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
 import 'package:nodes/config/country_states.dart';
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
+import 'package:nodes/core/services/push_notifications.dart';
 import 'package:nodes/features/auth/models/country_state_model.dart';
 import 'package:nodes/features/auth/models/individual_talent_onboarding_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
@@ -68,6 +71,7 @@ class AuthController extends BaseController {
 
   List<CountryStateModel> get countryStatesList => _countryStatesList;
   SubscriptionUpgrade get subUpgrade => _subUpgrade;
+
   // Setters
 
   setTStepper(int val) {
@@ -173,8 +177,11 @@ class AuthController extends BaseController {
 
   // Functions
   Future<String?> _deviceToken() async {
-    // return await FirebaseMessaging.instance.getToken();
-    return "";
+    return await FirebaseMessaging.instance.getToken();
+  }
+
+  _subscribeTopic(String topic, [bool unsubscribeFromTopic = false]) {
+    locator.get<PushNotification>().subscribeTopic(topic, unsubscribeFromTopic);
   }
 
   Future<UserModel?> login(_details) async {
@@ -188,6 +195,7 @@ class AuthController extends BaseController {
       showSuccess(message: response.message); // For login o
       await _authCustomSaveSession(response);
       // setCurrentScreen(NavbarView.routeName);
+      // Call the update profile after login, from the VIEW, so you'd get the 'CONTEXT'
       return CurrentSession.fromJson(response.result as Map<String, dynamic>)
           .user;
     } on NetworkException catch (e) {
@@ -204,6 +212,7 @@ class AuthController extends BaseController {
   Future<bool> register(dynamic payload) async {
     setBusy(true);
     try {
+      payload["firebaseToken"] = await _deviceToken();
       ApiResponse response = await _authService.register(payload);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
@@ -394,6 +403,7 @@ class AuthController extends BaseController {
     try {
       await googleSignIn.signOut();
       user = await googleSignIn.signIn();
+      // var firebaseToken  = await _deviceToken();
       // ApiResponse response = await _authService.logout(ctx);
 
       // if (response.status == KeyString.failure) {
@@ -529,6 +539,10 @@ class AuthController extends BaseController {
         showError(message: response.message);
         return false;
       }
+      // Subscribe to business topic here
+      _subscribeTopic(businessTopic);
+      // Unsubscribe from Standard
+      _subscribeTopic(standardTopic, true);
       await _customUserSessionUpdate(response);
       showSuccess(message: response.message);
       return true;
@@ -562,6 +576,7 @@ class AuthController extends BaseController {
   Future<bool> updateProfile(BuildContext ctx, dynamic payload) async {
     setBusy(true);
     try {
+      payload["firebaseToken"] = await _deviceToken();
       ApiResponse response = await _authService.updateProfile(ctx, payload);
 
       if (response.status == KeyString.failure) {
@@ -685,13 +700,14 @@ class AuthController extends BaseController {
     }
   }
 
-  Future<bool> verifyAndUpgradeSubscription(
-    dynamic payload,
-  ) async {
+  Future<bool> verifyAndUpgradeSubscription({
+    required String ref,
+    required String plan,
+  }) async {
     setBusy(true);
     try {
       ApiResponse response = await _authService.verifyAndUpgradeSubscription(
-        payload,
+        ref,
       );
 
       if (response.status == KeyString.failure) {
@@ -699,6 +715,10 @@ class AuthController extends BaseController {
         return false;
       }
       showSuccess(message: response.message);
+      // get the sorta upgrade made and sub the user to that Topic
+      _subscribeTopic(
+        plan.contains(KeyString.pro.toLowerCase()) ? proTopic : businessTopic,
+      );
       await _customUserSessionUpdate(response);
       return true;
     } on NetworkException catch (e) {
@@ -708,6 +728,8 @@ class AuthController extends BaseController {
       setBusy(false);
     }
   }
+
+// Handling Paginated Data...
 
   ///
   logout() {

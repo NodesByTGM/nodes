@@ -119,11 +119,25 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   onTap: () {
                     BusinessAccountModel business =
                         user.business ?? const BusinessAccountModel();
-                    if (isBusinessProfileComplete(business)) {
+                    if (isBusinessProfileComplete(business) &&
+                        isBusinessVerified(business)) {
+                      // Profile must be complete and business account verified
                       showCreateJobBottomSheet(0);
+                    } else if (isBusinessProfileComplete(business) &&
+                        !isBusinessVerified(business)) {
+                      // Profile is complete but business account is not verified
+                      cantCreateMsg(i: 1);
                     } else {
+                      // Profile is not complete
                       cantCreateMsg();
                     }
+                    // if (isBusinessProfileComplete(business)) {
+                    //   showCreateJobBottomSheet(0);
+                    // } else if (isBusinessVerified(business)) {
+                    //   cantCreateMsg(i: 1);
+                    // } else {
+                    //   cantCreateMsg();
+                    // }
                   }),
             ],
           ),
@@ -177,11 +191,24 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             onTap: () {
               BusinessAccountModel business =
                   user.business ?? const BusinessAccountModel();
-              if (isBusinessProfileComplete(business)) {
+              if (isBusinessProfileComplete(business) &&
+                  isBusinessVerified(business)) {
                 showCreateJobBottomSheet(0);
+              } else if (isBusinessProfileComplete(business) &&
+                  !isBusinessVerified(business)) {
+                cantCreateMsg(i: 1);
               } else {
                 cantCreateMsg();
               }
+
+              // if (isBusinessProfileComplete(business)) {
+              //   showCreateJobBottomSheet(0);
+              // }
+              // if (isBusinessVerified(business)) {
+              //   cantCreateMsg(i: 1);
+              // } else {
+              //   cantCreateMsg();
+              // }
             },
             btnText: "Create job post",
           ),
@@ -299,11 +326,24 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             onTap: () {
               BusinessAccountModel business =
                   user.business ?? const BusinessAccountModel();
-              if (isBusinessProfileComplete(business)) {
+
+              if (isBusinessProfileComplete(business) &&
+                  isBusinessVerified(business)) {
                 showCreateJobBottomSheet(1);
+              } else if (isBusinessProfileComplete(business) &&
+                  !isBusinessVerified(business)) {
+                cantCreateMsg(i: 1);
               } else {
                 cantCreateMsg();
               }
+              // if (isBusinessProfileComplete(business)) {
+              //   showCreateJobBottomSheet(1);
+              // }
+              // if (isBusinessVerified(business)) {
+              //   cantCreateMsg(i: 1);
+              // } else {
+              //   cantCreateMsg();
+              // }
             },
             btnText: "Create event",
           ),
@@ -430,8 +470,11 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     );
   }
 
-  void cantCreateMsg() {
-    showText(message: "Oops!! You have to complete your profile first.");
+  void cantCreateMsg({int i = 0}) {
+    showText(
+        message: i == 0
+            ? Constants.updateYourProfileToProceed
+            : Constants.accountNotVerified);
   }
 
   showBusinessAccountVerificationModal() async {

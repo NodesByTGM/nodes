@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,7 +30,7 @@ late List<CameraDescription> cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   await LocalStorageService.initializeDb();
   setUpLocator();
   _setupLogging();
@@ -36,14 +38,14 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   //  // Pass all uncaught "fatal" errors from the framework to Crashlytics
-  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  // // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-  // PlatformDispatcher.instance.onError = (error, stack) {
-  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  //   return true;
-  // };
-  // await setupNotification();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  await setupNotification();
   runApp(const MyApp());
 }
 

@@ -5,8 +5,11 @@ import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/custom_page.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/models/create_post_model.dart';
+import 'package:nodes/features/community/models/currently_viewed_user_model.dart';
+import 'package:nodes/features/community/models/general_user_model.dart';
 import 'package:nodes/features/community/service/community_service.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -19,20 +22,29 @@ class ComController extends BaseController {
   // Variables
   // This should somehow have the description to denote if it was created by the user or not in the model.
   dynamic _currentlyViewedSpace = "";
+  CurrentlyViewedUser _currentlyViewedUser = const CurrentlyViewedUser();
   bool _dummyIsCreatedSpace = false;
   List<PostModel> _postList = [];
   List<CreatePostModel> _draftPostList = [];
+  //General Users
+  List<GeneralUserModel> _generalUsers = [];
 
   // Getters
   get currentlyViewedSpace => _currentlyViewedSpace;
+  CurrentlyViewedUser get currentlyViewedUser => _currentlyViewedUser;
   bool get dummyIsCreatedSpace => _dummyIsCreatedSpace;
   List<PostModel> get PostList => _postList;
   List<CreatePostModel> get draftPostList => _draftPostList;
-
+  List<GeneralUserModel> get generalUsers => _generalUsers;
   // Setters
 
   setCurrentlyViewedSpaceVal(dynamic val) {
     _currentlyViewedSpace = val;
+    notifyListeners();
+  }
+
+  setCurrentlyViewedUser(CurrentlyViewedUser cUser) {
+    _currentlyViewedUser = cUser;
     notifyListeners();
   }
 
@@ -66,6 +78,12 @@ class ComController extends BaseController {
   // set currentUserVal(CurrentSession session) {
   //   notifyListeners();
   // }
+
+  // General Users
+  setGeneralUsers(List<GeneralUserModel> users) {
+    _generalUsers = users;
+    notifyListeners();
+  }
 
   // Functions
   Future<bool> createPost(BuildContext ctx, CreatePostModel details) async {
@@ -175,6 +193,46 @@ class ComController extends BaseController {
     }
   }
 
+  // General Users
+  Future<bool> fetchAllUsers(BuildContext ctx) async {
+    setFetchingGeneralUser(true);
+    try {
+      ApiResponse response = await _comService.fetchAllUsers(ctx);
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      setGeneralUsers(_resolvePaginatedUsers(response));
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setFetchingGeneralUser(false);
+    }
+  }
+
+  Future<UserModel?> fetchSingleUser(BuildContext ctx, String id) async {
+    setFetchingSingleGeneralUser(true);
+    try {
+      ApiResponse response = await _comService.fetchSingleUser(ctx, id);
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        customNavigateBack(ctx);
+        return null;
+      }
+      return UserModel.fromJson(response.result as Map<String, dynamic>);
+    } on NetworkException catch (e) {
+      customNavigateBack(ctx);
+      showError(message: e.toString());
+      return null;
+    } finally {
+      setFetchingSingleGeneralUser(false);
+    }
+  }
+
 // Handling Paginated Data...
   List<PostModel> _resolvePaginatedPosts(ApiResponse response) {
     CustomPage<PostModel> p = const CustomPage<PostModel>()
@@ -182,6 +240,18 @@ class ComController extends BaseController {
 
     if (!isObjectEmpty(p.items)) {
       return p.items as List<PostModel>;
+    }
+    return [];
+  }
+
+  // General Users
+  List<GeneralUserModel> _resolvePaginatedUsers(ApiResponse response) {
+    CustomPage<GeneralUserModel> p = const CustomPage<GeneralUserModel>()
+        .fromJson(
+            response.result as Map<String, dynamic>, const GeneralUserModel());
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<GeneralUserModel>;
     }
     return [];
   }

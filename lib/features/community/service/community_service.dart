@@ -73,4 +73,26 @@ class ComService {
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
+
+
+
+  Future<ApiResponse> fetchAllUsers(BuildContext ctx) async {
+    try {
+      ApiResponse res = await comRepository.fetchAllUsers();
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @fetchAllUsers ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> fetchSingleUser(BuildContext ctx, String id) async {
+    try {
+      ApiResponse res = await comRepository.fetchSingleUser(id);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @fetchSingleUser ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
 }

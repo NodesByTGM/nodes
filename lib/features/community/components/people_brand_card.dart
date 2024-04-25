@@ -1,3 +1,4 @@
+import 'package:nodes/features/community/models/general_user_model.dart';
 import 'package:nodes/features/messages/screen/single_message_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -5,12 +6,16 @@ class PeopleBrandCard extends StatelessWidget {
   const PeopleBrandCard({
     super.key,
     this.isConnected = false,
+    required this.genUser,
   });
 
   final bool isConnected;
+  final GeneralUserModel genUser;
 
   @override
   Widget build(BuildContext context) {
+    List<String> usersType = ["Standard", "Pro", "Business"];
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -25,7 +30,7 @@ class PeopleBrandCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               cachedNetworkImage(
-                imgUrl: "",
+                imgUrl: "${genUser.avatar?.url}",
                 size: 45,
               ),
               xSpace(width: 10),
@@ -34,12 +39,12 @@ class PeopleBrandCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     labelText(
-                      capitalize("Aderinsola Adejuwon"),
+                      capitalize("${genUser.name}"),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                     subtext(
-                      "Pro User",
+                      "${usersType[genUser.type]} User",
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: GRAY,
@@ -78,12 +83,12 @@ class PeopleBrandCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 labelText(
-                  "Production assistant",
+                  "${genUser.headline}",
                   fontSize: 12,
                 ),
                 ySpace(height: 10),
                 subtext(
-                  "Something about being an amazing media production company and like stuff something smoething",
+                  "${genUser.bio}",
                   height: 1.6,
                 ),
               ],

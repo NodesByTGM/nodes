@@ -36,7 +36,8 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
   @override
   Widget build(BuildContext context) {
     dashCtrl = context.watch<DashboardController>();
-    bool isTalent = context.read<AuthController>().currentUser.type == 1;
+    bool canApply = context.read<AuthController>().currentUser.type == 1 ||
+        context.read<AuthController>().currentUser.type == 2;
 
     return ListView(
       shrinkWrap: true,
@@ -118,7 +119,7 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
                 ? const Loader()
                 : GestureDetector(
                     onTap: () {
-                      if (isTalent) {
+                      if (canApply) {
                         saveUnsaveJob();
                       } else {
                         msg();
@@ -133,7 +134,7 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
               child: SubmitBtn(
                 onPressed: job.applied
                     ? null
-                    : isTalent
+                    : canApply
                         ? () => applyForJob()
                         : () => msg(),
                 title: btnTxt(

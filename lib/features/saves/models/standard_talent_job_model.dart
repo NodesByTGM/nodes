@@ -217,22 +217,30 @@ class ApplicantModel extends Equatable {
   final String? name;
   final MediaUploadModel? avatar;
   final String? id;
+  final String? email;
+  final int type;
 
   const ApplicantModel({
     this.name,
     this.avatar,
     this.id,
+    this.email,
+    this.type = 0,
   });
 
   ApplicantModel copyWith({
     String? name,
     MediaUploadModel? avatar,
     String? id,
+    String? email,
+    int? type,
   }) =>
       ApplicantModel(
         name: name ?? this.name,
         avatar: avatar ?? this.avatar,
         id: id ?? this.id,
+        email: email ?? this.email,
+        type: type ?? this.type,
       );
 
   factory ApplicantModel.fromJson(Map<String, dynamic> json) =>
@@ -245,5 +253,7 @@ class ApplicantModel extends Equatable {
         name,
         avatar,
         id,
+        email,
+        type,
       ];
 }

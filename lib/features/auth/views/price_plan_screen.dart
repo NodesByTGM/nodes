@@ -187,7 +187,8 @@ class _PricePlanScreen extends State<PricePlanScreen> {
               priceDescription: "Get one month free if you subscribe now",
               features: Constants.businessFeatures,
               onTap: () => _paystackPayment(
-                  planIndex == 0 ? busMonthlySub : busYearlySub),
+                planIndex == 0 ? busMonthlySub : busYearlySub,
+              ),
               btnText: "Subscribe now",
               // loading: authCtrl.loading,
               loading: subingBus,
@@ -281,7 +282,7 @@ class _PricePlanScreen extends State<PricePlanScreen> {
         );
         if (!res && mounted) {
           // Call the verification ENDPOINT...
-          _onSuccessfulPaystackPayment(ref);
+          _onSuccessfulPaystackPayment(ref: ref, plan: plan);
         }
       }
     } catch (e) {
@@ -300,8 +301,8 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     }
   }
 
-  _onSuccessfulPaystackPayment(ref) async {
-    bool done = await authCtrl.verifyAndUpgradeSubscription(ref);
+  _onSuccessfulPaystackPayment({required String ref, required String plan}) async {
+    bool done = await authCtrl.verifyAndUpgradeSubscription(ref: ref, plan: plan);
     if (done && mounted) {
       submit();
     } else {
@@ -309,3 +310,4 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     }
   }
 }
+

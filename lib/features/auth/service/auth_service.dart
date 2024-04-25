@@ -147,6 +147,7 @@ class AuthService {
     }
   }
 
+
   Future<ApiResponse> fetchProfile(BuildContext ctx) async {
     try {
       ApiResponse res = await authRepository.fetchProfile();

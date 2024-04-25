@@ -2,6 +2,7 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
+import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
@@ -83,7 +84,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           ),
           ySpace(height: 8),
           subtext(
-            "Checkout the blah blah blah blah blah blah",
+            "Discover all the cool things waiting for you to tap into",
             fontSize: 14,
           ),
           customDivider(height: 40),
@@ -95,7 +96,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           ),
           ySpace(height: 8),
           subtext(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+            "Stay in the loop with what’s buzzing in the creative world.",
             fontSize: 14,
           ),
           ySpace(height: 24),
@@ -194,7 +195,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           ),
           ySpace(height: 40),
           Subsection(
-            leftSection: "Top Movies",
+            leftSection: "What did you think?\nRate and share your review",
             rightSection: "View all",
             onTap: () {
               navCtrl.updateDashboardDynamicItem(
@@ -381,123 +382,130 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
             ],
           ),
           ySpace(height: 40),
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     labelText(
-          //       "Spaces you might like",
-          //       fontSize: 16,
-          //       fontWeight: FontWeight.w500,
-          //     ),
-          //     ySpace(height: 10),
-          //     Row(
-          //       children: [
-          //         Expanded(
-          //           child: subtext(
-          //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         GestureDetector(
-          //           onTap: () {
-          //             // navCtrl.updatePageListStack(
-          //             //   NodeSpacesScreen.routeName,
-          //             // );
-          //             showSuccess(message: "Coming Soon");
-          //           },
-          //           child: subtext(
-          //             "See more",
-          //             fontSize: 14,
-          //             color: PRIMARY,
-          //           ),
-          //         ),
-          //       ],
-          //     )
-          //   ],
-          // ),
-          // ySpace(height: 20),
-          // SizedBox(
-          //   height: 320,
-          //   child: PageView.builder(
-          //     itemCount: spaceLength,
-          //     controller: spaceCardCtrl,
-          //     onPageChanged: (val) {
-          //       currentSpaceIndex = val;
-          //       setState(() {});
-          //     },
-          //     itemBuilder: (context, index) {
-          //       return CommunitySpaceCardTemplate(
-          //         imgUrl:
-          //             "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-          //         title: "Lorem ipsum dolor sit amet, con...",
-          //         height: 300,
-          //         marginRight: 0,
-          //         onTap: () {},
-          //       );
-          //     },
-          //   ),
-          // ),
-          // ySpace(height: 24),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.end,
-          //       children: [
-          //         ...List.generate(spaceLength, (index) {
-          //           return Padding(
-          //             padding: const EdgeInsets.only(right: 2),
-          //             child: CardDotIndicator(
-          //               isActive: currentSpaceIndex == index,
-          //             ),
-          //           );
-          //         })
-          //       ],
-          //     ),
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         GestureDetector(
-          //           onTap: () {
-          //             customAnimatePageView(
-          //               isInc: false,
-          //               totoalLength: spaceLength,
-          //               currentIndex: currentSpaceIndex,
-          //               ctrl: spaceCardCtrl,
-          //             );
-          //           },
-          //           child: SvgPicture.asset(
-          //             ImageUtils.leftCircleDirectionIcon,
-          //           ),
-          //         ),
-          //         xSpace(width: 24),
-          //         GestureDetector(
-          //           onTap: () {
-          //             customAnimatePageView(
-          //               isInc: true,
-          //               totoalLength: spaceLength,
-          //               currentIndex: currentSpaceIndex,
-          //               ctrl: spaceCardCtrl,
-          //             );
-          //           },
-          //           child: SvgPicture.asset(
-          //             ImageUtils.rightCircleDirectionIcon,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
-          // ySpace(height: 40),
-          // Subsection(
-          //   leftSection: "Collaboration Spotlights",
-          //   rightSection: "View all",
-          //   onTap: () {},
-          // ),
-          // const HorizontalSlidingCards(
-          //   dataSource: HorizontalSlidingCardDataSource.CollaborationSpotlights,
-          // ),
-          // ySpace(height: 40),
+          Subsection(
+            leftSection: "You'll love this!",
+            rightSection: "View all",
+            onTap: () {},
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+          ),
+          ySpace(height: 40),
+          Subsection(
+            leftSection: "Previously on Nodes",
+            rightSection: "View all",
+            onTap: () {},
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+          ),
+          ySpace(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              labelText(
+                "Join the conversation and\nconnect with your tribe",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              GestureDetector(
+                onTap: () {
+                  // navCtrl.updatePageListStack(
+                  //   NodeSpacesScreen.routeName,
+                  // );
+                  showSuccess(message: "Coming Soon");
+                },
+                child: subtext(
+                  "See more",
+                  fontSize: 14,
+                  color: PRIMARY,
+                ),
+              ),
+            ],
+          ),
+          ySpace(height: 20),
+          SizedBox(
+            height: 320,
+            child: PageView.builder(
+              itemCount: spaceLength,
+              controller: spaceCardCtrl,
+              onPageChanged: (val) {
+                currentSpaceIndex = val;
+                setState(() {});
+              },
+              itemBuilder: (context, index) {
+                return CommunitySpaceCardTemplate(
+                  imgUrl:
+                      "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+                  title: "Lorem ipsum dolor sit amet, con...",
+                  height: 300,
+                  marginRight: 0,
+                  onTap: () {},
+                );
+              },
+            ),
+          ),
+          ySpace(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...List.generate(spaceLength, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: CardDotIndicator(
+                        isActive: currentSpaceIndex == index,
+                      ),
+                    );
+                  })
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: false,
+                        totoalLength: spaceLength,
+                        currentIndex: currentSpaceIndex,
+                        ctrl: spaceCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.leftCircleDirectionIcon,
+                    ),
+                  ),
+                  xSpace(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: true,
+                        totoalLength: spaceLength,
+                        currentIndex: currentSpaceIndex,
+                        ctrl: spaceCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.rightCircleDirectionIcon,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          ySpace(height: 40),
+          Subsection(
+            leftSection: "Collaboration Spotlights",
+            rightSection: "View all",
+            onTap: () {},
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.CollaborationSpotlights,
+          ),
+          ySpace(height: 40),
           Subsection(
             leftSection: "Birthdays",
             rightSection: "View all",

@@ -111,6 +111,8 @@ ApplicantModel _$ApplicantModelFromJson(Map<String, dynamic> json) =>
           ? null
           : MediaUploadModel.fromJson(json['avatar'] as Map<String, dynamic>),
       id: json['id'] as String?,
+      email: json['email'] as String?,
+      type: json['type'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$ApplicantModelToJson(ApplicantModel instance) =>
@@ -118,4 +120,6 @@ Map<String, dynamic> _$ApplicantModelToJson(ApplicantModel instance) =>
       'name': instance.name,
       'avatar': instance.avatar?.toJson(),
       'id': instance.id,
+      'email': instance.email,
+      'type': instance.type,
     };

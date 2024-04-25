@@ -260,7 +260,11 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
           ),
         );
         if (res && mounted) {
-          _onSuccessfulPaystackPayment(ref);
+          // _onSuccessfulPaystackPayment(ref);
+          _onSuccessfulPaystackPayment(
+            ref: ref,
+            plan: "${subUpgrade.type}",
+          );
         }
       }
     } catch (e) {
@@ -269,8 +273,13 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
     }
   }
 
-  _onSuccessfulPaystackPayment(ref) async {
-    bool done = await authCtrl.verifyAndUpgradeSubscription(ref);
+  // _onSuccessfulPaystackPayment(ref) async {
+  _onSuccessfulPaystackPayment({
+    required String ref,
+    required String plan,
+  }) async {
+    bool done =
+        await authCtrl.verifyAndUpgradeSubscription(ref: ref, plan: plan);
     if (done && mounted) {
       // when successful, send user to either the talent or business dashboard page.
       customNavigateBack(context);
