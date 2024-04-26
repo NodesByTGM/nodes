@@ -308,7 +308,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/users/connections/request',
+              'https://dev.api.nodesafrica.com/api/v1/users/connections/requests',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -335,7 +335,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/users/connections/request/accept/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/users/connections/requests/accept/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -362,7 +362,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/users/connections/request/abandon/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/users/connections/requests/abandon/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -389,7 +389,7 @@ class _ComRepository implements ComRepository {
     )
             .compose(
               _dio.options,
-              'https://dev.api.nodesafrica.com/api/v1/users/connections/request/reject/${id}',
+              'https://dev.api.nodesafrica.com/api/v1/users/connections/requests/reject/${id}',
               queryParameters: queryParameters,
               data: _data,
             )

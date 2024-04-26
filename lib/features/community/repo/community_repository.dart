@@ -28,8 +28,8 @@ class ComApis {
   static const removeConnection = "$connectionApi/remove/{id}";
   static const singleUserConnections = "$connectionApi/{id}";
   static const allMyConnections = "$connectionApi/mine";
-  static const connectionRequestApi = "$connectionApi/request"; // fetch all
-  static const requestConnection = "$connectionRequestApi/{id}";
+  static const requestConnection = "$connectionApi/request/{id}";
+  static const connectionRequestApi = "$connectionApi/requests"; // fetch all
   static const acceptConnectionRequest = "$connectionRequestApi/accept/{id}";
   static const rejectConnectionRequest = "$connectionRequestApi/reject/{id}";
   static const abandonConnectionRequest = "$connectionRequestApi/abandon/{id}";

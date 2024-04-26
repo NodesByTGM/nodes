@@ -1,12 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nodes/core/models/base_data.dart';
+import 'package:nodes/features/auth/models/user_model.dart';
 
 part "user_connection_model.g.dart";
 
 @JsonSerializable(explicitToJson: true)
 class UserConnectionModel extends BaseData {
-  final String? sender;
-  final String? recipient;
+  final UserModel? sender;
+  final UserModel? recipient;
   final String? message;
   final String? id;
   final int? status;
@@ -20,8 +21,8 @@ class UserConnectionModel extends BaseData {
   });
 
   UserConnectionModel copyWith({
-    String? sender,
-    String? recipient,
+    UserModel? sender,
+    UserModel? recipient,
     String? message,
     String? id,
     int? status,

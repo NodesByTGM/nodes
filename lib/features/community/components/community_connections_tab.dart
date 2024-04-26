@@ -163,7 +163,9 @@ class _CommunityConnectionsTabState extends State<CommunityConnectionsTab> {
                   padding: const EdgeInsets.all(8.0),
                   child: Consumer<ComController>(
                     builder: (contex, comCtrl, _) {
-                      bool isLoading = comCtrl.isFetchingGeneralUsers;
+                      bool isLoading = comCtrl.isFetchingAllConnections;
+                      // bool isLoading = comCtrl.isFetchingAllMyConnection;
+                      // change this
                       bool hasData = isObjectEmpty(comCtrl.generalUsers);
                       if (isLoading || isObjectEmpty(comCtrl.generalUsers)) {
                         return DataReload(
@@ -192,7 +194,7 @@ class _CommunityConnectionsTabState extends State<CommunityConnectionsTab> {
                             //   post: genUsers[i],
                             // );
                             return PeopleBrandCard(
-                              isConnected: false,
+                              isConnected: true,
                               genUser: genUsers[i],
                             );
                           },
@@ -209,7 +211,9 @@ class _CommunityConnectionsTabState extends State<CommunityConnectionsTab> {
   }
 
   void _reloadData() {
-    safeNavigate(() => comCtrl.fetchAllUsers(context));
+    // fetch all connections, not just mine...
+    // safeNavigate(() => comCtrl.fetchAllMyConnections(context));
+    safeNavigate(() => comCtrl.fetchAllConnections(context));
   }
 
   Container commentCard({required PostModel post}) {

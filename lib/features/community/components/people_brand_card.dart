@@ -1,8 +1,8 @@
-import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/features/community/models/general_user_model.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/messages/screen/single_message_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class PeopleBrandCard extends StatelessWidget {
   const PeopleBrandCard({
@@ -17,8 +17,10 @@ class PeopleBrandCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> usersType = ["Standard", "Pro", "Business"];
+
     bool hasHeadlineOrBio =
         !isObjectEmpty(genUser.headline) || !isObjectEmpty(genUser.bio);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -56,20 +58,26 @@ class PeopleBrandCard extends StatelessWidget {
                 ),
               ),
               xSpace(width: 10),
-              GestureDetector(
-                onTap: () {
-                  if (isConnected) {
-                    // probably fetch the user something before sending them here...
-                    navigateTo(context, SingleMessageDetails.routeName);
-                  } else {
-                    // Function to Connect with user/brand
-                  }
-                },
-                child: labelText(
-                  isConnected ? "Message" : "Connect",
-                  color: PRIMARY,
-                ),
-              ),
+              context.watch<ComController>().isRequestingConnection
+                  ? const Loader()
+                  : GestureDetector(
+                      onTap: () {
+                        if (isConnected) {
+                          // probably fetch the user something before sending them here...
+                          navigateTo(context, SingleMessageDetails.routeName);
+                        } else {
+                          // Function to Connect with user/brand
+                          context.read<ComController>().requestConnection(
+                                context,
+                                "${genUser.id}",
+                              );
+                        }
+                      },
+                      child: labelText(
+                        isConnected ? "Message" : "Connect",
+                        color: PRIMARY,
+                      ),
+                    ),
             ],
           ),
           if (hasHeadlineOrBio) ...[
