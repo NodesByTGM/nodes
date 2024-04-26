@@ -36,164 +36,192 @@ class _PricePlanScreen extends State<PricePlanScreen> {
   @override
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
-    return AppWrapper(
-      isCancel: false,
-      backgroundColor: PRIMARY,
-      backBtnColor: WHITE,
-      title: Image.asset(
-        ImageUtils.appIcon,
-        fit: BoxFit.cover,
-        height: 32,
-        width: 36,
-        color: WHITE,
+    return Container(
+      width: screenWidth(context),
+      height: screenHeight(context),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(ImageUtils.logoBg),
+          fit: BoxFit.cover,
+        ),
       ),
-      onTap: () {
-        authCtrl.setTStepper(5);
-        navigateBack(context);
-      },
-      body: SingleChildScrollView(
+      child: SafeArea(
+        top: true,
         child: Column(
           children: [
-            ySpace(),
-            labelText(
-              "PRICING",
-              fontSize: 16,
-              color: WHITE,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w500,
-            ),
-            ySpace(height: 16),
-            labelText(
-              "Thank you for choosing Nodes!",
-              fontSize: 20,
-              color: WHITE,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w500,
-            ),
-            ySpace(height: 16),
-            labelText(
-              "Pricing plans for every budget",
-              fontSize: 16,
-              color: WHITE,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w400,
-            ),
-            ySpace(height: 40),
-            labelText(
-              "Choose plan",
-              fontSize: 16,
-              color: WHITE,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w500,
-            ),
-            ySpace(height: 24),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                planTabHeader(
-                  title: "Monthly billing",
-                  isActive: planIndex == 0,
+                GestureDetector(
                   onTap: () {
-                    setState(() {
-                      planIndex = 0;
-                      updateAmt();
-                    });
+                    navigateBack(context);
                   },
+                  child: const Icon(
+                    Icons.arrow_back,
+                    size: 34,
+                  ),
                 ),
-                planTabHeader(
-                  title: "Yearly billing",
-                  isActive: planIndex == 1,
-                  onTap: () {
-                    setState(() {
-                      planIndex = 1;
-                      updateAmt();
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Image.asset(
+                    ImageUtils.appIcon,
+                    fit: BoxFit.cover,
+                    height: 32,
+                    width: 36,
+                  ),
                 ),
+                Container(),
               ],
             ),
-            ySpace(height: 40),
-            PricePlanCard(
-              type: "Standard",
-              description: "Lorem Ipsum dolor sit amet",
-              icon: ImageUtils.standardPlanIcon,
-              price: labelText(
-                "Free",
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-              ),
-              priceDescription: "Free/forever",
-              features: Constants.standardFeatures,
-              // onTap: pay,
-              onTap: submit,
-              btnText: "Continue for free",
-            ),
-            ySpace(height: 24),
-            PricePlanCard(
-              type: "Pro",
-              description: "Lorem Ipsum dolor sit amet",
-              icon: ImageUtils.proPlanIcon,
-              price: Wrap(
-                spacing: 2,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  labelText(
-                    formatCurrencyAmount(Constants.naira, proAmt),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  subtext(
-                    "/${planIndex == 0 ? 'month' : 'year'}",
-                    fontSize: 12,
-                    color: GRAY,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ],
-              ),
-              // priceDescription: "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
-              priceDescription: "Get one month free if you subscribe now",
-              features: Constants.proFeatures,
-              onTap: () => _paystackPayment(
-                planIndex == 0 ? talentMonthlySub : talentYearlySub,
-              ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ySpace(),
+                    labelText(
+                      "PRICING",
+                      fontSize: 16,
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    ySpace(height: 16),
+                    labelText(
+                      "Unlock your Nodes experience! ",
+                      fontSize: 20,
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    ySpace(height: 16),
+                    labelText(
+                      "Choose a plan that suits you best.",
+                      fontSize: 16,
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    ySpace(height: 40),
+                    labelText(
+                      "Choose plan",
+                      fontSize: 16,
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    ySpace(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        planTabHeader(
+                          title: "Monthly billing",
+                          isActive: planIndex == 0,
+                          onTap: () {
+                            setState(() {
+                              planIndex = 0;
+                              updateAmt();
+                            });
+                          },
+                        ),
+                        planTabHeader(
+                          title: "Yearly billing",
+                          isActive: planIndex == 1,
+                          onTap: () {
+                            setState(() {
+                              planIndex = 1;
+                              updateAmt();
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    ySpace(height: 40),
+                    PricePlanCard(
+                      type: "Standard",
+                      description: "Explore Nodes with our basic features.",
+                      icon: ImageUtils.standardPlanIcon,
+                      price: labelText(
+                        "Free",
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      priceDescription: "Free/forever",
+                      features: Constants.standardFeatures,
+                      // onTap: pay,
+                      onTap: submit,
+                      btnText: "Continue for free",
+                    ),
+                    ySpace(height: 24),
+                    PricePlanCard(
+                      type: "Pro",
+                      description:
+                          "Elevate your profile and access\nadditional features.",
+                      icon: ImageUtils.proPlanIcon,
+                      price: Wrap(
+                        spacing: 2,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          labelText(
+                            formatCurrencyAmount(Constants.naira, proAmt),
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          subtext(
+                            "/${planIndex == 0 ? 'month' : 'year'}",
+                            fontSize: 12,
+                            color: GRAY,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ],
+                      ),
+                      // priceDescription: "For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
+                      priceDescription:
+                          "Get one month free if you subscribe now",
+                      features: Constants.proFeatures,
+                      onTap: () => _paystackPayment(
+                        planIndex == 0 ? talentMonthlySub : talentYearlySub,
+                      ),
 
-              btnText: "Subscribe now",
-              // loading: authCtrl.loading,
-              loading: subingPro,
-            ),
-            ySpace(height: 24),
-            PricePlanCard(
-              type: "Business",
-              description: "Lorem Ipsum dolor sit amet",
-              icon: ImageUtils.businessPlanIcon,
-              price: Wrap(
-                spacing: 2,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  labelText(
-                    formatCurrencyAmount(Constants.naira, businessAmt),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  subtext(
-                    "/${planIndex == 0 ? 'month' : 'year'}",
-                    fontSize: 12,
-                    color: GRAY,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ],
+                      btnText: "Subscribe now",
+                      // loading: authCtrl.loading,
+                      loading: subingPro,
+                    ),
+                    ySpace(height: 24),
+                    PricePlanCard(
+                      type: "Business",
+                      description:
+                          "Access all features for talent and\nbusinesses.",
+                      icon: ImageUtils.businessPlanIcon,
+                      price: Wrap(
+                        spacing: 2,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          labelText(
+                            formatCurrencyAmount(Constants.naira, businessAmt),
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          subtext(
+                            "/${planIndex == 0 ? 'month' : 'year'}",
+                            fontSize: 12,
+                            color: GRAY,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ],
+                      ),
+                      // priceDescription:"For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
+                      priceDescription:
+                          "Get one month free if you subscribe now",
+                      features: Constants.businessFeatures,
+                      onTap: () => _paystackPayment(
+                        planIndex == 0 ? busMonthlySub : busYearlySub,
+                      ),
+                      btnText: "Subscribe now",
+                      // loading: authCtrl.loading,
+                      loading: subingBus,
+                    ),
+                    ySpace(height: 24),
+                  ],
+                ),
               ),
-              // priceDescription:"For the next  ${planIndex == 0 ? '3 months' : '1 year'} and ${formatCurrencyAmount(Constants.naira, talentOngoingProPlanAmt)} after",
-              priceDescription: "Get one month free if you subscribe now",
-              features: Constants.businessFeatures,
-              onTap: () => _paystackPayment(
-                planIndex == 0 ? busMonthlySub : busYearlySub,
-              ),
-              btnText: "Subscribe now",
-              // loading: authCtrl.loading,
-              loading: subingBus,
             ),
-            ySpace(height: 24),
           ],
         ),
       ),
@@ -216,7 +244,6 @@ class _PricePlanScreen extends State<PricePlanScreen> {
           ),
           labelText(
             title,
-            color: WHITE,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -301,8 +328,10 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     }
   }
 
-  _onSuccessfulPaystackPayment({required String ref, required String plan}) async {
-    bool done = await authCtrl.verifyAndUpgradeSubscription(ref: ref, plan: plan);
+  _onSuccessfulPaystackPayment(
+      {required String ref, required String plan}) async {
+    bool done =
+        await authCtrl.verifyAndUpgradeSubscription(ref: ref, plan: plan);
     if (done && mounted) {
       submit();
     } else {
@@ -310,4 +339,3 @@ class _PricePlanScreen extends State<PricePlanScreen> {
     }
   }
 }
-

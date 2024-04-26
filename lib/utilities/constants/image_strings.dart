@@ -8,6 +8,7 @@ class ImageUtils {
   static const jobDpIcon = "assets/images/png/job_dp.png";
   static const dottedBgOverlay = "assets/images/png/dotted_bg.png";
   static const paystackIcon = "assets/images/png/paystack_icon.png";
+  static const logoBg = "assets/images/png/logo_bg.png";
 
   // Animations
   // static const nodeLoader = "assets/animations/loading_animation.json";

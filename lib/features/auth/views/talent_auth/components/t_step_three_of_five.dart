@@ -52,7 +52,7 @@ class _TStepThreeOfFiveState extends State<TStepThreeOfFive> {
       shrinkWrap: true,
       children: [
         labelText(
-          "Where are you located?",
+          "Tell us where you are",
           fontSize: 20,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.w500,
@@ -141,7 +141,7 @@ class _TStepThreeOfFiveState extends State<TStepThreeOfFive> {
       location: isObjectEmpty(locationCtrl.text) ? null : getStateCountry(),
     ));
 
-     _authCtrl.onboarding({
+    _authCtrl.onboarding({
       "location": isObjectEmpty(locationCtrl.text) ? null : getStateCountry(),
       "step": 3, // Means STEP 3, has been completed,
     });

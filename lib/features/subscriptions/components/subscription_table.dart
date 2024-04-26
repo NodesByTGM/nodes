@@ -8,6 +8,8 @@ class SubscriptionTable extends StatefulWidget {
   State<SubscriptionTable> createState() => _SubscriptionTableState();
 }
 
+
+// SubscriptionHistoryModel
 class _SubscriptionTableState extends State<SubscriptionTable> {
   @override
   Widget build(BuildContext context) {

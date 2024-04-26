@@ -97,19 +97,27 @@ class _TStepOneOfFiveState extends State<TStepOneOfFive> {
 
   List<PurposeModel> onboardingPurposeArray = [
     PurposeModel(
-      title: "Connect with fellow creatives",
+      title: "Flaunt my cool projects",
       status: false,
     ),
     PurposeModel(
-      title: "Find exciting job opportunities and gigs.",
+      title: "Expand my network",
       status: false,
     ),
     PurposeModel(
-      title: 'Increase visibility and showcase my work. ',
+      title: 'Collaborate with diverse creatives',
       status: false,
     ),
     PurposeModel(
-      title: 'Explore and discover inspiring projects. ',
+      title: 'Find local and international gigs',
+      status: false,
+    ),
+    PurposeModel(
+      title: 'Make money with my talent',
+      status: false,
+    ),
+    PurposeModel(
+      title: 'Be part of a bustling creative community',
       status: false,
     ),
   ];

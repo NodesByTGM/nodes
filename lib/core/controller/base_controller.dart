@@ -47,7 +47,14 @@ abstract class BaseController extends ChangeNotifier {
   bool _isFetchMovieShows = false;
   bool _isFetchingGeneralUsers = false;
   bool _isFetchingSingleGeneralUser = false;
-  
+  bool _isRequestingConnection = false;
+  bool _isFetchingAllConnections = false;
+  bool _isAcceptingConnection = false;
+  bool _isAbandoningConnection = false;
+  bool _isRejectingConnection = false;
+  bool _isRemovingConnection = false;
+  bool _isFetchingSingleUserConnection = false;
+  bool _isFetchingAllMyConnection = false;
 
 // Getters
   bool get loading => _busy;
@@ -92,7 +99,14 @@ abstract class BaseController extends ChangeNotifier {
   bool get isFetchMovieShows => _isFetchMovieShows;
   bool get isFetchingGeneralUsers => _isFetchingGeneralUsers;
   bool get isFetchingSingleGeneralUser => _isFetchingSingleGeneralUser;
-
+  bool get isRequestingConnection => _isRequestingConnection;
+  bool get isFetchingAllConnections => _isFetchingAllConnections;
+  bool get isAcceptingConnection => _isAcceptingConnection;
+  bool get isAbandoningConnection => _isAbandoningConnection;
+  bool get isRejectingConnection => _isRejectingConnection;
+  bool get isRemovingConnection => _isRemovingConnection;
+  bool get isFetchingSingleUserConnection => _isFetchingSingleUserConnection;
+  bool get isFetchingAllMyConnection => _isFetchingAllMyConnection;
 
   // Setters
   setBusy(bool value, {bool when = true}) {
@@ -308,6 +322,46 @@ abstract class BaseController extends ChangeNotifier {
 
   setFetchingSingleGeneralUser(bool value) {
     _isFetchingSingleGeneralUser = value;
+    notifyListeners();
+  }
+
+  setIsRequestingConnection(bool value) {
+    _isRequestingConnection = value;
+    notifyListeners();
+  }
+
+  setIsFetchingAllConnections(bool value) {
+    _isFetchingAllConnections = value;
+    notifyListeners();
+  }
+
+  setIsAcceptingConnection(bool value) {
+    _isAcceptingConnection = value;
+    notifyListeners();
+  }
+
+  setIsAbandoningConnection(bool value) {
+    _isAbandoningConnection = value;
+    notifyListeners();
+  }
+
+  setIsRejectingConnection(bool value) {
+    _isRejectingConnection = value;
+    notifyListeners();
+  }
+
+  setIsRemovingConnection(bool value) {
+    _isRemovingConnection = value;
+    notifyListeners();
+  }
+
+  setIsFetchingSingleUserConnection(bool value) {
+    _isFetchingSingleUserConnection = value;
+    notifyListeners();
+  }
+
+  setIsFetchingAllMyConnection(bool value) {
+    _isFetchingAllMyConnection = value;
     notifyListeners();
   }
 }

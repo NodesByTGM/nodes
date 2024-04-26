@@ -39,7 +39,7 @@ class _TStepFourOfFiveState extends State<TStepFourOfFive> {
     return Column(
       children: [
         labelText(
-          "Let’s see what you look like",
+          "Don't be shy, show the community\nwhat you look like.",
           fontSize: 20,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.w500,

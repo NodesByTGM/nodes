@@ -8,14 +8,10 @@ import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class StandardTalentEventCard extends StatelessWidget {
   const StandardTalentEventCard({
-    super.key,
-    this.hasDelete = false,
-    this.hasSave = false,
+    super.key, 
     required this.event,
   });
-
-  final bool hasDelete;
-  final bool hasSave;
+ 
   final StandardTalentEventModel event;
 
   @override
@@ -49,59 +45,36 @@ class StandardTalentEventCard extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // if (hasDelete || hasSave)
-                if (hasSave)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      context.watch<DashboardController>().isSavingUnsavedEvent
-                          ? const Padding(
-                              padding: EdgeInsets.only(top: 10, right: 15),
-                              child: SaveIconLoader(
-                                color: WHITE,
-                              ),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                saveUnsaveEvent(context, event);
-                              },
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: SvgPicture.asset(
-                                    event.saved
-                                        ? ImageUtils.saveJobFilledIcon
-                                        : ImageUtils.saveJobIcon,
-                                    color: WHITE,
-                                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    context.watch<DashboardController>().isSavingUnsavedEvent
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 10, right: 15),
+                            child: SaveIconLoader(
+                              color: WHITE,
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              // check if user is standard and prompt them to upgrade 
+                              saveUnsaveEvent(context, event);
+                            },
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: SvgPicture.asset(
+                                  event.saved
+                                      ? ImageUtils.saveJobFilledIcon
+                                      : ImageUtils.saveJobIcon,
+                                  color: WHITE,
                                 ),
                               ),
                             ),
-                    ],
-                  ),
-                if (hasDelete)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        context.watch<DashboardController>().isDeletingEvent
-                            ? const Loader()
-                            : GestureDetector(
-                                onTap: () => deleteEvent(context, event),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: SvgPicture.asset(
-                                    ImageUtils.trashOutlineIcon,
-                                    color: WHITE,
-                                    height: 40,
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
+                          ),
+                  ],
+                ), 
                 Container(
                   height: 50,
                 ),
@@ -145,7 +118,7 @@ class StandardTalentEventCard extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
-                       showEventDetailsBottomSheet(context, event);
+                      showEventDetailsBottomSheet(context, event);
                     },
                     child: labelText(
                       "View details",
@@ -174,7 +147,8 @@ class StandardTalentEventCard extends StatelessWidget {
             .saveEvent(context, event.id);
   }
 
-  showEventDetailsBottomSheet(BuildContext context, StandardTalentEventModel event) {
+  showEventDetailsBottomSheet(
+      BuildContext context, StandardTalentEventModel event) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -203,10 +177,5 @@ class StandardTalentEventCard extends StatelessWidget {
       },
     );
   }
-
-  deleteEvent(BuildContext context, StandardTalentEventModel event) async {
-    await context
-        .read<DashboardController>()
-        .deleteSingleEvent(context, event.id);
-  }
+ 
 }

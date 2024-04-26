@@ -11,7 +11,7 @@ class PricePlanCard extends StatelessWidget {
     required this.features,
     required this.onTap,
     required this.btnText,
-     this.loading = false,
+    this.loading = false,
   });
 
   final String type;
@@ -26,55 +26,58 @@ class PricePlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 24,
-      ),
-      decoration: BoxDecoration(
-        color: WHITE,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            contentPadding: const EdgeInsets.all(0),
-            title: labelText(
-              type,
-              fontSize: 16,
+    return Material(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 24,
+        ),
+        decoration: BoxDecoration(
+          color: WHITE,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 0.7, color: TAG_CHIP),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              contentPadding: const EdgeInsets.all(0),
+              title: labelText(
+                type,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              subtitle: subtext(
+                description,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+              trailing: SvgPicture.asset(
+                icon,
+                height: 53,
+              ),
+            ),
+            ySpace(height: 26),
+            price,
+            ySpace(height: 16),
+            labelText(
+              priceDescription,
+              fontSize: 14,
+              color: GRAY,
               fontWeight: FontWeight.w500,
             ),
-            subtitle: subtext(
-              description,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
+            divider(),
+            // Using the spread operator
+            ...getFeatures(),
+            ySpace(height: 24),
+            SubmitBtn(
+              onPressed: onTap,
+              title: btnTxt(btnText, WHITE),
+              loading: loading,
             ),
-            trailing: SvgPicture.asset(
-              icon,
-              height: 53,
-            ),
-          ),
-          ySpace(height: 26),
-          price,
-          ySpace(height: 16),
-          labelText(
-            priceDescription,
-            fontSize: 14,
-            color: GRAY,
-            fontWeight: FontWeight.w500,
-          ),
-          divider(),
-          // Using the spread operator
-          ...getFeatures(),
-          ySpace(height: 24),
-          SubmitBtn(
-            onPressed: onTap,
-            title: btnTxt(btnText, WHITE),
-            loading: loading,
-          ),
-          ySpace(height: 24),
-        ],
+            ySpace(height: 24),
+          ],
+        ),
       ),
     );
   }

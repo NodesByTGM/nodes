@@ -19,10 +19,20 @@ class ComApis {
   static const singlePostLike = "$postApi/like/{id}";
   static const singlePostUnlike = "$postApi/unlike/{id}";
 
-
   // General Users
   static const usersApi = "$baseApi/users";
   static const singleUsers = "$usersApi/{id}";
+
+  // Connections
+  static const connectionApi = "$usersApi/connections";
+  static const removeConnection = "$connectionApi/remove/{id}";
+  static const singleUserConnections = "$connectionApi/{id}";
+  static const allMyConnections = "$connectionApi/mine";
+  static const connectionRequestApi = "$connectionApi/request"; // fetch all
+  static const requestConnection = "$connectionRequestApi/{id}";
+  static const acceptConnectionRequest = "$connectionRequestApi/accept/{id}";
+  static const rejectConnectionRequest = "$connectionRequestApi/reject/{id}";
+  static const abandonConnectionRequest = "$connectionRequestApi/abandon/{id}";
 }
 
 @RestApi()
@@ -58,13 +68,55 @@ abstract class ComRepository {
     @Path('id') String id,
   );
 
-
-
   @GET(ComApis.usersApi)
   Future<ApiResponse> fetchAllUsers();
 
   @GET(ComApis.singleUsers)
   Future<ApiResponse> fetchSingleUser(
     @Path('id') String id,
+  );
+//
+  @POST(ComApis.requestConnection)
+  Future<ApiResponse> requestConnection(
+    @Path('id') String id,
+  );
+
+  @GET(ComApis.connectionRequestApi)
+  Future<ApiResponse> fetchAllConnections(
+    @Query("page") int page,
+    @Query("pageSize") int pageSize,
+  );
+
+  @POST(ComApis.acceptConnectionRequest)
+  Future<ApiResponse> acceptConnectionRequest(
+    @Path('id') String id,
+  );
+
+  @POST(ComApis.abandonConnectionRequest)
+  Future<ApiResponse> abandonConnectionRequest(
+    @Path('id') String id,
+  );
+
+  @POST(ComApis.rejectConnectionRequest)
+  Future<ApiResponse> rejectConnectionRequest(
+    @Path('id') String id,
+  );
+
+  @DELETE(ComApis.removeConnection)
+  Future<ApiResponse> removeConnection(
+    @Path('id') String id,
+  );
+
+  @GET(ComApis.singleUserConnections)
+  Future<ApiResponse> fetchSingleUserConnections(
+    @Path('id') String id,
+    @Query("page") int page,
+    @Query("pageSize") int pageSize,
+  );
+
+  @GET(ComApis.allMyConnections)
+  Future<ApiResponse> fetchAllMyConnections(
+    @Query("page") int page,
+    @Query("pageSize") int pageSize,
   );
 }

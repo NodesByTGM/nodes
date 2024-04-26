@@ -6,7 +6,6 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/business_verification_form.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
-import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/components/job_card_business.dart';
 import 'package:nodes/features/dashboard/screen/business/business_dashboard_view_all_created_events.dart';
@@ -14,6 +13,7 @@ import 'package:nodes/features/dashboard/screen/business/business_dashboard_view
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/screens/business/business_profile_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/card_dot_generator.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 
 class BusinessDashboardScreen extends StatefulWidget {
@@ -217,7 +217,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: dashCtrl.createdJobList.length,
+              itemCount: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
               controller: jobsCardCtrl,
               onPageChanged: (val) {
                 currentJobIndex = val;
@@ -234,19 +234,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           ySpace(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(dashCtrl.createdJobList.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentJobIndex == index,
-                      ),
-                    );
-                  })
-                ],
+            children: [ 
+              CardDotGenerator(
+                length: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
+                currentIndex: currentJobIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,7 +246,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.createdJobList.length,
+                        totoalLength: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
                         currentIndex: currentJobIndex,
                         ctrl: jobsCardCtrl,
                       );
@@ -269,7 +260,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.createdJobList.length,
+                        totoalLength: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
                         currentIndex: currentJobIndex,
                         ctrl: jobsCardCtrl,
                       );
@@ -352,7 +343,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           SizedBox(
             height: 280,
             child: PageView.builder(
-              itemCount: dashCtrl.myCreatedEventsList.length,
+              itemCount: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
               controller: trendingCtrl,
               onPageChanged: (val) {
                 currentTrendingIndex = val;
@@ -368,20 +359,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           ySpace(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(dashCtrl.myCreatedEventsList.length,
-                      (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentTrendingIndex == index,
-                      ),
-                    );
-                  })
-                ],
+            children: [ 
+              CardDotGenerator(
+                length: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
+                currentIndex: currentTrendingIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,7 +371,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.myCreatedEventsList.length,
+                        totoalLength: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );
@@ -404,7 +385,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.myCreatedEventsList.length,
+                        totoalLength: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );

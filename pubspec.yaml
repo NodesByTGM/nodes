@@ -78,9 +78,10 @@ dependency_overrides:
   intl: ^0.17.0 
 
 flutter_native_splash:
-  image: assets/images/png/splash.png
-  color: "#085A55"
-  image_dark: assets/images/png/splash.png
+  # image: assets/images/png/splash.png
+  # color: "#085A55"
+  background_image: assets/images/png/splash_bg.png
+  # image_dark: assets/images/png/splash.png
   android: true
   ios: true
 

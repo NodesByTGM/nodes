@@ -1,9 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, file_names
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:nodes/config/dependencies.dart';
-import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/write_a_post_form.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
@@ -37,7 +34,7 @@ class _CommunityTabState extends State<CommunityTab> {
   @override
   Widget build(BuildContext context) {
     comCtrl = context.watch<ComController>();
-    return isObjectEmpty(comCtrl.PostList)
+    return isObjectEmpty(comCtrl.postList)
         ? Container(
             margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
             decoration: BoxDecoration(
@@ -206,8 +203,8 @@ class _CommunityTabState extends State<CommunityTab> {
                   child: Consumer<ComController>(
                     builder: (contex, comCtrl, _) {
                       bool isLoading = comCtrl.isFetchingPost;
-                      bool hasData = isObjectEmpty(comCtrl.PostList);
-                      if (isLoading || isObjectEmpty(comCtrl.PostList)) {
+                      bool hasData = isObjectEmpty(comCtrl.postList);
+                      if (isLoading || isObjectEmpty(comCtrl.postList)) {
                         return DataReload(
                           maxHeight: screenHeight(context) * .19,
                           isLoading: isLoading,
@@ -223,7 +220,7 @@ class _CommunityTabState extends State<CommunityTab> {
                           isEmpty: hasData,
                         );
                       } else {
-                        List<PostModel> posts = comCtrl.PostList;
+                        List<PostModel> posts = comCtrl.postList;
                         return ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -481,7 +478,6 @@ class _CommunityTabState extends State<CommunityTab> {
     msgCtrl.dispose();
     super.dispose();
   }
-
 
   showPostInCommunity() {
     showModalBottomSheet(

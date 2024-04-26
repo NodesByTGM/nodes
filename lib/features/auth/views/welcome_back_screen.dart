@@ -59,14 +59,14 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                 ),
                 ySpace(),
                 labelText(
-                  "Welcome Back!",
+                  "Nodes: Where Creatives Connect.",
                   fontSize: 24,
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w500,
                 ),
                 ySpace(height: 8),
                 subtext(
-                  "Sign in to your creative space.",
+                  "Showcase your talent. Expand your opportunities.\nNetwork with like-minds.",
                   fontSize: 14,
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w400,

@@ -1,3 +1,5 @@
+import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/auth/views/price_plan_screen.dart';
 import 'package:nodes/features/community/models/general_user_model.dart';
 import 'package:nodes/features/messages/screen/single_message_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -15,7 +17,8 @@ class PeopleBrandCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> usersType = ["Standard", "Pro", "Business"];
-
+    bool hasHeadlineOrBio =
+        !isObjectEmpty(genUser.headline) || !isObjectEmpty(genUser.bio);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -56,7 +59,6 @@ class PeopleBrandCard extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if (isConnected) {
-                    // navigateTo(context, MessageScreen.routeName);
                     // probably fetch the user something before sending them here...
                     navigateTo(context, SingleMessageDetails.routeName);
                   } else {
@@ -70,30 +72,32 @@ class PeopleBrandCard extends StatelessWidget {
               ),
             ],
           ),
-          ySpace(height: 24),
-          Container(
-            padding: const EdgeInsets.all(8),
-            width: screenWidth(context),
-            decoration: BoxDecoration(
-              border: Border.all(width: 0.8, color: BORDER),
-              color: TAG_CHIP.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+          if (hasHeadlineOrBio) ...[
+            ySpace(height: 24),
+            Container(
+              padding: const EdgeInsets.all(8),
+              width: screenWidth(context),
+              decoration: BoxDecoration(
+                border: Border.all(width: 0.8, color: BORDER),
+                color: TAG_CHIP.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  labelText(
+                    "${genUser.headline}",
+                    fontSize: 12,
+                  ),
+                  ySpace(height: 10),
+                  subtext(
+                    "${genUser.bio}",
+                    height: 1.6,
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                labelText(
-                  "${genUser.headline}",
-                  fontSize: 12,
-                ),
-                ySpace(height: 10),
-                subtext(
-                  "${genUser.bio}",
-                  height: 1.6,
-                ),
-              ],
-            ),
-          ),
+          ],
         ],
       ),
     );

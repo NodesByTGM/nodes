@@ -45,7 +45,7 @@ class _OtpScreenState extends State<OtpScreen> {
         children: [
           ySpace(),
           labelText(
-            "We emailed you a code",
+            "Help us keep Nodes authentic.",
             fontSize: 24,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w500,

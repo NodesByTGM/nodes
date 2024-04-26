@@ -45,9 +45,7 @@ class _SavedEventsState extends State<SavedEvents> {
             itemBuilder: (c, i) {
               return SizedBox(
                 height: 300,
-                child: StandardTalentEventCard(
-                  hasDelete: false,
-                  hasSave: true,
+                child: StandardTalentEventCard( 
                   event: savedEvents[i],
                 ),
               );

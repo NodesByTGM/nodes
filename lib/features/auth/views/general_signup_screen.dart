@@ -69,18 +69,18 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
         children: [
           ySpace(),
           labelText(
-            "Welcome to Nodes!",
+            "You’re one step away from a whole\nnew dimension.",
             fontSize: 24,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w500,
           ),
-          ySpace(height: 8),
-          subtext(
-            "Where creativity knows no limits.",
-            fontSize: 14,
-            textAlign: TextAlign.center,
-            fontWeight: FontWeight.w400,
-          ),
+          // ySpace(height: 8),
+          // subtext(
+          //   "Where creativity knows no limits.",
+          //   fontSize: 14,
+          //   textAlign: TextAlign.center,
+          //   fontWeight: FontWeight.w400,
+          // ),
           ySpace(height: 40),
           FormBuilder(
             key: formKey,

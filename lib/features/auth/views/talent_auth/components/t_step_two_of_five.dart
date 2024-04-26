@@ -31,7 +31,7 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
     return Column(
       children: [
         labelText(
-          "What do you do?",
+          "What's your creative superpower?",
           fontSize: 20,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.w500,
@@ -148,7 +148,6 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
     );
   }
 
-
   void _submit() async {
     closeKeyPad(context);
     // if (isObjectEmpty(selectedSkills)) {
@@ -158,10 +157,10 @@ class _TStepTwoOfFiveState extends State<TStepTwoOfFive> {
     _authCtrl.setIndividualTalentData(_authCtrl.individualTalentData.copyWith(
       skills: selectedSkills,
     ));
-     _authCtrl.onboarding({
-           "skills": selectedSkills,
-          "step": 2, // Means STEP 2, has been completed,
-        });
+    _authCtrl.onboarding({
+      "skills": selectedSkills,
+      "step": 2, // Means STEP 2, has been completed,
+    });
     _authCtrl.setTStepper(3);
   }
 }

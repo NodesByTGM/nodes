@@ -2,18 +2,21 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/community/components/community_space_card_template.dart';
+import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/dashboard/components/dot_indicator.dart';
 import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_applied_jobs.dart';
+import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_events.dart';
 import 'package:nodes/features/dashboard/screen/talent/talent_dashboard_view_all_jobs.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/profile/screens/profile_wrapper.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/widgets/card_dot_generator.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/quick_setup_card.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
@@ -30,15 +33,15 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   late NavController navCtrl;
   late AuthController authCtrl;
   late DashboardController dashCtrl;
+  late ComController cCtrl;
   late UserModel user;
-  int spaceLength = 5;
   int currentJobsForYouIndex = 0;
-  int currentSpaceIndex = 0;
+  int currentPostIndex = 0;
   int currentTrendingIndex = 0;
   int currentAppliedJobsIndex = 0;
   final trendingCtrl = PageController(viewportFraction: 1);
   final appliedJobsCtrl = PageController(viewportFraction: 1);
-  final spaceCardCtrl = PageController(viewportFraction: 1);
+  final postCardCtrl = PageController(viewportFraction: 1);
   final jobsForYouCtrl = PageController(viewportFraction: 1);
 
   @override
@@ -46,16 +49,18 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
     navCtrl = locator.get<NavController>();
     authCtrl = locator.get<AuthController>();
     dashCtrl = locator.get<DashboardController>();
+    cCtrl = locator.get<ComController>();
     user = authCtrl.currentUser;
     super.initState();
-    fetchJobsEventsTrending();
+    fetchJobsEventsTrendingPosts();
   }
 
-  fetchJobsEventsTrending() {
+  fetchJobsEventsTrendingPosts() {
     fetchAllJobs();
     fetchAllAppliedJobs();
     fetchAllEvents();
     fetchAllTrending();
+    fetchAllPosts();
   }
 
   fetchAllJobs() {
@@ -74,10 +79,15 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
     safeNavigate(() => dashCtrl.fetchTrending(context));
   }
 
+  fetchAllPosts() {
+    safeNavigate(() => context.read<ComController>().fetchAllPosts(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     authCtrl = context.watch<AuthController>();
     dashCtrl = context.watch<DashboardController>();
+    cCtrl = context.watch<ComController>();
     return Container(
       decoration: const BoxDecoration(
           // gradient: profileLinearGradient,
@@ -87,10 +97,13 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
         children: [
           ySpace(height: 40),
           labelText(
-            "Hi  ${user.name?.split(' ').first}!, Nice to have you here.",
+            "You’re now a Nodes Pro, ${user.name?.split(' ').first}",
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
+          ySpace(height: 10),
+          subtext(
+              "Enjoy exclusive access to gigs, cool events, the gridtools and more."),
           customDivider(height: 40),
           Container(
             padding: const EdgeInsets.symmetric(
@@ -166,7 +179,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 children: [
                   Expanded(
                     child: subtext(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                      "See your applications at a glance.",
                       fontSize: 14,
                     ),
                   ),
@@ -211,9 +224,10 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 List<StandardTalentJobModel> appliedJobsList =
                     dCtrl.appliedJobsList;
                 return SizedBox(
-                  height: 320,
+                  height: 300,
                   child: PageView.builder(
-                    itemCount: appliedJobsList.length,
+                    itemCount:
+                        appliedJobsList.length > 5 ? 5 : appliedJobsList.length,
                     controller: appliedJobsCtrl,
                     onPageChanged: (val) {
                       currentAppliedJobsIndex = val;
@@ -235,18 +249,11 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(dashCtrl.appliedJobsList.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentAppliedJobsIndex == index,
-                      ),
-                    );
-                  })
-                ],
+              CardDotGenerator(
+                length: dashCtrl.appliedJobsList.length > 5
+                    ? 5
+                    : dashCtrl.appliedJobsList.length,
+                currentIndex: currentAppliedJobsIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,7 +262,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.appliedJobsList.length,
+                        totoalLength: dashCtrl.appliedJobsList.length > 5
+                            ? 5
+                            : dashCtrl.appliedJobsList.length,
                         currentIndex: currentAppliedJobsIndex,
                         ctrl: appliedJobsCtrl,
                       );
@@ -269,7 +278,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.appliedJobsList.length,
+                        totoalLength: dashCtrl.appliedJobsList.length > 5
+                            ? 5
+                            : dashCtrl.appliedJobsList.length,
                         currentIndex: currentAppliedJobsIndex,
                         ctrl: appliedJobsCtrl,
                       );
@@ -296,7 +307,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 children: [
                   Expanded(
                     child: subtext(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                      "Exciting opportunities perfectly matched\nto your skills",
                       fontSize: 14,
                     ),
                   ),
@@ -342,7 +353,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 return SizedBox(
                   height: 320,
                   child: PageView.builder(
-                    itemCount: jobsList.length,
+                    itemCount: jobsList.length > 5 ? 5 : jobsList.length,
                     controller: jobsForYouCtrl,
                     onPageChanged: (val) {
                       currentJobsForYouIndex = val;
@@ -364,18 +375,10 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(dashCtrl.jobsList.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentJobsForYouIndex == index,
-                      ),
-                    );
-                  })
-                ],
+              CardDotGenerator(
+                length:
+                    dashCtrl.jobsList.length > 5 ? 5 : dashCtrl.jobsList.length,
+                currentIndex: currentJobsForYouIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -384,7 +387,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.jobsList.length,
+                        totoalLength: dashCtrl.jobsList.length > 5
+                            ? 5
+                            : dashCtrl.jobsList.length,
                         currentIndex: currentJobsForYouIndex,
                         ctrl: jobsForYouCtrl,
                       );
@@ -398,7 +403,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.jobsList.length,
+                        totoalLength: dashCtrl.jobsList.length > 5
+                            ? 5
+                            : dashCtrl.jobsList.length,
                         currentIndex: currentJobsForYouIndex,
                         ctrl: jobsForYouCtrl,
                       );
@@ -412,78 +419,130 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
             ],
           ),
           ySpace(height: 72),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               labelText(
-                "Spaces you might like",
+                "Join the conversation and\nconnect with your tribe",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
-              ySpace(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: subtext(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                      fontSize: 14,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // navCtrl.updatePageListStack(
-                      //   NodeSpacesScreen.routeName,
-                      // );
-                      showSuccess(message: "Coming Soon");
-                    },
-                    child: subtext(
-                      "See more",
-                      fontSize: 14,
-                      color: PRIMARY,
-                    ),
-                  ),
-                ],
-              )
+              GestureDetector(
+                onTap: () {
+                  navCtrl.updatePageListStack(
+                    NodeCommunityScreen.routeName,
+                  );
+                },
+                child: subtext(
+                  "See more",
+                  fontSize: 14,
+                  color: PRIMARY,
+                ),
+              ),
             ],
           ),
           ySpace(height: 20),
-          SizedBox(
-            height: 320,
-            child: PageView.builder(
-              itemCount: spaceLength,
-              controller: spaceCardCtrl,
-              onPageChanged: (val) {
-                currentSpaceIndex = val;
-                setState(() {});
-              },
-              itemBuilder: (context, index) {
-                return CommunitySpaceCardTemplate(
-                  imgUrl:
-                      "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-                  title: "Lorem ipsum dolor sit amet, con...",
-                  height: 300,
-                  marginRight: 0,
-                  onTap: () {},
+          //
+          //
+          Consumer<ComController>(
+            builder: (contex, cCtrl, _) {
+              bool isLoading = cCtrl.isFetchingPost;
+              bool hasData = isObjectEmpty(cCtrl.postList);
+              if (isLoading || isObjectEmpty(cCtrl.postList)) {
+                return DataReload(
+                  maxHeight: screenHeight(context) * .19,
+                  isLoading: isLoading,
+                  label: "Oops!! No Community posts yet.",
+                  loader: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ShimmerLoader(
+                      scrollDirection: Axis.horizontal,
+                      width: screenWidth(context),
+                      marginBottom: 10,
+                    ),
+                  ),
+                  onTap: fetchAllPosts,
+                  isEmpty: hasData,
                 );
-              },
-            ),
+              } else {
+                List<PostModel> postList = cCtrl.postList;
+                return SizedBox(
+                  height: 150,
+                  // height: 320,
+                  child: PageView.builder(
+                    itemCount: postList.length > 5 ? 5 : postList.length,
+                    controller: postCardCtrl,
+                    onPageChanged: (val) {
+                      currentPostIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      PostModel post = postList[index];
+                      return Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(width: 0.7, color: BORDER),
+                          color: WHITE,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: PRIMARY,
+                                  child: labelText(
+                                      getShortName(
+                                        "${post.author?.name?.split(" ").first}",
+                                      ),
+                                      color: WHITE),
+                                ),
+                                xSpace(width: 10),
+                                Expanded(
+                                  child: labelText(
+                                    capitalize("${post.author?.name}"),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                xSpace(width: 10),
+                                subtext(
+                                  shortTime(post.createdAt ?? DateTime.now()),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: GRAY,
+                                ),
+                              ],
+                            ),
+                            ySpace(height: 20),
+                            labelText(
+                              "${post.body}",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5,
+                              maxLine: 2,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
+          //
+          //
+
           ySpace(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(spaceLength, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentSpaceIndex == index,
-                      ),
-                    );
-                  })
-                ],
+              CardDotGenerator(
+                length: cCtrl.postList.length > 5 ? 5 : cCtrl.postList.length,
+                currentIndex: currentPostIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -492,9 +551,11 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: spaceLength,
-                        currentIndex: currentSpaceIndex,
-                        ctrl: spaceCardCtrl,
+                        totoalLength: cCtrl.postList.length > 5
+                            ? 5
+                            : cCtrl.postList.length,
+                        currentIndex: currentPostIndex,
+                        ctrl: postCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -506,9 +567,11 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: spaceLength,
-                        currentIndex: currentSpaceIndex,
-                        ctrl: spaceCardCtrl,
+                        totoalLength: cCtrl.postList.length > 5
+                            ? 5
+                            : cCtrl.postList.length,
+                        currentIndex: currentPostIndex,
+                        ctrl: postCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -520,15 +583,27 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
             ],
           ),
           ySpace(height: 72),
-          labelText(
-            "Trending Events",
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-          ySpace(height: 8),
-          subtext(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-            fontSize: 14,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              labelText(
+                "Trending Events",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              GestureDetector(
+                onTap: () {
+                  navCtrl.updatePageListStack(
+                    TalentEventCenterScreen.routeName,
+                  );
+                },
+                child: subtext(
+                  "See more",
+                  fontSize: 14,
+                  color: PRIMARY,
+                ),
+              ),
+            ],
           ),
           ySpace(height: 24),
           Consumer<DashboardController>(
@@ -554,9 +629,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               } else {
                 List<StandardTalentEventModel> eventsList = dCtrl.eventsList;
                 return SizedBox(
-                  height: 200,
+                  height: 320,
                   child: PageView.builder(
-                    itemCount: eventsList.length,
+                    itemCount: eventsList.length > 5 ? 5 : eventsList.length,
                     controller: trendingCtrl,
                     onPageChanged: (val) {
                       currentTrendingIndex = val;
@@ -564,8 +639,6 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     },
                     itemBuilder: (context, index) {
                       return StandardTalentEventCard(
-                        hasDelete: false,
-                        hasSave: false,
                         event: eventsList[index],
                       );
                     },
@@ -581,14 +654,19 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...List.generate(dashCtrl.eventsList.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentTrendingIndex == index,
-                      ),
-                    );
-                  })
+                  ...List.generate(
+                    dashCtrl.eventsList.length > 5
+                        ? 5
+                        : dashCtrl.eventsList.length,
+                    (index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: CardDotIndicator(
+                          isActive: currentTrendingIndex == index,
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
               Row(
@@ -598,7 +676,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.eventsList.length,
+                        totoalLength: dashCtrl.eventsList.length > 5
+                            ? 5
+                            : dashCtrl.eventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );
@@ -612,7 +692,9 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.eventsList.length,
+                        totoalLength: dashCtrl.eventsList.length > 5
+                            ? 5
+                            : dashCtrl.eventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );

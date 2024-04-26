@@ -3,7 +3,9 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/dashboard/components/dot_indicator.dart';
+import 'package:nodes/features/community/models/community_post_model.dart';
+import 'package:nodes/features/community/screens/nodes_community_screen.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
@@ -14,6 +16,7 @@ import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/features/subscriptions/screen/proceed_with_payment_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
+import 'package:nodes/utilities/widgets/card_dot_generator.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
@@ -30,26 +33,31 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
   late NavController navCtrl;
   late AuthController authCtrl;
   late DashboardController dashCtrl;
+  late ComController cCtrl;
   late UserModel user;
   int currentEventIndex = 0;
   int currentTrendingIndex = 0;
+  int currentPostIndex = 0;
   final eventsCardCtrl = PageController(viewportFraction: 1);
   final trendingCardCtrl = PageController(viewportFraction: 1);
+  final postCardCtrl = PageController(viewportFraction: 1);
 
   @override
   void initState() {
     navCtrl = locator.get<NavController>();
     authCtrl = locator.get<AuthController>();
     dashCtrl = locator.get<DashboardController>();
+    cCtrl = locator.get<ComController>();
     user = authCtrl.currentUser;
     super.initState();
-    fetchJobsEventsTrending();
+    fetchJobsEventsTrendingPosts();
   }
 
-  fetchJobsEventsTrending() {
+  fetchJobsEventsTrendingPosts() {
     fetchTrending();
     fetchAllJobs();
     fetchAllEvents();
+    fetchAllPosts();
   }
 
   fetchAllJobs() {
@@ -62,6 +70,10 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
 
   fetchTrending() {
     safeNavigate(() => dashCtrl.fetchTrending(context));
+  }
+
+  fetchAllPosts() {
+    safeNavigate(() => context.read<ComController>().fetchAllPosts(context));
   }
 
   @override
@@ -81,7 +93,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           ),
           ySpace(height: 8),
           subtext(
-            "Checkout the blah blah blah blah blah blah",
+            "Discover all the cool things waiting for you to tap into",
             fontSize: 14,
           ),
           customDivider(height: 40),
@@ -93,7 +105,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           ),
           ySpace(height: 8),
           subtext(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+            "Stay in the loop with what's buzzing in the creative world.",
             fontSize: 14,
           ),
           ySpace(height: 24),
@@ -119,7 +131,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
               } else {
                 List<StandardTalentEventModel> eventsList = dCtrl.eventsList;
                 return SizedBox(
-                  height: 200,
+                  height: 320,
                   child: PageView.builder(
                     itemCount: eventsList.length,
                     controller: eventsCardCtrl,
@@ -129,8 +141,6 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     },
                     itemBuilder: (context, index) {
                       return StandardTalentEventCard(
-                        hasDelete: false,
-                        hasSave: false,
                         event: eventsList[index],
                       );
                     },
@@ -143,18 +153,11 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(dashCtrl.eventsList.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentEventIndex == index,
-                      ),
-                    );
-                  })
-                ],
+              CardDotGenerator(
+                length: dashCtrl.eventsList.length > 5
+                    ? 5
+                    : dashCtrl.eventsList.length,
+                currentIndex: currentEventIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,7 +166,9 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.eventsList.length,
+                        totoalLength: dashCtrl.eventsList.length > 5
+                            ? 5
+                            : dashCtrl.eventsList.length,
                         currentIndex: currentEventIndex,
                         ctrl: eventsCardCtrl,
                       );
@@ -177,7 +182,9 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.eventsList.length,
+                        totoalLength: dashCtrl.eventsList.length > 5
+                            ? 5
+                            : dashCtrl.eventsList.length,
                         currentIndex: currentEventIndex,
                         ctrl: eventsCardCtrl,
                       );
@@ -192,7 +199,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           ),
           ySpace(height: 40),
           Subsection(
-            leftSection: "Top Movies",
+            leftSection: "What did you think?\nRate and share your review",
             rightSection: "View all",
             onTap: () {
               navCtrl.updateDashboardDynamicItem(
@@ -281,7 +288,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                 children: [
                   Expanded(
                     child: subtext(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                      "Local and international gigs for you",
                       fontSize: 14,
                     ),
                   ),
@@ -344,18 +351,10 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ...List.generate(dashCtrl.jobsList.length, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 2),
-                      child: CardDotIndicator(
-                        isActive: currentTrendingIndex == index,
-                      ),
-                    );
-                  })
-                ],
+              CardDotGenerator(
+                length:
+                    dashCtrl.jobsList.length > 5 ? 5 : dashCtrl.jobsList.length,
+                currentIndex: currentTrendingIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -364,7 +363,9 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.jobsList.length,
+                        totoalLength: dashCtrl.jobsList.length > 5
+                            ? 5
+                            : dashCtrl.jobsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCardCtrl,
                       );
@@ -378,7 +379,9 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.jobsList.length,
+                        totoalLength: dashCtrl.jobsList.length > 5
+                            ? 5
+                            : dashCtrl.jobsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCardCtrl,
                       );
@@ -390,6 +393,192 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                 ],
               ),
             ],
+          ),
+          ySpace(height: 40),
+          Subsection(
+            leftSection: "You'll love this!",
+            rightSection: "View all",
+            onTap: () {},
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+          ),
+          ySpace(height: 40),
+          Subsection(
+            leftSection: "Previously on Nodes",
+            rightSection: "View all",
+            onTap: () {},
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+          ),
+          ySpace(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              labelText(
+                "Join the conversation and\nconnect with your tribe",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              GestureDetector(
+                onTap: () {
+                  navCtrl.updatePageListStack(
+                    NodeCommunityScreen.routeName,
+                  );
+                },
+                child: subtext(
+                  "See more",
+                  fontSize: 14,
+                  color: PRIMARY,
+                ),
+              ),
+            ],
+          ),
+          ySpace(height: 20),
+          Consumer<ComController>(
+            builder: (contex, cCtrl, _) {
+              bool isLoading = cCtrl.isFetchingPost;
+              bool hasData = isObjectEmpty(cCtrl.postList);
+              if (isLoading || isObjectEmpty(cCtrl.postList)) {
+                return DataReload(
+                  maxHeight: screenHeight(context) * .19,
+                  isLoading: isLoading,
+                  label: "Oops!! No Community posts yet.",
+                  loader: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ShimmerLoader(
+                      scrollDirection: Axis.horizontal,
+                      width: screenWidth(context),
+                      marginBottom: 10,
+                    ),
+                  ),
+                  onTap: fetchAllPosts,
+                  isEmpty: hasData,
+                );
+              } else {
+                List<PostModel> postList = cCtrl.postList;
+                return SizedBox(
+                  height: 150,
+                  // height: 320,
+                  child: PageView.builder(
+                    itemCount: postList.length > 5 ? 5 : postList.length,
+                    controller: postCardCtrl,
+                    onPageChanged: (val) {
+                      currentPostIndex = val;
+                      setState(() {});
+                    },
+                    itemBuilder: (context, index) {
+                      PostModel post = postList[index];
+                      return Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(width: 0.7, color: BORDER),
+                          color: WHITE,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: PRIMARY,
+                                  child: labelText(
+                                      getShortName(
+                                        "${post.author?.name?.split(" ").first}",
+                                      ),
+                                      color: WHITE),
+                                ),
+                                xSpace(width: 10),
+                                Expanded(
+                                  child: labelText(
+                                    capitalize("${post.author?.name}"),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                xSpace(width: 10),
+                                subtext(
+                                  shortTime(post.createdAt ?? DateTime.now()),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: GRAY,
+                                ),
+                              ],
+                            ),
+                            ySpace(height: 20),
+                            labelText(
+                              "${post.body}",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5,
+                              maxLine: 2,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+          ySpace(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CardDotGenerator(
+                length: cCtrl.postList.length > 5 ? 5 : cCtrl.postList.length,
+                currentIndex: currentPostIndex,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: false,
+                        totoalLength: cCtrl.postList.length > 5
+                            ? 5
+                            : cCtrl.postList.length,
+                        currentIndex: currentPostIndex,
+                        ctrl: postCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.leftCircleDirectionIcon,
+                    ),
+                  ),
+                  xSpace(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      customAnimatePageView(
+                        isInc: true,
+                        totoalLength: cCtrl.postList.length > 5
+                            ? 5
+                            : cCtrl.postList.length,
+                        currentIndex: currentPostIndex,
+                        ctrl: postCardCtrl,
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      ImageUtils.rightCircleDirectionIcon,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          ySpace(height: 40),
+          Subsection(
+            leftSection: "Collaboration Spotlights",
+            rightSection: "View all",
+            onTap: () {},
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.CollaborationSpotlights,
           ),
           ySpace(height: 40),
           Subsection(

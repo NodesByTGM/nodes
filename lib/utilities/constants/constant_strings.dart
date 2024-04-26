@@ -13,8 +13,10 @@ class Constants {
   static const confirmPassword = "Confirm Password";
   static const passwordMatchError = "Password does not match!";
   static const naira = "₦";
-  static const accountNotVerified = "Oops!! Your account hasn't been verified yet.";
-  static const updateYourProfileToProceed = "Please update your profile to proceed.";
+  static const accountNotVerified =
+      "Oops!! Your account hasn't been verified yet.";
+  static const updateYourProfileToProceed =
+      "Please update your profile to proceed.";
 
   static const jobType = [
     'Full-time',
@@ -22,24 +24,25 @@ class Constants {
     'Contract',
   ];
   static const standardFeatures = [
-    "Access to nodes community",
-    "Networking opportunities",
-    "Stay informed on creative trends and movies",
+    "Community Engagement",
+    "Networking Opportunities",
+    "Stay Informed on Creative Trends",
   ];
   static const proFeatures = [
-    "Everything on the standard plan",
-    "Access to events",
-    "Enhanced visibility",
-    "Access to premium jobs",
-    "Expanded project showcase",
-    "Advanced analytics & insights",
-    "Access to Gridtools Discovery Pack (Free)",
+    // "Everything on the standard plan",
+    "Enhanced Visibility",
+    "Access to Premium Jobs",
+    "Expanded Project Showcase",
+    "Advanced Analytics & Insights",
+    "Access to GridTools Discovery Pack (Free)",
   ];
   static const businessFeatures = [
-    "Everything on the pro plan",
-    "Premium talent pool access",
-    "Featured job listings",
-    "Promotion and marketing opportunities",
+    // "Everything on the pro plan",
+    "Premium Talent Pool Access",
+    "Featured Job Listings",
+    "Analytics and Performance Metrics",
+    "Promotion and Marketing Opportunities",
+    "Access to GridTools Discovery Pack (Free)",
   ];
 
   static const industry = [
