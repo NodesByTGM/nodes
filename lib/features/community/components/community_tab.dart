@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, file_names
 
+import 'package:like_button/like_button.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/components/write_a_post_form.dart';
@@ -394,17 +395,19 @@ class _CommunityTabState extends State<CommunityTab> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              socialBtn(
-                title: '${post.comments?.length}',
-                icon: Icons.chat_bubble_outline_outlined,
-                onTap: () {},
-              ),
+              // socialBtn(
+              //   title: '${post.comments?.length}',
+              //   icon: Icons.chat_bubble_outline_outlined,
+              //   onTap: () {},
+              // ),
               socialBtn(
                 title: '${post.likes?.length}',
                 icon: Icons.thumb_up_alt_outlined,
                 isActive: post.liked,
+                isLikeBtn: true,
                 onTap: () {
                   // check if your ID is here, then it means we are unliking... else, we like...
                   likeUnlikeFn(
@@ -429,15 +432,54 @@ class _CommunityTabState extends State<CommunityTab> {
     );
   }
 
+  // GestureDetector socialBtn({
+  //   required String title,
+  //   required IconData icon,
+  //   required GestureTapCallback onTap,
+  //   bool isActive = false,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(
+  //         horizontal: 16,
+  //         vertical: 12,
+  //       ),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(5),
+  //         color: BORDER.withOpacity(0.2),
+  //       ),
+  //       child: Wrap(
+  //         spacing: 5,
+  //         crossAxisAlignment: WrapCrossAlignment.center,
+  //         children: [
+  //           Icon(
+  //             icon,
+  //             color: isActive ? PRIMARY : GRAY,
+  //           ),
+  //           labelText(
+  //             title,
+  //             fontSize: 14,
+  //             fontWeight: FontWeight.bold,
+  //             color: isActive ? PRIMARY : GRAY,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   GestureDetector socialBtn({
     required String title,
     required IconData icon,
     required GestureTapCallback onTap,
     bool isActive = false,
+    bool isLikeBtn = false,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 50,
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 12,
@@ -446,22 +488,37 @@ class _CommunityTabState extends State<CommunityTab> {
           borderRadius: BorderRadius.circular(5),
           color: BORDER.withOpacity(0.2),
         ),
-        child: Wrap(
-          spacing: 5,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: isActive ? PRIMARY : GRAY,
-            ),
-            labelText(
-              title,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: isActive ? PRIMARY : GRAY,
-            ),
-          ],
-        ),
+        child: isLikeBtn
+            ? LikeButton(
+                likeCount: int.parse(title),
+                countPostion: CountPostion.right,
+                onTap: (bool? val) async {
+                  onTap();
+                  return true;
+                },
+                likeBuilder: (isTapped) {
+                  return Icon(
+                    icon,
+                    color: isActive ? PRIMARY : GRAY,
+                  );
+                },
+              )
+            : Wrap(
+                spacing: 5,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    color: isActive ? PRIMARY : GRAY,
+                  ),
+                  labelText(
+                    title,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: isActive ? PRIMARY : GRAY,
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -470,6 +527,7 @@ class _CommunityTabState extends State<CommunityTab> {
     required bool likedPost,
     required PostModel post,
   }) async {
+    print("George this post is liked: $likedPost");
     likedPost
         ? await comCtrl.unlikeSinglePost(context, post.copyWith(liked: false))
         : await comCtrl.likeSinglePost(context, post.copyWith(liked: true));

@@ -165,8 +165,9 @@ class ComController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      updatePostData(
-          PostModel.fromJson(response.result as Map<String, dynamic>));
+      PostModel det =
+          PostModel.fromJson(response.result as Map<String, dynamic>);
+      updatePostData(det);
       // This returns the data for post, so use it to update the postList arr...
       return true;
     } on NetworkException catch (e) {
@@ -188,8 +189,9 @@ class ComController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      updatePostData(
-          PostModel.fromJson(response.result as Map<String, dynamic>));
+      PostModel det =
+          PostModel.fromJson(response.result as Map<String, dynamic>);
+      updatePostData(det);
       // This returns the data for post, so use it to update the postList arr...
       return true;
     } on NetworkException catch (e) {
@@ -210,7 +212,6 @@ class ComController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      print("George here is the res fo response: ${response.result}");
       setGeneralUsers(_resolvePaginatedUsers(response));
       return true;
     } on NetworkException catch (e) {
