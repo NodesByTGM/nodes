@@ -190,56 +190,6 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                       ],
                     ),
                     ySpace(height: 8),
-                    // DropdownDatePicker(
-                    //   locale: "en",
-                    //   isFormValidator: true,
-                    //   currentSelectedDay: currentSelectedDay,
-                    //   currentSelectedMonth: currentSelectedMonth,
-                    //   selectedYear: selectedYear,
-                    //   onChangedDay: (v) {
-                    //     currentSelectedDay = int.parse(v!);
-                    //   },
-                    //   onChangedMonth: (v) {
-                    //     currentSelectedMonth = int.parse(v!);
-                    //   },
-                    //   onChangedYear: (v) {
-                    //     selectedYear = int.parse(v!);
-                    //   },
-                    //   inputDecoration: FormUtils.formDecoration(),
-                    //   dayFlex: 2,
-                    //   // Limit the age to folks 18 and above from the current year
-                    //   endYear: DateTime.now().year - 18,
-                    //   hintDay: 'Day',
-                    //   hintMonth: 'Month',
-                    //   hintYear: 'Year',
-                    // ),
-                  ],
-                ),
-                FormUtils.formSpacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 5,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        subtext(
-                          "Date of birth*",
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Icon(
-                            MdiIcons.informationSlabCircle,
-                            size: 20,
-                            color: BORDER,
-                          ),
-                        )
-                      ],
-                    ),
-                    ySpace(height: 8),
                     Row(
                       children: [
                         Expanded(
