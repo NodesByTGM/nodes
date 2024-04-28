@@ -9,7 +9,7 @@ part of 'subscription_model.dart';
 SubscriptionModel _$SubscriptionModelFromJson(Map<String, dynamic> json) =>
     SubscriptionModel(
       plan: json['plan'] as String?,
-      active: json['active'] as bool?,
+      active: json['active'] as bool? ?? false,
       paidAt: json['paidAt'] == null
           ? null
           : DateTime.parse(json['paidAt'] as String),

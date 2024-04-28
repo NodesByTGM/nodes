@@ -246,19 +246,16 @@ class _BusinessGuestProfileScreenState
   getTabBody() {
     switch (currentIndex) {
       case 0:
-        // Call the Model-converter-function here...
         return JobsTab(
           jobs: userData?.jobs ?? [],
         );
       case 1:
         return ProjectsTab(
-          // Removed the isBusiness, so i'd be able to view the Project
           isGuest: true,
           projects: userData?.projects ?? [],
         );
       case 2:
         return EventsTab(
-          // Call the Model-converter-function here...
           events: userData?.events ?? [],
         );
       default:

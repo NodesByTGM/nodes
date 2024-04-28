@@ -133,7 +133,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
                     ),
                     ySpace(height: 16),
                     labelText(
-                      "${project.name}lol",
+                      "${project.name}",
                       fontSize: 14,
                     ),
                     ySpace(height: 10),

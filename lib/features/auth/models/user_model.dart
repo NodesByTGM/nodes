@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nodes/core/models/base_data.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/subscription_model.dart';
@@ -11,7 +11,7 @@ import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class UserModel extends Equatable {
+class UserModel extends BaseData {
   final String? id;
   final String? name;
   final String? username;
@@ -166,6 +166,16 @@ class UserModel extends Equatable {
       _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
+
+
+  @override
+  List<UserModel> fromList(List<dynamic> items) {
+    if (items.isEmpty) {
+      return [];
+    } else {
+      return items.map((e) => UserModel.fromJson(e)).toList();
+    }
+  }
 
   @override
   List<Object?> get props => [

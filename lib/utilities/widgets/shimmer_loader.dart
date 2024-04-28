@@ -203,3 +203,32 @@ class ProfileShimmerLoader extends StatelessWidget {
     );
   }
 }
+
+class BoxShimmerLoader extends StatelessWidget {
+  const BoxShimmerLoader({
+    Key? key,
+    this.height = 200,
+    this.width,
+  }) : super(key: key);
+
+  final double height;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        width: width ?? screenWidth(context) * 0.6,
+        height: height,
+        decoration: const BoxDecoration(
+          color: BORDER,
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
+          ),
+        ),
+      ),
+    );
+  }
+}

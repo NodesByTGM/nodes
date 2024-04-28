@@ -80,7 +80,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: TAG_CHIP,
+            color: LIGHT_SECONDARY,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   title: "Complete your\nbusiness profile",
                   btnTitle: "Complete Profile",
                   icon: ImageUtils.headIcon,
-                  borderColor: TAG_CHIP,
+                  borderColor: LIGHT_SECONDARY,
                   onTap: () {
                     context.read<NavController>().updatePageListStack(
                           BusinessProfileScreen.routeName,
@@ -115,7 +115,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   title: "Create a job\npost",
                   btnTitle: "Create Job",
                   icon: ImageUtils.thrunkIcon,
-                  borderColor: TAG_CHIP,
+                  borderColor: LIGHT_SECONDARY,
                   onTap: () {
                     BusinessAccountModel business =
                         user.business ?? const BusinessAccountModel();
@@ -217,7 +217,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           SizedBox(
             height: 320,
             child: PageView.builder(
-              itemCount: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
+              itemCount: dashCtrl.createdJobList.length > 5
+                  ? 5
+                  : dashCtrl.createdJobList.length,
               controller: jobsCardCtrl,
               onPageChanged: (val) {
                 currentJobIndex = val;
@@ -234,9 +236,11 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           ySpace(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [ 
+            children: [
               CardDotGenerator(
-                length: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
+                length: dashCtrl.createdJobList.length > 5
+                    ? 5
+                    : dashCtrl.createdJobList.length,
                 currentIndex: currentJobIndex,
               ),
               Row(
@@ -246,7 +250,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
+                        totoalLength: dashCtrl.createdJobList.length > 5
+                            ? 5
+                            : dashCtrl.createdJobList.length,
                         currentIndex: currentJobIndex,
                         ctrl: jobsCardCtrl,
                       );
@@ -260,7 +266,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.createdJobList.length > 5 ? 5 : dashCtrl.createdJobList.length,
+                        totoalLength: dashCtrl.createdJobList.length > 5
+                            ? 5
+                            : dashCtrl.createdJobList.length,
                         currentIndex: currentJobIndex,
                         ctrl: jobsCardCtrl,
                       );
@@ -343,7 +351,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           SizedBox(
             height: 280,
             child: PageView.builder(
-              itemCount: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
+              itemCount: dashCtrl.myCreatedEventsList.length > 5
+                  ? 5
+                  : dashCtrl.myCreatedEventsList.length,
               controller: trendingCtrl,
               onPageChanged: (val) {
                 currentTrendingIndex = val;
@@ -359,9 +369,11 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
           ySpace(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [ 
+            children: [
               CardDotGenerator(
-                length: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
+                length: dashCtrl.myCreatedEventsList.length > 5
+                    ? 5
+                    : dashCtrl.myCreatedEventsList.length,
                 currentIndex: currentTrendingIndex,
               ),
               Row(
@@ -371,7 +383,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
+                        totoalLength: dashCtrl.myCreatedEventsList.length > 5
+                            ? 5
+                            : dashCtrl.myCreatedEventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );
@@ -385,7 +399,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.myCreatedEventsList.length > 5 ? 5 : dashCtrl.myCreatedEventsList.length,
+                        totoalLength: dashCtrl.myCreatedEventsList.length > 5
+                            ? 5
+                            : dashCtrl.myCreatedEventsList.length,
                         currentIndex: currentTrendingIndex,
                         ctrl: trendingCtrl,
                       );

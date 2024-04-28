@@ -30,4 +30,6 @@ class KeyString {
   static const monthly = "monthly";
   static const year = "year";
   static const annual = "annual";
+  static const subAbandoned = "abandoned";
+  static const subSuccess = "success";
 }

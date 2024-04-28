@@ -16,6 +16,8 @@ GeneralUserModel _$GeneralUserModelFromJson(Map<String, dynamic> json) =>
       type: json['type'] as int? ?? 0,
       headline: json['headline'] as String?,
       bio: json['bio'] as String?,
+      connected: json['connected'] as bool? ?? false,
+      requested: json['requested'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GeneralUserModelToJson(GeneralUserModel instance) =>
@@ -26,4 +28,6 @@ Map<String, dynamic> _$GeneralUserModelToJson(GeneralUserModel instance) =>
       'type': instance.type,
       'headline': instance.headline,
       'bio': instance.bio,
+      'connected': instance.connected,
+      'requested': instance.requested,
     };

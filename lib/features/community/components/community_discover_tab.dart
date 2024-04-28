@@ -159,12 +159,11 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
                     padding: const EdgeInsets.only(top: 10),
                     itemCount: genUsers.length,
                     itemBuilder: (c, i) {
-                      // return commentCard(
-                      //   post: posts[i],
-                      // );
+                      GeneralUserModel genUser = genUsers[i];
                       return PeopleBrandCard(
+                        // isConnected: genUser.connected,
                         isConnected: false,
-                        genUser: genUsers[i],
+                        genUser: genUser,
                       );
                     },
                     separatorBuilder: (c, i) => ySpace(height: 20),

@@ -232,4 +232,16 @@ class AuthService {
       return NetworkException.errorHandler(e);
     }
   }
+
+  Future<ApiResponse> fetchAllMyTransactions() async {
+    try {
+      ApiResponse res =
+          await authRepository.fetchAllMyTransactions();
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchAllMyTransactions ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e);
+    }
+  }
 }

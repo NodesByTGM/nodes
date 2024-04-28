@@ -19,7 +19,8 @@ class NetworkException implements Exception {
         // Call the refreshToken function from your auth provider and handle it accordingly
         context?.read<AuthController>().refreshToken();
         ApiResponse response = ApiResponse.fromJson(e.response?.data)
-            .copyWith(message: "Retrying Request...");
+            // .copyWith(message: "Retrying Request...");
+            .copyWith(message: "${e.response?.statusMessage}");
         return response;
       }
       if (e.response?.statusCode == 422) {

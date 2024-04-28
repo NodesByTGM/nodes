@@ -9,6 +9,7 @@ import 'package:nodes/config/country_states.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
+import 'package:nodes/core/models/custom_page.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/current_session.dart';
@@ -23,6 +24,7 @@ import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
+import 'package:nodes/features/subscriptions/models/subscription_history_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class AuthController extends BaseController {
@@ -35,7 +37,7 @@ class AuthController extends BaseController {
     this._storageService,
   );
 
-  // Variables
+  // <================= Variables Starts here =================>
   UserModel _currentUser = const UserModel();
   int _tStepperVal = 1;
   int _bStepperVal = 1;
@@ -48,9 +50,9 @@ class AuthController extends BaseController {
       const CountryStateModel().fromList(countryStatesData);
 
   GoogleSignIn googleSignIn = GoogleSignIn();
+  List<SubscriptionHistoryModel> _subscriptionHistory = [];
 
-  // Getters
-
+  // <================= Getters Starts here =====================>
   UserModel get currentUser => _currentUser;
   Future<CurrentSession?> get currentSession async {
     var _currentSession =
@@ -71,9 +73,10 @@ class AuthController extends BaseController {
 
   List<CountryStateModel> get countryStatesList => _countryStatesList;
   SubscriptionUpgrade get subUpgrade => _subUpgrade;
+  List<SubscriptionHistoryModel> get subscriptionHistoryList =>
+      _subscriptionHistory;
 
-  // Setters
-
+  // <================= Setters Starts here =================>
   setTStepper(int val) {
     _tStepperVal = val;
     notifyListeners();
@@ -175,7 +178,14 @@ class AuthController extends BaseController {
         .toJson());
   }
 
-  // Functions
+  setSubscriptionHistory(List<SubscriptionHistoryModel> history) {
+    // _subscriptionHistory = history;
+    _subscriptionHistory =
+        history.where((h) => h.status != KeyString.subAbandoned).toList();
+    notifyListeners();
+  }
+
+  // <================= Functions Starts here =================>
   Future<String?> _deviceToken() async {
     return await FirebaseMessaging.instance.getToken();
   }
@@ -729,7 +739,39 @@ class AuthController extends BaseController {
     }
   }
 
+  Future<bool> fetchAllMyTransactions() async {
+    setFetchingSubHistory(true);
+    try {
+      ApiResponse response = await _authService.fetchAllMyTransactions();
+
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      // SubscriptionHistoryModel
+      setSubscriptionHistory(_resolvePaginatedSubscriptionHistory(response));
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setFetchingSubHistory(false);
+    }
+  }
+
 // Handling Paginated Data...
+  List<SubscriptionHistoryModel> _resolvePaginatedSubscriptionHistory(
+      ApiResponse response) {
+    CustomPage<SubscriptionHistoryModel> p =
+        const CustomPage<SubscriptionHistoryModel>().fromJson(
+            response.result as Map<String, dynamic>,
+            const SubscriptionHistoryModel());
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<SubscriptionHistoryModel>;
+    }
+    return [];
+  }
 
   ///
   logout() {

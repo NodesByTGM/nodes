@@ -204,6 +204,7 @@ class ComController extends BaseController {
         showError(message: response.message);
         return false;
       }
+      print("George here is the res fo response: ${response.result}");
       setGeneralUsers(_resolvePaginatedUsers(response));
       return true;
     } on NetworkException catch (e) {

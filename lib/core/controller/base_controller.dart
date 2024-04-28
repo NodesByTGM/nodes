@@ -55,6 +55,7 @@ abstract class BaseController extends ChangeNotifier {
   bool _isRemovingConnection = false;
   bool _isFetchingSingleUserConnection = false;
   bool _isFetchingAllMyConnection = false;
+  bool _isFetchingSubHistory = false;
 
 // Getters
   bool get loading => _busy;
@@ -107,6 +108,7 @@ abstract class BaseController extends ChangeNotifier {
   bool get isRemovingConnection => _isRemovingConnection;
   bool get isFetchingSingleUserConnection => _isFetchingSingleUserConnection;
   bool get isFetchingAllMyConnection => _isFetchingAllMyConnection;
+  bool get isFetchingSubHistory => _isFetchingSubHistory;
 
   // Setters
   setBusy(bool value, {bool when = true}) {
@@ -362,6 +364,11 @@ abstract class BaseController extends ChangeNotifier {
 
   setIsFetchingAllMyConnection(bool value) {
     _isFetchingAllMyConnection = value;
+    notifyListeners();
+  }
+
+  setFetchingSubHistory(bool value) {
+    _isFetchingSubHistory = value;
     notifyListeners();
   }
 }

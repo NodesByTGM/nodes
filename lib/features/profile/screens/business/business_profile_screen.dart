@@ -6,6 +6,8 @@ import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/profile/components/events_tab.dart';
+import 'package:nodes/features/profile/components/jobs_tab.dart';
 import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/profile/components/projects_tab.dart';
 import 'package:nodes/features/profile/screens/business/edit_business_profile_screen.dart';
@@ -55,7 +57,7 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                   size: 100,
                 ),
                 title: labelText(
-                  capitalize("${business.name}"),
+                  capitalize(business.name ?? 'Name of Business'),
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
@@ -65,26 +67,12 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                   children: [
                     ySpace(height: 2),
                     subtext(
-                      shortDate(business.yoe ?? DateTime.now()),
+                      isObjectEmpty(business.yoe)
+                          ? "** ** ****"
+                          : shortDate(business.yoe ?? DateTime.now()),
                       // shortDate(DateTime.now()),
                       color: GRAY,
                     ),
-                    // ySpace(height: 5),
-                    // Wrap(
-                    //   spacing: 2,
-                    //   crossAxisAlignment: WrapCrossAlignment.center,
-                    //   children: [
-                    //     labelText(
-                    //       "26",
-                    //       fontSize: 12,
-                    //     ),
-                    //     subtext(
-                    //       "Followers",
-                    //       fontSize: 12,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
@@ -234,12 +222,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                     },
                   ),
                   tabHeader(
-                    // isActive: currentIndex == 2,
-                    isActive: currentIndex == 1,
+                    isActive: currentIndex == 2,
                     title: "Events",
                     onTap: () {
                       setState(() {
-                        currentIndex = 1;
+                        currentIndex = 2;
                       });
                     },
                   ),
@@ -262,14 +249,23 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   }
 
   getTabBody(DashboardController dc) {
-    return currentIndex == 0
-        ? ProjectsTab(
-            isBusiness: true,
-            projects: dc.myProjectList,
-          )
-        : ProjectsTab(
-            isBusiness: true,
-            projects: dc.myProjectList,
-          );
+    switch (currentIndex) {
+      case 0:
+        return JobsTab(
+          jobs: dc.createdJobList,
+        );
+      case 1:
+        return ProjectsTab(
+          projects: dc.myProjectList,
+        );
+      case 2:
+        return EventsTab(
+          events: dc.myCreatedEventsList,
+        );
+      default:
+        return JobsTab(
+          jobs: dc.createdJobList,
+        );
+    }
   }
 }

@@ -112,7 +112,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: TAG_CHIP,
+              color: LIGHT_SECONDARY,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                     title: "Complete your\nprofile",
                     btnTitle: "Complete Profile",
                     icon: ImageUtils.headIcon,
-                    borderColor: TAG_CHIP,
+                    borderColor: LIGHT_SECONDARY,
                     onTap: () {
                       navCtrl.updatePageListStack(ProfileWrapper.routeName);
                     },
@@ -145,7 +145,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   title: "Connect with\nothers",
                   btnTitle: "Discover",
                   icon: ImageUtils.thrunkIcon,
-                  borderColor: TAG_CHIP,
+                  borderColor: LIGHT_SECONDARY,
                   onTap: () {
                     navCtrl.updatePageListStack(NodeCommunityScreen.routeName);
                   },
@@ -155,7 +155,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                   title: "Find your\nnext job",
                   btnTitle: "Browse jobs",
                   icon: ImageUtils.legsIcon,
-                  borderColor: TAG_CHIP,
+                  borderColor: LIGHT_SECONDARY,
                   onTap: () {
                     navCtrl.updatePageListStack(
                       TalentJobCenterScreen.routeName,

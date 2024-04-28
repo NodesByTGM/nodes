@@ -12,6 +12,8 @@ class GeneralUserModel extends BaseData {
   final int type;
   final String? headline;
   final String? bio;
+  final bool connected;
+  final bool requested;
 
   const GeneralUserModel({
     this.name,
@@ -20,6 +22,8 @@ class GeneralUserModel extends BaseData {
     this.type = 0,
     this.headline,
     this.bio,
+    this.connected = false,
+    this.requested = false,
   });
 
   GeneralUserModel copyWith({
@@ -29,6 +33,8 @@ class GeneralUserModel extends BaseData {
     int? type,
     String? headline,
     String? bio,
+    bool? connected,
+    bool? requested,
   }) =>
       GeneralUserModel(
         name: name ?? this.name,
@@ -37,13 +43,14 @@ class GeneralUserModel extends BaseData {
         type: type ?? this.type,
         headline: headline ?? this.headline,
         bio: bio ?? this.bio,
+        connected: connected ?? this.connected,
+        requested: requested ?? this.requested,
       );
 
   factory GeneralUserModel.fromJson(Map<String, dynamic> json) =>
       _$GeneralUserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$GeneralUserModelToJson(this);
-
 
   @override
   List<GeneralUserModel> fromList(List<dynamic> items) {
@@ -54,14 +61,7 @@ class GeneralUserModel extends BaseData {
     }
   }
 
-
   @override
-  List<Object?> get props => [
-        name,
-        id,
-        avatar,
-        type,
-        headline,
-        bio,
-      ];
+  List<Object?> get props =>
+      [name, id, avatar, type, headline, bio, connected, requested];
 }

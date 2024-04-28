@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
+import 'package:flutter/services.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
@@ -76,15 +77,20 @@ class _AccountFormState extends State<AccountForm> {
               name: "username",
               decoration: FormUtils.formDecoration(
                 hintText: "Enter your username",
-                prefix: labelText("@ "),
+                prefix: labelText("@"),
               ),
               keyboardType: TextInputType.text,
               style: FORM_STYLE,
               controller: usernameCtrl,
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r"\s\b|\b\s"))
+              ],
               onSaved: (value) => formValues['username'] = trimValue(value),
               validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(context,
-                    errorText: Constants.emptyFieldError),
+                FormBuilderValidators.required(
+                  context,
+                  errorText: Constants.emptyFieldError,
+                ),
               ]),
               onChanged: (val) {},
             ),

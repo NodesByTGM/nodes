@@ -118,6 +118,9 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                     ),
                     keyboardType: TextInputType.text,
                     style: FORM_STYLE,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp(r"\s\b|\b\s"))
+                    ],
                     controller: usernameCtrl,
                     onSaved: (value) =>
                         formValues['username'] = trimValue(value),

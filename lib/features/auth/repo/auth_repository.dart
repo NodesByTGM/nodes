@@ -32,16 +32,15 @@ class AuthApis {
   static const profileApi = "$usersApi/profile";
   static const businessProfile = "$usersApi/business-profile";
 
-
   // Media Uploads
   static const mediaUploadsApi = "$baseApi/uploads/media";
   static const deleteMediaApi = "$mediaUploadsApi/delete/{id}";
 
-  // Paystack
-  static const paystackInitialize =
-      "$baseApi/transactions/subscription/initiate";
-  static const verifyAndUpgradeSubscription =
-      "$baseApi/transactions/verify/internal";
+  // Transactions
+  static const transactionApi = "$baseApi/transactions";
+  static const paystackInitialize = "$transactionApi/subscription/initiate";
+  static const verifyAndUpgradeSubscription = "$transactionApi/verify/internal";
+  static const allMyTransactions = "$transactionApi/mine";
 }
 
 @RestApi()
@@ -83,11 +82,10 @@ abstract class AuthRepository {
   Future<ApiResponse> logout();
 
   @POST(AuthApis.onboardingApi)
-  Future<ApiResponse> onboarding(@Body() payload); 
+  Future<ApiResponse> onboarding(@Body() payload);
 
   @POST(AuthApis.verifyBusiness)
   Future<ApiResponse> verifyBusiness(@Body() payload);
-
 
   @GET(AuthApis.profileApi)
   Future<ApiResponse> fetchProfile();
@@ -97,7 +95,7 @@ abstract class AuthRepository {
 
   @PUT(AuthApis.businessProfile)
   Future<ApiResponse> updateBusinessProfile(@Body() payload);
- 
+
   // @MultiPart()
   // @POST(AuthApis.mediaUploadsApi)
   // Future<ApiResponse> mediaUpload(
@@ -124,4 +122,7 @@ abstract class AuthRepository {
   Future<ApiResponse> verifyAndUpgradeSubscription(
     @Query('reference') String ref,
   );
+
+  @GET(AuthApis.allMyTransactions)
+  Future<ApiResponse> fetchAllMyTransactions();
 }

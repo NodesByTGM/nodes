@@ -190,12 +190,11 @@ class _CommunityConnectionsTabState extends State<CommunityConnectionsTab> {
                           padding: const EdgeInsets.only(top: 10),
                           itemCount: genUsers.length,
                           itemBuilder: (c, i) {
-                            // return commentCard(
-                            //   post: genUsers[i],
-                            // );
+                            GeneralUserModel genUser = genUsers[i];
                             return PeopleBrandCard(
+                              // isConnected: genUser.connected,
                               isConnected: true,
-                              genUser: genUsers[i],
+                              genUser: genUser,
                             );
                           },
                           separatorBuilder: (c, i) => ySpace(height: 20),

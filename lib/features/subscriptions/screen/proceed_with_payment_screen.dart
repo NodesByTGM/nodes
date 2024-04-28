@@ -145,7 +145,11 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
             ySpace(height: 40),
             if (isSubscribed) ...[
               // Billing History
-              const SubscriptionTable()
+              SubscriptionTable(
+                // Pass in the type and tenor, from subUpgrade
+                // Which will be used to filter the search and retrieve transactions pertaining to only that type and tenor...
+                config: subUpgrade,
+              )
             ],
             if (!isSubscribed) ...[
               OutlineBtn(
@@ -260,10 +264,9 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
           ),
         );
         if (res && mounted) {
-          // _onSuccessfulPaystackPayment(ref);
           _onSuccessfulPaystackPayment(
             ref: ref,
-            plan: "${subUpgrade.type}",
+            plan: "${subUpgrade.type?.toLowerCase()}",
           );
         }
       }

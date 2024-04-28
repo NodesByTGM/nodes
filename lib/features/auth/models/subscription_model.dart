@@ -7,7 +7,7 @@ part "subscription_model.g.dart";
 @JsonSerializable(explicitToJson: true)
 class SubscriptionModel extends Equatable {
 final String? plan;
-    final bool? active;
+    final bool active;
     final DateTime? paidAt;
     final DateTime? createdAt;
     final DateTime? updatedAt;
@@ -16,7 +16,7 @@ final String? plan;
 
 const SubscriptionModel({
         this.plan,
-        this.active,
+        this.active = false,
         this.paidAt,
         this.createdAt,
         this.updatedAt,

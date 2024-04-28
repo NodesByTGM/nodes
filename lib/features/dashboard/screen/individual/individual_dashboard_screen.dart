@@ -131,7 +131,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               } else {
                 List<StandardTalentEventModel> eventsList = dCtrl.eventsList;
                 return SizedBox(
-                  height: 200,
+                  height: 320,
                   child: PageView.builder(
                     itemCount: eventsList.length > 5 ? 5 : eventsList.length,
                     controller: eventsCardCtrl,

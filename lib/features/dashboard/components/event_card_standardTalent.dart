@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, deprecated_member_use
 
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/event_details_standardTalent.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
@@ -8,14 +9,15 @@ import 'package:nodes/utilities/widgets/custom_loader.dart';
 
 class StandardTalentEventCard extends StatelessWidget {
   const StandardTalentEventCard({
-    super.key, 
+    super.key,
     required this.event,
   });
- 
+
   final StandardTalentEventModel event;
 
   @override
   Widget build(BuildContext context) {
+    bool isTalent = context.read<AuthController>().currentUser.type == 1;
     return Stack(
       children: [
         Positioned(
@@ -57,8 +59,15 @@ class StandardTalentEventCard extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              // check if user is standard and prompt them to upgrade 
-                              saveUnsaveEvent(context, event);
+                              // check if user is standard and prompt them to upgrade
+                              if (isTalent) {
+                                saveUnsaveEvent(context, event);
+                              } else {
+                                showText(
+                                  message:
+                                      "Oops!! You have to upgrade to PRO to have this feature.",
+                                );
+                              }
                             },
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -74,7 +83,7 @@ class StandardTalentEventCard extends StatelessWidget {
                             ),
                           ),
                   ],
-                ), 
+                ),
                 Container(
                   height: 50,
                 ),
@@ -177,5 +186,4 @@ class StandardTalentEventCard extends StatelessWidget {
       },
     );
   }
- 
 }

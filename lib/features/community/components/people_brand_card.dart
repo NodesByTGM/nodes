@@ -87,7 +87,7 @@ class PeopleBrandCard extends StatelessWidget {
               width: screenWidth(context),
               decoration: BoxDecoration(
                 border: Border.all(width: 0.8, color: BORDER),
-                color: TAG_CHIP.withOpacity(0.1),
+                color: LIGHT_SECONDARY,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
