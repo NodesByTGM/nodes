@@ -12,6 +12,8 @@ class Constants {
   static const passwordLenError = "Password length must be 6 or more";
   static const confirmPassword = "Confirm Password";
   static const passwordMatchError = "Password does not match!";
+  static const monthError = "Please choose a month";
+  static const dayError = "Please choose a day";
   static const naira = "₦";
   static const accountNotVerified =
       "Oops!! Your account hasn't been verified yet.";
@@ -85,4 +87,29 @@ class Constants {
   ];
 
   static const skillsList = [...industry, ...jobRoles];
+
+  static const monthList = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  static List<String> get yearList {
+    int currentYear = DateTime.now().year;
+    int ageGap = currentYear - 18;
+    List<String> yArr = [];
+    for (int i = 0; i <= 300; i++) {
+      yArr.add("${ageGap--}");
+    }
+    return yArr;
+  }
 }

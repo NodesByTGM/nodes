@@ -23,6 +23,7 @@ class GeneralSignupScreen extends StatefulWidget {
 class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
   late AuthController authCtrl;
   final formKey = GlobalKey<FormBuilderState>();
+  final _dropDownKey = GlobalKey<FormBuilderFieldState>();
   final TextEditingController pwdCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController fullnameCtrl = TextEditingController();
@@ -32,13 +33,17 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
   bool isPwd = false;
   bool isConfirmPwd = false;
   bool tosStatus = false;
-  int? selectedDay;
-  int? selectedMonth;
+  int? currentSelectedDay;
+  int? currentSelectedMonth;
   int? selectedYear;
   String? passwordValue;
   double pwdStrengthVal = 0;
   bool isPwdFocus = false;
-
+  List<int> _days = [];
+  String? _initialMonth;
+  int? _initialDay;
+  String selectedMonth = "";
+  int selectedDay = 0;
   final pwdFocus = FocusNode();
 
   @override
@@ -69,7 +74,7 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
         children: [
           ySpace(),
           labelText(
-            "You’re one step away from a whole\nnew dimension.",
+            "You're one step away from a whole\nnew dimension.",
             fontSize: 24,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.w500,
@@ -185,28 +190,146 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
                       ],
                     ),
                     ySpace(height: 8),
-                    DropdownDatePicker(
-                      locale: "en",
-                      isFormValidator: true,
-                      selectedDay: selectedDay,
-                      selectedMonth: selectedMonth,
-                      selectedYear: selectedYear,
-                      onChangedDay: (v) {
-                        selectedDay = int.parse(v!);
-                      },
-                      onChangedMonth: (v) {
-                        selectedMonth = int.parse(v!);
-                      },
-                      onChangedYear: (v) {
-                        selectedYear = int.parse(v!);
-                      },
-                      inputDecoration: FormUtils.formDecoration(),
-                      dayFlex: 2,
-                      // Limit the age to folks 18 and above from the current year
-                      endYear: DateTime.now().year - 18,
-                      hintDay: 'Day',
-                      hintMonth: 'Month',
-                      hintYear: 'Year',
+                    // DropdownDatePicker(
+                    //   locale: "en",
+                    //   isFormValidator: true,
+                    //   currentSelectedDay: currentSelectedDay,
+                    //   currentSelectedMonth: currentSelectedMonth,
+                    //   selectedYear: selectedYear,
+                    //   onChangedDay: (v) {
+                    //     currentSelectedDay = int.parse(v!);
+                    //   },
+                    //   onChangedMonth: (v) {
+                    //     currentSelectedMonth = int.parse(v!);
+                    //   },
+                    //   onChangedYear: (v) {
+                    //     selectedYear = int.parse(v!);
+                    //   },
+                    //   inputDecoration: FormUtils.formDecoration(),
+                    //   dayFlex: 2,
+                    //   // Limit the age to folks 18 and above from the current year
+                    //   endYear: DateTime.now().year - 18,
+                    //   hintDay: 'Day',
+                    //   hintMonth: 'Month',
+                    //   hintYear: 'Year',
+                    // ),
+                  ],
+                ),
+                FormUtils.formSpacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(
+                      spacing: 5,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        subtext(
+                          "Date of birth*",
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Icon(
+                            MdiIcons.informationSlabCircle,
+                            size: 20,
+                            color: BORDER,
+                          ),
+                        )
+                      ],
+                    ),
+                    ySpace(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FormBuilderDropdown<String>(
+                            items: Constants.monthList
+                                .map(
+                                  (month) => DropdownMenuItem<String>(
+                                    value: month,
+                                    child: subtext(
+                                      month,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            name: "month",
+                            initialValue: _initialMonth,
+                            decoration: FormUtils.formDecoration(
+                              verticalPadding: 12,
+                              hintText: 'Month',
+                            ),
+                            style: FORM_STYLE,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedMonth = value as String;
+                                _getDays();
+                              });
+                            },
+                            validator: FormBuilderValidators.required(context,
+                                errorText: Constants.monthError),
+                          ),
+                        ),
+                        xSpace(width: 12),
+                        Expanded(
+                          child: FormBuilderDropdown<int>(
+                            key: _dropDownKey,
+                            items: _days
+                                .map(
+                                  (day) => DropdownMenuItem<int>(
+                                    value: day,
+                                    child: subtext(
+                                      day.toString(),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            name: "day",
+                            initialValue: _initialDay,
+                            decoration: FormUtils.formDecoration(
+                              verticalPadding: 12,
+                              hintText: 'Day',
+                            ),
+                            style: FORM_STYLE,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedDay = value as int;
+                              });
+                            },
+                            validator: FormBuilderValidators.required(
+                              context,
+                              errorText: Constants.dayError,
+                            ),
+                          ),
+                        ),
+                        xSpace(width: 12),
+                        Expanded(
+                          child: FormBuilderDropdown<String>(
+                            items: Constants.yearList
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: subtext(e, fontSize: 13),
+                                  ),
+                                )
+                                .toList(),
+                            name: "year",
+                            decoration: FormUtils.formDecoration(
+                              verticalPadding: 12,
+                              hintText: "Year",
+                            ),
+                            style: FORM_STYLE,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedYear = int.parse("$value");
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -422,21 +545,71 @@ class _GeneralSignupScreenState extends State<GeneralSignupScreen> {
     );
   }
 
+  _getDays() {
+    int length = 1;
+    _dropDownKey.currentState!.reset();
+    _days = [];
+    setState(() {});
+    switch (selectedMonth) {
+      case 'February':
+        length = 29;
+        setState(() {});
+        break;
+      case 'April':
+      case 'June':
+      case 'September':
+      case 'November':
+        length = 30;
+        setState(() {});
+        break;
+      case 'January':
+      case 'March':
+      case 'May':
+      case 'July':
+      case 'August':
+      case 'October':
+      case 'December':
+        length = 31;
+        setState(() {});
+        break;
+      default:
+        length = 0;
+        setState(() {});
+    }
+
+    for (var i = 1; i <= length; i++) {
+      setState(() {
+        _days.add(i);
+      });
+    }
+
+    if (!isObjectEmpty(_initialDay)) {
+      if (_days.contains(_initialDay as int)) return;
+      setState(() {
+        _days.add(_initialDay as int);
+      });
+    }
+  }
+
   void _submit() async {
     closeKeyPad(context);
-    // For developement purpose...
-    // navigateTo(context, TalentStepperWrapperScreen.routeName);
+    // since index is from 0
     if (formKey.currentState!.saveAndValidate()) {
       if (!tosStatus) {
         showError(message: "Please check the Terms of Service box to continue");
         return;
       }
       bool done = await authCtrl.sendOTP(emailCtrl.text);
+      // since index is from 0
+      var mIndex =
+          Constants.monthList.indexWhere((m) => m == selectedMonth) + 1;
+      var month = mIndex.toString().length < 2 ? "0$mIndex" : mIndex;
       RegisterModel data = RegisterModel(
         name: fullnameCtrl.text,
         username: usernameCtrl.text,
         email: emailCtrl.text,
-        dob: registerDate("$selectedYear-$selectedMonth-$selectedDay"),
+        // dob: registerDate("$selectedYear-$currentSelectedMonth-$currentSelectedDay"),
+        dob: registerDate("$selectedYear-$month-$selectedDay"),
         password: pwdCtrl.text,
       );
       if (done && mounted) {
