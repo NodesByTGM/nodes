@@ -23,7 +23,7 @@ class DashboardController extends BaseController {
 
   DashboardController(this._dashboardService);
 
-  // Variables
+  // <================= Variables Starts here =================>
   // Jobs
   List<StandardTalentJobModel> _savedJobsList = [];
   List<StandardTalentJobModel> _jobsList = [];
@@ -40,9 +40,8 @@ class DashboardController extends BaseController {
   List<ProjectModel> _myProjectList = [];
   List<TrendingModel> _trendingList = [];
   List<MovieShowModel> _movieShowList = [];
-  
 
-  // Getters
+  // <================= Getters Starts here =====================>
   List<StandardTalentJobModel> get savedJobsList => _savedJobsList;
   List<StandardTalentJobModel> get jobsList => _jobsList;
   BusinessJobModel get currentlyViewedBusinessJob =>
@@ -57,8 +56,8 @@ class DashboardController extends BaseController {
   List<ProjectModel> get myProjectList => _myProjectList;
   List<TrendingModel> get trendingList => _trendingList;
   List<MovieShowModel> get movieShowList => _movieShowList;
-  
-  // Setters
+
+  // <================= Setters Starts here =================>
 
   // setCurrentlyViewedSpaceVal(dynamic val) {
   //   _currentlyViewedSpace = val;
@@ -267,7 +266,20 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
-  // Functions
+  resetDashCtrl() {
+_savedJobsList = [];
+_appliedJobsList = [];
+_createdJobList = [];
+_currentlyViewedBusinessJob = const BusinessJobModel();
+_currentlyViewedBusinessEvent = const EventModel();
+_savedEventsList = [];
+_myCreatedEventsList = [];
+_projectList = [];
+_myProjectList = [];
+    notifyListeners();
+  }
+
+  // <================= Functions Starts here =================>
 
   // Projects
 
@@ -880,7 +892,6 @@ class DashboardController extends BaseController {
     }
   }
 
-
 // Handling Paginated Data...
 // Jobs
   List<BusinessJobModel> _resolvePaginatedBusinessJobs(ApiResponse response) {
@@ -952,5 +963,4 @@ class DashboardController extends BaseController {
     }
     return [];
   }
-
 }

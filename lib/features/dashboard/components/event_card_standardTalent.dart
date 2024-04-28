@@ -17,7 +17,8 @@ class StandardTalentEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTalent = context.read<AuthController>().currentUser.type == 1;
+    bool canSave = context.read<AuthController>().currentUser.type == 1 ||
+        context.read<AuthController>().currentUser.type == 2;
     return Stack(
       children: [
         Positioned(
@@ -60,7 +61,7 @@ class StandardTalentEventCard extends StatelessWidget {
                         : GestureDetector(
                             onTap: () {
                               // check if user is standard and prompt them to upgrade
-                              if (isTalent) {
+                              if (canSave) {
                                 saveUnsaveEvent(context, event);
                               } else {
                                 showText(

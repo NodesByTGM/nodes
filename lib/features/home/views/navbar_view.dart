@@ -207,6 +207,6 @@ void logout(BuildContext context) async {
   // bool done = await context.read<AuthController>().serverLogout(context);
   // if (done) {
   // }
-  context.read<AuthController>().logout();
+  context.read<AuthController>().logout(context);
   navigateTo(context, WelcomeBackScreen.routeName);
 }

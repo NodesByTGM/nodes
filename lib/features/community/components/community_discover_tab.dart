@@ -152,7 +152,12 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
                     isEmpty: hasData,
                   );
                 } else {
-                  List<GeneralUserModel> genUsers = comCtrl.generalUsers;
+                  // List<GeneralUserModel> genUsers = comCtrl.generalUsers;
+                  // Filtering the "People" and "Brand"
+                  List<GeneralUserModel> genUsers = comCtrl.generalUsers
+                      .where((u) => u.type == (isBrand ? 2 : 1))
+                      .toList();
+                      // Use the genUsers, to now filter for the advance filtering mechanism...
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

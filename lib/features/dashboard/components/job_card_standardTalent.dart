@@ -19,7 +19,8 @@ class StandardTalentJobCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTalent = context.read<AuthController>().currentUser.type == 1;
+    bool canApply = context.read<AuthController>().currentUser.type == 1 ||
+        context.read<AuthController>().currentUser.type == 2;
     return Container(
       margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
@@ -53,7 +54,7 @@ class StandardTalentJobCard extends StatelessWidget {
                         : GestureDetector(
                             onTap: () {
                               bool currentJob = job.id == id;
-                              if (isTalent && currentJob) {
+                              if (canApply && currentJob) {
                                 saveUnsaveJob(context, job);
                               } else {
                                 showText(
@@ -61,7 +62,7 @@ class StandardTalentJobCard extends StatelessWidget {
                                       "Oops!! You have to upgrade to PRO to have this feature.",
                                 );
                               }
-                              // if (isTalent) {
+                              // if (canApply) {
                               //   saveUnsaveJob(context, job);
                               // } else {
                               //   showText(

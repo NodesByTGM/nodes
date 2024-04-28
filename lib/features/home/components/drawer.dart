@@ -397,7 +397,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     isActive: false,
                     onTap: () {
                       safeNavigate(() => logout(context));
-                      context.read<AuthController>().logout();
                     }
                     // onTap: () async {
                     //   closeDrawer();

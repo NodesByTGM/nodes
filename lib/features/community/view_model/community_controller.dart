@@ -20,7 +20,7 @@ class ComController extends BaseController {
 
   ComController(this._comService);
 
-  // Variables
+  // <================= Variables Starts here =================>
   // This should somehow have the description to denote if it was created by the user or not in the model.
   dynamic _currentlyViewedSpace = "";
   CurrentlyViewedUser _currentlyViewedUser = const CurrentlyViewedUser();
@@ -30,14 +30,15 @@ class ComController extends BaseController {
   //General Users
   List<GeneralUserModel> _generalUsers = [];
 
-  // Getters
+  // <================= Getters Starts here =====================>
   get currentlyViewedSpace => _currentlyViewedSpace;
   CurrentlyViewedUser get currentlyViewedUser => _currentlyViewedUser;
   bool get dummyIsCreatedSpace => _dummyIsCreatedSpace;
   List<PostModel> get postList => _postList;
   List<CreatePostModel> get draftPostList => _draftPostList;
   List<GeneralUserModel> get generalUsers => _generalUsers;
-  // Setters
+
+  // <================= Setters Starts here =================>
 
   setCurrentlyViewedSpaceVal(dynamic val) {
     _currentlyViewedSpace = val;
@@ -86,7 +87,12 @@ class ComController extends BaseController {
     notifyListeners();
   }
 
-  // Functions
+  resetComCtrl() {
+    _currentlyViewedUser = const CurrentlyViewedUser();
+    notifyListeners();
+  }
+
+  // <================= Functions Starts here =================>
   Future<bool> createPost(BuildContext ctx, CreatePostModel details) async {
     setCreatingPost(true);
     try {

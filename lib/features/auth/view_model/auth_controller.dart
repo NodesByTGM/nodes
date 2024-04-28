@@ -24,6 +24,8 @@ import 'package:nodes/features/auth/models/subscription_upgrade_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
+import 'package:nodes/features/community/view_model/community_controller.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/subscriptions/models/subscription_history_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -90,6 +92,17 @@ class AuthController extends BaseController {
   resetBTStepper() {
     _tStepperVal = 1;
     _bStepperVal = 1;
+    notifyListeners();
+  }
+
+// This will be called when user decides to LOGOUT
+  resetAuthCtrl() {
+    _currentUser = const UserModel();
+    _registerData = const RegisterModel();
+    _individualTalentData = const IndividualTalentOnboardingModel();
+    _subUpgrade = const SubscriptionUpgrade();
+    _subscriptionHistory = [];
+    resetBTStepper();
     notifyListeners();
   }
 
@@ -774,11 +787,14 @@ class AuthController extends BaseController {
   }
 
   ///
-  logout() {
+  logout(BuildContext context) {
     setBusy(false);
     _storageService.deleteSecure(KeyString.currentSession);
     _storageService.deleteSecure(KeyString.token);
-    _currentUser = const UserModel();
+    // _currentUser = const UserModel();
+    resetAuthCtrl();
+    context.read<ComController>().resetComCtrl();
+    context.read<DashboardController>().resetDashCtrl();
     setCurrentScreen(WelcomeBackScreen.routeName);
     notifyListeners();
   }

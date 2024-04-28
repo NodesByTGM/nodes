@@ -404,6 +404,7 @@ class _CommunityTabState extends State<CommunityTab> {
               socialBtn(
                 title: '${post.likes?.length}',
                 icon: Icons.thumb_up_alt_outlined,
+                isActive: post.liked,
                 onTap: () {
                   // check if your ID is here, then it means we are unliking... else, we like...
                   likeUnlikeFn(
@@ -432,6 +433,7 @@ class _CommunityTabState extends State<CommunityTab> {
     required String title,
     required IconData icon,
     required GestureTapCallback onTap,
+    bool isActive = false,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -450,13 +452,13 @@ class _CommunityTabState extends State<CommunityTab> {
           children: [
             Icon(
               icon,
-              color: GRAY,
+              color: isActive ? PRIMARY : GRAY,
             ),
             labelText(
               title,
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: GRAY,
+              color: isActive ? PRIMARY : GRAY,
             ),
           ],
         ),
