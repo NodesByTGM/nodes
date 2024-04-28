@@ -220,6 +220,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
     // navigateTo(context, NavbarView.routeName); // Uncomment for testings only
     if (formKey.currentState!.saveAndValidate()) {
       UserModel? user = await authCtrl.login(
+        context,
         {
           // "email": "napor44764@abnovel.com", lopodaf334@kravify.com, wocog63907@idsho.com  // currently a business account
           // "password": "Test@1234",

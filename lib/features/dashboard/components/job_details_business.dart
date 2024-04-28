@@ -108,7 +108,7 @@ class _BusinessJobDetailsState extends State<BusinessJobDetails> {
              * 
             //  Work on this George
              */
-                title: Constants.jobType[job.jobType ?? 1],
+                title: Constants.jobType[job.jobType],
               ),
             ],
           ),

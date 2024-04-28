@@ -20,7 +20,7 @@ class NetworkException implements Exception {
         context?.read<AuthController>().refreshToken();
         ApiResponse response = ApiResponse.fromJson(e.response?.data)
             // .copyWith(message: "Retrying Request...");
-            .copyWith(message: "${e.response?.statusMessage}");
+            .copyWith(message: "${e.response?.data['message']}");
         return response;
       }
       if (e.response?.statusCode == 422) {

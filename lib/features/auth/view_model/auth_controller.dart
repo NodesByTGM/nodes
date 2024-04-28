@@ -194,10 +194,10 @@ class AuthController extends BaseController {
     locator.get<PushNotification>().subscribeTopic(topic, unsubscribeFromTopic);
   }
 
-  Future<UserModel?> login(_details) async {
+  Future<UserModel?> login(BuildContext ctx, details) async {
     setBusy(true);
     try {
-      ApiResponse response = await _authService.login(_details);
+      ApiResponse response = await _authService.login(ctx, details);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return null;

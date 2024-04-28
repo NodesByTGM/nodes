@@ -20,13 +20,13 @@ class AuthService {
   final localStorageService = locator.get<LocalStorageService>();
 
   // Functions
-  Future<ApiResponse> login(payload) async {
+  Future<ApiResponse> login(BuildContext ctx, payload) async {
     try {
       ApiResponse res = await authRepository.login(payload);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @login User ::===> ${e.response?.data}");
-      return NetworkException.errorHandler(e);
+      return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
