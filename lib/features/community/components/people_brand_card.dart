@@ -4,7 +4,7 @@ import 'package:nodes/features/messages/screen/single_message_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 
-class PeopleBrandCard extends StatelessWidget {
+class PeopleBrandCard extends StatefulWidget {
   const PeopleBrandCard({
     super.key,
     this.isConnected = false,
@@ -15,11 +15,18 @@ class PeopleBrandCard extends StatelessWidget {
   final GeneralUserModel genUser;
 
   @override
+  State<PeopleBrandCard> createState() => _PeopleBrandCardState();
+}
+
+class _PeopleBrandCardState extends State<PeopleBrandCard> {
+  bool isConnecting = false;
+
+  @override
   Widget build(BuildContext context) {
     List<String> usersType = ["Standard", "Pro", "Business"];
 
-    bool hasHeadlineOrBio =
-        !isObjectEmpty(genUser.headline) || !isObjectEmpty(genUser.bio);
+    bool hasHeadlineOrBio = !isObjectEmpty(widget.genUser.headline) ||
+        !isObjectEmpty(widget.genUser.bio);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -35,7 +42,7 @@ class PeopleBrandCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               cachedNetworkImage(
-                imgUrl: "${genUser.avatar?.url}",
+                imgUrl: "${widget.genUser.avatar?.url}",
                 size: 45,
               ),
               xSpace(width: 10),
@@ -44,12 +51,12 @@ class PeopleBrandCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     labelText(
-                      capitalize("${genUser.name}"),
+                      capitalize("${widget.genUser.name}"),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                     subtext(
-                      "${usersType[genUser.type]} User",
+                      "${usersType[widget.genUser.type]} User",
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: GRAY,
@@ -58,23 +65,30 @@ class PeopleBrandCard extends StatelessWidget {
                 ),
               ),
               xSpace(width: 10),
-              context.watch<ComController>().isRequestingConnection
+              // context.watch<ComController>().isRequestingConnection
+              isConnecting
                   ? const Loader()
                   : GestureDetector(
-                      onTap: () {
-                        if (isConnected) {
+                      onTap: () async {
+                        if (widget.isConnected) {
                           // probably fetch the user something before sending them here...
                           navigateTo(context, SingleMessageDetails.routeName);
                         } else {
                           // Function to Connect with user/brand
-                          context.read<ComController>().requestConnection(
+                          setState(() {
+                            isConnecting = true;
+                          });
+                          await context.read<ComController>().requestConnection(
                                 context,
-                                "${genUser.id}",
+                                "${widget.genUser.id}",
                               );
+                          setState(() {
+                            isConnecting = false;
+                          });
                         }
                       },
                       child: labelText(
-                        isConnected ? "Message" : "Connect",
+                        widget.isConnected ? "Message" : "Connect",
                         color: PRIMARY,
                       ),
                     ),
@@ -94,12 +108,12 @@ class PeopleBrandCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   labelText(
-                    "${genUser.headline}",
+                    "${widget.genUser.headline}",
                     fontSize: 12,
                   ),
                   ySpace(height: 10),
                   subtext(
-                    "${genUser.bio}",
+                    "${widget.genUser.bio}",
                     height: 1.6,
                   ),
                 ],

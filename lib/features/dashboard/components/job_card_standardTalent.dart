@@ -7,7 +7,7 @@ import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 
-class StandardTalentJobCard extends StatelessWidget {
+class StandardTalentJobCard extends StatefulWidget {
   const StandardTalentJobCard({
     super.key,
     required this.job,
@@ -18,9 +18,17 @@ class StandardTalentJobCard extends StatelessWidget {
   final String id;
 
   @override
+  State<StandardTalentJobCard> createState() => _StandardTalentJobCardState();
+}
+
+class _StandardTalentJobCardState extends State<StandardTalentJobCard> {
+  ValueNotifier<bool> isSavingJob = ValueNotifier(false);
+
+  @override
   Widget build(BuildContext context) {
     bool canApply = context.read<AuthController>().currentUser.type == 1 ||
         context.read<AuthController>().currentUser.type == 2;
+
     return Container(
       margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
@@ -43,45 +51,44 @@ class StandardTalentJobCard extends StatelessWidget {
                   ImageUtils.jobDpIcon,
                   height: 72,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    context.watch<DashboardController>().isSavingUnsavedJobs
-                        ? const Padding(
-                            padding: EdgeInsets.only(top: 10, right: 15),
-                            child: SaveIconLoader(),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              bool currentJob = job.id == id;
-                              if (canApply && currentJob) {
-                                saveUnsaveJob(context, job);
-                              } else {
-                                showText(
-                                  message:
-                                      "Oops!! You have to upgrade to PRO to have this feature.",
-                                );
-                              }
-                              // if (canApply) {
-                              //   saveUnsaveJob(context, job);
-                              // } else {
-                              //   showText(
-                              //     message:
-                              //         "Oops!! You have to upgrade to PRO to have this feature.",
-                              //   );
-                              // }
-                            },
-                            child: SvgPicture.asset(job.saved
-                                ? ImageUtils.saveJobFilledIcon
-                                : ImageUtils.saveJobIcon),
-                          ),
-                  ],
+                ValueListenableBuilder(
+                  valueListenable: isSavingJob,
+                  builder: (context, bool savingStatus, _) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // context.watch<DashboardController>().isSavingUnsavedJobs
+                        savingStatus
+                            ? const Padding(
+                                padding: EdgeInsets.only(top: 10, right: 15),
+                                child: SaveIconLoader(),
+                              )
+                            : GestureDetector(
+                                onTap: () async {
+                                  if (canApply) {
+                                    isSavingJob.value = true;
+                                    await saveUnsaveJob(context, widget.job);
+                                    isSavingJob.value = false;
+                                  } else {
+                                    showText(
+                                      message:
+                                          "Oops!! You have to upgrade to PRO to have this feature.",
+                                    );
+                                  }
+                                },
+                                child: SvgPicture.asset(widget.job.saved
+                                    ? ImageUtils.saveJobFilledIcon
+                                    : ImageUtils.saveJobIcon),
+                              ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),
             ySpace(height: 16),
             labelText(
-              capitalize("${job.name}"),
+              capitalize("${widget.job.name}"),
               fontSize: 14,
               fontWeight: FontWeight.w500,
               maxLine: 1,
@@ -89,7 +96,7 @@ class StandardTalentJobCard extends StatelessWidget {
             ySpace(height: 16),
             subtext(
               // "${job.business?.name}",
-              capitalize("${job.business?.name}"),
+              capitalize("${widget.job.business?.name}"),
               fontSize: 14,
             ),
             ySpace(height: 16),
@@ -100,7 +107,7 @@ class StandardTalentJobCard extends StatelessWidget {
                 const Icon(Icons.credit_card_sharp),
                 subtext(
                   // "\$10-1k/hr",
-                  "${job.payRate}",
+                  "${widget.job.payRate}",
                   fontSize: 14,
                 ),
               ],
@@ -116,7 +123,7 @@ class StandardTalentJobCard extends StatelessWidget {
                     const Icon(Icons.calendar_today_outlined),
                     subtext(
                       // "\$20 hrs/wk",
-                      "${job.workRate}",
+                      "${widget.job.workRate}",
                       fontSize: 14,
                     ),
                   ],
@@ -141,7 +148,7 @@ class StandardTalentJobCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => showJobDetailsBottomSheet(context, job),
+                  onTap: () => showJobDetailsBottomSheet(context, widget.job),
                   child: labelText(
                     "View job",
                     fontSize: 14,
@@ -158,13 +165,9 @@ class StandardTalentJobCard extends StatelessWidget {
   }
 
   saveUnsaveJob(BuildContext context, StandardTalentJobModel job) async {
-    // setSt4
     job.saved
         ? await context.read<DashboardController>().unSaveJob(context, job.id)
         : await context.read<DashboardController>().saveJob(context, job.id);
-    // setState(() {
-    //   isSavingUnsaving = false;
-    // });
   }
 
   showJobDetailsBottomSheet(BuildContext context, StandardTalentJobModel job) {
@@ -198,5 +201,11 @@ class StandardTalentJobCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    isSavingJob.dispose();
+    super.dispose();
   }
 }

@@ -7,13 +7,23 @@ import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 
-class StandardTalentEventCard extends StatelessWidget {
+class StandardTalentEventCard extends StatefulWidget {
   const StandardTalentEventCard({
     super.key,
     required this.event,
   });
 
   final StandardTalentEventModel event;
+
+  @override
+  State<StandardTalentEventCard> createState() =>
+      _StandardTalentEventCardState();
+}
+
+class _StandardTalentEventCardState extends State<StandardTalentEventCard> {
+  ValueNotifier<bool> isSavingEvent = ValueNotifier(false);
+
+  bool isSaving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class StandardTalentEventCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               // Add an overlay on this image please...
               child: cachedNetworkImage(
-                imgUrl: "${event.thumbnail?.url}",
+                imgUrl: "${widget.event.thumbnail?.url}",
                 size: screenWidth(context),
               ),
             ),
@@ -51,7 +61,8 @@ class StandardTalentEventCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    context.watch<DashboardController>().isSavingUnsavedEvent
+                    // context.watch<DashboardController>().isSavingUnsavedEvent
+                    isSaving
                         ? const Padding(
                             padding: EdgeInsets.only(top: 10, right: 15),
                             child: SaveIconLoader(
@@ -59,10 +70,16 @@ class StandardTalentEventCard extends StatelessWidget {
                             ),
                           )
                         : GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               // check if user is standard and prompt them to upgrade
                               if (canSave) {
-                                saveUnsaveEvent(context, event);
+                                setState(() {
+                                  isSaving = true;
+                                });
+                                await saveUnsaveEvent(context, widget.event);
+                                setState(() {
+                                  isSaving = false;
+                                });
                               } else {
                                 showText(
                                   message:
@@ -75,7 +92,7 @@ class StandardTalentEventCard extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 20),
                                 child: SvgPicture.asset(
-                                  event.saved
+                                  widget.event.saved
                                       ? ImageUtils.saveJobFilledIcon
                                       : ImageUtils.saveJobIcon,
                                   color: WHITE,
@@ -92,7 +109,7 @@ class StandardTalentEventCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     labelText(
-                      "${event.name}",
+                      "${widget.event.name}",
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: WHITE,
@@ -100,7 +117,7 @@ class StandardTalentEventCard extends StatelessWidget {
                     ),
                     ySpace(height: 8),
                     subtext(
-                      "${shortDate(event.dateTime ?? DateTime.now())} by ${fromDatTimeToTimeOfDay(event.dateTime ?? DateTime.now())}",
+                      "${shortDate(widget.event.dateTime ?? DateTime.now())} by ${fromDatTimeToTimeOfDay(widget.event.dateTime ?? DateTime.now())}",
                       color: WHITE,
                       fontSize: 14,
                     ),
@@ -115,7 +132,7 @@ class StandardTalentEventCard extends StatelessWidget {
                         ),
                         subtext(
                           // "Lagos | Nigeria",
-                          "${event.location}",
+                          "${widget.event.location}",
                           color: WHITE.withOpacity(0.9),
                           fontSize: 14,
                         ),
@@ -128,7 +145,7 @@ class StandardTalentEventCard extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
-                      showEventDetailsBottomSheet(context, event);
+                      showEventDetailsBottomSheet(context, widget.event);
                     },
                     child: labelText(
                       "View details",
@@ -187,4 +204,5 @@ class StandardTalentEventCard extends StatelessWidget {
       },
     );
   }
+
 }
