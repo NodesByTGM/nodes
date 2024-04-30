@@ -55,7 +55,6 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
     safeNavigate(() => dashCtrl.fetchAllMyCreatedJobs(context));
     // Should be fetching all my created events
     safeNavigate(() => dashCtrl.fetchAllAllMyCreatedEvents(context));
-    safeNavigate(() => dashCtrl.fetchTrending(context));
   }
 
   @override

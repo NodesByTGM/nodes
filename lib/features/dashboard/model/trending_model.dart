@@ -5,7 +5,7 @@ import 'package:nodes/core/models/base_data.dart';
 part "trending_model.g.dart";
 
 @JsonSerializable(explicitToJson: true)
-class TrendingModel extends BaseData {
+class TrendingModelNews extends BaseData {
   final TrendingSourceModel? source;
   final String? author;
   final String? title;
@@ -15,7 +15,7 @@ class TrendingModel extends BaseData {
   final DateTime? publishedAt;
   final String? content;
 
-  const TrendingModel({
+  const TrendingModelNews({
     this.source,
     this.author,
     this.title,
@@ -26,7 +26,7 @@ class TrendingModel extends BaseData {
     this.content,
   });
 
-  TrendingModel copyWith({
+  TrendingModelNews copyWith({
     TrendingSourceModel? source,
     String? author,
     String? title,
@@ -36,7 +36,7 @@ class TrendingModel extends BaseData {
     DateTime? publishedAt,
     String? content,
   }) =>
-      TrendingModel(
+      TrendingModelNews(
         source: source ?? this.source,
         author: author ?? this.author,
         title: title ?? this.title,
@@ -47,18 +47,17 @@ class TrendingModel extends BaseData {
         content: content ?? this.content,
       );
 
-  factory TrendingModel.fromJson(Map<String, dynamic> json) =>
-      _$TrendingModelFromJson(json);
+  factory TrendingModelNews.fromJson(Map<String, dynamic> json) =>
+      _$TrendingModelNewsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TrendingModelToJson(this);
-
+  Map<String, dynamic> toJson() => _$TrendingModelNewsToJson(this);
 
   @override
-  List<TrendingModel> fromList(List<dynamic> items) {
+  List<TrendingModelNews> fromList(List<dynamic> items) {
     if (items.isEmpty) {
       return [];
     } else {
-      return items.map((e) => TrendingModel.fromJson(e)).toList();
+      return items.map((e) => TrendingModelNews.fromJson(e)).toList();
     }
   }
 

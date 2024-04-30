@@ -700,7 +700,7 @@ class _DashboardRepository implements DashboardRepository {
   }
 
   @override
-  Future<ApiResponse> fetchTrending() async {
+  Future<ApiResponse> fetchTrendingNews() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

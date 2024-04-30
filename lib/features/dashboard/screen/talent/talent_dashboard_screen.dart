@@ -58,8 +58,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   fetchJobsEventsTrendingPosts() {
     fetchAllJobs();
     fetchAllAppliedJobs();
-    fetchAllEvents();
-    fetchAllTrending();
+    fetchAllEvents(); 
     fetchAllPosts();
   }
 
@@ -74,10 +73,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   fetchAllEvents() {
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }
-
-  fetchAllTrending() {
-    safeNavigate(() => dashCtrl.fetchTrending(context));
-  }
+ 
 
   fetchAllPosts() {
     safeNavigate(() => context.read<ComController>().fetchAllPosts(context));

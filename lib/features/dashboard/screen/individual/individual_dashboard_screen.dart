@@ -54,21 +54,17 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
 
   fetchJobsEventsTrendingPosts() {
     fetchTrending();
-    fetchAllJobs();
-    fetchAllEvents();
+    fetchAllJobs(); 
     fetchAllPosts();
   }
 
   fetchAllJobs() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
   }
-
-  fetchAllEvents() {
-    safeNavigate(() => dashCtrl.fetchAllEvents(context));
-  }
+ 
 
   fetchTrending() {
-    safeNavigate(() => dashCtrl.fetchTrending(context));
+    safeNavigate(() => dashCtrl.fetchTrendingNews(context));
   }
 
   fetchAllPosts() {

@@ -54,26 +54,26 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
   }
 
   fetchJobsEventsTrendingPosts() {
-    fetchTrending();
     fetchAllJobs();
-    fetchAllEvents();
     fetchAllPosts();
+    fetchTrendingNews();
+    fetchMoviesShows();
   }
 
   fetchAllJobs() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
   }
 
-  fetchAllEvents() {
-    safeNavigate(() => dashCtrl.fetchAllEvents(context));
-  }
-
-  fetchTrending() {
-    safeNavigate(() => dashCtrl.fetchTrending(context));
+  fetchTrendingNews() {
+    safeNavigate(() => dashCtrl.fetchTrendingNews(context));
   }
 
   fetchAllPosts() {
     safeNavigate(() => context.read<ComController>().fetchAllPosts(context));
+  }
+
+  fetchMoviesShows() {
+    safeNavigate(() => dashCtrl.fetchMovieShows(context));
   }
 
   @override
@@ -99,7 +99,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           customDivider(height: 40),
           ySpace(height: 20),
           labelText(
-            "Trending Events",
+            "Trending News",
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

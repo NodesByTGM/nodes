@@ -527,7 +527,6 @@ class _CommunityTabState extends State<CommunityTab> {
     required bool likedPost,
     required PostModel post,
   }) async {
-    print("George this post is liked: $likedPost");
     likedPost
         ? await comCtrl.unlikeSinglePost(context, post.copyWith(liked: false))
         : await comCtrl.likeSinglePost(context, post.copyWith(liked: true));

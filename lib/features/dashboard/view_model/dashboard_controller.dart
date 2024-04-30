@@ -38,7 +38,7 @@ class DashboardController extends BaseController {
   // Project
   List<ProjectModel> _projectList = [];
   List<ProjectModel> _myProjectList = [];
-  List<TrendingModel> _trendingList = [];
+  List<TrendingModelNews> _trendingNewsList = [];
   List<MovieShowModel> _movieShowList = [];
 
   // <================= Getters Starts here =====================>
@@ -54,7 +54,7 @@ class DashboardController extends BaseController {
   List<EventModel> get myCreatedEventsList => _myCreatedEventsList;
   List<ProjectModel> get projectList => _projectList;
   List<ProjectModel> get myProjectList => _myProjectList;
-  List<TrendingModel> get trendingList => _trendingList;
+  List<TrendingModelNews> get trendingNewsList => _trendingNewsList;
   List<MovieShowModel> get movieShowList => _movieShowList;
 
   // <================= Setters Starts here =================>
@@ -254,8 +254,8 @@ class DashboardController extends BaseController {
   }
 
   // Trending
-  setTrendingList(List<TrendingModel> trending) {
-    _trendingList = trending;
+  setTrendingList(List<TrendingModelNews> trending) {
+    _trendingNewsList = trending;
     notifyListeners();
   }
 
@@ -267,15 +267,15 @@ class DashboardController extends BaseController {
   }
 
   resetDashCtrl() {
-_savedJobsList = [];
-_appliedJobsList = [];
-_createdJobList = [];
-_currentlyViewedBusinessJob = const BusinessJobModel();
-_currentlyViewedBusinessEvent = const EventModel();
-_savedEventsList = [];
-_myCreatedEventsList = [];
-_projectList = [];
-_myProjectList = [];
+    _savedJobsList = [];
+    _appliedJobsList = [];
+    _createdJobList = [];
+    _currentlyViewedBusinessJob = const BusinessJobModel();
+    _currentlyViewedBusinessEvent = const EventModel();
+    _savedEventsList = [];
+    _myCreatedEventsList = [];
+    _projectList = [];
+    _myProjectList = [];
     notifyListeners();
   }
 
@@ -852,17 +852,17 @@ _myProjectList = [];
     }
   }
 
-// Trending
-  Future<bool> fetchTrending(BuildContext ctx) async {
+// Trending News
+  Future<bool> fetchTrendingNews(BuildContext ctx) async {
     setFetchingTrending(true);
     try {
-      ApiResponse response = await _dashboardService.fetchTrending(ctx);
+      ApiResponse response = await _dashboardService.fetchTrendingNews(ctx);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
       setTrendingList(
-        const TrendingModel().fromList(response.result as List<dynamic>),
+        const TrendingModelNews().fromList(response.result as List<dynamic>),
       );
       return true;
     } on NetworkException catch (e) {

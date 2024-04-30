@@ -33,7 +33,7 @@ class DashboardApis {
   static const myCreatedJobs = "$jobs/mine";
 
   // Trending
-  static const trending = "$baseApi/trending";
+  static const trendingNews = "$baseApi/trending";
 
   // Trending
   static const movieShows = "$baseApi/movies-and-shows";
@@ -169,8 +169,8 @@ abstract class DashboardRepository {
     @Query('pageSize') int pageSize,
   );
 
-  @GET(DashboardApis.trending)
-  Future<ApiResponse> fetchTrending();
+  @GET(DashboardApis.trendingNews)
+  Future<ApiResponse> fetchTrendingNews();
 
   @GET(DashboardApis.movieShows)
   Future<ApiResponse> fetchMovieShows();

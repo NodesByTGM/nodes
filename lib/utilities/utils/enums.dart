@@ -72,3 +72,7 @@ enum SubscriptionPlanKeys {
   business,
   business_annual,
 }
+
+enum NotificationType {
+  All, Mentioned, Unread,
+}

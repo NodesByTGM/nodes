@@ -1,4 +1,5 @@
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/messages/screen/single_message_details.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -66,54 +67,73 @@ class _MessageScreenState extends State<MessageScreen> {
             onChanged: (val) {},
           ),
           Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 20),
-              itemCount: 20,
-              itemBuilder: (c, i) {
-                return ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  visualDensity: VisualDensity.compact,
-                  splashColor: TRANSPARENT,
-                  leading: CircleAvatar(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: cachedNetworkImage(imgUrl: ""),
-                    ),
-                  ),
-                  title: labelText(
-                    "Cameron Williamson",
-                  ),
-                  subtitle: subtext(
-                    "Not too bad, just trying to catch up on some work. How about you?",
-                    maxLines: 1,
-                  ),
-                  trailing: Column(
+            child: Consumer<AuthController>(builder: (context, aCtrl, _) {
+              if (1 < 2) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      subtext("5s"),
-                      Container(
-                        height: 25,
-                        width: 25,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: SECONDARY,
-                        ),
-                        child: Center(
-                          child: subtext(
-                            "1",
-                            color: WHITE,
-                          ),
-                        ),
+                      labelText("Coming Soon !!!"),
+                      ySpace(height: 10),
+                      subtext(
+                        "We're working on making this awesome for you,\nbut it's not quite ready yet.",
+                        textAlign: TextAlign.center,
                       ),
+                      ySpace(height: 10),
+                      SvgPicture.asset(ImageUtils.spaceEmptyIcon),
                     ],
                   ),
-                  onTap: () {
-                    navigateTo(context, SingleMessageDetails.routeName);
-                  },
                 );
-              },
-              separatorBuilder: (c, i) => customDivider(),
-            ),
+              }
+              return ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 20),
+                itemCount: 20,
+                itemBuilder: (c, i) {
+                  return ListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    visualDensity: VisualDensity.compact,
+                    splashColor: TRANSPARENT,
+                    leading: CircleAvatar(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: cachedNetworkImage(imgUrl: ""),
+                      ),
+                    ),
+                    title: labelText(
+                      "Cameron Williamson",
+                    ),
+                    subtitle: subtext(
+                      "Not too bad, just trying to catch up on some work. How about you?",
+                      maxLines: 1,
+                    ),
+                    trailing: Column(
+                      children: [
+                        subtext("5s"),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: SECONDARY,
+                          ),
+                          child: Center(
+                            child: subtext(
+                              "1",
+                              color: WHITE,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      navigateTo(context, SingleMessageDetails.routeName);
+                    },
+                  );
+                },
+                separatorBuilder: (c, i) => customDivider(),
+              );
+            }),
           ),
           Container(
             padding: const EdgeInsets.only(top: 10),
@@ -137,7 +157,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 Expanded(
                   flex: 2,
                   child: SubmitBtn(
-                    onPressed: () {},
+                    onPressed: null,
                     title: btnTxt(
                       "Mark all as read",
                       WHITE,

@@ -39,6 +39,8 @@ class _StandardTalentJobDetailsState extends State<StandardTalentJobDetails> {
     bool canApply = context.read<AuthController>().currentUser.type == 1 ||
         context.read<AuthController>().currentUser.type == 2;
 
+    print(
+        "George here is the job applied: ${job.applied} and saved: ${job.saved}");
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

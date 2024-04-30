@@ -1,5 +1,6 @@
 import 'package:nodes/features/notification/components/all_notification.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -49,9 +50,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
             const Expanded(
               child: TabBarView(
                 children: [
-                  AllNotificationList(),
-                  Icon(Icons.directions_transit, size: 350),
-                  Icon(Icons.directions_car, size: 350),
+                  AllNotificationList(type: NotificationType.All),
+                  AllNotificationList(type: NotificationType.Mentioned),
+                  AllNotificationList(type: NotificationType.Unread),
                 ],
               ),
             ),
@@ -77,7 +78,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   Expanded(
                     flex: 2,
                     child: SubmitBtn(
-                      onPressed: () {},
+                      // Se to Null if nothing happens...
+                      onPressed: null,
                       title: btnTxt(
                         "Mark all as read",
                         WHITE,
