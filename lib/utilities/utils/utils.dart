@@ -22,6 +22,7 @@ import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // const FontFamily = 'br-firma';
 const FontFamily = 'generalSans';
@@ -398,40 +399,79 @@ cachedNetworkImage({
   );
 }
 
-// ccachedNetworkImage({
-//   required String imgUrl,
-//   EdgeInsets? margin,
-//   double size = 50,
-//   double borderRadius = 5,
-// }) {
-//   final empty = Container(
-//     decoration: BoxDecoration(
-//       color: Colors.grey,
-//       // shape: shape,
-//       borderRadius: BorderRadius.circular(borderRadius),
-//       border: Border.all(width: 1, color: Colors.white),
-//     ),
-//   );
-//   return CachedNetworkImageProvider(imgUrl,
-//     // imageBuilder: (context, imageProvider) => Container(
-//     //   margin: const EdgeInsets.only(left: 0, top: 0),
-//     //   decoration: BoxDecoration(
-//     //     // shape: shape,
-//     //     borderRadius: BorderRadius.circular(borderRadius),
-//     //     border: Border.all(width: 1, color: Colors.white),
-//     //     image: DecorationImage(
-//     //       image: imageProvider,
-//     //       fit: BoxFit.cover,
-//     //     ),
-//     //   ),
-//     // ),
-//     // fit: BoxFit.cover,
-//     // width: size,
-//     // height: size,
-//     // placeholder: (context, url) => const Loader(),
-//     // errorWidget: (context, url, error) => empty,
-//   );
-// }
+Future<void> customUrlLauncher(
+  BuildContext context, {
+  required String type,
+  String? url,
+  String? subject,
+  String? body,
+  String? lat,
+  String? lng,
+}) async {
+  switch (type) {
+    case "phone":
+      Uri _uri = Uri.parse("tel:$url");
+      if (!await launchUrl(_uri)) {
+        if (!context.mounted) return;
+        _throwCustomUrlLauncherError(context, "Oops!! Can't Make a call");
+      }
+      break;
+    case "web":
+      var _url = url!.contains("https://") || url.contains("http://")
+          ? url
+          : "https://$url";
+      Uri _uri = Uri.parse(_url);
+      if (!await launchUrl(_uri)) {
+        if (!context.mounted) return;
+        _throwCustomUrlLauncherError(context, "Oops!! Can't Open this website");
+      }
+      break;
+    case "email":
+      // launchUrl(Uri.parse("mailto:$url?subject=$subject&body=$body"));
+      if (!await launchUrl(
+          Uri.parse("mailto:$url?subject=$subject&body=$body"))) {
+        if (!context.mounted) return;
+        _throwCustomUrlLauncherError(context, "Can't open the email app");
+      }
+      break;
+    case "map":
+      // final Uri googleMapUrl = Uri.parse("comgooglemaps://?center=$lat,$lng");
+      final Uri googleMapUrl = Uri.parse(
+          "https://www.google.com/maps/search/?api=1&query=$lat,$lng");
+      final Uri appleMapUrl = Uri.parse("https://maps.apple.com?q=$lat,$lng");
+
+      if (Platform.isAndroid) {
+        if (!await launchUrl(googleMapUrl)) {
+          if (!context.mounted) return;
+          _throwCustomUrlLauncherError(context, "Can't launch Google map app");
+        }
+      } else if (Platform.isIOS) {
+        if (!await launchUrl(appleMapUrl)) {
+          if (!context.mounted) return;
+          _throwCustomUrlLauncherError(context, "Can't launch Apple map app");
+        }
+      } else {
+        // Launch with google maps
+        if (!await launchUrl(googleMapUrl)) {
+          if (!context.mounted) return;
+          _throwCustomUrlLauncherError(context, "Can't launch Google map app");
+        }
+      }
+
+      break;
+    default:
+      if (!context.mounted) return;
+      _throwCustomUrlLauncherError(
+          context, "Can't find appropriate app for this action");
+  }
+}
+
+_throwCustomUrlLauncherError(BuildContext context, String err) {
+  showError(
+    message: err
+  );
+  throw err;
+}
 
 Future<File?> selectImageFromGallery() async {
   var selectedImage =

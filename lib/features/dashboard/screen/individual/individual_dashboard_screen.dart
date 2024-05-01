@@ -54,14 +54,13 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
 
   fetchJobsEventsTrendingPosts() {
     fetchTrendingNews();
-    fetchAllJobs(); 
+    fetchAllJobs();
     fetchAllPosts();
   }
 
   fetchAllJobs() {
     safeNavigate(() => dashCtrl.fetchAllJobs(context));
   }
- 
 
   fetchTrendingNews() {
     safeNavigate(() => dashCtrl.fetchTrendingNews(context));
@@ -130,10 +129,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 return SizedBox(
                   height: 320,
                   child: PageView.builder(
-                    itemCount: trendingNewsList.length > 5
-                        ? 5
-                        : trendingNewsList.length,
-                    // itemCount: trendingNewsList.length,
+                    itemCount: trendingNewsList.length > 5 ? 5 : trendingNewsList.length,
                     controller: trendingNewsCardCtrl,
                     onPageChanged: (val) {
                       currentTrendingNewsIndex = val;

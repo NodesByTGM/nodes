@@ -71,27 +71,27 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w400,
                 ),
-                ySpace(height: 40),
-                OutlineBtn(
-                  onPressed: signupWithGoogle,
-                  leftIcon: SvgPicture.asset(ImageUtils.googleIcon),
-                  borderColor: BLACK,
-                  child: btnTxt("Sign in with Google"),
-                ),
-                ySpace(height: 8),
-                if (Platform.isIOS) ...[
-                  OutlineBtn(
-                    onPressed: signupWithApple,
-                    leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
-                    borderColor: BLACK,
-                    child: btnTxt("Sign in with Apple"),
-                  ),
-                ],
-                ySpace(height: 40),
-                SvgPicture.asset(
-                  ImageUtils.orSignInWIthEmailText,
-                  width: screenWidth(context),
-                ),
+                // ySpace(height: 40),
+                // OutlineBtn(
+                //   onPressed: signupWithGoogle,
+                //   leftIcon: SvgPicture.asset(ImageUtils.googleIcon),
+                //   borderColor: BLACK,
+                //   child: btnTxt("Sign in with Google"),
+                // ),
+                // ySpace(height: 8),
+                // if (Platform.isIOS) ...[
+                //   OutlineBtn(
+                //     onPressed: signupWithApple,
+                //     leftIcon: SvgPicture.asset(ImageUtils.appleIcon),
+                //     borderColor: BLACK,
+                //     child: btnTxt("Sign in with Apple"),
+                //   ),
+                // ],
+                // ySpace(height: 40),
+                // SvgPicture.asset(
+                //   ImageUtils.orSignInWIthEmailText,
+                //   width: screenWidth(context),
+                // ),
                 ySpace(height: 40),
                 FormBuilder(
                   key: formKey,
@@ -128,7 +128,7 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                             navigateTo(context, ForgotPasswordScreen.routeName);
                           },
                           child: subtext(
-                            "Forgot?",
+                            "Forgot password?",
                             fontSize: 14,
                             color: PRIMARY,
                             fontWeight: FontWeight.w400,

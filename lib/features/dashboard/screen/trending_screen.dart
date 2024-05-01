@@ -748,29 +748,29 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
     );
   }
 
-  showRatingBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30.0),
-        ),
-      ),
-      backgroundColor: WHITE,
-      elevation: 0.0,
-      builder: (context) {
-        return BottomSheetWrapper(
-          closeOnTap: true,
-          title: labelText(
-            "Leave a rating",
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-          child: const LeaveARating(),
-        );
-      },
-    );
-  }
+  // showRatingBottomSheet() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     isDismissible: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(
+  //         top: Radius.circular(30.0),
+  //       ),
+  //     ),
+  //     backgroundColor: WHITE,
+  //     elevation: 0.0,
+  //     builder: (context) {
+  //       return BottomSheetWrapper(
+  //         closeOnTap: true,
+  //         title: labelText(
+  //           "Leave a rating",
+  //           fontSize: 18,
+  //           fontWeight: FontWeight.w500,
+  //         ),
+  //         child: const LeaveARating(),
+  //       );
+  //     },
+  //   );
+  // }
 }

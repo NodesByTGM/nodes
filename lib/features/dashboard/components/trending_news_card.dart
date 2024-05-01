@@ -130,8 +130,9 @@ class _TrendingNewsCardState extends State<TrendingNewsCard> {
             return BottomSheetWrapper(
               closeOnTap: true,
               title: labelText(
-                "${news.title}",
-                fontSize: 18,
+                // "${news.title}",
+                "Details",
+                // fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
               child: TrendingNewsDetail(

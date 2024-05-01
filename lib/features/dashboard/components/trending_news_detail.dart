@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:nodes/features/dashboard/model/trending_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -106,6 +107,14 @@ class _TrendingNewsDetailState extends State<TrendingNewsDetail> {
                 fontWeight: FontWeight.w500,
               ),
               ySpace(height: 24),
+              labelText(
+                news.title ?? "",
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                height: 1.5,
+                color: GRAY,
+              ),
+              ySpace(height: 10),
               subtext(
                 news.description ?? "",
                 fontSize: 14,
@@ -113,6 +122,24 @@ class _TrendingNewsDetailState extends State<TrendingNewsDetail> {
                 height: 1.5,
               ),
             ],
+          ),
+        ),
+        ySpace(height: 24),
+        SubmitBtn(
+          onPressed: () {
+            customUrlLauncher(
+              context,
+              type: "web",
+              url: "${news.url}",
+            );
+          },
+          rightIcon: Icon(
+            MdiIcons.arrowTopRight,
+            color: WHITE,
+          ),
+          title: btnTxt(
+            "Continue Reading",
+            WHITE,
           ),
         ),
       ],
