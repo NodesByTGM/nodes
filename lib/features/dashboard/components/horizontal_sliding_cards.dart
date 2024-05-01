@@ -1,3 +1,4 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/community/components/community_space_card_template.dart';
 import 'package:nodes/features/community/screens/space_details_screen.dart';
@@ -5,6 +6,8 @@ import 'package:nodes/features/dashboard/components/card_template.dart';
 import 'package:nodes/features/dashboard/components/community_card_template.dart';
 import 'package:nodes/features/dashboard/components/leave_a_rating.dart';
 import 'package:nodes/features/dashboard/components/top_movies_card_template.dart';
+import 'package:nodes/features/dashboard/model/movie_show_model.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
@@ -23,9 +26,23 @@ class HorizontalSlidingCards extends StatefulWidget {
 }
 
 class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
-  Future<List<String>> getData() async {
+  late DashboardController dashCtrl;
+
+  @override
+  void initState() {
+    dashCtrl = locator.get<DashboardController>();
+    super.initState();
+  }
+
+  Future<List<dynamic>> getData() async {
     // get the type of call, from widge...then call using the controller...
     // The type also contols the onTap function and all...
+    switch (widget.dataSource) {
+      case HorizontalSlidingCardDataSource.TopMovies:
+        List<dynamic> data = (await dashCtrl.fetchMovieShows(context)) ?? [];
+        return data;
+      default:
+    }
     await Future.delayed(const Duration(seconds: 5));
     return [
       "I'm Ramy",
@@ -45,7 +62,7 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<List<dynamic>>(
       future: getData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,8 +94,12 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
                 children: List.generate(
                   snapshot.data!.length,
                   (index) {
+                    dynamic data = snapshot.data;
                     // Depending on the datasource, the corresponding cards will be used...
-                    return designatedCardDisplay();
+                    return designatedCardDisplay(
+                      // pass the data here... and receive it as dynamic, then format it using the help of the source...
+                      data,
+                    );
                   },
                 ),
               ),
@@ -90,19 +111,19 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
     );
   }
 
-  designatedCardDisplay() {
+  designatedCardDisplay(dynamic data) {
     switch (widget.dataSource) {
       case HorizontalSlidingCardDataSource.TopMovies:
+        MovieShowModel movieShow = data as MovieShowModel;
         return TopMovieCardTemplate(
-          imgUrl:
-              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-          title: "Lorem ipsum dolor sit amet, con...",
-          onTap: () {},
-          ratingTap: () {
-            showRatingBottomSheet(
-                // passin the item details, likes of IDs, etc...
-                );
-          },
+          imgUrl: "${movieShow.backdrop_path}",
+          title: (movieShow.original_name ?? movieShow.original_title) ?? "",
+          rating: movieShow.vote_average ?? 0,
+          onTap: showRatingBottomSheet,
+          ratingTap: showRatingBottomSheet,
+          // ratingTap: () {
+          //   showRatingBottomSheet();
+          // },
         );
       case HorizontalSlidingCardDataSource.Community:
         return CommunityCardTemplate(

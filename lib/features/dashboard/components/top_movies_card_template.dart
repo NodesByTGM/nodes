@@ -7,6 +7,7 @@ class TopMovieCardTemplate extends StatelessWidget {
     required this.title,
     this.height,
     required this.onTap,
+     this.rating = 0,
     required this.ratingTap,
   });
 
@@ -14,6 +15,7 @@ class TopMovieCardTemplate extends StatelessWidget {
   final String title;
   final double? height;
   final GestureTapCallback onTap;
+  final double rating;
   final GestureTapCallback ratingTap;
 
   @override
@@ -53,7 +55,7 @@ class TopMovieCardTemplate extends StatelessWidget {
                     children: [
                       SvgPicture.asset(ImageUtils.starIcon),
                       labelText(
-                        "4.5",
+                        "$rating",
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: WHITE,

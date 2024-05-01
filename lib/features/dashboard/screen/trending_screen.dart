@@ -6,12 +6,15 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
-import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
+import 'package:nodes/features/dashboard/components/leave_a_rating.dart';
+import 'package:nodes/features/dashboard/components/top_movies_card_template.dart';
+import 'package:nodes/features/dashboard/components/trending_news_card.dart';
+import 'package:nodes/features/dashboard/model/movie_show_model.dart';
+import 'package:nodes/features/dashboard/model/trending_model.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/features/subscriptions/screen/proceed_with_payment_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -35,11 +38,11 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
   late DashboardController dashCtrl;
   late ComController cCtrl;
   late UserModel user;
-  int currentEventIndex = 0;
+  int currentTrendingNewsIndex = 0;
   int currentTrendingIndex = 0;
   int currentPostIndex = 0;
-  final eventsCardCtrl = PageController(viewportFraction: 1);
   final trendingCardCtrl = PageController(viewportFraction: 1);
+  final trendingNewsCardCtrl = PageController(viewportFraction: 1);
   final postCardCtrl = PageController(viewportFraction: 1);
 
   @override
@@ -111,9 +114,9 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           ySpace(height: 24),
           Consumer<DashboardController>(
             builder: (contex, dCtrl, _) {
-              bool isLoading = dCtrl.isFetchingAllEvent;
-              bool hasData = isObjectEmpty(dCtrl.eventsList);
-              if (isLoading || isObjectEmpty(dCtrl.eventsList)) {
+              bool isLoading = dCtrl.isFetchTrendingNews;
+              bool hasData = isObjectEmpty(dCtrl.trendingNewsList);
+              if (isLoading || isObjectEmpty(dCtrl.trendingNewsList)) {
                 return DataReload(
                   maxHeight: screenHeight(context) * .19,
                   isLoading: isLoading,
@@ -125,23 +128,28 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                       marginBottom: 10,
                     ),
                   ),
-                  onTap: fetchAllJobs,
+                  onTap: fetchTrendingNews,
                   isEmpty: hasData,
                 );
               } else {
-                List<StandardTalentEventModel> eventsList = dCtrl.eventsList;
+                List<TrendingNewsModel> trendingNewsList =
+                    dCtrl.trendingNewsList;
                 return SizedBox(
                   height: 320,
                   child: PageView.builder(
-                    itemCount: eventsList.length,
-                    controller: eventsCardCtrl,
+                    itemCount: trendingNewsList.length > 5
+                        ? 5
+                        : trendingNewsList.length,
+                    // itemCount: trendingNewsList.length,
+                    controller: trendingNewsCardCtrl,
                     onPageChanged: (val) {
-                      currentEventIndex = val;
+                      currentTrendingNewsIndex = val;
                       setState(() {});
                     },
                     itemBuilder: (context, index) {
-                      return StandardTalentEventCard(
-                        event: eventsList[index],
+                      TrendingNewsModel tNews = trendingNewsList[index];
+                      return TrendingNewsCard(
+                        news: tNews,
                       );
                     },
                   ),
@@ -154,10 +162,11 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CardDotGenerator(
-                length: dashCtrl.eventsList.length > 5
+                length: dashCtrl.trendingNewsList.length > 5
                     ? 5
-                    : dashCtrl.eventsList.length,
-                currentIndex: currentEventIndex,
+                    : dashCtrl.trendingNewsList.length,
+                // length: dashCtrl.trendingNewsList.length,
+                currentIndex: currentTrendingNewsIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,11 +175,12 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.eventsList.length > 5
+                        totoalLength: dashCtrl.trendingNewsList.length > 5
                             ? 5
-                            : dashCtrl.eventsList.length,
-                        currentIndex: currentEventIndex,
-                        ctrl: eventsCardCtrl,
+                            : dashCtrl.trendingNewsList.length,
+                        // totoalLength: dashCtrl.trendingNewsList.length,
+                        currentIndex: currentTrendingNewsIndex,
+                        ctrl: trendingNewsCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -182,11 +192,11 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.eventsList.length > 5
+                        totoalLength: dashCtrl.trendingNewsList.length > 5
                             ? 5
-                            : dashCtrl.eventsList.length,
-                        currentIndex: currentEventIndex,
-                        ctrl: eventsCardCtrl,
+                            : dashCtrl.trendingNewsList.length,
+                        currentIndex: currentTrendingNewsIndex,
+                        ctrl: trendingNewsCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -198,24 +208,102 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
             ],
           ),
           ySpace(height: 40),
-          Subsection(
-            leftSection: "What did you think?\nRate and share your review",
-            rightSection: "View all",
-            onTap: () {
-              navCtrl.updateDashboardDynamicItem(
-                HorizontalSlidingCardDataSource.TopMovies,
-              );
-              navCtrl.updatePageListStack(
-                IndividualDashboardViewAllDynamicScreen.routeName,
-              );
-            },
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Top Movies",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "What did you think? Rate and share your review",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updateDashboardDynamicItem(
+                        HorizontalSlidingCardDataSource.TopMovies,
+                      );
+                      navCtrl.updatePageListStack(
+                        IndividualDashboardViewAllDynamicScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "View all",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              ),
+              customDivider(),
+            ],
           ),
+          // FutureBuilder(
+          //   future: dashCtrl.fetchMovieShows(context),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.waiting) {
+          //       return const ShimmerLoader();
+          //     } else if (snapshot.hasError) {
+          //       // Use a proper error widget with a Reload feature...
+          //       return Container(
+          //         margin: const EdgeInsets.only(right: 5),
+          //         width: screenWidth(context),
+          //         height: 200,
+          //         decoration: const BoxDecoration(
+          //           color: BORDER,
+          //           borderRadius: BorderRadius.all(
+          //             Radius.circular(5),
+          //           ),
+          //         ),
+          //         child: Center(
+          //           child: labelText("Oops!!!! Error"),
+          //         ),
+          //       );
+          //     } else if (snapshot.hasData &&
+          //         snapshot.connectionState == ConnectionState.done) {
+          //       return SizedBox(
+          //         // height: 240,
+          //         height: 240,
+          //         child: SingleChildScrollView(
+          //           scrollDirection: Axis.horizontal,
+          //           child: Row(
+          //             children: List.generate(
+          //               snapshot.data!.length,
+          //               (index) {
+          //                 // Depending on the datasource, the corresponding cards will be used...
+          //                 return TopMovieCardTemplate(
+          //                   imgUrl:
+          //                       "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          //                   title: "Lorem ipsum dolor sit amet, con...",
+          //                   onTap: () {},
+          //                   ratingTap: () {
+          //                     showRatingBottomSheet(
+          //                         // passin the item details, likes of IDs, etc...
+          //                         );
+          //                   },
+          //                 );
+          //               },
+          //             ),
+          //           ),
+          //         ),
+          //       );
+          //     }
+          //     return const CircularProgressIndicator.adaptive();
+          //   },
+          // ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.TopMovies,
           ),
           ySpace(height: 40),
           if (user.type == 1) ...[
-            // Meaning the User is Talent
+            // <<<<=============================== Meaning the User is Talent  =====================>>>>
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20),
               decoration: const BoxDecoration(
@@ -395,10 +483,42 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
             ],
           ),
           ySpace(height: 40),
-          Subsection(
-            leftSection: "You'll love this!",
-            rightSection: "View all",
-            onTap: () {},
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Birthday",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "You'll love this!",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // navCtrl.updateDashboardDynamicItem(
+                      //   HorizontalSlidingCardDataSource.TopMovies,
+                      // );
+                      // navCtrl.updatePageListStack(
+                      //   IndividualDashboardViewAllDynamicScreen.routeName,
+                      // );
+                    },
+                    child: subtext(
+                      "View all",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              ),
+              customDivider(),
+            ],
           ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.Birthdays,
@@ -413,25 +533,36 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
             dataSource: HorizontalSlidingCardDataSource.Birthdays,
           ),
           ySpace(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               labelText(
-                "Join the conversation and\nconnect with your tribe",
+                "Community",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
-              GestureDetector(
-                onTap: () {
-                  navCtrl.updatePageListStack(
-                    NodeCommunityScreen.routeName,
-                  );
-                },
-                child: subtext(
-                  "See more",
-                  fontSize: 14,
-                  color: PRIMARY,
-                ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Join the conversation and connect with your tribe",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updatePageListStack(
+                        NodeCommunityScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "See more",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -614,6 +745,32 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
       currentIndex,
       curve: Curves.easeInOut,
       duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  showRatingBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return BottomSheetWrapper(
+          closeOnTap: true,
+          title: labelText(
+            "Leave a rating",
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          child: const LeaveARating(),
+        );
+      },
     );
   }
 }

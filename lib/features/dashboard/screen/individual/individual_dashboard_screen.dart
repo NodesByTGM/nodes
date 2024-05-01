@@ -5,12 +5,12 @@ import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/community/models/community_post_model.dart';
 import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
-import 'package:nodes/features/dashboard/components/event_card_standardTalent.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
+import 'package:nodes/features/dashboard/components/trending_news_card.dart';
+import 'package:nodes/features/dashboard/model/trending_model.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
-import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/features/subscriptions/screen/subscription_screen.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -34,10 +34,10 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   late DashboardController dashCtrl;
   late ComController cCtrl;
   late UserModel user;
-  int currentEventIndex = 0;
+  int currentTrendingNewsIndex = 0;
   int currentTrendingIndex = 0;
   int currentPostIndex = 0;
-  final eventsCardCtrl = PageController(viewportFraction: 1);
+  final trendingNewsCardCtrl = PageController(viewportFraction: 1);
   final trendingCardCtrl = PageController(viewportFraction: 1);
   final postCardCtrl = PageController(viewportFraction: 1);
 
@@ -53,7 +53,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   }
 
   fetchJobsEventsTrendingPosts() {
-    fetchTrending();
+    fetchTrendingNews();
     fetchAllJobs(); 
     fetchAllPosts();
   }
@@ -63,7 +63,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
   }
  
 
-  fetchTrending() {
+  fetchTrendingNews() {
     safeNavigate(() => dashCtrl.fetchTrendingNews(context));
   }
 
@@ -95,7 +95,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           customDivider(height: 40),
           ySpace(height: 20),
           labelText(
-            "Trending Events",
+            "Trending News",
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -107,9 +107,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           ySpace(height: 24),
           Consumer<DashboardController>(
             builder: (contex, dCtrl, _) {
-              bool isLoading = dCtrl.isFetchingAllEvent;
-              bool hasData = isObjectEmpty(dCtrl.eventsList);
-              if (isLoading || isObjectEmpty(dCtrl.eventsList)) {
+              bool isLoading = dCtrl.isFetchTrendingNews;
+              bool hasData = isObjectEmpty(dCtrl.trendingNewsList);
+              if (isLoading || isObjectEmpty(dCtrl.trendingNewsList)) {
                 return DataReload(
                   maxHeight: screenHeight(context) * .19,
                   isLoading: isLoading,
@@ -121,23 +121,28 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                       marginBottom: 10,
                     ),
                   ),
-                  onTap: fetchAllJobs,
+                  onTap: fetchTrendingNews,
                   isEmpty: hasData,
                 );
               } else {
-                List<StandardTalentEventModel> eventsList = dCtrl.eventsList;
+                List<TrendingNewsModel> trendingNewsList =
+                    dCtrl.trendingNewsList;
                 return SizedBox(
                   height: 320,
                   child: PageView.builder(
-                    itemCount: eventsList.length > 5 ? 5 : eventsList.length,
-                    controller: eventsCardCtrl,
+                    itemCount: trendingNewsList.length > 5
+                        ? 5
+                        : trendingNewsList.length,
+                    // itemCount: trendingNewsList.length,
+                    controller: trendingNewsCardCtrl,
                     onPageChanged: (val) {
-                      currentEventIndex = val;
+                      currentTrendingNewsIndex = val;
                       setState(() {});
                     },
                     itemBuilder: (context, index) {
-                      return StandardTalentEventCard(
-                        event: eventsList[index],
+                      TrendingNewsModel tNews = trendingNewsList[index];
+                      return TrendingNewsCard(
+                        news: tNews,
                       );
                     },
                   ),
@@ -150,10 +155,11 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CardDotGenerator(
-                length: dashCtrl.eventsList.length > 5
+                length: dashCtrl.trendingNewsList.length > 5
                     ? 5
-                    : dashCtrl.eventsList.length,
-                currentIndex: currentEventIndex,
+                    : dashCtrl.trendingNewsList.length,
+                // length: dashCtrl.trendingNewsList.length,
+                currentIndex: currentTrendingNewsIndex,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,11 +168,12 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: false,
-                        totoalLength: dashCtrl.eventsList.length > 5
+                        totoalLength: dashCtrl.trendingNewsList.length > 5
                             ? 5
-                            : dashCtrl.eventsList.length,
-                        currentIndex: currentEventIndex,
-                        ctrl: eventsCardCtrl,
+                            : dashCtrl.trendingNewsList.length,
+                        // totoalLength: dashCtrl.trendingNewsList.length,
+                        currentIndex: currentTrendingNewsIndex,
+                        ctrl: trendingNewsCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(
@@ -178,11 +185,11 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     onTap: () {
                       customAnimatePageView(
                         isInc: true,
-                        totoalLength: dashCtrl.eventsList.length > 5
+                        totoalLength: dashCtrl.trendingNewsList.length > 5
                             ? 5
-                            : dashCtrl.eventsList.length,
-                        currentIndex: currentEventIndex,
-                        ctrl: eventsCardCtrl,
+                            : dashCtrl.trendingNewsList.length,
+                        currentIndex: currentTrendingNewsIndex,
+                        ctrl: trendingNewsCardCtrl,
                       );
                     },
                     child: SvgPicture.asset(

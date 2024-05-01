@@ -6,8 +6,8 @@ part of 'trending_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TrendingModelNews _$TrendingModelNewsFromJson(Map<String, dynamic> json) =>
-    TrendingModelNews(
+TrendingNewsModel _$TrendingNewsModelFromJson(Map<String, dynamic> json) =>
+    TrendingNewsModel(
       source: json['source'] == null
           ? null
           : TrendingSourceModel.fromJson(
@@ -23,7 +23,7 @@ TrendingModelNews _$TrendingModelNewsFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String?,
     );
 
-Map<String, dynamic> _$TrendingModelNewsToJson(TrendingModelNews instance) =>
+Map<String, dynamic> _$TrendingNewsModelToJson(TrendingNewsModel instance) =>
     <String, dynamic>{
       'source': instance.source?.toJson(),
       'author': instance.author,

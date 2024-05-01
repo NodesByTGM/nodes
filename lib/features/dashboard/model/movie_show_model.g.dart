@@ -8,43 +8,45 @@ part of 'movie_show_model.dart';
 
 MovieShowModel _$MovieShowModelFromJson(Map<String, dynamic> json) =>
     MovieShowModel(
-      backdropPath: json['backdropPath'] as String?,
+      backdrop_path: json['backdrop_path'] as String?,
       id: json['id'] as int?,
-      originalName: json['originalName'] as String?,
+      original_name: json['original_name'] as String?,
+      original_title: json['original_title'] as String?,
       overview: json['overview'] as String?,
-      posterPath: json['posterPath'] as String?,
-      mediaType: json['mediaType'] as String?,
+      poster_path: json['poster_path'] as String?,
+      media_type: json['media_type'] as String?,
       adult: json['adult'] as bool?,
       name: json['name'] as String?,
-      originalLanguage: json['originalLanguage'] as String?,
-      genreIds:
-          (json['genreIds'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      original_language: json['original_language'] as String?,
+      genre_ids:
+          (json['genre_ids'] as List<dynamic>?)?.map((e) => e as int).toList(),
       popularity: (json['popularity'] as num?)?.toDouble(),
-      firstAirDate: json['firstAirDate'] == null
+      first_air_date: json['first_air_date'] == null
           ? null
-          : DateTime.parse(json['firstAirDate'] as String),
-      voteAverage: (json['voteAverage'] as num?)?.toDouble(),
-      voteCount: json['voteCount'] as int?,
-      originCountry: (json['originCountry'] as List<dynamic>?)
+          : DateTime.parse(json['first_air_date'] as String),
+      vote_average: (json['vote_average'] as num?)?.toDouble(),
+      vote_count: json['vote_count'] as int?,
+      origin_country: (json['origin_country'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
     );
 
 Map<String, dynamic> _$MovieShowModelToJson(MovieShowModel instance) =>
     <String, dynamic>{
-      'backdropPath': instance.backdropPath,
+      'backdrop_path': instance.backdrop_path,
       'id': instance.id,
-      'originalName': instance.originalName,
+      'original_name': instance.original_name,
+      'original_title': instance.original_title,
       'overview': instance.overview,
-      'posterPath': instance.posterPath,
-      'mediaType': instance.mediaType,
+      'poster_path': instance.poster_path,
+      'media_type': instance.media_type,
       'adult': instance.adult,
       'name': instance.name,
-      'originalLanguage': instance.originalLanguage,
-      'genreIds': instance.genreIds,
+      'original_language': instance.original_language,
+      'genre_ids': instance.genre_ids,
       'popularity': instance.popularity,
-      'firstAirDate': instance.firstAirDate?.toIso8601String(),
-      'voteAverage': instance.voteAverage,
-      'voteCount': instance.voteCount,
-      'originCountry': instance.originCountry,
+      'first_air_date': instance.first_air_date?.toIso8601String(),
+      'vote_average': instance.vote_average,
+      'vote_count': instance.vote_count,
+      'origin_country': instance.origin_country,
     };

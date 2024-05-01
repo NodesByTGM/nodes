@@ -43,7 +43,7 @@ abstract class BaseController extends ChangeNotifier {
   bool _isCreatingProject = false;
   bool _isFetchingAllProjects = false;
   bool _isFetchMyProjects = false;
-  bool _isFetchTrending = false;
+  bool _isFetchTrendingNews = false;
   bool _isFetchMovieShows = false;
   bool _isFetchingGeneralUsers = false;
   bool _isFetchingSingleGeneralUser = false;
@@ -96,7 +96,7 @@ abstract class BaseController extends ChangeNotifier {
   bool get isCreatingProject => _isCreatingProject;
   bool get isFetchingAllProjects => _isFetchingAllProjects;
   bool get isFetchMyProjects => _isFetchMyProjects;
-  bool get isFetchTrending => _isFetchTrending;
+  bool get isFetchTrendingNews => _isFetchTrendingNews;
   bool get isFetchMovieShows => _isFetchMovieShows;
   bool get isFetchingGeneralUsers => _isFetchingGeneralUsers;
   bool get isFetchingSingleGeneralUser => _isFetchingSingleGeneralUser;
@@ -307,8 +307,8 @@ abstract class BaseController extends ChangeNotifier {
     notifyListeners();
   }
 
-  setFetchingTrending(bool value) {
-    _isFetchTrending = value;
+  setFetchingTrendingNews(bool value) {
+    _isFetchTrendingNews = value;
     notifyListeners();
   }
 

@@ -38,7 +38,7 @@ class DashboardController extends BaseController {
   // Project
   List<ProjectModel> _projectList = [];
   List<ProjectModel> _myProjectList = [];
-  List<TrendingModelNews> _trendingNewsList = [];
+  List<TrendingNewsModel> _trendingNewsList = [];
   List<MovieShowModel> _movieShowList = [];
 
   // <================= Getters Starts here =====================>
@@ -54,7 +54,7 @@ class DashboardController extends BaseController {
   List<EventModel> get myCreatedEventsList => _myCreatedEventsList;
   List<ProjectModel> get projectList => _projectList;
   List<ProjectModel> get myProjectList => _myProjectList;
-  List<TrendingModelNews> get trendingNewsList => _trendingNewsList;
+  List<TrendingNewsModel> get trendingNewsList => _trendingNewsList;
   List<MovieShowModel> get movieShowList => _movieShowList;
 
   // <================= Setters Starts here =================>
@@ -254,7 +254,7 @@ class DashboardController extends BaseController {
   }
 
   // Trending
-  setTrendingList(List<TrendingModelNews> trending) {
+  setTrendingList(List<TrendingNewsModel> trending) {
     _trendingNewsList = trending;
     notifyListeners();
   }
@@ -854,41 +854,44 @@ class DashboardController extends BaseController {
 
 // Trending News
   Future<bool> fetchTrendingNews(BuildContext ctx) async {
-    setFetchingTrending(true);
+    setFetchingTrendingNews(true);
     try {
       ApiResponse response = await _dashboardService.fetchTrendingNews(ctx);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
         return false;
       }
-      setTrendingList(
-        const TrendingModelNews().fromList(response.result as List<dynamic>),
-      );
+      List<TrendingNewsModel> trendingNewsList =
+          const TrendingNewsModel().fromList(response.result as List<dynamic>);
+      setTrendingList(trendingNewsList);
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return false;
     } finally {
-      setFetchingTrending(false);
+      setFetchingTrendingNews(false);
     }
   }
 
 // Movie Shows
-  Future<bool> fetchMovieShows(BuildContext ctx) async {
-    setFetchingMovieShows(true);
+  Future<List<MovieShowModel>?> fetchMovieShows(BuildContext ctx) async {
+    // setFetchingMovieShows(true);
     try {
       ApiResponse response = await _dashboardService.fetchMovieShows(ctx);
       if (response.status == KeyString.failure) {
         showError(message: response.message);
-        return false;
+        return null;
       }
-      setMovieShowList(_resolvePaginatedMovieShows(response));
-      return true;
+      List<MovieShowModel> movieShowList =
+          _resolvePaginatedMovieShows(response);
+      print("Hello George na the movieShowList be this: ${movieShowList}");
+      // setMovieShowList(movieShowList);
+      return movieShowList;
     } on NetworkException catch (e) {
       showError(message: e.toString());
-      return false;
+      return null;
     } finally {
-      setFetchingMovieShows(false);
+      // setFetchingMovieShows(false);
     }
   }
 
@@ -956,8 +959,11 @@ class DashboardController extends BaseController {
 // MovieShow
   List<MovieShowModel> _resolvePaginatedMovieShows(ApiResponse response) {
     CustomPage<MovieShowModel> p = const CustomPage<MovieShowModel>().fromJson(
-        response.result as Map<String, dynamic>, const MovieShowModel());
+      response.result as Map<String, dynamic>,
+      const MovieShowModel(),
+    );
 
+    print("George this be the items;:: ${p}");
     if (!isObjectEmpty(p.items)) {
       return p.items as List<MovieShowModel>;
     }
