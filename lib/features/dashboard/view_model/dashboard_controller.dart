@@ -108,38 +108,19 @@ class DashboardController extends BaseController {
       _createdJobList[jIndex] = job;
     } else {
       // Means it should add/ i.e created a new one in the list
-      _createdJobList.add(job);
+      // _createdJobList.add(job);
+      _createdJobList.insert(0, job);
     }
     _currentlyViewedBusinessJob = job;
     notifyListeners();
   }
 
   _updateAppliedJobsList(StandardTalentJobModel job) {
-    _appliedJobsList.add(job);
+    // _appliedJobsList.add(job);
+    _appliedJobsList.insert(0, job);
     _patchJobAppliedJobList(job: job, savedStatus: job.saved);
     notifyListeners();
   }
-
-  // _updateSavedJobsList(
-  //   BuildContext ctx, {
-  //   required StandardTalentJobModel job,
-  //   required bool isSave,
-  // }) {
-  //   int jI = _jobsList.indexWhere((jd) => jd.id == job.id);
-  //   if (isSave) {
-  //     _savedJobsList.add(job.copyWith(saved: isSave));
-  //     if (jI != -1) {
-  //       _jobsList[jI] = job.copyWith(saved: isSave);
-  //     }
-  //   } else {
-  //     int jIndex = _savedJobsList.indexWhere((jd) => jd.id == job.id);
-  //     if (jIndex != -1) {
-  //       // Found something...
-  //       _savedJobsList[jIndex] = job.copyWith(saved: isSave);
-  //     }
-  //   }
-  //   notifyListeners();
-  // }
 
   _updateSavedJobsList(
     BuildContext ctx, {
@@ -147,7 +128,8 @@ class DashboardController extends BaseController {
     required bool isSave,
   }) {
     if (isSave) {
-      _savedJobsList.add(job.copyWith(saved: isSave));
+      // _savedJobsList.add(job.copyWith(saved: isSave));
+      _savedJobsList.insert(0, job.copyWith(saved: isSave));
       _patchJobAppliedJobList(job: job, savedStatus: isSave);
     } else {
       int sJLI = _savedJobsList.indexWhere((jd) => jd.id == job.id);
@@ -217,7 +199,8 @@ class DashboardController extends BaseController {
       _myCreatedEventsList[eIndex] = event;
     } else {
       // Means it should add/ i.e created a new one in the list
-      _myCreatedEventsList.add(event);
+      // _myCreatedEventsList.add(event);
+      _myCreatedEventsList.insert(0, event);
     }
     _currentlyViewedBusinessEvent = event; // This will update the data
     notifyListeners();
@@ -237,7 +220,8 @@ class DashboardController extends BaseController {
     required bool isSave,
   }) {
     if (isSave) {
-      _savedEventsList.add(event.copyWith(saved: isSave));
+      // _savedEventsList.add(event.copyWith(saved: isSave));
+      _savedEventsList.insert(0, event.copyWith(saved: isSave));
     } else {
       int eIndex = _savedJobsList.indexWhere((e) => e.id == event.id);
       if (eIndex != -1) {
@@ -261,7 +245,8 @@ class DashboardController extends BaseController {
   }
 
   _updateMyProjectList(ProjectModel project) {
-    _myProjectList.add(project);
+    // _myProjectList.add(project);
+    _myProjectList.insert(0, project);
     notifyListeners();
   }
 

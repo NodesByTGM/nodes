@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/event_details.dart';
 import 'package:nodes/features/dashboard/components/saved_event_applicant_card.dart';
@@ -182,9 +183,12 @@ class _BusinessEventDetailsScreenState
     );
     if (DialogAction.yes == result) {
       // make the api request, delete account, call the logout function, to send them to the auth screen...
+      // Delete already existing image behind the scene, no need to hold up the thread...
+
       bool done = await context
           .read<DashboardController>()
           .deleteSingleEvent(context, event.id);
+      context.read<AuthController>().deleteMedia("${event.thumbnail?.id}");
 
       if (done && mounted) {
         customNavigateBack(context);

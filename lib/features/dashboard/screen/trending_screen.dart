@@ -651,6 +651,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                           ],
                         ),
                       );
+                      
                     },
                   ),
                 );

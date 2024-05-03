@@ -160,20 +160,20 @@ class _BusinessCreatedEventCenterScreenState
                   Expanded(
                     flex: 2,
                     child: SubmitBtn(
-                      // onPressed: showCreateEventBottomSheet,
-                      onPressed: () {
-                        BusinessAccountModel business =
-                            context.read<AuthController>().currentUser.business ?? const BusinessAccountModel();
-                        if (isBusinessProfileComplete(business) &&
-                            isBusinessVerified(business)) {
-                          showCreateEventBottomSheet();
-                        } else if (isBusinessProfileComplete(business) &&
-                            !isBusinessVerified(business)) {
-                          cantCreateMsg(i: 1);
-                        } else {
-                          cantCreateMsg();
-                        }
-                      },
+                      onPressed: showCreateEventBottomSheet,
+                      // onPressed: () {
+                      //   BusinessAccountModel business =
+                      //       context.read<AuthController>().currentUser.business ?? const BusinessAccountModel();
+                      //   if (isBusinessProfileComplete(business) &&
+                      //       isBusinessVerified(business)) {
+                      //     showCreateEventBottomSheet();
+                      //   } else if (isBusinessProfileComplete(business) &&
+                      //       !isBusinessVerified(business)) {
+                      //     cantCreateMsg(i: 1);
+                      //   } else {
+                      //     cantCreateMsg();
+                      //   }
+                      // },
                       title: btnTxt(
                         "Create an event",
                         WHITE,
@@ -195,6 +195,7 @@ class _BusinessCreatedEventCenterScreenState
             ? Constants.updateYourProfileToProceed
             : Constants.accountNotVerified);
   }
+
   showCreateEventBottomSheet() {
     showModalBottomSheet(
       context: context,

@@ -106,6 +106,7 @@ class _AccountFormState extends State<AccountForm> {
               keyboardType: TextInputType.emailAddress,
               style: FORM_STYLE,
               controller: emailCtrl,
+              readOnly: true,
               onSaved: (value) => formValues['email'] = trimValue(value),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(context,

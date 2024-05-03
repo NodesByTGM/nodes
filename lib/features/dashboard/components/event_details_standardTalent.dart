@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -33,11 +34,19 @@ class _StandardTalentEventDetailsState
       physics: const NeverScrollableScrollPhysics(),
       children: [
         if (!isObjectEmpty(event.thumbnail)) ...[
-          SizedBox(
-            height: 250,
-            child: cachedNetworkImage(
-              imgUrl: "${event.thumbnail?.url}",
-              size: screenWidth(context),
+          GestureDetector(
+            onTap: () {
+              singleImagePreviewer(
+                context,
+                image: event.thumbnail as MediaUploadModel,
+              );
+            },
+            child: SizedBox(
+              height: 250,
+              child: cachedNetworkImage(
+                imgUrl: "${event.thumbnail?.url}",
+                size: screenWidth(context),
+              ),
             ),
           ),
         ],

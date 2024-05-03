@@ -147,7 +147,6 @@ class AuthService {
     }
   }
 
-
   Future<ApiResponse> fetchProfile(BuildContext ctx) async {
     try {
       ApiResponse res = await authRepository.fetchProfile();
@@ -235,8 +234,7 @@ class AuthService {
 
   Future<ApiResponse> fetchAllMyTransactions() async {
     try {
-      ApiResponse res =
-          await authRepository.fetchAllMyTransactions();
+      ApiResponse res = await authRepository.fetchAllMyTransactions();
       return res;
     } on DioException catch (e) {
       log.severe(

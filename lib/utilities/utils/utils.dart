@@ -81,7 +81,6 @@ String fromDatTimeToTimeOfDay(DateTime now) {
   return timeOfDay(TimeOfDay.fromDateTime(now));
 }
 
-
 TimeOfDay _customStringToTimeOfDay(String s) => TimeOfDay(
     hour: int.parse(s.split(":")[0]), minute: int.parse(s.split(":")[1]));
 
@@ -467,9 +466,7 @@ Future<void> customUrlLauncher(
 }
 
 _throwCustomUrlLauncherError(BuildContext context, String err) {
-  showError(
-    message: err
-  );
+  showError(message: err);
   throw err;
 }
 
@@ -509,7 +506,7 @@ showSimpleDialog({
     },
   );
 }
- 
+
 typedef void IntCallBack(int val);
 
 class CustomTabBar extends StatefulWidget {
@@ -869,7 +866,8 @@ Container analyticsCard({
 Future<String> convertFileToString(String filePath) async =>
     "data:image/png;base64,${base64Encode(await (File(filePath).readAsBytes()))}";
 
-String getShortName(String name) => name.substring(0, 2).toUpperCase();
+String getShortName(String name) =>
+    name.length > 2 ? name.substring(0, 2).toUpperCase() : name.toUpperCase();
 
 List<Widget> userSocials(UserModel user) {
   List<Widget> iconArr = [];
@@ -1057,6 +1055,21 @@ imagePreviewer(
   showImageViewerPager(
     context,
     multiImageProvider,
+    closeButtonColor: RED,
+    backgroundColor: BLACK,
+    onPageChanged: (page) {
+      // print("page changed to $page");
+    },
+    onViewerDismissed: (page) {
+      // print("dismissed while on page $page");
+    },
+  );
+}
+
+singleImagePreviewer(context, {required MediaUploadModel image}) {
+  showImageViewerPager(
+    context,
+    MultiImageProvider([CachedNetworkImageProvider(image.url)]),
     closeButtonColor: RED,
     backgroundColor: BLACK,
     onPageChanged: (page) {

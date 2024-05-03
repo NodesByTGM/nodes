@@ -1,12 +1,13 @@
+import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class EventDetails extends StatefulWidget {
   const EventDetails({
-    super.key, 
+    super.key,
     required this.event,
   });
- 
+
   final EventModel event;
 
   @override
@@ -29,6 +30,28 @@ class _EventDetailsState extends State<EventDetails> {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         ySpace(height: 27),
+        GestureDetector(
+          onTap: () {
+            singleImagePreviewer(
+              context,
+              image: event.thumbnail as MediaUploadModel,
+            );
+          },
+          child: Container(
+            height: 250,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: cachedNetworkImage(
+                imgUrl: "${event.thumbnail?.url}",
+                size: screenWidth(context),
+              ),
+            ),
+          ),
+        ),
+        ySpace(height: 24),
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,

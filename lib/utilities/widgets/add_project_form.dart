@@ -12,7 +12,10 @@ import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 
 class AddProjectForm extends StatefulWidget {
-  const AddProjectForm({super.key, required this.isBusiness,});
+  const AddProjectForm({
+    super.key,
+    required this.isBusiness,
+  });
 
   final bool isBusiness;
 
@@ -37,13 +40,15 @@ class _AddProjectFormState extends State<AddProjectForm> {
   ];
 
   List<XFile> projectImageFileList = [];
-  XFile? logoImage;
+  XFile?
+      logoImage; // check if you're using this George, and remove it if you're not using ...
   XFile? thumbnailImageFile;
   bool isLoadingThumbnail = false;
-  bool isLoadingLogo = false;
-late int maxProjectImages;
+  bool isLoadingLogo =
+      false; // check if you're using this George, and remove it if you're not using ...
+  late int maxProjectImages;
   bool isLoadingImage = false;
- 
+
   @override
   void initState() {
     authCtrl = locator.get<AuthController>();
@@ -68,6 +73,7 @@ late int maxProjectImages;
   @override
   Widget build(BuildContext context) {
     dashCtrl = context.watch<DashboardController>();
+    authCtrl = context.watch<AuthController>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

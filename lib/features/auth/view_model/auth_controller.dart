@@ -638,26 +638,6 @@ class AuthController extends BaseController {
     }
   }
 
-  // Future<String?> mediaUpload(File file) async {
-  //   setUploadingMedia(true);
-  //   try {
-  //     ApiResponse response = await _authService.mediaUpload(file);
-
-  //     if (response.status == KeyString.failure) {
-  //       showError(message: response.message);
-  //       return null;
-  //     }
-  //     MediaUploadModel data =
-  //         MediaUploadModel.fromJson(response.result as Map<String, dynamic>);
-  //     return data.url;
-  //   } on NetworkException catch (e) {
-  //     showError(message: e.toString());
-  //     return null;
-  //   } finally {
-  //     setUploadingMedia(false);
-  //   }
-  // }
-
   Future<MediaUploadModel?> mediaUpload(dynamic file) async {
     setUploadingMedia(true);
     try {

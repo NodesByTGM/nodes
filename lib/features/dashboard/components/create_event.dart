@@ -1,7 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/profile/components/profile_cards.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
@@ -21,6 +27,7 @@ class CreateEvent extends StatefulWidget {
 class _CreateEventState extends State<CreateEvent> {
   final formKey = GlobalKey<FormBuilderState>();
   late DashboardController dashCtrl;
+  late AuthController authCtrl;
   final TextEditingController eventCtrl = TextEditingController();
   final TextEditingController dateCtrl = TextEditingController();
   final TextEditingController timeCtrl = TextEditingController();
@@ -30,10 +37,13 @@ class _CreateEventState extends State<CreateEvent> {
   String eventType = '';
   final formValues = {};
   late EventModel? event;
+  XFile? thumbnailImageFile;
+  bool isLoadingThumbnail = false;
 
   @override
   void initState() {
     dashCtrl = locator.get<DashboardController>();
+    authCtrl = locator.get<AuthController>();
     event = widget.event;
     super.initState();
     loadEventData();
@@ -53,6 +63,8 @@ class _CreateEventState extends State<CreateEvent> {
   @override
   Widget build(BuildContext context) {
     dashCtrl = context.watch<DashboardController>();
+    authCtrl = context.watch<AuthController>();
+
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -233,7 +245,96 @@ class _CreateEventState extends State<CreateEvent> {
                   },
                 ),
               ),
+              FormWithLabel(
+                label: "Upload thumbnail",
+                form: GestureDetector(
+                  onTap: pickImage,
+                  child: Stack(
+                    children: [
+                      if (!isObjectEmpty(event?.thumbnail?.url)) ...[
+                        // When we are in edit event phase, and there's already a thumbnail URL
+                        Stack(
+                          children: [
+                            Positioned(
+                              child: Container(
+                                height: 170,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: cachedNetworkImage(
+                                    imgUrl: "${event?.thumbnail?.url}",
+                                    size: screenWidth(context),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      if (isObjectEmpty(thumbnailImageFile) &&
+                          isObjectEmpty(event?.thumbnail?.id)) ...[
+                        CustomDottedBorder(
+                          child: Padding(
+                            padding: const EdgeInsets.all(28.0),
+                            child: Center(
+                              child: subtext(
+                                "Click to browse your files\nRecommended image size: 280 x 160px",
+                                fontSize: 14,
+                                color: GRAY,
+                                fontWeight: FontWeight.w400,
+                                textAlign: TextAlign.center,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
 
+                      if (!isObjectEmpty(thumbnailImageFile)) ...[
+                        Container(
+                          height: 170,
+                          width: screenWidth(context),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(
+                              File(thumbnailImageFile!.path),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
+                      // Adding an replace icon Denoting Users can re-upload a new image, after either selecting a new thumbnail, or we on the edit event phase...
+
+                      if (!isObjectEmpty(thumbnailImageFile) ||
+                          !isObjectEmpty(event?.thumbnail?.id)) ...[
+                        Positioned(
+                          top: 60,
+                          left: screenWidth(context) * .4,
+                          child: const Icon(
+                            Icons.add_circle,
+                            color: BORDER,
+                            size: 50,
+                          ),
+                        ),
+                      ],
+
+                      /// Loading Dialog on Empty Box
+                      if (isLoadingThumbnail) ...[
+                        Positioned(
+                          top: 100,
+                          left: screenWidth(context) * .44,
+                          child: const CircularProgressIndicator.adaptive(),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
               FormUtils.formSpacer(),
               //
               SubmitBtn(
@@ -241,13 +342,33 @@ class _CreateEventState extends State<CreateEvent> {
                 title: btnTxt(
                     isObjectEmpty(event) ? "Create Event" : "Update Event",
                     WHITE),
-                loading: dashCtrl.isCreatingEvent || dashCtrl.isUpdatingEvent,
+                loading: authCtrl.isUploadingMedia ||
+                    dashCtrl.isCreatingEvent ||
+                    dashCtrl.isUpdatingEvent,
               ),
             ],
           ),
         ),
       ],
     );
+  }
+
+  pickImage() async {
+    final ImagePicker imagePicker = locator.get<ImagePicker>();
+    awaitingImageLoad();
+    final XFile? selectedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    awaitingImageLoad();
+    if (!isObjectEmpty(selectedImage)) {
+      thumbnailImageFile = selectedImage;
+    }
+    setState(() {});
+  }
+
+  awaitingImageLoad() {
+    setState(() {
+      isLoadingThumbnail = !isLoadingThumbnail;
+    });
   }
 
   updateEventType(String val) {
@@ -263,35 +384,73 @@ class _CreateEventState extends State<CreateEvent> {
         showText(message: "Please select the payment type");
         return;
       }
-      bool done = isObjectEmpty(event)
-          ? await dashCtrl.createEvent(context, {
-              "name": eventCtrl.text,
-              "description": descCtrl.text,
-              "location": locationCtrl.text,
-              "dateTime": dateCtrl.text,
-              "paymentType": eventType,
-              "thumbnail": {
-                "id": "xpkbzyctjeiwvnn8hmjh",
-                "url":
-                    "https://res.cloudinary.com/dwzhnrcdv/image/upload/v1712013809/xpkbzyctjeiwvnn8hmjh.png"
-              }
-            })
-          : await dashCtrl.updateSingleEvent(context, id: event?.id, payload: {
-              "name": eventCtrl.text,
-              "description": descCtrl.text,
-              "location": locationCtrl.text,
-              "dateTime": dateCtrl.text,
-              "paymentType": eventType,
-              "thumbnail": {
-                "id": "xpkbzyctjeiwvnn8hmjh",
-                "url":
-                    "https://res.cloudinary.com/dwzhnrcdv/image/upload/v1712013809/xpkbzyctjeiwvnn8hmjh.png"
-              }
-            });
+      if (isObjectEmpty(event?.thumbnail?.id) &&
+          isObjectEmpty(thumbnailImageFile)) {
+        // meaning even if na editing, we need to have had the thumbnail
+        showText(message: "Please select event image");
+        return;
+      }
+      // Get the image string...
+      String? imageByteString = isObjectEmpty(thumbnailImageFile)
+          ? null
+          : (await convertFileToString("${thumbnailImageFile?.path}"));
+      MediaUploadModel? thumbnailUrl;
+      bool done = false;
+      if (isObjectEmpty(event)) {
+        // Creating a new Event Entirely 
+
+        thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
+        if (isObjectEmpty(thumbnailUrl)) {
+          showError(
+              message: "Oops!!! Error uploading event image. Please try again");
+          return;
+        }
+        done = await dashCtrl.createEvent(
+          context,
+          evetPayload(thumbnailUrl as MediaUploadModel), 
+        );
+      } else {
+        // Modifying an already existing Event
+        if (!isObjectEmpty(event?.thumbnail?.id) &&
+            !isObjectEmpty(thumbnailImageFile)) {
+          // we are updating, and also user wants to change the event thumbnail...
+
+          // Delete already existing image behind the scene, no need to hold up the thread...
+
+          // upload new file...
+          // imageByteString = await convertFileToString("${thumbnailImageFile?.path}");
+          thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
+          if (isObjectEmpty(thumbnailUrl)) {
+            showError(
+                message:
+                    "Oops!!! Error uploading event image. Please try again");
+            return;
+          }
+          authCtrl.deleteMedia("${event?.thumbnail?.id}");
+        }
+        done = await dashCtrl.updateSingleEvent(
+          context,
+          id: event?.id,
+          payload: evetPayload(
+            thumbnailUrl ?? event?.thumbnail as MediaUploadModel,
+          ), 
+        );
+      } 
       if (done && mounted) {
         navigateBack(context);
       }
     }
+  }
+
+  dynamic evetPayload(MediaUploadModel thumbnailUrl) {
+    return {
+      "name": eventCtrl.text,
+      "description": descCtrl.text,
+      "location": locationCtrl.text,
+      "dateTime": dateCtrl.text,
+      "paymentType": eventType,
+      "thumbnail": thumbnailUrl,
+    };
   }
 
   @override

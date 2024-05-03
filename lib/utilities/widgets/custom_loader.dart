@@ -2,17 +2,20 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
 class Loader extends StatelessWidget {
-  const Loader({Key? key}) : super(key: key);
-
+  const Loader({
+    Key? key,
+    this.color = PRIMARY,
+  }) : super(key: key);
+  final Color color;
   @override
   Widget build(BuildContext context) {
-    const spinKit = SpinKitDualRing(
-      color: PRIMARY,
+    var spinKit = SpinKitDualRing(
+      color: color,
       size: 25.0,
       lineWidth: 3,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
     );
-    return const Center(
+    return Center(
       child: spinKit,
     );
   }

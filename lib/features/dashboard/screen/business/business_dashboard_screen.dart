@@ -325,12 +325,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             onTap: () {
               BusinessAccountModel business =
                   user.business ?? const BusinessAccountModel();
-              // showCreateJobBottomSheet(1);
               if (isBusinessProfileComplete(business) &&
                   isBusinessVerified(business)) {
                 showCreateJobBottomSheet(1);
-              } else if (isBusinessProfileComplete(business) &&
-                  !isBusinessVerified(business)) {
+              } else if (isBusinessProfileComplete(business) && !isBusinessVerified(business)) {
                 cantCreateMsg(i: 1);
               } else {
                 cantCreateMsg();
