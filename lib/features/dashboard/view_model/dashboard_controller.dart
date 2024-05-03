@@ -7,7 +7,9 @@ import 'package:nodes/core/controller/base_controller.dart';
 import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/models/custom_page.dart';
+import 'package:nodes/features/dashboard/model/dynamic_cms_content_model.dart';
 import 'package:nodes/features/dashboard/model/movie_show_model.dart';
+import 'package:nodes/features/dashboard/model/notification_model.dart';
 import 'package:nodes/features/dashboard/model/project_model.dart';
 import 'package:nodes/features/dashboard/model/trending_model.dart';
 import 'package:nodes/features/dashboard/service/dashboard_service.dart';
@@ -15,6 +17,7 @@ import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/features/saves/models/event_model_standardTalent.dart';
 import 'package:nodes/features/saves/models/standard_talent_job_model.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/utils.dart';
 
 class DashboardController extends BaseController {
@@ -39,7 +42,11 @@ class DashboardController extends BaseController {
   List<ProjectModel> _projectList = [];
   List<ProjectModel> _myProjectList = [];
   List<TrendingNewsModel> _trendingNewsList = [];
+  List<NotificationModel> _notificationList = [];
   List<MovieShowModel> _movieShowList = [];
+  DynamicCMSContentModel _currentlyViewedDynamicCMSContent =
+      const DynamicCMSContentModel();
+  List<DynamicCMSContentModel> _dynamicCMSContentList = [];
 
   // <================= Getters Starts here =====================>
   List<StandardTalentJobModel> get savedJobsList => _savedJobsList;
@@ -55,7 +62,12 @@ class DashboardController extends BaseController {
   List<ProjectModel> get projectList => _projectList;
   List<ProjectModel> get myProjectList => _myProjectList;
   List<TrendingNewsModel> get trendingNewsList => _trendingNewsList;
+  List<NotificationModel> get notificationList => _notificationList;
   List<MovieShowModel> get movieShowList => _movieShowList;
+  DynamicCMSContentModel get currentlyViewedDynamicCMSContent =>
+      _currentlyViewedDynamicCMSContent;
+  List<DynamicCMSContentModel> get dynamicCMSContentList =>
+      _dynamicCMSContentList;
 
   // <================= Setters Starts here =================>
 
@@ -259,10 +271,26 @@ class DashboardController extends BaseController {
     notifyListeners();
   }
 
-  // MovieShows
+  // Notifications
 
+  setNotificationList(List<NotificationModel> notifications) {
+    _notificationList = notifications;
+    notifyListeners();
+  }
+
+  // MovieShows
   setMovieShowList(List<MovieShowModel> data) {
     _movieShowList = data;
+    notifyListeners();
+  }
+
+  // CurrentlyViewedDynamicCMSContent
+  setCurrentlyViewedDynamicCMSContents({
+    required DynamicCMSContentModel data,
+    List<DynamicCMSContentModel>? dataList,
+  }) {
+    _currentlyViewedDynamicCMSContent = data;
+    _dynamicCMSContentList = dataList ?? [];
     notifyListeners();
   }
 
@@ -884,18 +912,119 @@ class DashboardController extends BaseController {
       }
       List<MovieShowModel> movieShowList =
           _resolvePaginatedMovieShows(response);
-      print("Hello George na the movieShowList be this: ${movieShowList}");
       // setMovieShowList(movieShowList);
       return movieShowList;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return null;
     } finally {
+      // Since i'm using FutureBuilder, no need for the below,
       // setFetchingMovieShows(false);
     }
   }
 
-// Handling Paginated Data...
+// CMS Contents
+  Future<List<DynamicCMSContentModel>?> fetchCMSContent(
+    BuildContext ctx, {
+    required HorizontalSlidingCardDataSource type,
+  }) async {
+    try {
+      ApiResponse response = await _dashboardService.fetchCMSContent(
+        ctx,
+        type: type,
+      );
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return null;
+      }
+      List<DynamicCMSContentModel> cmsContentList =
+          _resolvePaginatedCMSContents(response);
+
+      return cmsContentList;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return null;
+    } finally {}
+  }
+
+// Notification
+  Future<bool> fetchNotifications(
+    BuildContext ctx, {
+    int page = 1,
+    int pageSize = 1000,
+  }) async {
+    setIsFetchingNotifications(true);
+    try {
+      ApiResponse response = await _dashboardService.fetchNotifications(ctx,
+          page: page, pageSize: pageSize);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      List<NotificationModel> notificationList =
+          _resolvePaginatedNotifications(response);
+      setNotificationList(notificationList);
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setIsFetchingNotifications(false);
+    }
+  }
+
+  Future<bool> fetchMyInteractions(
+    BuildContext ctx, {
+    int page = 1,
+    int pageSize = 1000,
+  }) async {
+    setIsFetchingInteractions(true);
+    try {
+      ApiResponse response = await _dashboardService.fetchMyInteractions(ctx,
+          page: page, pageSize: pageSize);
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return false;
+      }
+      List<NotificationModel> interactionsList =
+          _resolvePaginatedInteractions(response);
+
+      return true;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return false;
+    } finally {
+      setIsFetchingInteractions(false);
+    }
+  }
+
+  Future<List<DynamicCMSContentModel>?> deleteNotification(
+    BuildContext ctx, {
+    required String id,
+  }) async {
+    setIsDeletingNotification(true);
+    try {
+      ApiResponse response = await _dashboardService.deleteNotification(
+        ctx,
+        id: id,
+      );
+      if (response.status == KeyString.failure) {
+        showError(message: response.message);
+        return null;
+      }
+      List<DynamicCMSContentModel> cmsContentList =
+          _resolvePaginatedCMSContents(response);
+
+      return cmsContentList;
+    } on NetworkException catch (e) {
+      showError(message: e.toString());
+      return null;
+    } finally {
+      setIsDeletingNotification(false);
+    }
+  }
+
+// <<<< =============== Handling Paginated Data =========== >>>>
 // Jobs
   List<BusinessJobModel> _resolvePaginatedBusinessJobs(ApiResponse response) {
     CustomPage<BusinessJobModel> p = const CustomPage<BusinessJobModel>()
@@ -963,9 +1092,51 @@ class DashboardController extends BaseController {
       const MovieShowModel(),
     );
 
-    print("George this be the items;:: ${p}");
     if (!isObjectEmpty(p.items)) {
       return p.items as List<MovieShowModel>;
+    }
+    return [];
+  }
+
+// CMS Contents
+  List<DynamicCMSContentModel> _resolvePaginatedCMSContents(
+      ApiResponse response) {
+    CustomPage<DynamicCMSContentModel> p =
+        const CustomPage<DynamicCMSContentModel>().fromJson(
+      response.result as Map<String, dynamic>,
+      const DynamicCMSContentModel(),
+    );
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<DynamicCMSContentModel>;
+    }
+    return [];
+  }
+
+// Notification
+  List<NotificationModel> _resolvePaginatedNotifications(ApiResponse response) {
+    CustomPage<NotificationModel> p =
+        const CustomPage<NotificationModel>().fromJson(
+      response.result as Map<String, dynamic>,
+      const NotificationModel(),
+    );
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<NotificationModel>;
+    }
+    return [];
+  }
+
+// Interactions
+  List<NotificationModel> _resolvePaginatedInteractions(ApiResponse response) {
+    CustomPage<NotificationModel> p =
+        const CustomPage<NotificationModel>().fromJson(
+      response.result as Map<String, dynamic>,
+      const NotificationModel(),
+    );
+
+    if (!isObjectEmpty(p.items)) {
+      return p.items as List<NotificationModel>;
     }
     return [];
   }

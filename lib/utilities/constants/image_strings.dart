@@ -10,6 +10,7 @@ class ImageUtils {
   static const paystackIcon = "assets/images/png/paystack_icon.png";
   static const logoBg = "assets/images/png/logo_bg.png";
   static const authBg = "assets/images/png/auth_img.png";
+  static const gridToolsImg = "assets/images/png/grid_tools_img.png";
 
   // Animations
   // static const nodeLoader = "assets/animations/loading_animation.json";

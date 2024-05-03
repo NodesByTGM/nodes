@@ -93,8 +93,10 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
           ),
           customDivider(height: 40),
           ySpace(height: 20),
+
+          // <<<< ========= TRENDING NEWS STARTS HERE ============ >>>>>>>
           labelText(
-            "Trending News",
+            "Trending",
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -129,7 +131,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                 return SizedBox(
                   height: 320,
                   child: PageView.builder(
-                    itemCount: trendingNewsList.length > 5 ? 5 : trendingNewsList.length,
+                    itemCount: trendingNewsList.length > 5
+                        ? 5
+                        : trendingNewsList.length,
                     controller: trendingNewsCardCtrl,
                     onPageChanged: (val) {
                       currentTrendingNewsIndex = val;
@@ -196,23 +200,56 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               ),
             ],
           ),
+          // <<<< ========= TRENDING NEWS ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
-          Subsection(
-            leftSection: "What did you think?\nRate and share your review",
-            rightSection: "View all",
-            onTap: () {
-              navCtrl.updateDashboardDynamicItem(
-                HorizontalSlidingCardDataSource.TopMovies,
-              );
-              navCtrl.updatePageListStack(
-                IndividualDashboardViewAllDynamicScreen.routeName,
-              );
-            },
+
+          // <<<< ========= TOP MOVIES STARTS HERE ============ >>>>>>>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Top Movies",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "What did you think? Rate and share your review",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updateDashboardDynamicItem(
+                        HorizontalSlidingCardDataSource.TopMovies,
+                      );
+                      navCtrl.updatePageListStack(
+                        IndividualDashboardViewAllDynamicScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "View all",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              ),
+              customDivider(),
+            ],
           ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.TopMovies,
           ),
+          // <<<< ========= TOP MOVIES ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= UPGRADE ACCOUNT STARTS HERE ============ >>>>>>>
           Container(
             padding: const EdgeInsets.symmetric(vertical: 20),
             decoration: const BoxDecoration(
@@ -242,7 +279,7 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     ),
                     ySpace(height: 40),
                     SizedBox(
-                      width: 200,
+                      width: 300,
                       child: SubmitBtn(
                         onPressed: () {
                           context.read<NavController>().updatePageListStack(
@@ -260,7 +297,11 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               ],
             ),
           ),
+          // <<<< ========= UPGRADE ACCOUNT ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= JOB LISTING STARTS HERE ============ >>>>>>>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -279,7 +320,9 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      showText(message: "Upgrade to Pro to see more");
+                    },
                     child: subtext(
                       "See more",
                       fontSize: 14,
@@ -380,45 +423,133 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               ),
             ],
           ),
+          // <<<< ========= JOB LISTING ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
-          Subsection(
-            leftSection: "You'll love this!",
-            rightSection: "View all",
-            onTap: () {},
-          ),
-          const HorizontalSlidingCards(
-            dataSource: HorizontalSlidingCardDataSource.Birthdays,
-          ),
-          ySpace(height: 40),
-          Subsection(
-            leftSection: "Previously on Nodes",
-            rightSection: "View all",
-            onTap: () {},
-          ),
-          const HorizontalSlidingCards(
-            dataSource: HorizontalSlidingCardDataSource.Birthdays,
-          ),
-          ySpace(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          // <<<< ========= BIRTHDAYS STARTS HERE ============ >>>>>>>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               labelText(
-                "Join the conversation and\nconnect with your tribe",
+                "Birthday",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
-              GestureDetector(
-                onTap: () {
-                  navCtrl.updatePageListStack(
-                    NodeCommunityScreen.routeName,
-                  );
-                },
-                child: subtext(
-                  "See more",
-                  fontSize: 14,
-                  color: PRIMARY,
-                ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "You'll love this!",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updateDashboardDynamicItem(
+                        HorizontalSlidingCardDataSource.Birthdays,
+                      );
+                      navCtrl.updatePageListStack(
+                        IndividualDashboardViewAllDynamicScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "View all",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
               ),
+              customDivider(),
+            ],
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+          ),
+          // <<<< ========= BIRTHDAYS ENDS HERE ============ >>>>>>>
+
+          ySpace(height: 40),
+
+          // <<<< ========= FLASHBACKS STARS HERE ============ >>>>>>>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Flash Backs",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Previously on Nodes",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updateDashboardDynamicItem(
+                        HorizontalSlidingCardDataSource.TopMovies,
+                      );
+                      navCtrl.updatePageListStack(
+                        IndividualDashboardViewAllDynamicScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "View all",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              ),
+              customDivider(),
+            ],
+          ),
+          const HorizontalSlidingCards(
+            dataSource: HorizontalSlidingCardDataSource.Flashbacks,
+          ),
+          // <<<< ========= FLASHBACKS ENDS HERE ============ >>>>>>>
+
+          ySpace(height: 40),
+
+          // <<<< ========= COMMUNITY STARTS HERE ============ >>>>>>>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Community",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Join the conversation and\nconnect with your tribe",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updatePageListStack(
+                        NodeCommunityScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "See more",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              ),
+              customDivider(),
             ],
           ),
           ySpace(height: 20),
@@ -557,24 +688,48 @@ class _IndividualDashboardScreenState extends State<IndividualDashboardScreen> {
               ),
             ],
           ),
+          // <<<< ========= COMMUNITY ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= COLLABORATION SPOTLIGHT STARTS HERE ============ >>>>>>>
           Subsection(
             leftSection: "Collaboration Spotlights",
             rightSection: "View all",
-            onTap: () {},
+            onTap: () {
+              navCtrl.updateDashboardDynamicItem(
+                HorizontalSlidingCardDataSource.CollaborationSpotlights,
+              );
+              navCtrl.updatePageListStack(
+                IndividualDashboardViewAllDynamicScreen.routeName,
+              );
+            },
           ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.CollaborationSpotlights,
           ),
+          // <<<< ========= COLLABORATION SPOTLIGHT ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= HIDDEN GEM STARTS HERE ============ >>>>>>>
           Subsection(
-            leftSection: "Birthdays",
+            leftSection: "Hiddedn Gem",
             rightSection: "View all",
-            onTap: () {},
+            onTap: () {
+              navCtrl.updateDashboardDynamicItem(
+                HorizontalSlidingCardDataSource.HiddenGems,
+              );
+              navCtrl.updatePageListStack(
+                IndividualDashboardViewAllDynamicScreen.routeName,
+              );
+            },
           ),
           const HorizontalSlidingCards(
-            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+            dataSource: HorizontalSlidingCardDataSource.HiddenGems,
           ),
+          // <<<< ========= HIDDEN GEM ENDS HERE ============ >>>>>>>
+
           ySpace(height: 120),
         ],
       ),

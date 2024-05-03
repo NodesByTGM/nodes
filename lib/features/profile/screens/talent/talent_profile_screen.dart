@@ -25,6 +25,7 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
   late UserModel user;
   late AuthController authCtrl;
   late DashboardController dashCtrl;
+  late String userAge;
 
   @override
   void initState() {
@@ -32,7 +33,9 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
     dashCtrl = locator.get<DashboardController>();
     user = authCtrl.currentUser;
     safeNavigate(
-        () => context.read<DashboardController>().fetchMyProjects(context));
+      () => context.read<DashboardController>().fetchMyProjects(context),
+    );
+    userAge = "${DateTime.now().year - (user.dob?.year as int)}";
     super.initState();
   }
 
@@ -92,7 +95,8 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                           color: GRAY,
                         ),
                         subtext(
-                          "${!isObjectEmpty(user.age) ? user.age : '**'} years",
+                          // "${!isObjectEmpty(user.age) ? user.age : '**'} years",
+                          "$userAge years",
                         ),
                       ],
                     ),
@@ -158,43 +162,43 @@ class _TalentProfileScreenState extends State<TalentProfileScreen> {
                 ],
               ),
               ySpace(height: 24),
-              Row(
-                children: [
-                  Wrap(
-                    spacing: 2,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      labelText(
-                        "26",
-                        fontSize: 12,
-                      ),
-                      subtext(
-                        "Followers",
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ],
-                  ),
-                  xSpace(width: 10),
-                  Wrap(
-                    spacing: 2,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      labelText(
-                        "26",
-                        fontSize: 12,
-                      ),
-                      subtext(
-                        "Following",
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              ySpace(height: 24),
-              ySpace(height: 10),
+              // Row(
+              //   children: [
+              //     Wrap(
+              //       spacing: 2,
+              //       crossAxisAlignment: WrapCrossAlignment.center,
+              //       children: [
+              //         labelText(
+              //           "26",
+              //           fontSize: 12,
+              //         ),
+              //         subtext(
+              //           "Followers",
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w400,
+              //         ),
+              //       ],
+              //     ),
+              //     xSpace(width: 10),
+              //     Wrap(
+              //       spacing: 2,
+              //       crossAxisAlignment: WrapCrossAlignment.center,
+              //       children: [
+              //         labelText(
+              //           "26",
+              //           fontSize: 12,
+              //         ),
+              //         subtext(
+              //           "Following",
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w400,
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
+              // ySpace(height: 24),
+              ySpace(height: 30),
               Row(
                 children: [
                   Expanded(

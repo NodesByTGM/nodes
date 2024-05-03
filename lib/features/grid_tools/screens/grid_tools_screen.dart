@@ -16,13 +16,14 @@ class GridToolsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 labelText(
-                  "Grid Tools",
+                  "Unleash the power of creativity with Nodes Grid Tools.",
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
+                  textAlign: TextAlign.center,
                 ),
                 ySpace(height: 24),
-                labelText(
-                  "We believe in the power of every individual's creative spark. Join our thriving community of actors, artists, designers, writers, and visionaries. Your journey to success starts here.",
+                subtext(
+                  "Your bridge between creativity and the pragmatic world of business",
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   textAlign: TextAlign.center,
@@ -45,7 +46,7 @@ class GridToolsScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Image.asset(ImageUtils.talentAuthImage),
+            child: Image.asset(ImageUtils.gridToolsImg),
           ),
         ],
       ),

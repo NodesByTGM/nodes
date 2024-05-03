@@ -20,6 +20,8 @@ class PeopleBrandCard extends StatefulWidget {
 
 class _PeopleBrandCardState extends State<PeopleBrandCard> {
   bool isConnecting = false;
+  bool canMessage = false;
+  bool canConnect = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,8 @@ class _PeopleBrandCardState extends State<PeopleBrandCard> {
 
     bool hasHeadlineOrBio = !isObjectEmpty(widget.genUser.headline) ||
         !isObjectEmpty(widget.genUser.bio);
+
+    // print("George user ${widget.genUser.name} is connected: ${widget.genUser.connected} or requested to connect : ${widget.genUser.requested}");
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -70,10 +74,10 @@ class _PeopleBrandCardState extends State<PeopleBrandCard> {
                   ? const Loader()
                   : GestureDetector(
                       onTap: () async {
-                        if (widget.isConnected) {
+                        if (canMessage) {
                           // probably fetch the user something before sending them here...
                           navigateTo(context, SingleMessageDetails.routeName);
-                        } else {
+                        } else if (canConnect) {
                           // Function to Connect with user/brand
                           setState(() {
                             isConnecting = true;
@@ -86,10 +90,12 @@ class _PeopleBrandCardState extends State<PeopleBrandCard> {
                             isConnecting = false;
                           });
                         }
+                        null;
                       },
                       child: labelText(
-                        widget.isConnected ? "Message" : "Connect",
-                        color: PRIMARY,
+                        // widget.isConnected ? "Message" : "Connect",
+                        getConnectionText(),
+                        color: (canMessage || canConnect) ? PRIMARY : GRAY,
                       ),
                     ),
             ],
@@ -123,5 +129,27 @@ class _PeopleBrandCardState extends State<PeopleBrandCard> {
         ],
       ),
     );
+  }
+
+  String getConnectionText() {
+    if (widget.isConnected && widget.genUser.connected) {
+      // User is on the Connections tab and is connected...
+      setState(() {
+        canMessage = true;
+      });
+      return "Message";
+    } else if (widget.genUser.requested) {
+      // User has requested to Connect. This won't appear in the Connections Tab as it's being filtered.
+      return "Pending...";
+    } else if (!widget.isConnected && widget.genUser.connected) {
+      // User is NOT in the Connections tab (i.e user is in the Discover tab) but has connected.
+      return "Connected";
+    } else {
+      // User is in the Discover tab and hasn't connected yet.
+      setState(() {
+        canConnect = true;
+      });
+      return "Connect";
+    }
   }
 }

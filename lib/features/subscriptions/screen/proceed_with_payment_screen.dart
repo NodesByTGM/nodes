@@ -224,7 +224,7 @@ class _ProceedWithPaymentState extends State<ProceedWithPayment> {
         leading: const Icon(
           Icons.check_circle,
           size: 30,
-          color: PRIMARY,
+          color: SECONDARY,
         ),
         title: labelText(
           f,

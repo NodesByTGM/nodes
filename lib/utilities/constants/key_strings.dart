@@ -32,4 +32,9 @@ class KeyString {
   static const annual = "annual";
   static const subAbandoned = "abandoned";
   static const subSuccess = "success";
+  static const spotlights = "Collaboration Spotlights";
+  static const hiddenGems = "Hidden Gems";
+  static const flashbacks = "Flashbacks";
+  static const birthdays = "Birthdays";
+  static const trendingNews = "Trending News";
 }

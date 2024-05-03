@@ -17,8 +17,8 @@ enum DrawerRouteTitle {
 enum HorizontalSlidingCardDataSource {
   Empty,
   TopMovies,
-  // HiddenGems,
-  // Flashbacks,
+  HiddenGems,
+  Flashbacks,
   Community,
   CollaborationSpotlights,
   Birthdays,

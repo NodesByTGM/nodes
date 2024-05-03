@@ -55,6 +55,7 @@ Text subtext(
   TextOverflow? overflow,
   double height = 1.5,
   String? fontFamily = FontFamily,
+  int? maxLine,
 }) {
   return Text(
     label,

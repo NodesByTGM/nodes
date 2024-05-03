@@ -29,6 +29,7 @@ class ComController extends BaseController {
   List<CreatePostModel> _draftPostList = [];
   //General Users
   List<GeneralUserModel> _generalUsers = [];
+  List<GeneralUserModel> _connectedUsers = [];
 
   // <================= Getters Starts here =====================>
   get currentlyViewedSpace => _currentlyViewedSpace;
@@ -37,6 +38,7 @@ class ComController extends BaseController {
   List<PostModel> get postList => _postList;
   List<CreatePostModel> get draftPostList => _draftPostList;
   List<GeneralUserModel> get generalUsers => _generalUsers;
+  List<GeneralUserModel> get connectedUsers => _connectedUsers;
 
   // <================= Setters Starts here =================>
 
@@ -84,6 +86,10 @@ class ComController extends BaseController {
   // General Users
   setGeneralUsers(List<GeneralUserModel> users) {
     _generalUsers = users;
+    notifyListeners();
+  }
+  setConnectedUsers(List<GeneralUserModel> users) {
+    _connectedUsers = users;
     notifyListeners();
   }
 
@@ -280,8 +286,7 @@ class ComController extends BaseController {
         showError(message: response.message);
         return false;
       }
-      // TODO::::
-      // _resolvePaginatedConnections(response);
+       setConnectedUsers(_resolvePaginatedUsers(response));
       return true;
     } on NetworkException catch (e) {
       showError(message: e.toString());

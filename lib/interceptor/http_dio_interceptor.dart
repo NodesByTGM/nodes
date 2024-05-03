@@ -23,8 +23,8 @@ class HttpDioInterceptors extends InterceptorsWrapper {
       options.headers["accept"] = 'application/json';
 
       // log.info("REQUEST DATA ${options.baseUrl}");
-      // log.info("REQUEST DATA ${options.uri.toString()}");
-      log.info("REQUEST DATA ${options.path}");
+      log.info("REQUEST DATA ${options.uri.toString()}");
+      // log.info("REQUEST DATA ${options.path}");
       // log.info("REQUEST DATA ${options.headers}");
       log.info("REQUEST DATA ${options.data}");
       return handler.next(options);

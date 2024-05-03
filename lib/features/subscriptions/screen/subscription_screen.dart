@@ -82,7 +82,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ySpace(height: 32),
             SubscriptionCard(
                 type: "Pro",
-                description: "One sentence  supporting text",
+                description: Constants.proSubDesc,
                 price: formatCurrencyAmount(Constants.naira, proAmt),
                 planIndex: planIndex,
                 isRecommended: true,
@@ -94,7 +94,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ySpace(height: 16),
             SubscriptionCard(
               type: "Business",
-              description: "One sentence  supporting text",
+              description: Constants.businessSubDesc,
               price: formatCurrencyAmount(Constants.naira, businessAmt),
               planIndex: planIndex,
               isRecommended: false,
@@ -236,12 +236,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     // Save the upgrade type/data, either pro or business
     authCtrl.setSubUpgrade(
       SubscriptionUpgrade(
-        type: isPro ? KeyString.pro : KeyString.bus,
-        amount: isPro ? proAmt : businessAmt,
-        period: planIndex == 0 ? KeyString.monthly : KeyString.annual,
-        features: isPro ? Constants.proFeatures : Constants.businessFeatures,
-        isSubscribed: isSubscribed(isPro: isPro),
-      ),
+          type: isPro ? KeyString.pro : KeyString.bus,
+          amount: isPro ? proAmt : businessAmt,
+          period: planIndex == 0 ? KeyString.monthly : KeyString.annual,
+          features: isPro ? Constants.proFeatures : Constants.businessFeatures,
+          isSubscribed: isSubscribed(isPro: isPro),
+          description:
+              isPro ? Constants.proSubDesc : Constants.businessSubDesc),
     );
     context.read<NavController>().updatePageListStack(
           ProceedWithPayment.routeName,
@@ -322,7 +323,6 @@ class SubscriptionCard extends StatelessWidget {
                 price,
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
-                color: PRIMARY,
               ),
               subtext(
                 "/${planIndex == 0 ? 'month' : 'year'}",
@@ -342,8 +342,9 @@ class SubscriptionCard extends StatelessWidget {
           ySpace(height: 24),
           SubmitBtn(
             onPressed: onTap,
-            title: btnTxt(btnText, isSubscribed ? PRIMARY : WHITE),
-            color: isSubscribed ? BORDER : PRIMARY,
+            // title: btnTxt(btnText, isSubscribed ? PRIMARY : WHITE),
+            title: btnTxt(btnText, WHITE),
+            color: isSubscribed ? BORDER : BLACK,
           ),
         ],
       ),
@@ -360,7 +361,7 @@ class SubscriptionCard extends StatelessWidget {
         leading: const Icon(
           Icons.check_circle,
           size: 30,
-          color: PRIMARY,
+          color: SECONDARY,
         ),
         title: labelText(
           f,

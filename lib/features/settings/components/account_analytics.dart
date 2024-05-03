@@ -28,14 +28,14 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
               Expanded(
                 child: analyticsCard(
                   title: "No. of Profile visits",
-                  value: "20",
+                  value: "0",
                 ),
               ),
               xSpace(width: 24),
               Expanded(
                 child: analyticsCard(
                   title: "No. of Impressions",
-                  value: "24",
+                  value: "0",
                 ),
               ),
             ],
@@ -47,14 +47,14 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
               Expanded(
                 child: analyticsCard(
                   title: "No. of Profile visits",
-                  value: "20",
+                  value: "0",
                 ),
               ),
               xSpace(width: 24),
               Expanded(
                 child: analyticsCard(
                   title: "No. of Impressions",
-                  value: "24",
+                  value: "0",
                 ),
               ),
             ],
@@ -62,7 +62,7 @@ class _AccountAnalyticsState extends State<AccountAnalytics> {
           ySpace(height: 24),
           analyticsCard(
             title: "No. of Unique Visitors",
-            value: "20",
+            value: "0",
           ),
         ],
         ySpace(height: 50),

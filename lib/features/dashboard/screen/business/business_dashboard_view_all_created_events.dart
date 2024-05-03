@@ -1,4 +1,6 @@
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/create_event.dart';
 import 'package:nodes/features/dashboard/components/event_card.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -158,7 +160,20 @@ class _BusinessCreatedEventCenterScreenState
                   Expanded(
                     flex: 2,
                     child: SubmitBtn(
-                      onPressed: showCreateEventBottomSheet,
+                      // onPressed: showCreateEventBottomSheet,
+                      onPressed: () {
+                        BusinessAccountModel business =
+                            context.read<AuthController>().currentUser.business ?? const BusinessAccountModel();
+                        if (isBusinessProfileComplete(business) &&
+                            isBusinessVerified(business)) {
+                          showCreateEventBottomSheet();
+                        } else if (isBusinessProfileComplete(business) &&
+                            !isBusinessVerified(business)) {
+                          cantCreateMsg(i: 1);
+                        } else {
+                          cantCreateMsg();
+                        }
+                      },
                       title: btnTxt(
                         "Create an event",
                         WHITE,
@@ -174,6 +189,12 @@ class _BusinessCreatedEventCenterScreenState
     );
   }
 
+  void cantCreateMsg({int i = 0}) {
+    showText(
+        message: i == 0
+            ? Constants.updateYourProfileToProceed
+            : Constants.accountNotVerified);
+  }
   showCreateEventBottomSheet() {
     showModalBottomSheet(
       context: context,

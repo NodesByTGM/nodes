@@ -157,7 +157,7 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
                   List<GeneralUserModel> genUsers = comCtrl.generalUsers
                       .where((u) => u.type == (isBrand ? 2 : 1))
                       .toList();
-                      // Use the genUsers, to now filter for the advance filtering mechanism...
+                  // Use the genUsers, to now filter for the advance filtering mechanism...
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -165,6 +165,7 @@ class _CommunityDiscoverTabState extends State<CommunityDiscoverTab> {
                     itemCount: genUsers.length,
                     itemBuilder: (c, i) {
                       GeneralUserModel genUser = genUsers[i];
+
                       return PeopleBrandCard(
                         // isConnected: genUser.connected,
                         isConnected: false,

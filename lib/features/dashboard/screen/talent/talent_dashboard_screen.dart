@@ -58,7 +58,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   fetchJobsEventsTrendingPosts() {
     fetchAllJobs();
     fetchAllAppliedJobs();
-    fetchAllEvents(); 
+    fetchAllEvents();
     fetchAllPosts();
   }
 
@@ -73,7 +73,6 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
   fetchAllEvents() {
     safeNavigate(() => dashCtrl.fetchAllEvents(context));
   }
- 
 
   fetchAllPosts() {
     safeNavigate(() => context.read<ComController>().fetchAllPosts(context));
@@ -120,7 +119,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                 ),
                 ySpace(height: 10),
                 subtext(
-                  "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
+                  "You now have access to a creative ecosystem, connect with the community and access job opportunities",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),

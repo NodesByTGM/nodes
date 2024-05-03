@@ -19,6 +19,10 @@ class Constants {
       "Oops!! Your account hasn't been verified yet.";
   static const updateYourProfileToProceed =
       "Please update your profile to proceed.";
+  static const proSubDesc =
+      "Elevate your profile and access additional features";
+  static const businessSubDesc =
+      "Access all features for talent and businesses";
 
   static const jobType = [
     'Full-time',
@@ -31,15 +35,15 @@ class Constants {
     "Stay Informed on Creative Trends",
   ];
   static const proFeatures = [
-    // "Everything on the standard plan",
+    "Everything on the standard plan",
     "Enhanced Visibility",
     "Access to Premium Jobs",
     "Expanded Project Showcase",
-    "Advanced Analytics & Insights",
+    "Advanced Analytics and Insights",
     "Access to GridTools Discovery Pack (Free)",
   ];
   static const businessFeatures = [
-    // "Everything on the pro plan",
+    "Everything in Talent",
     "Premium Talent Pool Access",
     "Featured Job Listings",
     "Analytics and Performance Metrics",

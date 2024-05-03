@@ -91,7 +91,7 @@ class _JobAnalyticsState extends State<JobAnalytics> {
             Expanded(
               child: analyticsCard(
                 title: "No. of Clicks",
-                value: "20",
+                value: "0",
               ),
             ),
             xSpace(width: 24),

@@ -30,13 +30,13 @@ late List<CameraDescription> cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   await LocalStorageService.initializeDb();
-  setUpLocator();
-  _setupLogging();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setUpLocator();
+  _setupLogging();
   //  // Pass all uncaught "fatal" errors from the framework to Crashlytics
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

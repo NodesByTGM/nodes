@@ -35,9 +35,17 @@ class DashboardApis {
   // Trending
   static const trendingNews = "$baseApi/trending";
 
-  // Trending
+  // Movies Shows
   static const movieShows = "$baseApi/movies-and-shows";
 
+  // CMS Content
+  static const cmsContent = "$baseApi/cms/contents";
+
+  // Notification
+  static const notificationApi = "$baseApi/notifications";
+  static const fetchNotifications = "$notificationApi/mine";
+  static const deleteNotification = "$notificationApi/remove/{id}";
+  static const myInteractions = "$notificationApi/mine/interactions";
 }
 
 @RestApi()
@@ -175,4 +183,25 @@ abstract class DashboardRepository {
   @GET(DashboardApis.movieShows)
   Future<ApiResponse> fetchMovieShows();
 
+  @GET(DashboardApis.cmsContent)
+  Future<ApiResponse> fetchCMSContent(
+    @Query('category') String category,
+  );
+
+  @GET(DashboardApis.notificationApi)
+  Future<ApiResponse> fetchNotifications(
+    @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
+
+  @DELETE(DashboardApis.deleteNotification)
+  Future<ApiResponse> deleteNotification(
+    @Path('id') String id,
+  );
+
+  @DELETE(DashboardApis.myInteractions)
+  Future<ApiResponse> fetchMyInteractions(
+   @Query('page') int page,
+    @Query('pageSize') int pageSize,
+  );
 }

@@ -1,14 +1,15 @@
 import 'package:nodes/core/controller/nav_controller.dart';
-import 'package:nodes/features/auth/view_model/auth_controller.dart';
-import 'package:nodes/features/dashboard/components/card_template.dart';
+import 'package:nodes/features/dashboard/components/cms_content_card_template.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_single_item_details.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/widgets/shimmer_loader.dart';
 
 class IndividualDashboardViewAllDynamicScreen extends StatefulWidget {
   const IndividualDashboardViewAllDynamicScreen({super.key});
-  static const String routeName = "/individual_dashboard_view_all_dynamic_screen";
+  static const String routeName =
+      "/individual_dashboard_view_all_dynamic_screen";
   @override
   State<IndividualDashboardViewAllDynamicScreen> createState() =>
       _IndividualDashboardViewAllDynamicScreenState();
@@ -31,8 +32,8 @@ class _IndividualDashboardViewAllDynamicScreenState
   @override
   Widget build(BuildContext context) {
     // will be using another controller instead of auth, for making the API calls...
-    return Consumer2<NavController, AuthController>(
-      builder: (context, navCtrl, authCtrl, _) {
+    return Consumer2<NavController, DashboardController>(
+      builder: (context, navCtrl, dashCtrl, _) {
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,51 +125,55 @@ class _IndividualDashboardViewAllDynamicScreenState
                 padding: const EdgeInsets.all(0),
                 itemCount: 5,
                 itemBuilder: (context, i) {
-                  return CustomCardTemplate(
-                    imgUrl:
-                        "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-                    title: "Lorem ipsum dolor sit amet, con...",
-                    onTap: () {
-                      navCtrl.updatePageListStack(
-                        IndividualDashboardSingleItemDetailsScreen.routeName,
-                      );
-                    },
-                    height: 240,
+                  return SizedBox(
+                    height: 300,
+                    child: CMSCardTemplate(
+                      imgUrl:
+                          "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+                      title: "Lorem ipsum dolor sit amet, con...",
+                      description: "Lorem ipsum dolor sit amet, con...",
+                      onTap: () {
+                        navCtrl.updatePageListStack(
+                          IndividualDashboardSingleItemDetailsScreen.routeName,
+                        );
+                      },
+                      height: 240,
+                    ),
                   );
                 },
                 separatorBuilder: (context, i) => ySpace(height: 10),
               ),
               ySpace(height: 20),
-              Center(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(4, (index) {
-                      int _ = index + 1;
-                      return GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
-                          margin: const EdgeInsets.only(
-                            right: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 0.6, color: BORDER),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: labelText("$_"),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-              )
+              // Center(
+              //   child: SingleChildScrollView(
+              //     scrollDirection: Axis.horizontal,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: List.generate(4, (index) {
+              //         int _ = index + 1;
+              //         return GestureDetector(
+              //           onTap: () {},
+              //           child: Container(
+              //             padding: const EdgeInsets.symmetric(
+              //               horizontal: 15,
+              //               vertical: 10,
+              //             ),
+              //             margin: const EdgeInsets.only(
+              //               right: 16,
+              //             ),
+              //             decoration: BoxDecoration(
+              //               border: Border.all(width: 0.6, color: BORDER),
+              //               borderRadius: BorderRadius.circular(8),
+              //             ),
+              //             child: Center(
+              //               child: labelText("$_"),
+              //             ),
+              //           ),
+              //         );
+              //       }),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         );

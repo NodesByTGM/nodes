@@ -163,9 +163,14 @@ class _CommunityConnectionsTabState extends State<CommunityConnectionsTab> {
                   padding: const EdgeInsets.all(8.0),
                   child: Consumer<ComController>(
                     builder: (contex, comCtrl, _) {
-                      bool isLoading = comCtrl.isFetchingAllConnections;
-                      // bool isLoading = comCtrl.isFetchingAllMyConnection;
+                      // I'm yet to understand how the API for fetching connections work, 
+                      // As it has both the send and receipient data.
+                      // What it does is just to show the two details and a status.
+                      // Same as fetching all the users and get the connected and requested from there...
+                      //  I think the connections api is needed for Notifications or something...more like messaging pattern and stuff...
+                      // bool isLoading = comCtrl.isFetchingAllConnections;
                       // change this
+                      bool isLoading = comCtrl.isFetchingGeneralUsers;
                       bool hasData = isObjectEmpty(comCtrl.generalUsers);
                       if (isLoading || isObjectEmpty(comCtrl.generalUsers)) {
                         return DataReload(

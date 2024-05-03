@@ -1,16 +1,18 @@
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
-class CustomCardTemplate extends StatelessWidget {
-  const CustomCardTemplate({
+class CMSCardTemplate extends StatelessWidget {
+  const CMSCardTemplate({
     super.key,
     required this.imgUrl,
     required this.title,
+    required this.description,
     this.height,
     required this.onTap,
   });
 
   final String imgUrl;
   final String title;
+  final String description;
   final double? height;
   final GestureTapCallback onTap;
 
@@ -26,8 +28,7 @@ class CustomCardTemplate extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: cachedNetworkImage(
-                imgUrl:"https://images.pexels.com/photos/20412111/pexels-photo-20412111/free-photo-of-cactus.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-                // imgUrl: imgUrl,
+                imgUrl: imgUrl,
                 size: screenWidth(context),
               ),
             ),
@@ -48,7 +49,13 @@ class CustomCardTemplate extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
                 color: WHITE,
-                // maxLine: 1,
+                maxLine: 2,
+              ),
+              subtext(
+                description,
+                fontSize: 14,
+                color: WHITE,
+                maxLine: 2,
               ),
               const Spacer(),
               GestureDetector(

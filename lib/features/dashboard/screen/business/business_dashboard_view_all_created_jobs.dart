@@ -1,4 +1,6 @@
 import 'package:nodes/config/dependencies.dart';
+import 'package:nodes/features/auth/models/business_account_model.dart';
+import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/dashboard/components/create_job_post.dart';
 import 'package:nodes/features/dashboard/components/job_card_business.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -170,7 +172,23 @@ class _BusinessCreatedJobCenterScreenState
                   Expanded(
                     flex: 2,
                     child: SubmitBtn(
-                      onPressed: showCreateJobBottomSheet,
+                      // onPressed: showCreateJobBottomSheet,
+                      onPressed: () {
+                        BusinessAccountModel business = context
+                                .read<AuthController>()
+                                .currentUser
+                                .business ??
+                            const BusinessAccountModel();
+                        if (isBusinessProfileComplete(business) &&
+                            isBusinessVerified(business)) {
+                          showCreateJobBottomSheet();
+                        } else if (isBusinessProfileComplete(business) &&
+                            !isBusinessVerified(business)) {
+                          cantCreateMsg(i: 1);
+                        } else {
+                          cantCreateMsg();
+                        }
+                      },
                       title: btnTxt(
                         "Create a job posting",
                         WHITE,
@@ -184,6 +202,13 @@ class _BusinessCreatedJobCenterScreenState
         ],
       ),
     );
+  }
+
+  void cantCreateMsg({int i = 0}) {
+    showText(
+        message: i == 0
+            ? Constants.updateYourProfileToProceed
+            : Constants.accountNotVerified);
   }
 
   showCreateJobBottomSheet() {

@@ -382,7 +382,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   icon: ImageUtils.settingsIcon,
                   title: KeyString.accountSettingsScreen,
                   route: DrawerRouteTitle.AccountSettings,
-                  isActive: false,
+                  isActive:
+                      getActiveDrawer(navCtrl, KeyString.accountSettingsScreen),
                   onTap: () {
                     closeDrawer();
                     navCtrl.updatePageListStack(

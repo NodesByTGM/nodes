@@ -8,10 +8,7 @@ import 'package:nodes/features/community/screens/nodes_community_screen.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
 import 'package:nodes/features/dashboard/components/job_card_standardTalent.dart';
-import 'package:nodes/features/dashboard/components/leave_a_rating.dart';
-import 'package:nodes/features/dashboard/components/top_movies_card_template.dart';
 import 'package:nodes/features/dashboard/components/trending_news_card.dart';
-import 'package:nodes/features/dashboard/model/movie_show_model.dart';
 import 'package:nodes/features/dashboard/model/trending_model.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_view_all_dynamic_screen.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
@@ -101,8 +98,10 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           ),
           customDivider(height: 40),
           ySpace(height: 20),
+
+          // <<<< ========= TRENDING NEWS STARTS HERE ============ >>>>>>>
           labelText(
-            "Trending News",
+            "Trending",
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -207,7 +206,11 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
               ),
             ],
           ),
+          // <<<< ========= TRENDING NEWS ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= TOP MOVIES STARTS HERE ============ >>>>>>>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -245,63 +248,14 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
               customDivider(),
             ],
           ),
-          // FutureBuilder(
-          //   future: dashCtrl.fetchMovieShows(context),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return const ShimmerLoader();
-          //     } else if (snapshot.hasError) {
-          //       // Use a proper error widget with a Reload feature...
-          //       return Container(
-          //         margin: const EdgeInsets.only(right: 5),
-          //         width: screenWidth(context),
-          //         height: 200,
-          //         decoration: const BoxDecoration(
-          //           color: BORDER,
-          //           borderRadius: BorderRadius.all(
-          //             Radius.circular(5),
-          //           ),
-          //         ),
-          //         child: Center(
-          //           child: labelText("Oops!!!! Error"),
-          //         ),
-          //       );
-          //     } else if (snapshot.hasData &&
-          //         snapshot.connectionState == ConnectionState.done) {
-          //       return SizedBox(
-          //         // height: 240,
-          //         height: 240,
-          //         child: SingleChildScrollView(
-          //           scrollDirection: Axis.horizontal,
-          //           child: Row(
-          //             children: List.generate(
-          //               snapshot.data!.length,
-          //               (index) {
-          //                 // Depending on the datasource, the corresponding cards will be used...
-          //                 return TopMovieCardTemplate(
-          //                   imgUrl:
-          //                       "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-          //                   title: "Lorem ipsum dolor sit amet, con...",
-          //                   onTap: () {},
-          //                   ratingTap: () {
-          //                     showRatingBottomSheet(
-          //                         // passin the item details, likes of IDs, etc...
-          //                         );
-          //                   },
-          //                 );
-          //               },
-          //             ),
-          //           ),
-          //         ),
-          //       );
-          //     }
-          //     return const CircularProgressIndicator.adaptive();
-          //   },
-          // ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.TopMovies,
           ),
+          // <<<< ========= TOP MOVIES ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= UPGRADE ACCOUNT STARTS HERE ============ >>>>>>>
           if (user.type == 1) ...[
             // <<<<=============================== Meaning the User is Talent  =====================>>>>
             Container(
@@ -333,7 +287,7 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                       ),
                       ySpace(height: 40),
                       SizedBox(
-                        width: 200,
+                        width: 300,
                         child: SubmitBtn(
                           onPressed: () {
                             // Set to Business Monthly sub
@@ -363,6 +317,9 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
             ),
             ySpace(height: 40),
           ],
+          // <<<< ========= UPGRADE ACCOUNT ENDS HERE ============ >>>>>>>
+
+          // <<<< ========= JOB LISTING STARTS HERE ============ >>>>>>>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -482,7 +439,11 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
               ),
             ],
           ),
+          // <<<< ========= JOB LISTING ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= BIRTHDAYS STARTS HERE ============ >>>>>>>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -502,12 +463,12 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // navCtrl.updateDashboardDynamicItem(
-                      //   HorizontalSlidingCardDataSource.TopMovies,
-                      // );
-                      // navCtrl.updatePageListStack(
-                      //   IndividualDashboardViewAllDynamicScreen.routeName,
-                      // );
+                      navCtrl.updateDashboardDynamicItem(
+                        HorizontalSlidingCardDataSource.Birthdays,
+                      );
+                      navCtrl.updatePageListStack(
+                        IndividualDashboardViewAllDynamicScreen.routeName,
+                      );
                     },
                     child: subtext(
                       "View all",
@@ -523,16 +484,56 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.Birthdays,
           ),
+          // <<<< ========= BIRTHDAYS ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
-          Subsection(
-            leftSection: "Previously on Nodes",
-            rightSection: "View all",
-            onTap: () {},
+
+          // <<<< ========= FLASHBACKS STARS HERE ============ >>>>>>>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              labelText(
+                "Flash Backs",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              ySpace(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: subtext(
+                      "Previously on Nodes",
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      navCtrl.updateDashboardDynamicItem(
+                        HorizontalSlidingCardDataSource.Flashbacks,
+                      );
+                      navCtrl.updatePageListStack(
+                        IndividualDashboardViewAllDynamicScreen.routeName,
+                      );
+                    },
+                    child: subtext(
+                      "View all",
+                      fontSize: 14,
+                      color: PRIMARY,
+                    ),
+                  ),
+                ],
+              ),
+              customDivider(),
+            ],
           ),
           const HorizontalSlidingCards(
-            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+            dataSource: HorizontalSlidingCardDataSource.Flashbacks,
           ),
+          // <<<< ========= FLASHBACKS ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= COMMUNITY STARTS HERE ============ >>>>>>>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -702,24 +703,47 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
               ),
             ],
           ),
+          // <<<< ========= COMMUNITY ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= COLLABORATION SPOTLIGHT STARTS HERE ============ >>>>>>>
           Subsection(
             leftSection: "Collaboration Spotlights",
             rightSection: "View all",
-            onTap: () {},
+            onTap: () {
+              navCtrl.updateDashboardDynamicItem(
+                HorizontalSlidingCardDataSource.CollaborationSpotlights,
+              );
+              navCtrl.updatePageListStack(
+                IndividualDashboardViewAllDynamicScreen.routeName,
+              );
+            },
           ),
           const HorizontalSlidingCards(
             dataSource: HorizontalSlidingCardDataSource.CollaborationSpotlights,
           ),
+          // <<<< ========= COLLABORATION SPOTLIGHT ENDS HERE ============ >>>>>>>
+
           ySpace(height: 40),
+
+          // <<<< ========= HIDDEN GEM STARTS HERE ============ >>>>>>>
           Subsection(
-            leftSection: "Birthdays",
+            leftSection: "Hiddedn Gem",
             rightSection: "View all",
-            onTap: () {},
+            onTap: () {
+              navCtrl.updateDashboardDynamicItem(
+                HorizontalSlidingCardDataSource.HiddenGems,
+              );
+              navCtrl.updatePageListStack(
+                IndividualDashboardViewAllDynamicScreen.routeName,
+              );
+            },
           ),
           const HorizontalSlidingCards(
-            dataSource: HorizontalSlidingCardDataSource.Birthdays,
+            dataSource: HorizontalSlidingCardDataSource.HiddenGems,
           ),
+          // <<<< ========= HIDDEN GEM ENDS HERE ============ >>>>>>>
           ySpace(height: 120),
         ],
       ),
@@ -747,30 +771,4 @@ class _TrendingDashboardScreenState extends State<TrendingDashboardScreen> {
       duration: const Duration(milliseconds: 500),
     );
   }
-
-  // showRatingBottomSheet() {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     isDismissible: true,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(
-  //         top: Radius.circular(30.0),
-  //       ),
-  //     ),
-  //     backgroundColor: WHITE,
-  //     elevation: 0.0,
-  //     builder: (context) {
-  //       return BottomSheetWrapper(
-  //         closeOnTap: true,
-  //         title: labelText(
-  //           "Leave a rating",
-  //           fontSize: 18,
-  //           fontWeight: FontWeight.w500,
-  //         ),
-  //         child: const LeaveARating(),
-  //       );
-  //     },
-  //   );
-  // }
 }

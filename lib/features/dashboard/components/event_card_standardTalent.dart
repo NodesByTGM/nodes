@@ -47,6 +47,11 @@ class _StandardTalentEventCardState extends State<StandardTalentEventCard> {
           ),
         ),
         Container(
+          decoration: BoxDecoration(
+            color: BLACK.withOpacity(0.5),
+          ),
+        ),
+        Container(
           margin: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
@@ -204,5 +209,4 @@ class _StandardTalentEventCardState extends State<StandardTalentEventCard> {
       },
     );
   }
-
 }

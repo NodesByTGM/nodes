@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/general_signup_screen.dart';
@@ -179,7 +177,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               children: [
                 labelText(
-                  "Nodes: Where Creatives Connect.",
+                  "Plug into Africa's largest\ncreative network.",
                   fontSize: 24,
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.w500,

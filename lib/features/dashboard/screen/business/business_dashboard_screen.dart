@@ -91,7 +91,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
               ),
               ySpace(height: 10),
               subtext(
-                "You now have access to a creative ecosystem, follow spaces, connect with the community and access job opportunities",
+                "You now have access to a creative ecosystem, connect with the community and access job opportunities",
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -163,8 +163,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
                   onTap: () {
                     if (isObjectEmpty(dashCtrl.createdJobList)) {
                       showText(
-                          message:
-                              "Oops!! you currently don't have any job created yet.");
+                        message:
+                            "Oops!! you currently don't have any job created yet.",
+                      );
                     } else {
                       navCtrl.updatePageListStack(
                         BusinessCreatedJobCenterScreen.routeName,
@@ -324,7 +325,7 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             onTap: () {
               BusinessAccountModel business =
                   user.business ?? const BusinessAccountModel();
-
+              // showCreateJobBottomSheet(1);
               if (isBusinessProfileComplete(business) &&
                   isBusinessVerified(business)) {
                 showCreateJobBottomSheet(1);

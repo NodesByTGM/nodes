@@ -8,6 +8,8 @@ import 'package:nodes/core/exception/app_exceptions.dart';
 import 'package:nodes/core/models/api_response.dart';
 import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/features/dashboard/repo/dashboard_repository.dart';
+import 'package:nodes/utilities/constants/key_strings.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 
 class DashboardService {
   final log = Logger('DashboardService');
@@ -21,7 +23,7 @@ class DashboardService {
   // Functions
 
   // Events
-  Future<ApiResponse> createProject(BuildContext ctx,dynamic payload) async {
+  Future<ApiResponse> createProject(BuildContext ctx, dynamic payload) async {
     try {
       ApiResponse res = await dashboardRepository.createProject(payload);
       return res;
@@ -31,9 +33,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllProjects(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllProjects(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllProjects(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllProjects(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllProjects ::===> ${e.response?.data}");
@@ -41,9 +48,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchMyProjects(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchMyProjects(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchMyProjects(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchMyProjects(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchMyProjects ::===> ${e.response?.data}");
@@ -51,7 +63,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> createEvent(BuildContext ctx,dynamic payload) async {
+  Future<ApiResponse> createEvent(BuildContext ctx, dynamic payload) async {
     try {
       ApiResponse res = await dashboardRepository.createEvent(payload);
       return res;
@@ -61,9 +73,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllEvents(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllEvents(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllEvents(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllEvents ::===> ${e.response?.data}");
@@ -71,7 +88,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchSingleEvent(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> fetchSingleEvent(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.fetchEvent(id);
       return res;
@@ -81,7 +98,8 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> updateSingleEvent(BuildContext ctx,{
+  Future<ApiResponse> updateSingleEvent(
+    BuildContext ctx, {
     required dynamic id,
     required dynamic payload,
   }) async {
@@ -94,7 +112,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> deleteSingleEvent(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> deleteSingleEvent(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.deleteEvent(id);
       return res;
@@ -104,7 +122,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> saveEvent(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> saveEvent(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.saveEvent(id);
       return res;
@@ -114,7 +132,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> unSaveEvent(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> unSaveEvent(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.unSaveEvent(id);
       return res;
@@ -124,9 +142,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllSavedEvents(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllSavedEvents(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllSavedEvents(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllSavedEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -135,9 +158,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllAllMyCreatedEvents(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllAllMyCreatedEvents(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllAllMyCreatedEvents(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllAllMyCreatedEvents(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -147,7 +175,7 @@ class DashboardService {
   }
 
 // Jobs
-  Future<ApiResponse> createJob(BuildContext ctx,dynamic payload) async {
+  Future<ApiResponse> createJob(BuildContext ctx, dynamic payload) async {
     try {
       ApiResponse res = await dashboardRepository.createJob(payload);
       return res;
@@ -157,7 +185,11 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllJobs(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
       ApiResponse res = await dashboardRepository.fetchAllJobs(page, pageSize);
       return res;
@@ -167,7 +199,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchSingleJob(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> fetchSingleJob(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.fetchJob(id);
       return res;
@@ -177,7 +209,8 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> updateSingleJob(BuildContext ctx,{
+  Future<ApiResponse> updateSingleJob(
+    BuildContext ctx, {
     required dynamic id,
     required dynamic payload,
   }) async {
@@ -190,7 +223,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> deleteSingleJob(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> deleteSingleJob(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.deleteJob(id);
       return res;
@@ -200,7 +233,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> applyForJob(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> applyForJob(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.applyForJob(id);
       return res;
@@ -210,7 +243,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> saveJob(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> saveJob(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.saveJob(id);
       return res;
@@ -220,7 +253,7 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> unSaveJob(BuildContext ctx,dynamic id) async {
+  Future<ApiResponse> unSaveJob(BuildContext ctx, dynamic id) async {
     try {
       ApiResponse res = await dashboardRepository.unSaveJob(id);
       return res;
@@ -230,9 +263,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllSavedJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllSavedJobs(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllSavedJobs(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllSavedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe("Error message @fetchAllSavedJobs ::===> ${e.response?.data}");
@@ -240,9 +278,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllAppliedJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllAppliedJobs(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllAppliedJobs(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllAppliedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -251,9 +294,14 @@ class DashboardService {
     }
   }
 
-  Future<ApiResponse> fetchAllMyCreatedJobs(BuildContext ctx,{required int page, required int pageSize,}) async {
+  Future<ApiResponse> fetchAllMyCreatedJobs(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
     try {
-      ApiResponse res = await dashboardRepository.fetchAllMyCreatedJobs(page, pageSize);
+      ApiResponse res =
+          await dashboardRepository.fetchAllMyCreatedJobs(page, pageSize);
       return res;
     } on DioException catch (e) {
       log.severe(
@@ -267,8 +315,7 @@ class DashboardService {
       ApiResponse res = await dashboardRepository.fetchTrendingNews();
       return res;
     } on DioException catch (e) {
-      log.severe(
-          "Error message @fetchTrendingNews ::===> ${e.response?.data}");
+      log.severe("Error message @fetchTrendingNews ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
@@ -278,10 +325,86 @@ class DashboardService {
       ApiResponse res = await dashboardRepository.fetchMovieShows();
       return res;
     } on DioException catch (e) {
-      log.severe(
-          "Error message @fetchMovieShows ::===> ${e.response?.data}");
+      log.severe("Error message @fetchMovieShows ::===> ${e.response?.data}");
       return NetworkException.errorHandler(e, context: ctx);
     }
   }
 
+  Future<ApiResponse> fetchCMSContent(
+    BuildContext ctx, {
+    required HorizontalSlidingCardDataSource type,
+  }) async {
+    try {
+      var category = "";
+      switch (type) {
+        case HorizontalSlidingCardDataSource.Birthdays:
+          category = KeyString.birthdays;
+          break;
+        case HorizontalSlidingCardDataSource.Flashbacks:
+          category = KeyString.flashbacks;
+          break;
+        case HorizontalSlidingCardDataSource.HiddenGems:
+          category = KeyString.hiddenGems;
+          break;
+        case HorizontalSlidingCardDataSource.CollaborationSpotlights:
+          category = KeyString.spotlights;
+          break;
+        // case HorizontalSlidingCardDataSource.TrendingNews:
+        //   category = KeyString.trendingNews;
+        //   break;
+        default:
+      }
+      ApiResponse res = await dashboardRepository.fetchCMSContent(category);
+      return res;
+    } on DioException catch (e) {
+      log.severe("Error message @fetchCMSContent ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> fetchNotifications(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
+    try {
+      ApiResponse res =
+          await dashboardRepository.fetchNotifications(page, pageSize);
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchNotifications ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> fetchMyInteractions(
+    BuildContext ctx, {
+    required int page,
+    required int pageSize,
+  }) async {
+    try {
+      ApiResponse res =
+          await dashboardRepository.fetchMyInteractions(page, pageSize);
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @fetchMyInteractions ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
+
+  Future<ApiResponse> deleteNotification(
+    BuildContext ctx, {
+    required String id,
+  }) async {
+    try {
+      ApiResponse res = await dashboardRepository.deleteNotification(id);
+      return res;
+    } on DioException catch (e) {
+      log.severe(
+          "Error message @deleteNotification ::===> ${e.response?.data}");
+      return NetworkException.errorHandler(e, context: ctx);
+    }
+  }
 }
