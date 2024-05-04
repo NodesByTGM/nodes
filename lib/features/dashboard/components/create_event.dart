@@ -404,17 +404,16 @@ class _CreateEventState extends State<CreateEvent> {
       String? imageByteString;
       MediaUploadModel? thumbnailUrl;
       bool done = false;
-      imageByteString =
-          await convertFileToString("${thumbnailImageFile?.path}");
-      // if (!isObjectEmpty(thumbnailImageFile)) {
-      //   imageByteString = await convertFileToString("${thumbnailImageFile?.path}");
-      //   thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
-      //   showError(
-      //       message: "Oops!!! Error uploading event image. Please try again");
-      //   return;
-      // }
+      if (!isObjectEmpty(thumbnailImageFile)) {
+        imageByteString =
+            await convertFileToString("${thumbnailImageFile?.path}");
+        //   thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
+        //   showError(
+        //       message: "Oops!!! Error uploading event image. Please try again");
+        //   return;
+      }
       if (isObjectEmpty(event)) {
-        // Creating a new Event Entirely
+        // <<<< ============ Creating a new Event Entirely ========= >>>>
 
         thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
         if (isObjectEmpty(thumbnailUrl)) {
@@ -427,20 +426,25 @@ class _CreateEventState extends State<CreateEvent> {
           evetPayload(thumbnailUrl!),
         );
       } else {
-        // Modifying an already existing Event
+        // <<<< ============  Modifying an already existing Event  ========= >>>>
         if (!isObjectEmpty(event?.thumbnail?.id) &&
             !isObjectEmpty(thumbnailImageFile)) {
           // we are updating, and also user wants to change the event thumbnail...
-
+          print(
+              "Hello George, i'm here nooow, trying to update the image file...");
           // upload new file...
           // imageByteString = await convertFileToString("${thumbnailImageFile?.path}");
-          // thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
-          // if (isObjectEmpty(thumbnailUrl)) {
-          //   showError(
-          //       message:
-          //           "Oops!!! Error uploading event image. Please try again");
-          //   return;
-          // }
+          print(
+              "Hi George, this is the imageByteString already gotten::: $imageByteString");
+          thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
+          print(
+              "My Guy George, this is the thumbnailUrl: ${thumbnailUrl?.toJson()}");
+          if (isObjectEmpty(thumbnailUrl)) {
+            showError(
+                message:
+                    "Oops!!! Error uploading event image. Please try again");
+            return;
+          }
           // Delete already existing image behind the scene, no need to hold up the thread...
           authCtrl.deleteMedia("${event?.thumbnail?.id}");
         }
