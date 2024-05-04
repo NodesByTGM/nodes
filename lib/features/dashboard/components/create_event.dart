@@ -407,10 +407,6 @@ class _CreateEventState extends State<CreateEvent> {
       if (!isObjectEmpty(thumbnailImageFile)) {
         imageByteString =
             await convertFileToString("${thumbnailImageFile?.path}");
-        //   thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
-        //   showError(
-        //       message: "Oops!!! Error uploading event image. Please try again");
-        //   return;
       }
       if (isObjectEmpty(event)) {
         // <<<< ============ Creating a new Event Entirely ========= >>>>
@@ -430,15 +426,7 @@ class _CreateEventState extends State<CreateEvent> {
         if (!isObjectEmpty(event?.thumbnail?.id) &&
             !isObjectEmpty(thumbnailImageFile)) {
           // we are updating, and also user wants to change the event thumbnail...
-          print(
-              "Hello George, i'm here nooow, trying to update the image file...");
-          // upload new file...
-          // imageByteString = await convertFileToString("${thumbnailImageFile?.path}");
-          print(
-              "Hi George, this is the imageByteString already gotten::: $imageByteString");
           thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
-          print(
-              "My Guy George, this is the thumbnailUrl: ${thumbnailUrl?.toJson()}");
           if (isObjectEmpty(thumbnailUrl)) {
             showError(
                 message:
