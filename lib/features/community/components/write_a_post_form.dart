@@ -145,7 +145,7 @@ class _WritePostFormState extends State<WritePostForm> {
   multipleImagePicker() async {
     final ImagePicker imagePicker = locator.get<ImagePicker>();
     final List<XFile> selectedImages =
-        (await imagePicker.pickMultiImage()).take(4).toList();
+        (await imagePicker.pickMultiImage(imageQuality: 10)).take(4).toList();
     if (selectedImages.isNotEmpty) {
       projectImageFileList.addAll(selectedImages);
     }

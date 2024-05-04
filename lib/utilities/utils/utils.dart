@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:image_picker/image_picker.dart';
@@ -472,8 +473,37 @@ _throwCustomUrlLauncherError(BuildContext context, String err) {
 
 Future<File?> selectImageFromGallery() async {
   var selectedImage =
-      await locator.get<ImagePicker>().pickImage(source: ImageSource.gallery);
+      // await locator.get<ImagePicker>().pickImage(source: ImageSource.gallery);
+      await locator.get<ImagePicker>().pickImage(
+            source: ImageSource.gallery,
+            imageQuality: 10,
+          );
+
   return isObjectEmpty(selectedImage) ? null : File(selectedImage!.path);
+  // return isObjectEmpty(selectedImage)
+  //     ? null
+  //     : (await FlutterImageCompress.compressAndGetFile(
+  //         selectedImage!.path,
+  //         selectedImage.path,
+  //         quality: 88,
+  //         rotate: 180,
+  //         format: CompressFormat.png,
+  //       ) as File);
+  // if (isObjectEmpty(selectedImage)) {
+  //   return null;
+  // } else {
+  //   print("Gello George...");
+  //   var result = await FlutterImageCompress.compressAndGetFile(
+  //     selectedImage!.path,
+  //     selectedImage.path,
+  //     quality: 88,
+  //     rotate: 180,
+  //     format: CompressFormat.png,
+  //   );
+  //   print("George here is the actual file size: ${selectedImage.length()}");
+  //   print("George here is the compressed file size: ${result?.length()}");
+  //   return result as File;
+  // }
 }
 
 showSimpleDialog({

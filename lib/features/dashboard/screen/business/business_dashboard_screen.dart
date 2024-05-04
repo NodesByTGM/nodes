@@ -299,6 +299,10 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             ),
             GestureDetector(
               onTap: () {
+                // For Dev Purpose
+                navCtrl.updatePageListStack(
+                  BusinessCreatedEventCenterScreen.routeName,
+                );
                 if (isObjectEmpty(dashCtrl.myCreatedEventsList)) {
                   showText(
                       message:
@@ -328,7 +332,8 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
               if (isBusinessProfileComplete(business) &&
                   isBusinessVerified(business)) {
                 showCreateJobBottomSheet(1);
-              } else if (isBusinessProfileComplete(business) && !isBusinessVerified(business)) {
+              } else if (isBusinessProfileComplete(business) &&
+                  !isBusinessVerified(business)) {
                 cantCreateMsg(i: 1);
               } else {
                 cantCreateMsg();

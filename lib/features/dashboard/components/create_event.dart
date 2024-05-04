@@ -37,7 +37,7 @@ class _CreateEventState extends State<CreateEvent> {
   String eventType = '';
   final formValues = {};
   late EventModel? event;
-  XFile? thumbnailImageFile;
+  File? thumbnailImageFile;
   bool isLoadingThumbnail = false;
 
   @override
@@ -353,16 +353,26 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
+  // pickImage() async {
+  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
+  //   awaitingImageLoad();
+  //   final XFile? selectedImage =
+  //       await imagePicker.pickImage(source: ImageSource.gallery);
+  //   awaitingImageLoad();
+  //   if (!isObjectEmpty(selectedImage)) {
+  //     thumbnailImageFile = selectedImage;
+  //   }
+  //   setState(() {});
+  // }
   pickImage() async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
     awaitingImageLoad();
-    final XFile? selectedImage =
-        await imagePicker.pickImage(source: ImageSource.gallery);
+    File? _ = await selectImageFromGallery();
     awaitingImageLoad();
-    if (!isObjectEmpty(selectedImage)) {
-      thumbnailImageFile = selectedImage;
+    if (_ != null) {
+      setState(() {
+        thumbnailImageFile = _;
+      });
     }
-    setState(() {});
   }
 
   awaitingImageLoad() {
@@ -391,13 +401,20 @@ class _CreateEventState extends State<CreateEvent> {
         return;
       }
       // Get the image string...
-      String? imageByteString = isObjectEmpty(thumbnailImageFile)
-          ? null
-          : (await convertFileToString("${thumbnailImageFile?.path}"));
+      String? imageByteString;
       MediaUploadModel? thumbnailUrl;
       bool done = false;
+      imageByteString =
+          await convertFileToString("${thumbnailImageFile?.path}");
+      // if (!isObjectEmpty(thumbnailImageFile)) {
+      //   imageByteString = await convertFileToString("${thumbnailImageFile?.path}");
+      //   thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
+      //   showError(
+      //       message: "Oops!!! Error uploading event image. Please try again");
+      //   return;
+      // }
       if (isObjectEmpty(event)) {
-        // Creating a new Event Entirely 
+        // Creating a new Event Entirely
 
         thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
         if (isObjectEmpty(thumbnailUrl)) {
@@ -407,7 +424,7 @@ class _CreateEventState extends State<CreateEvent> {
         }
         done = await dashCtrl.createEvent(
           context,
-          evetPayload(thumbnailUrl as MediaUploadModel), 
+          evetPayload(thumbnailUrl!),
         );
       } else {
         // Modifying an already existing Event
@@ -415,17 +432,16 @@ class _CreateEventState extends State<CreateEvent> {
             !isObjectEmpty(thumbnailImageFile)) {
           // we are updating, and also user wants to change the event thumbnail...
 
-          // Delete already existing image behind the scene, no need to hold up the thread...
-
           // upload new file...
           // imageByteString = await convertFileToString("${thumbnailImageFile?.path}");
-          thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
-          if (isObjectEmpty(thumbnailUrl)) {
-            showError(
-                message:
-                    "Oops!!! Error uploading event image. Please try again");
-            return;
-          }
+          // thumbnailUrl = await authCtrl.mediaUpload(imageByteString);
+          // if (isObjectEmpty(thumbnailUrl)) {
+          //   showError(
+          //       message:
+          //           "Oops!!! Error uploading event image. Please try again");
+          //   return;
+          // }
+          // Delete already existing image behind the scene, no need to hold up the thread...
           authCtrl.deleteMedia("${event?.thumbnail?.id}");
         }
         done = await dashCtrl.updateSingleEvent(
@@ -433,9 +449,9 @@ class _CreateEventState extends State<CreateEvent> {
           id: event?.id,
           payload: evetPayload(
             thumbnailUrl ?? event?.thumbnail as MediaUploadModel,
-          ), 
+          ),
         );
-      } 
+      }
       if (done && mounted) {
         navigateBack(context);
       }

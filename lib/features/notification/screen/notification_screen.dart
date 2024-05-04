@@ -37,13 +37,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
               }),
               tabs: const [
                 Tab(
-                  text: "All (1)",
+                  text: "All (*)",
                 ),
                 Tab(
-                  text: "Mentions (2)",
+                  text: "Mentions (*)",
                 ),
                 Tab(
-                  text: "Unread (2)",
+                  text: "Unread (*)",
                 ),
               ],
             ),

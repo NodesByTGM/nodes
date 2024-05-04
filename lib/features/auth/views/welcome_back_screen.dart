@@ -3,6 +3,7 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
 import 'package:nodes/features/auth/views/forgot_password_screen.dart';
+import 'package:nodes/features/auth/views/general_signup_screen.dart';
 import 'package:nodes/features/auth/views/talent_auth/talent_stepper_wrapper.dart';
 import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/home/views/welcome_screen.dart';
@@ -192,7 +193,8 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        navigateTo(context, WelcomeScreen.routeName);
+                        // navigateTo(context, WelcomeScreen.routeName);
+                        navigateTo(context, GeneralSignupScreen.routeName);
                       },
                       child: labelText(
                         "Sign Up",
@@ -239,8 +241,6 @@ class _WelcomeBackScreenState extends State<WelcomeBackScreen> {
       //   return;
       // }
       if (!isObjectEmpty(user) && mounted) {
-        // This will auto load the firebaseToken for me from the controller...
-        authCtrl.updateProfile(context, user?.toJson());
         safeNavigate(() {
           formKey.currentState!.reset();
           context.read<NavController>().resetPageListStack();

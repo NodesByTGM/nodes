@@ -58,6 +58,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   webview_flutter: ^3.0.4
   gallery_image_viewer: ^1.2.0
+  flutter_image_compress: ^2.2.0
   data_table_2: ^2.5.12
   google_sign_in: ^6.1.4
   sign_in_with_apple: ^5.0.0

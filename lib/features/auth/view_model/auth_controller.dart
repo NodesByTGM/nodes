@@ -26,6 +26,7 @@ import 'package:nodes/features/auth/service/auth_service.dart';
 import 'package:nodes/features/auth/views/welcome_back_screen.dart';
 import 'package:nodes/features/community/view_model/community_controller.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
+import 'package:nodes/features/home/views/navbar_view.dart';
 import 'package:nodes/features/subscriptions/models/subscription_history_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -217,10 +218,15 @@ class AuthController extends BaseController {
       }
       showSuccess(message: response.message); // For login o
       await _authCustomSaveSession(response);
-      // setCurrentScreen(NavbarView.routeName);
+      setCurrentScreen(NavbarView.routeName);
       // Call the update profile after login, from the VIEW, so you'd get the 'CONTEXT'
-      return CurrentSession.fromJson(response.result as Map<String, dynamic>)
-          .user;
+      UserModel? user =
+          CurrentSession.fromJson(response.result as Map<String, dynamic>).user;
+      if (isObjectEmpty(user?.firebaseToken)) {
+        // This updates the User profile with the firebase token, if they don't already have it...
+        updateProfile(ctx, user?.toJson());
+      }
+      return user;
     } on NetworkException catch (e) {
       showError(message: e.toString());
       return null;
