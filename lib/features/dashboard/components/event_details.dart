@@ -1,4 +1,5 @@
 import 'package:nodes/features/auth/models/media_upload_model.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/features/saves/models/event_model.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
 
@@ -25,6 +26,7 @@ class _EventDetailsState extends State<EventDetails> {
 
   @override
   Widget build(BuildContext context) {
+    event = context.watch<DashboardController>().currentlyViewedBusinessEvent;
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
