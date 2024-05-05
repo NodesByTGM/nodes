@@ -506,6 +506,21 @@ Future<File?> selectImageFromGallery() async {
   // }
 }
 
+Future<List<XFile>?> selectMultipleImageFromGallery({
+  int max = 4,
+}) async {
+  final ImagePicker imagePicker = locator.get<ImagePicker>();
+  List<XFile> projectImageFileList = [];
+  final List<XFile> selectedImages =
+      (await imagePicker.pickMultiImage(imageQuality: 10)).take(max).toList();
+  if (selectedImages.isNotEmpty) {
+    projectImageFileList.addAll(selectedImages);
+    return projectImageFileList;
+  } else {
+    return null;
+  }
+}
+
 showSimpleDialog({
   required BuildContext context,
   required Widget child,

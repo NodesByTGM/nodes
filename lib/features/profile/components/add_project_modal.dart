@@ -41,7 +41,7 @@ class _AddProjectState extends State<AddProject> {
   double progressLevel = 0.5;
 
   List<XFile> projectImageFileList = [];
-  XFile? thumbnailImageFile;
+  File? thumbnailImageFile;
   bool isLoadingThumbnail = false;
   bool isLoadingImage = false;
   late int maxProjectImages;
@@ -563,27 +563,49 @@ class _AddProjectState extends State<AddProject> {
   //   }
   // }
 
+  // multipleImagePicker({
+  //   bool isThumbnail = false,
+  // }) async {
+  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
+
+  //   if (isThumbnail) {
+  //     awaitingImageLoad(true);
+  //     final XFile? selectedImage =
+  //         await imagePicker.pickImage(source: ImageSource.gallery);
+  //     awaitingImageLoad(true);
+  //     if (!isObjectEmpty(selectedImage)) {
+  //       thumbnailImageFile = selectedImage;
+  //     }
+  //   } else {
+  //     awaitingImageLoad(false);
+  //     final List<XFile> selectedImages =
+  //         (await imagePicker.pickMultiImage()).take(maxProjectImages).toList();
+  //     awaitingImageLoad(false);
+  //     if (selectedImages.isNotEmpty) {
+  //       projectImageFileList.addAll(selectedImages);
+  //     }
+  //   }
+  //   setState(() {});
+  // }
   multipleImagePicker({
     bool isThumbnail = false,
   }) async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
-
     if (isThumbnail) {
       awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
+      File? _ = await selectImageFromGallery();
       awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        thumbnailImageFile = selectedImage;
+      if (_ != null) {
+        setState(() {
+          thumbnailImageFile = _;
+        });
       }
     } else {
       awaitingImageLoad(false);
-      // final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-      final List<XFile> selectedImages =
-          (await imagePicker.pickMultiImage()).take(maxProjectImages).toList();
+      final List<XFile>? selectedImages =
+          await selectMultipleImageFromGallery(max: maxProjectImages);
       awaitingImageLoad(false);
-      if (selectedImages.isNotEmpty) {
-        projectImageFileList.addAll(selectedImages);
+      if (!isObjectEmpty(selectedImages)) {
+        projectImageFileList.addAll(selectedImages as List<XFile>);
       }
     }
     setState(() {});

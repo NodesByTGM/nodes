@@ -618,7 +618,7 @@ class _TalentDashboardScreenState extends State<TalentDashboardScreen> {
                       marginBottom: 10,
                     ),
                   ),
-                  onTap: fetchAllAppliedJobs,
+                  onTap: fetchAllEvents,
                   isEmpty: hasData,
                 );
               } else {

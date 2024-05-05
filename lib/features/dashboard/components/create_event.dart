@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/view_model/auth_controller.dart';
@@ -353,17 +352,6 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
-  // pickImage() async {
-  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
-  //   awaitingImageLoad();
-  //   final XFile? selectedImage =
-  //       await imagePicker.pickImage(source: ImageSource.gallery);
-  //   awaitingImageLoad();
-  //   if (!isObjectEmpty(selectedImage)) {
-  //     thumbnailImageFile = selectedImage;
-  //   }
-  //   setState(() {});
-  // }
   pickImage() async {
     awaitingImageLoad();
     File? _ = await selectImageFromGallery();

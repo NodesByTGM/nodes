@@ -300,9 +300,9 @@ class _BusinessDashboardScreenState extends State<BusinessDashboardScreen> {
             GestureDetector(
               onTap: () {
                 // For Dev Purpose
-                navCtrl.updatePageListStack(
-                  BusinessCreatedEventCenterScreen.routeName,
-                );
+                // navCtrl.updatePageListStack(
+                //   BusinessCreatedEventCenterScreen.routeName,
+                // );
                 if (isObjectEmpty(dashCtrl.myCreatedEventsList)) {
                   showText(
                       message:

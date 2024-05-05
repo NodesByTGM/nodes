@@ -142,12 +142,23 @@ class _WritePostFormState extends State<WritePostForm> {
     );
   }
 
+  // multipleImagePicker() async {
+  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
+  //   final List<XFile> selectedImages =
+  //       (await imagePicker.pickMultiImage(imageQuality: 10)).take(4).toList();
+  //   if (selectedImages.isNotEmpty) {
+  //     projectImageFileList.addAll(selectedImages);
+  //   }
+  //   setState(() {});
+  // }
+
   multipleImagePicker() async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
-    final List<XFile> selectedImages =
-        (await imagePicker.pickMultiImage(imageQuality: 10)).take(4).toList();
-    if (selectedImages.isNotEmpty) {
-      projectImageFileList.addAll(selectedImages);
+    // Add a progress indicator...
+    // awaitingImageLoad(false);
+    final List<XFile>? selectedImages =
+        await selectMultipleImageFromGallery(max: 4);
+    if (!isObjectEmpty(selectedImages)) {
+      projectImageFileList.addAll(selectedImages as List<XFile>);
     }
     setState(() {});
   }

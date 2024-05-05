@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
@@ -30,7 +29,7 @@ class _BusinessVerificationFormState extends State<BusinessVerificationForm> {
   final TextEditingController linkedinCtrl = TextEditingController();
   final formValues = {};
   File? profilePicture;
-  XFile? cacThumbnailImageFile;
+  File? cacThumbnailImageFile;
   bool isLoadingThumbnail = false;
   DateTime? yoe;
 
@@ -340,16 +339,27 @@ class _BusinessVerificationFormState extends State<BusinessVerificationForm> {
     super.dispose();
   }
 
+  // void cacImagePicker() async {
+  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
+  //   awaitingImageLoad(true);
+  //   final XFile? selectedImage =
+  //       await imagePicker.pickImage(source: ImageSource.gallery);
+  //   awaitingImageLoad(true);
+  //   if (!isObjectEmpty(selectedImage)) {
+  //     cacThumbnailImageFile = selectedImage;
+  //   }
+  // }
+
   void cacImagePicker() async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
     awaitingImageLoad(true);
-    final XFile? selectedImage =
-        await imagePicker.pickImage(source: ImageSource.gallery);
-    awaitingImageLoad(true);
-    if (!isObjectEmpty(selectedImage)) {
-      cacThumbnailImageFile = selectedImage;
+    File? _ = await selectImageFromGallery();
+    awaitingImageLoad(false);
+    if (_ != null) {
+      setState(() {
+        cacThumbnailImageFile = _;
+      });
     }
-  }
+  } 
 
   void awaitingImageLoad(bool bool) {
     setState(() {

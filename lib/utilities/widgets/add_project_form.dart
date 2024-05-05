@@ -40,12 +40,8 @@ class _AddProjectFormState extends State<AddProjectForm> {
   ];
 
   List<XFile> projectImageFileList = [];
-  XFile?
-      logoImage; // check if you're using this George, and remove it if you're not using ...
-  XFile? thumbnailImageFile;
+  File? thumbnailImageFile;
   bool isLoadingThumbnail = false;
-  bool isLoadingLogo =
-      false; // check if you're using this George, and remove it if you're not using ...
   late int maxProjectImages;
   bool isLoadingImage = false;
 
@@ -66,7 +62,6 @@ class _AddProjectFormState extends State<AddProjectForm> {
     dynamicNameCollaboratorsCtrl = [TextEditingController()];
     dynamicRoleCollaboratorsCtrl = [TextEditingController()];
     projectImageFileList = <XFile>[];
-    logoImage = null;
     thumbnailImageFile = null;
   }
 
@@ -464,35 +459,59 @@ class _AddProjectFormState extends State<AddProjectForm> {
     setState(() {});
   }
 
-  multipleImagePicker({
+  // multipleImagePicker({
+  //   bool isThumbnail = false,
+  //   bool isLogo = false,
+  // }) async {
+  //   final ImagePicker imagePicker = locator.get<ImagePicker>();
+  //   if (isThumbnail) {
+  //     awaitingImageLoad(true);
+  //     final XFile? selectedImage =
+  //         await imagePicker.pickImage(source: ImageSource.gallery);
+  //     awaitingImageLoad(true);
+  //     if (!isObjectEmpty(selectedImage)) {
+  //       thumbnailImageFile = selectedImage;
+  //     }
+  //   } else if (isLogo) {
+  //     awaitingImageLoad(true);
+  //     final XFile? selectedImage =
+  //         await imagePicker.pickImage(source: ImageSource.gallery);
+  //     awaitingImageLoad(true);
+  //     if (!isObjectEmpty(selectedImage)) {
+  //       logoImage = selectedImage;
+  //     }
+  //   } else {
+  //     awaitingImageLoad(false);
+  //     // final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+  //     final List<XFile> selectedImages =
+  //         (await imagePicker.pickMultiImage()).take(maxProjectImages).toList();
+  //     awaitingImageLoad(false);
+  //     if (selectedImages.isNotEmpty) {
+  //       projectImageFileList.addAll(selectedImages);
+  //     }
+  //   }
+  //   setState(() {});
+  // }
+
+ multipleImagePicker({
     bool isThumbnail = false,
-    bool isLogo = false,
   }) async {
-    final ImagePicker imagePicker = locator.get<ImagePicker>();
     if (isThumbnail) {
       awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
+      File? _ = await selectImageFromGallery();
       awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        thumbnailImageFile = selectedImage;
-      }
-    } else if (isLogo) {
-      awaitingImageLoad(true);
-      final XFile? selectedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      awaitingImageLoad(true);
-      if (!isObjectEmpty(selectedImage)) {
-        logoImage = selectedImage;
+      if (_ != null) {
+        setState(() {
+          thumbnailImageFile = _;
+        });
       }
     } else {
       awaitingImageLoad(false);
-      // final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-      final List<XFile> selectedImages =
-          (await imagePicker.pickMultiImage()).take(maxProjectImages).toList();
+      final List<XFile>? selectedImages =
+          await selectMultipleImageFromGallery(max: maxProjectImages);
       awaitingImageLoad(false);
-      if (selectedImages.isNotEmpty) {
-        projectImageFileList.addAll(selectedImages);
+      if (!isObjectEmpty(selectedImages)) {
+        projectImageFileList.addAll(selectedImages as List<XFile>);
       }
     }
     setState(() {});
@@ -503,7 +522,6 @@ class _AddProjectFormState extends State<AddProjectForm> {
       case true:
         setState(() {
           isLoadingThumbnail = !isLoadingThumbnail;
-          isLoadingLogo = !isLoadingLogo; // just putting it here
         });
         break;
       default:
