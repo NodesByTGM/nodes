@@ -10,6 +10,7 @@ import 'package:nodes/core/services/local_storage.dart';
 import 'package:nodes/features/dashboard/repo/dashboard_repository.dart';
 import 'package:nodes/utilities/constants/key_strings.dart';
 import 'package:nodes/utilities/utils/enums.dart';
+import 'package:nodes/utilities/utils/utils.dart';
 
 class DashboardService {
   final log = Logger('DashboardService');
@@ -335,25 +336,26 @@ class DashboardService {
     required HorizontalSlidingCardDataSource type,
   }) async {
     try {
-      var category = "";
-      switch (type) {
-        case HorizontalSlidingCardDataSource.Birthdays:
-          category = KeyString.birthdays;
-          break;
-        case HorizontalSlidingCardDataSource.Flashbacks:
-          category = KeyString.flashbacks;
-          break;
-        case HorizontalSlidingCardDataSource.HiddenGems:
-          category = KeyString.hiddenGems;
-          break;
-        case HorizontalSlidingCardDataSource.CollaborationSpotlights:
-          category = KeyString.spotlights;
-          break;
-        // case HorizontalSlidingCardDataSource.TrendingNews:
-        //   category = KeyString.trendingNews;
-        //   break;
-        default:
-      }
+      var category = getHorizontalSlidingCardDataSourceTitle(type);
+      // var category = "";
+      // switch (type) {
+      //   case HorizontalSlidingCardDataSource.Birthdays:
+      //     category = KeyString.birthdays;
+      //     break;
+      //   case HorizontalSlidingCardDataSource.Flashbacks:
+      //     category = KeyString.flashbacks;
+      //     break;
+      //   case HorizontalSlidingCardDataSource.HiddenGems:
+      //     category = KeyString.hiddenGems;
+      //     break;
+      //   case HorizontalSlidingCardDataSource.CollaborationSpotlights:
+      //     category = KeyString.spotlights;
+      //     break;
+      //   // case HorizontalSlidingCardDataSource.TrendingNews:
+      //   //   category = KeyString.trendingNews;
+      //   //   break;
+      //   default:
+      // }
       ApiResponse res = await dashboardRepository.fetchCMSContent(category);
       return res;
     } on DioException catch (e) {

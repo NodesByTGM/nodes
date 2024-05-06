@@ -1,5 +1,10 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
+import 'package:nodes/features/dashboard/components/card_template.dart';
 import 'package:nodes/features/dashboard/components/cms_content_card_template.dart';
+import 'package:nodes/features/dashboard/components/top_movies_card_template.dart';
+import 'package:nodes/features/dashboard/model/dynamic_cms_content_model.dart';
+import 'package:nodes/features/dashboard/model/movie_show_model.dart';
 import 'package:nodes/features/dashboard/screen/individual/individual_dashboard_single_item_details.dart';
 import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
@@ -22,10 +27,13 @@ class _IndividualDashboardViewAllDynamicScreenState
   List<String> filterOptions = ['All', 'some'];
   List<String> sortOptions = ['Latest', 'Trending', 'Classic'];
 
+  late HorizontalSlidingCardDataSource currentSource;
+
   @override
   void initState() {
     selectedFilter = filterOptions.first;
     selectedSort = sortOptions.first;
+    currentSource = locator.get<NavController>().currentDashboardDynamicItem;
     super.initState();
   }
 
@@ -56,31 +64,33 @@ class _IndividualDashboardViewAllDynamicScreenState
                     color: BORDER,
                   ),
                   labelText(
-                    "Top Movies",
+                    getHorizontalSlidingCardDataSourceTitle(currentSource),
                     fontSize: 12,
                   ),
                 ],
               ),
               ySpace(height: 40),
               Container(
-                height: 80,
+                height: 100,
                 decoration: BoxDecoration(
-                  color: GRAY,
+                  color: WHITE,
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    image: const AssetImage(ImageUtils.appIcon),
+                    image: const AssetImage(ImageUtils.cmsBg),
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.3),
+                      // Colors.black.withOpacity(0.3),
+                      Colors.black.withOpacity(0.2),
                       BlendMode.multiply,
                     ),
                   ),
                 ),
                 child: Center(
                   child: labelText(
-                    "Top Movies",
-                    color: WHITE,
+                    getHorizontalSlidingCardDataSourceTitle(currentSource),
+                    color: BLACK,
                     fontSize: 20,
+                    letterSpacing: 2,
                   ),
                 ),
               ),
@@ -112,73 +122,168 @@ class _IndividualDashboardViewAllDynamicScreenState
               ),
               ySpace(height: 20),
               customDivider(),
-              if (1 > 2) ...[
-                ShimmerLoader(
-                  scrollDirection: Axis.vertical,
-                  width: screenWidth(context),
-                  marginBottom: 10,
+              // if (1 < 2) ...[
+              //   ShimmerLoader(
+              //     scrollDirection: Axis.vertical,
+              //     width: screenWidth(context),
+              //     marginBottom: 10,
+              //   ),
+              // ],
+              // ListView.separated(
+              //   shrinkWrap: true,
+              //   physics: const NeverScrollableScrollPhysics(),
+              //   padding: const EdgeInsets.all(0),
+              //   itemCount: 5,
+              //   itemBuilder: (context, i) {
+              //     return SizedBox(
+              //       height: 300,
+              //       child: CMSCardTemplate(
+              //         imgUrl:
+              //             "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+              //         title: "Lorem ipsum dolor sit amet, con...",
+              //         description: "Lorem ipsum dolor sit amet, con...",
+              //         onTap: () {
+              //           navCtrl.updatePageListStack(
+              //             IndividualDashboardSingleItemDetailsScreen.routeName,
+              //           );
+              //         },
+              //         height: 240,
+              //       ),
+              //     );
+              //   },
+              //   separatorBuilder: (context, i) => ySpace(height: 10),
+              // ),
+              FutureBuilder<List<dynamic>>(
+                future: getHorizontalSlidingCardData(
+                  context,
+                  source: currentSource,
+                  dashCtrl: dashCtrl,
                 ),
-              ],
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(0),
-                itemCount: 5,
-                itemBuilder: (context, i) {
-                  return SizedBox(
-                    height: 300,
-                    child: CMSCardTemplate(
-                      imgUrl:
-                          "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
-                      title: "Lorem ipsum dolor sit amet, con...",
-                      description: "Lorem ipsum dolor sit amet, con...",
-                      onTap: () {
-                        navCtrl.updatePageListStack(
-                          IndividualDashboardSingleItemDetailsScreen.routeName,
+                builder: (context, snapshot) {
+                  Container box(String text) => Container(
+                        margin: const EdgeInsets.only(right: 5),
+                        width: screenWidth(context),
+                        height: 200,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              ImageUtils.spaceEmptyIcon,
+                              height: 150,
+                            ),
+                            ySpace(height: 4),
+                            subtext(text),
+                          ],
+                        ),
+                      );
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const ShimmerLoader(scrollDirection: Axis.vertical);
+                  } else if (snapshot.hasError) {
+                    // Use a proper error widget with a Reload feature...
+                    return box("Oops!!!! Error");
+                  } else if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    if (isObjectEmpty(snapshot.data)) {
+                      return box("Oops!!! Please check back later...");
+                    }
+                    // return SizedBox(
+                    //   height: 240,
+                    //   child: SingleChildScrollView(
+                    //     scrollDirection: Axis.horizontal,
+                    //     child: Row(
+                    //       children: List.generate(
+                    //         snapshot.data!.length,
+                    //         (index) {
+                    //           dynamic datum = snapshot.data![index];
+                    //           // Depending on the datasource, the corresponding cards will be used...
+                    //           return designatedCardDisplay(
+                    //             // pass the data here... and receive it as dynamic, then format it using the help of the source...
+                    //             datum,
+                    //             data: snapshot.data,
+                    //             // Passing all the data here,since i'm not storing it in the controller...
+                    //             dashCtrl: dashCtrl,
+                    //           );
+                    //         },
+                    //       ),
+                    //     ),
+                    //   ),
+                    // );
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (c, i) {
+                        dynamic datum = snapshot.data![i];
+                        return designatedCardDisplay(
+                          datum,
+                          data: snapshot.data,
+                          dashCtrl: dashCtrl,
                         );
                       },
-                      height: 240,
-                    ),
-                  );
+                    );
+                  }
+                  return const CircularProgressIndicator.adaptive();
                 },
-                separatorBuilder: (context, i) => ySpace(height: 10),
               ),
-              ySpace(height: 20),
-              // Center(
-              //   child: SingleChildScrollView(
-              //     scrollDirection: Axis.horizontal,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: List.generate(4, (index) {
-              //         int _ = index + 1;
-              //         return GestureDetector(
-              //           onTap: () {},
-              //           child: Container(
-              //             padding: const EdgeInsets.symmetric(
-              //               horizontal: 15,
-              //               vertical: 10,
-              //             ),
-              //             margin: const EdgeInsets.only(
-              //               right: 16,
-              //             ),
-              //             decoration: BoxDecoration(
-              //               border: Border.all(width: 0.6, color: BORDER),
-              //               borderRadius: BorderRadius.circular(8),
-              //             ),
-              //             child: Center(
-              //               child: labelText("$_"),
-              //             ),
-              //           ),
-              //         );
-              //       }),
-              //     ),
-              //   ),
-              // )
             ],
           ),
         );
       },
     );
+  }
+
+  designatedCardDisplay(
+    dynamic datum, {
+    List<dynamic>? data,
+    required DashboardController dashCtrl,
+  }) {
+    switch (currentSource) {
+      case HorizontalSlidingCardDataSource.TopMovies:
+        MovieShowModel movieShow = datum as MovieShowModel;
+        return TopMovieCardTemplate(
+          imgUrl: "${movieShow.backdrop_path}",
+          title: (movieShow.original_name ?? movieShow.original_title) ?? "",
+          rating: movieShow.vote_average ?? 0,
+          onTap: () => showRatingBottomSheet(context),
+          ratingTap: () => showRatingBottomSheet(context),
+          // ratingTap: () {
+          //   showRatingBottomSheet();
+          // },
+        );
+      case HorizontalSlidingCardDataSource.Birthdays:
+      case HorizontalSlidingCardDataSource.HiddenGems:
+      case HorizontalSlidingCardDataSource.CollaborationSpotlights:
+      case HorizontalSlidingCardDataSource.Flashbacks:
+        DynamicCMSContentModel cmsContent = datum as DynamicCMSContentModel;
+        return CMSCardTemplate(
+          imgUrl: "${cmsContent.thumbnail?.url}",
+          title: "${cmsContent.title}",
+          description: "${cmsContent.description}",
+          onTap: () {
+            // First Pass the datum as the currentlyViewed before sending it here...
+            // Also, pass the full data too, as it'll be used in the individual descriptiong page
+            dashCtrl.setCurrentlyViewedDynamicCMSContents(
+              data: datum,
+              dataList: data as List<DynamicCMSContentModel>,
+            );
+            context.read<NavController>().updatePageListStack(
+                  IndividualDashboardSingleItemDetailsScreen.routeName,
+                );
+          },
+        );
+
+      default:
+        return CustomCardTemplate(
+          imgUrl:
+              "https://thumbs.dreamstime.com/z/letter-o-blue-fire-flames-black-letter-o-blue-fire-flames-black-isolated-background-realistic-fire-effect-sparks-part-157762935.jpg",
+          title: "Lorem ipsum dolor sit amet, con...",
+          onTap: () {},
+        );
+    }
   }
 }
 

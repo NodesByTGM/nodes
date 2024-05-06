@@ -38,64 +38,69 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
     super.initState();
   }
 
-  Future<List<dynamic>> getData() async {
-    // get the type of call, from widge...then call using the controller...
-    // The type also contols the onTap function and all...
-    switch (widget.dataSource) {
-      case HorizontalSlidingCardDataSource.TopMovies:
-        List<dynamic> data = (await dashCtrl.fetchMovieShows(context)) ?? [];
-        return data;
-      case HorizontalSlidingCardDataSource.Birthdays:
-        List<dynamic> data = (await dashCtrl.fetchCMSContent(
-              context,
-              type: HorizontalSlidingCardDataSource.Birthdays,
-            )) ??
-            [];
-        return data;
-      case HorizontalSlidingCardDataSource.Flashbacks:
-        List<dynamic> data = (await dashCtrl.fetchCMSContent(
-              context,
-              type: HorizontalSlidingCardDataSource.Flashbacks,
-            )) ??
-            [];
-        return data;
-      case HorizontalSlidingCardDataSource.CollaborationSpotlights:
-        List<dynamic> data = (await dashCtrl.fetchCMSContent(
-              context,
-              type: HorizontalSlidingCardDataSource.CollaborationSpotlights,
-            )) ??
-            [];
-        return data;
-      case HorizontalSlidingCardDataSource.HiddenGems:
-        List<dynamic> data = (await dashCtrl.fetchCMSContent(
-              context,
-              type: HorizontalSlidingCardDataSource.HiddenGems,
-            )) ??
-            [];
-        return data;
-      default:
-    }
-    await Future.delayed(const Duration(seconds: 5));
-    return [
-      "I'm Ramy",
-      "I'm Yasser",
-      "I'm Ahmed",
-      "I'm Yossif",
-      "I'm Ramy",
-      "I'm Yasser",
-      "I'm Ahmed",
-      "I'm Yossif",
-      "I'm Ramy",
-      "I'm Yasser",
-      "I'm Ahmed",
-      "I'm Yossif",
-    ];
-  }
+  // Future<List<dynamic>> getData() async {
+  //   // get the type of call, from widge...then call using the controller...
+  //   // The type also contols the onTap function and all...
+  //   switch (widget.dataSource) {
+  //     case HorizontalSlidingCardDataSource.TopMovies:
+  //       List<dynamic> data = (await dashCtrl.fetchMovieShows(context)) ?? [];
+  //       return data;
+  //     case HorizontalSlidingCardDataSource.Birthdays:
+  //       List<dynamic> data = (await dashCtrl.fetchCMSContent(
+  //             context,
+  //             type: HorizontalSlidingCardDataSource.Birthdays,
+  //           )) ??
+  //           [];
+  //       return data;
+  //     case HorizontalSlidingCardDataSource.Flashbacks:
+  //       List<dynamic> data = (await dashCtrl.fetchCMSContent(
+  //             context,
+  //             type: HorizontalSlidingCardDataSource.Flashbacks,
+  //           )) ??
+  //           [];
+  //       return data;
+  //     case HorizontalSlidingCardDataSource.CollaborationSpotlights:
+  //       List<dynamic> data = (await dashCtrl.fetchCMSContent(
+  //             context,
+  //             type: HorizontalSlidingCardDataSource.CollaborationSpotlights,
+  //           )) ??
+  //           [];
+  //       return data;
+  //     case HorizontalSlidingCardDataSource.HiddenGems:
+  //       List<dynamic> data = (await dashCtrl.fetchCMSContent(
+  //             context,
+  //             type: HorizontalSlidingCardDataSource.HiddenGems,
+  //           )) ??
+  //           [];
+  //       return data;
+  //     default:
+  //   }
+  //   await Future.delayed(const Duration(seconds: 5));
+  //   return [
+  //     "I'm Ramy",
+  //     "I'm Yasser",
+  //     "I'm Ahmed",
+  //     "I'm Yossif",
+  //     "I'm Ramy",
+  //     "I'm Yasser",
+  //     "I'm Ahmed",
+  //     "I'm Yossif",
+  //     "I'm Ramy",
+  //     "I'm Yasser",
+  //     "I'm Ahmed",
+  //     "I'm Yossif",
+  //   ];
+  // }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-      future: getData(),
+      // future: getData(),
+      future: getHorizontalSlidingCardData(
+        context,
+        source: widget.dataSource,
+        dashCtrl: dashCtrl,
+      ),
       builder: (context, snapshot) {
         Container box(String text) => Container(
               margin: const EdgeInsets.only(right: 5),
@@ -163,8 +168,10 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
           imgUrl: "${movieShow.backdrop_path}",
           title: (movieShow.original_name ?? movieShow.original_title) ?? "",
           rating: movieShow.vote_average ?? 0,
-          onTap: showRatingBottomSheet,
-          ratingTap: showRatingBottomSheet,
+          onTap: () =>
+              showRatingBottomSheet(context), // will add the movie item soon..
+          ratingTap: () =>
+              showRatingBottomSheet(context), // will add the movie item soon..
           // ratingTap: () {
           //   showRatingBottomSheet();
           // },
@@ -211,31 +218,5 @@ class _HorizontalSlidingCardsState extends State<HorizontalSlidingCards> {
           onTap: () {},
         );
     }
-  }
-
-  showRatingBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30.0),
-        ),
-      ),
-      backgroundColor: WHITE,
-      elevation: 0.0,
-      builder: (context) {
-        return BottomSheetWrapper(
-          closeOnTap: true,
-          title: labelText(
-            "Leave a rating",
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-          child: const LeaveARating(),
-        );
-      },
-    );
   }
 }

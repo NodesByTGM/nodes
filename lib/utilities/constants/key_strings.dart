@@ -37,4 +37,10 @@ class KeyString {
   static const flashbacks = "Flashbacks";
   static const birthdays = "Birthdays";
   static const trendingNews = "Trending News";
+
+  static const topMovies = "Top Movies";
+  static const community = "Community";
+  static const moreLikeThis = "More Like This";
+  static const recommended = "Recommended";
+
 }

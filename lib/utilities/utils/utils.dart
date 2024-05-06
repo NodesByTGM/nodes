@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names, implementation_imports, prefer_generic_function_type_aliases, deprecated_member_use, no_leading_underscores_for_local_identifiers
+// ignore_for_file: constant_identifier_names, implementation_imports, prefer_generic_function_type_aliases, deprecated_member_use, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -17,7 +17,10 @@ import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/auth/models/business_account_model.dart';
 import 'package:nodes/features/auth/models/media_upload_model.dart';
 import 'package:nodes/features/auth/models/user_model.dart';
+import 'package:nodes/features/dashboard/components/leave_a_rating.dart';
+import 'package:nodes/features/dashboard/view_model/dashboard_controller.dart';
 import 'package:nodes/utilities/constants/exported_packages.dart';
+import 'package:nodes/utilities/utils/enums.dart';
 import 'package:nodes/utilities/utils/form_utils.dart';
 import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/utilities/widgets/custom_loader.dart';
@@ -1125,3 +1128,108 @@ singleImagePreviewer(context, {required MediaUploadModel image}) {
     },
   );
 }
+
+Future<List<dynamic>> getHorizontalSlidingCardData(BuildContext context,{required DashboardController dashCtrl, required HorizontalSlidingCardDataSource source}) async {
+    
+    switch (source) {
+      case HorizontalSlidingCardDataSource.TopMovies:
+        List<dynamic> data = (await dashCtrl.fetchMovieShows(context)) ?? [];
+        return data;
+      case HorizontalSlidingCardDataSource.Birthdays:
+        List<dynamic> data = (await dashCtrl.fetchCMSContent(
+              context,
+              type: HorizontalSlidingCardDataSource.Birthdays,
+            )) ??
+            [];
+        return data;
+      case HorizontalSlidingCardDataSource.Flashbacks:
+        List<dynamic> data = (await dashCtrl.fetchCMSContent(
+              context,
+              type: HorizontalSlidingCardDataSource.Flashbacks,
+            )) ??
+            [];
+        return data;
+      case HorizontalSlidingCardDataSource.CollaborationSpotlights:
+        List<dynamic> data = (await dashCtrl.fetchCMSContent(
+              context,
+              type: HorizontalSlidingCardDataSource.CollaborationSpotlights,
+            )) ??
+            [];
+        return data;
+      case HorizontalSlidingCardDataSource.HiddenGems:
+        List<dynamic> data = (await dashCtrl.fetchCMSContent(
+              context,
+              type: HorizontalSlidingCardDataSource.HiddenGems,
+            )) ??
+            [];
+        return data;
+      default:
+    }
+    await Future.delayed(const Duration(seconds: 5));
+    return [
+      "I'm Ramy",
+      "I'm Yasser",
+      "I'm Ahmed",
+      "I'm Yossif",
+      "I'm Ramy",
+      "I'm Yasser",
+      "I'm Ahmed",
+      "I'm Yossif",
+      "I'm Ramy",
+      "I'm Yasser",
+      "I'm Ahmed",
+      "I'm Yossif",
+    ];
+  }
+
+getHorizontalSlidingCardDataSourceTitle(
+  HorizontalSlidingCardDataSource source,
+) {
+  switch (source) {
+    case HorizontalSlidingCardDataSource.TopMovies:
+      return KeyString.topMovies;
+    case HorizontalSlidingCardDataSource.HiddenGems:
+      return KeyString.hiddenGems;
+    case HorizontalSlidingCardDataSource.Flashbacks:
+      return KeyString.flashbacks;
+    case HorizontalSlidingCardDataSource.Community:
+      return KeyString.community;
+    case HorizontalSlidingCardDataSource.CollaborationSpotlights:
+      return KeyString.spotlights;
+    case HorizontalSlidingCardDataSource.Birthdays:
+      return KeyString.birthdays;
+    case HorizontalSlidingCardDataSource.MoreLikeThis:
+      return KeyString.moreLikeThis;
+    case HorizontalSlidingCardDataSource.Recommended:
+      return KeyString.recommended;
+    default:
+      return "";
+  }
+}
+
+
+  showRatingBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
+      ),
+      backgroundColor: WHITE,
+      elevation: 0.0,
+      builder: (context) {
+        return BottomSheetWrapper(
+          closeOnTap: true,
+          title: labelText(
+            "Leave a rating",
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+          child: const LeaveARating(),
+        );
+      },
+    );
+  }

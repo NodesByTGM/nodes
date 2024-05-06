@@ -11,6 +11,7 @@ class ImageUtils {
   static const logoBg = "assets/images/png/logo_bg.png";
   static const authBg = "assets/images/png/auth_img.png";
   static const gridToolsImg = "assets/images/png/grid_tools_img.png";
+  static const cmsBg = "assets/images/png/cms_bg.png";
 
   // Animations
   // static const nodeLoader = "assets/animations/loading_animation.json";

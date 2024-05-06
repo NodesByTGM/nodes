@@ -1,3 +1,4 @@
+import 'package:nodes/config/dependencies.dart';
 import 'package:nodes/core/controller/nav_controller.dart';
 import 'package:nodes/features/dashboard/components/comment_section.dart';
 import 'package:nodes/features/dashboard/components/horizontal_sliding_cards.dart';
@@ -16,8 +17,11 @@ class IndividualDashboardSingleItemDetailsScreen extends StatefulWidget {
 
 class _IndividualDashboardSingleItemDetailsScreenState
     extends State<IndividualDashboardSingleItemDetailsScreen> {
+  late HorizontalSlidingCardDataSource currentSource;
+
   @override
   void initState() {
+    currentSource = locator.get<NavController>().currentDashboardDynamicItem;
     super.initState();
   }
 
@@ -52,7 +56,7 @@ class _IndividualDashboardSingleItemDetailsScreenState
                 ),
                 ySpace(height: 40),
                 subtext(
-                  "Top Movies",
+                  getHorizontalSlidingCardDataSourceTitle(currentSource),
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
                 ),
